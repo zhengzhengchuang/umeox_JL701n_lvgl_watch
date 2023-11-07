@@ -1,6 +1,6 @@
 #include "split_screen.h"
 
-
+#if 0
 static lv_anim_t split_screen_anim;
 static bool is_split_screen = false; //是否满足拉出分屏的条件
 static lv_obj_t *tileview_menu = NULL;
@@ -164,10 +164,12 @@ static void record_img_click_event_cb(lv_event_t *e)
 
     return;
 }
+#endif
 
-void menu_split_screen_create(lv_obj_t *obj)
+#if 0
+lv_obj_t *wf_register_left_split_screen(lv_obj_t *obj)
 {
-    if(!obj) return;
+    if(!obj) return NULL;
 
     int16_t lcd_w = lv_disp_get_hor_res(NULL);
     int16_t lcd_h = lv_disp_get_ver_res(NULL);
@@ -185,15 +187,15 @@ void menu_split_screen_create(lv_obj_t *obj)
     widget_obj_para.obj_border_color = lv_color_hex(0x000000);
     widget_obj_para.obj_radius = 0;
     widget_obj_para.obj_is_scrollable = false;
-    split_screen_container = common_widget_obj_create(&widget_obj_para);
+    lv_obj_t *split_screen_container = common_widget_obj_create(&widget_obj_para);
 
-    /*************后台记录图标*************/
+    /*************分屏:后台记录图标*************/
     widget_img_para.img_x = 11;
     widget_img_para.img_y = 178;
     widget_img_para.img_parent = split_screen_container;
     widget_img_para.file_img_dat = FILE_menu_icon_64x64_00_dat;
     widget_img_para.img_click_attr = true;
-    widget_img_para.event_cb = record_img_click_event_cb;
+    widget_img_para.event_cb = NULL;
     widget_img_para.user_data = NULL;
     common_widget_img_create(&widget_img_para, NULL);
 
@@ -212,12 +214,14 @@ void menu_split_screen_create(lv_obj_t *obj)
     widget_img_para.file_img_dat = FILE_menu_icon_64x64_03_dat;
     common_widget_img_create(&widget_img_para, NULL);
 
+#if 0
     is_split_screen = false;
     split_screen_dela_x = 0;
     tileview_menu = p_ui_info_cache->ui_tileview_info.tileview_obj;
 
     lv_obj_add_event_cb(obj, split_screen_event_cb, LV_EVENT_ALL, NULL);
+#endif
 
-    return;
+    return split_screen_container;
 }
-
+#endif

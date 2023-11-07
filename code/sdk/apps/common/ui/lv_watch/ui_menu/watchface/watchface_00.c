@@ -37,11 +37,6 @@ static void menu_create_cb(lv_obj_t *obj)
 
     wf_register_tileview_menu(obj);
 
-    lv_obj_t *wf_scr_par = p_ui_info_cache->ui_tileview_info.tileview_center_menu;
-    wf_register_left_split_screen(wf_scr_par);
-
-    wf_register_up_tool_box(wf_scr_par);
-
     return;
 }
 

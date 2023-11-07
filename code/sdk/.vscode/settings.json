@@ -88,7 +88,9 @@
         "common_clock.h": "c",
         "split_screen.h": "c",
         "config_interface.h": "c",
-        "tool_box.h": "c"
+        "tool_box.h": "c",
+        "common_translate.h": "c",
+        "ui_translate.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

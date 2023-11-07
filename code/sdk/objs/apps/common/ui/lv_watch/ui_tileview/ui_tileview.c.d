@@ -179,6 +179,7 @@ objs/apps/common/ui/lv_watch/ui_tileview/ui_tileview.c.o: \
   apps/common/ui/lv_watch/ui_tileview/../lv_watch.h \
   apps/common/ui/lv_watch/ui_tileview/.././poc_modem/poc_modem_ui.h \
   apps/common/ui/lv_watch/ui_tileview/.././poc_modem/poc_modem_cache.h \
+  apps/common/ui/lv_watch/ui_tileview/.././poc_modem/../ui_translate/ui_translate.h \
   apps/common/ui/lv_watch/ui_tileview/.././poc_modem/../../../../../cpu/br28/ui_driver/lvgl/lvgl_main.h \
   apps/common/ui/lv_watch/ui_tileview/.././comm_widget/common_clock.h \
   apps/common/ui/lv_watch/ui_tileview/.././comm_widget/../lv_watch.h \
