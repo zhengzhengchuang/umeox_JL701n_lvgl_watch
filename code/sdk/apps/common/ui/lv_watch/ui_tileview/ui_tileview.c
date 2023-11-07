@@ -142,7 +142,7 @@ static void tileview_event_cb(lv_event_t *e)
     uint8_t tileview_valid_cnt = p_ui_info_cache->ui_tileview_info.tileview_valid_cnt;
     for(uint8_t i = 0; i < tileview_valid_cnt; i++)
     {
-        menu_load_container = p_ui_info_cache->ui_tileview_info.tileview_menu_cache[i];
+        menu_load_container = p_ui_info_cache->ui_tileview_info.tileview_side_menu_cache[i];
         if(menu_load_container && tile_act == menu_load_container)
         {
             new_act_id = p_ui_info_cache->ui_tileview_info.tileview_id_cache[i];
@@ -168,7 +168,7 @@ void tileview_menu_create(lv_obj_t *obj)
     lv_obj_remove_style(tileview_menu, NULL, LV_PART_SCROLLBAR|LV_STATE_DEFAULT);
     lv_obj_remove_style(tileview_menu, NULL, LV_PART_SCROLLBAR|LV_STATE_PRESSED);
 
-    printf("%s:%p\n", __func__, tileview_menu);
+    p_ui_info_cache->ui_tileview_info.tileview_obj = tileview_menu;
     
     lv_point_t tileview_dir_point = {0};
     lv_obj_t *menu_load_container = NULL;
@@ -190,7 +190,7 @@ void tileview_menu_create(lv_obj_t *obj)
         }
 
         if(!(tileview_dir_point.x == 1 && tileview_dir_point.y == 1))
-            p_ui_info_cache->ui_tileview_info.tileview_menu_cache[i] = menu_load_container;
+            p_ui_info_cache->ui_tileview_info.tileview_side_menu_cache[i] = menu_load_container;
         else
             p_ui_info_cache->ui_tileview_info.tileview_center_menu = menu_load_container;
     }

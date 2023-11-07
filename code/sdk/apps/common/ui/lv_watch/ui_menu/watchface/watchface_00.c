@@ -37,8 +37,10 @@ static void menu_create_cb(lv_obj_t *obj)
 
     wf_register_tileview_menu(obj);
 
-    lv_obj_t *sp_scr_par = p_ui_info_cache->ui_tileview_info.tileview_center_menu;
-    wf_left_split_screen_create(sp_scr_par);
+    lv_obj_t *wf_scr_par = p_ui_info_cache->ui_tileview_info.tileview_center_menu;
+    wf_register_left_split_screen(wf_scr_par);
+
+    wf_register_up_tool_box(wf_scr_par);
 
     return;
 }
@@ -63,6 +65,8 @@ static void menu_display_cb(lv_obj_t *obj)
     widget_img_para.img_x = 0;
     widget_img_para.img_y = 0;
     widget_img_para.file_img_dat = FILE_watchface_00_bg_dat;
+    widget_img_para.img_click_attr = false;
+    widget_img_para.event_cb = NULL;
     common_widget_img_create(&widget_img_para, NULL);
 
     uint8_t clk_p_num = sizeof(clk_p_para)/sizeof(common_clock_pointer_para_t);

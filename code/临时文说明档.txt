@@ -1,2 +1,0 @@
-【金山文档】 LVGL 2D加速接入
-https://kdocs.cn/l/cqEusSMo40vm

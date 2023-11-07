@@ -55,6 +55,14 @@ lv_obj_t *common_widget_img_create(common_widget_img_para_t *img_para, uint16_t 
     lv_img_set_src(common_widget_img, &user_img_dsc.img_dst_gather[user_img_dsc.img_dst_cnt]);
     lv_obj_set_pos(common_widget_img, img_para->img_x, img_para->img_y);
 
+    if(img_para->img_click_attr)
+        lv_obj_add_flag(common_widget_img, LV_OBJ_FLAG_CLICKABLE);
+    else
+        lv_obj_clear_flag(common_widget_img, LV_OBJ_FLAG_CLICKABLE);
+    
+    if(img_para->event_cb)
+        lv_obj_add_event_cb(common_widget_img, img_para->event_cb, LV_EVENT_SHORT_CLICKED, img_para->user_data);
+
     close_fd();
 
     if(img_dsc_idx)

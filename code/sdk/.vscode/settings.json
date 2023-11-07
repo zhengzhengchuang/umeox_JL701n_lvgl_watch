@@ -86,7 +86,9 @@
         "sys_time.h": "c",
         "ioctl_cmds.h": "c",
         "common_clock.h": "c",
-        "split_screen.h": "c"
+        "split_screen.h": "c",
+        "config_interface.h": "c",
+        "tool_box.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

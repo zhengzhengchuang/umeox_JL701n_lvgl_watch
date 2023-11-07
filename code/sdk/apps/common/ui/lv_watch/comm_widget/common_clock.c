@@ -85,7 +85,9 @@ void common_clock_pointer_create(lv_obj_t *obj, const common_clock_pointer_para_
     widget_img_para.img_x = 0;
     widget_img_para.img_y = 0;
     widget_img_para.img_parent = obj;
-
+    widget_img_para.img_click_attr = false;
+    widget_img_para.event_cb = NULL;
+    
     for(uint8_t i = 0; i < clk_p_num; i++)
     {
         widget_img_para.file_img_dat = clk_p_para[i].clk_p_file_dat;

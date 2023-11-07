@@ -94,6 +94,13 @@ typedef struct
 
     /*用户图片资源地址的索引*/
     uint32_t file_img_dat;
+
+    /*点击属性*/
+    bool img_click_attr;
+
+    /*点击回调函数*/
+    lv_event_cb_t event_cb;
+    void *user_data;
 }common_widget_img_para_t;
 extern common_widget_img_para_t widget_img_para;
 lv_obj_t *common_widget_img_create(common_widget_img_para_t *img_para, uint16_t *img_dsc_idx);

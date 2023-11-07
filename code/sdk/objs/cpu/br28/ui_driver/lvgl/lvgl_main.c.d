@@ -273,5 +273,7 @@ objs/cpu/br28/ui_driver/lvgl/lvgl_main.c.o: \
   apps/watch/include/task_manager/bt\../../../../common/ui/lv_watch/./comm_widget/common_widget.h \
   apps/watch/include/task_manager/bt\../../../../common/ui/lv_watch/./comm_widget/../../../../../cpu/br28/ui_driver/imb_demo.h \
   apps/common\ui/ui/jl_images/FILE_index.h \
+  apps/watch/include/task_manager/bt\../../../../common/ui/lv_watch/./ui_menu/tool_box/tool_box.h \
+  apps/watch/include/task_manager/bt\../../../../common/ui/lv_watch/./ui_menu/tool_box/../../lv_watch.h \
   apps/watch/include/task_manager/bt\../../../../common/ui/lv_watch/./ui_menu/split_screen/split_screen.h \
   apps/watch/include/task_manager/bt\../../../../common/ui/lv_watch/./ui_menu/split_screen/../../lv_watch.h

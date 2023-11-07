@@ -14,6 +14,9 @@ extern "C" {
 
 typedef struct
 {
+    /*tileview对象*/
+    lv_obj_t *tileview_obj;
+
     uint8_t tileview_valid_dir;
 
     /*可视化个数*/
@@ -25,7 +28,7 @@ typedef struct
     /*可视化菜单容器*/
     ui_act_id_t tileview_id_cache[TILEVIEW_DIR_NUM];
     lv_point_t tileview_dir_points[TILEVIEW_DIR_NUM];
-    lv_obj_t *tileview_menu_cache[TILEVIEW_DIR_NUM-1];
+    lv_obj_t *tileview_side_menu_cache[TILEVIEW_DIR_NUM-1];//tileview四边容器 上、下、左、右
     ui_menu_load_info_t *tileview_menu_load[TILEVIEW_DIR_NUM]; 
 }ui_tileview_info_t;
 

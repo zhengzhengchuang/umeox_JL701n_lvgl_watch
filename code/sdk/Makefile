@@ -1033,6 +1033,7 @@ c_SRC_FILES := \
 	apps/common/ui/lv_watch/ui_menu/watchface/watchface_01.c \
 	apps/common/ui/lv_watch/ui_menu/watchface/watchface_main.c \
 	apps/common/ui/lv_watch/ui_menu/split_screen/split_screen.c \
+	apps/common/ui/lv_watch/ui_menu/tool_box/tool_box.c \
 
 # 需要编译的 .S 文件
 S_SRC_FILES := \

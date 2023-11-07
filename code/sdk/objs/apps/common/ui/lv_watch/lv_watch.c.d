@@ -184,6 +184,8 @@ objs/apps/common/ui/lv_watch/lv_watch.c.o: \
   apps/common/ui/lv_watch/./comm_widget/common_widget.h \
   apps/common/ui/lv_watch/./comm_widget/../../../../../cpu/br28/ui_driver/imb_demo.h \
   apps/common\ui/ui/jl_images/FILE_index.h \
+  apps/common/ui/lv_watch/./ui_menu/tool_box/tool_box.h \
+  apps/common/ui/lv_watch/./ui_menu/tool_box/../../lv_watch.h \
   apps/common/ui/lv_watch/./ui_menu/split_screen/split_screen.h \
   apps/common/ui/lv_watch/./ui_menu/split_screen/../../lv_watch.h \
   apps/common/ui/lv_watch/../../../../include_lib/system/timer.h \
