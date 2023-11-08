@@ -11,6 +11,11 @@ void tileview_info_clear(void)
     return;
 }
 
+lv_obj_t *tileview_get_center_menu(void)
+{
+    return (p_ui_info_cache->ui_tileview_info.tileview_center_menu);
+}
+
 void tileview_register_up_menu(ui_act_id_t act_id)
 {
     ui_menu_load_info_t *menu_load_info = NULL;
@@ -114,11 +119,20 @@ void tileview_register_center_menu(ui_act_id_t act_id)
 void tileview_register_all_menu(ui_act_id_t up, ui_act_id_t down, ui_act_id_t left, \
     ui_act_id_t right, ui_act_id_t center)
 {
-    tileview_register_up_menu(up);
-    tileview_register_down_menu(down);
-    tileview_register_left_menu(left);
-    tileview_register_right_menu(right); 
-    tileview_register_center_menu(center); 
+    if(ui_act_id_validity(up))
+        tileview_register_up_menu(up);
+    
+    if(ui_act_id_validity(down))
+        tileview_register_down_menu(down);
+
+    if(ui_act_id_validity(left))
+        tileview_register_left_menu(left);
+
+    if(ui_act_id_validity(right))
+        tileview_register_right_menu(right); 
+
+    if(ui_act_id_validity(center))
+        tileview_register_center_menu(center); 
 
     return;
 }

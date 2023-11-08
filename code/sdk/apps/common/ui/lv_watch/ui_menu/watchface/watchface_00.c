@@ -37,6 +37,8 @@ static void menu_create_cb(lv_obj_t *obj)
 
     wf_register_tileview_menu(obj);
 
+    wf_register_translate_menu();
+
     return;
 }
 

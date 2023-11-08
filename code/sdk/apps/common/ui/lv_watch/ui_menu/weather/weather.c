@@ -5,9 +5,7 @@ static void menu_create_cb(lv_obj_t *obj)
 {
     if(!obj) return;
 
-    tileview_register_left_menu(Act_Id_Watchface);
-    tileview_register_center_menu(Act_Id_Weather);
-    tileview_menu_create(obj);
+ 
 
     return;
 }

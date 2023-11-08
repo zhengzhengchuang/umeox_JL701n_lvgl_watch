@@ -27,6 +27,8 @@ void ui_menu_exit_prepare(ui_act_id_t act_id)
 
     tileview_info_clear();
 
+    translate_info_clear();
+
     common_widget_para_init();
    
     if(act_id != exit_act_id && p_ui_info_cache->menu_load_info.return_flag)

@@ -34,6 +34,7 @@ typedef struct
 
 void tileview_info_clear(void);
 void tileview_menu_create(lv_obj_t *obj);
+lv_obj_t *tileview_get_center_menu(void);
 void tileview_register_up_menu(ui_act_id_t act_id);
 void tileview_register_down_menu(ui_act_id_t act_id);
 void tileview_register_left_menu(ui_act_id_t act_id);
