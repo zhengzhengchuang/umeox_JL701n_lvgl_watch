@@ -8,7 +8,7 @@ extern "C" {
 #include "../include/ui_menu.h"
 #include "../include/ui_act_id.h"
 
-#define TRANSLATE_DIR_NUM (4)
+#define TRANSLATE_DIR_NUM (5)
 
 typedef struct
 {
@@ -38,13 +38,15 @@ typedef struct
 }ui_translate_info_t;
 
 void translate_info_clear(void);
-void translate_menu_create(lv_obj_t *obj);
+void translate_menu_create_by_tv(lv_obj_t *obj);
+void translate_menu_create_by_obj(lv_obj_t *obj);
 void translate_register_up_menu(ui_act_id_t act_id);
 void translate_register_down_menu(ui_act_id_t act_id);
 void translate_register_left_menu(ui_act_id_t act_id);
 void translate_register_right_menu(ui_act_id_t act_id);
+void translate_register_center_menu(ui_act_id_t act_id);
 void translate_register_all_menu(ui_act_id_t up, ui_act_id_t down, ui_act_id_t left, \
-    ui_act_id_t right);
+    ui_act_id_t right, ui_act_id_t center);
 #ifdef __cplusplus
 } /* extern "C" */
 #endif

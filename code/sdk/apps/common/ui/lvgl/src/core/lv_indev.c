@@ -936,10 +936,16 @@ static void indev_proc_press(_lv_indev_proc_t * proc)
         /*If there is no scrolling then check for long press time*/
         if(proc->types.pointer.scroll_obj == NULL && proc->long_pr_sent == 0) {
             /*Call the ancestor's event handler about the long press if enough time elapsed*/
-            if(lv_tick_elaps(proc->pr_timestamp) > indev_act->driver->long_press_time) {
-                lv_event_send(indev_obj_act, LV_EVENT_LONG_PRESSED, indev_act);
-                if(indev_reset_check(proc)) return;
-
+            if(lv_tick_elaps(proc->pr_timestamp) > indev_act->driver->long_press_time) 
+            {
+                uint8_t scroll_limit = indev_act->driver->scroll_limit;
+                lv_point_t scroll_sum = proc->types.pointer.scroll_sum;  
+                if(!(LV_ABS(scroll_sum.x) > scroll_limit || LV_ABS(scroll_sum.y) > scroll_limit))
+                {
+                    lv_event_send(indev_obj_act, LV_EVENT_LONG_PRESSED, indev_act);
+                    if(indev_reset_check(proc)) return;
+                }
+                
                 /*Mark the Call the ancestor's event handler sending to do not send it again*/
                 proc->long_pr_sent = 1;
 
@@ -986,14 +992,15 @@ static void indev_proc_release(_lv_indev_proc_t * proc)
     /*Forget the act obj and send a released Call the ancestor's event handler*/
     if(indev_obj_act) 
     {
-        LV_LOG_INFO("released");
+        printf("%s:released\n");
 
         /*Send RELEASE Call the ancestor's event handler and event*/
         lv_event_send(indev_obj_act, LV_EVENT_RELEASED, indev_act);
         if(indev_reset_check(proc)) return;
 
         /*Send CLICK if no scrolling*/
-        if(scroll_obj == NULL) {
+        if(scroll_obj == NULL) 
+        {
             if(proc->long_pr_sent == 0) {
                 lv_event_send(indev_obj_act, LV_EVENT_SHORT_CLICKED, indev_act);
                 if(indev_reset_check(proc)) return;

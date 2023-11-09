@@ -22,9 +22,6 @@ enum
     /********表盘相关页面*********/
     Act_Id_Watchface,
 
-    /********活动记录页面*********/
-    Act_Id_Activity,
-
     /********天气页面*********/
     Act_Id_Weather,
 

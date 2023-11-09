@@ -5,7 +5,9 @@ static void menu_create_cb(lv_obj_t *obj)
 {
     if(!obj) return;
 
- 
+    translate_register_all_menu(Act_Id_Null, Act_Id_Null, \
+        Act_Id_Watchface, Act_Id_Null, Act_Id_Weather);
+    translate_menu_create_by_obj(obj);
 
     return;
 }

@@ -35,9 +35,9 @@ static void menu_create_cb(lv_obj_t *obj)
 {
     if(!obj) return;
 
-    wf_register_tileview_menu(obj);
-
-    wf_register_translate_menu();
+    translate_register_all_menu(Act_Id_Null, Act_Id_Null, \
+        Act_Id_Null, Act_Id_Weather, Act_Id_Watchface);
+    translate_menu_create_by_obj(obj);
 
     return;
 }

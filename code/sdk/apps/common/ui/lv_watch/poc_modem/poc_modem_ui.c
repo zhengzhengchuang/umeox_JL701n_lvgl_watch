@@ -66,7 +66,8 @@ void ui_menu_container_create(void)
     lv_obj_set_style_border_width(ui_menu_container, 0, LV_PART_MAIN);
     lv_obj_set_style_bg_color(ui_menu_container, lv_color_hex(0x000000), LV_PART_MAIN);
     lv_obj_set_style_pad_all(ui_menu_container, 0, LV_PART_MAIN);
- 
+    lv_obj_clear_flag(ui_menu_container, LV_OBJ_FLAG_SCROLLABLE);
+
     p_ui_info_cache->ui_menu_container = ui_menu_container;
 
     printf("%s:%p\n", __func__, ui_menu_container);
