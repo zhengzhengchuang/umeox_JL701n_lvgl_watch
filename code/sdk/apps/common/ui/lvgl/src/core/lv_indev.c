@@ -111,7 +111,7 @@ void lv_indev_read_timer_cb(lv_timer_t * timer)
         // }
         /*Handle reset query if it happened in during processing*/
         indev_proc_reset_query_handler(indev_act);
-    } while(continue_reading);
+    }while(continue_reading);
 
     /*End of indev processing, so no act indev*/
     indev_act     = NULL;
@@ -379,12 +379,10 @@ static void indev_pointer_proc(lv_indev_t * i, lv_indev_data_t * data)
     i->proc.types.pointer.act_point.x = data->point.x;
     i->proc.types.pointer.act_point.y = data->point.y;
 
-    if(i->proc.state == LV_INDEV_STATE_PRESSED) {
+    if(i->proc.state == LV_INDEV_STATE_PRESSED)
         indev_proc_press(&i->proc);
-    }else 
-    {
+    else 
         indev_proc_release(&i->proc);
-    }
 
     i->proc.types.pointer.last_point.x = i->proc.types.pointer.act_point.x;
     i->proc.types.pointer.last_point.y = i->proc.types.pointer.act_point.y;
@@ -820,12 +818,12 @@ static void indev_proc_press(_lv_indev_proc_t * proc)
 {
     // LV_LOG_INFO("pressed at x:%d y:%d", proc->types.pointer.act_point.x, proc->types.pointer.act_point.y);
     indev_obj_act = proc->types.pointer.act_obj;
-  
+
     if(proc->wait_until_release != 0) 
         return;
 
     bool new_obj_searched = false;
-    lv_disp_t * disp = indev_act->driver->disp;
+    lv_disp_t *disp = indev_act->driver->disp;
     
     /*If there is no last object then search*/
     if(indev_obj_act == NULL) 

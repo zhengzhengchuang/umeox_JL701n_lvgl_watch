@@ -90,7 +90,9 @@
         "config_interface.h": "c",
         "tool_box.h": "c",
         "common_translate.h": "c",
-        "ui_translate.h": "c"
+        "ui_translate.h": "c",
+        "ui_button.h": "c",
+        "ui_cover.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

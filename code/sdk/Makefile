@@ -1028,6 +1028,7 @@ c_SRC_FILES := \
 	apps/common/ui/lv_watch/comm_widget/common_clock.c \
 	apps/common/ui/lv_watch/comm_widget/common_widget.c \
 	apps/common/ui/lv_watch/ui_translate/ui_translate.c \
+	apps/common/ui/lv_watch/ui_cover/ui_cover.c \
 	apps/common/ui/lv_watch/ui_tileview/ui_tileview.c \
 	apps/common/ui/lv_watch/ui_menu/weather/weather.c \
 	apps/common/ui/lv_watch/ui_menu/watchface/watchface_00.c \

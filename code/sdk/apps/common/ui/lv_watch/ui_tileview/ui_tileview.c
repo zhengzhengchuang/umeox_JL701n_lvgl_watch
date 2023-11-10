@@ -16,7 +16,7 @@ lv_obj_t *tileview_get_center_menu(void)
     return (p_ui_info_cache->ui_tileview_info.tileview_center_menu);
 }
 
-void tileview_register_up_menu(ui_act_id_t act_id)
+static void tileview_register_up_menu(ui_act_id_t act_id)
 {
     ui_menu_load_info_t *menu_load_info = NULL;
 
@@ -36,7 +36,7 @@ void tileview_register_up_menu(ui_act_id_t act_id)
     return;
 }
 
-void tileview_register_down_menu(ui_act_id_t act_id)
+static void tileview_register_down_menu(ui_act_id_t act_id)
 {
     ui_menu_load_info_t *menu_load_info = NULL;
 
@@ -56,7 +56,7 @@ void tileview_register_down_menu(ui_act_id_t act_id)
     return;
 }
 
-void tileview_register_left_menu(ui_act_id_t act_id)
+static void tileview_register_left_menu(ui_act_id_t act_id)
 {
     ui_menu_load_info_t *menu_load_info = NULL;
 
@@ -76,7 +76,7 @@ void tileview_register_left_menu(ui_act_id_t act_id)
     return;
 }
 
-void tileview_register_right_menu(ui_act_id_t act_id)
+static void tileview_register_right_menu(ui_act_id_t act_id)
 {
     ui_menu_load_info_t *menu_load_info = NULL;
 
@@ -96,7 +96,7 @@ void tileview_register_right_menu(ui_act_id_t act_id)
     return;
 }
 
-void tileview_register_center_menu(ui_act_id_t act_id)
+static void tileview_register_center_menu(ui_act_id_t act_id)
 {
     ui_menu_load_info_t *menu_load_info = NULL;
 

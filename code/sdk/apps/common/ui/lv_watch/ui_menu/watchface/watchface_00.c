@@ -35,10 +35,9 @@ static void menu_create_cb(lv_obj_t *obj)
 {
     if(!obj) return;
 
-    translate_register_all_menu(Act_Id_Null, Act_Id_Null, \
-        Act_Id_Null, Act_Id_Weather, Act_Id_Watchface);
-    translate_menu_create_by_obj(obj);
-
+    cover_register_all_menu(obj, Act_Id_Watchface, \
+        Act_Id_Weather, LV_DIR_TOP);
+ 
     return;
 }
 

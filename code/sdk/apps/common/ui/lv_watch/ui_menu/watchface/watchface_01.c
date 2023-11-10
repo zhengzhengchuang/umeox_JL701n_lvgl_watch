@@ -5,8 +5,6 @@ static void menu_create_cb(lv_obj_t *obj)
 {
     if(!obj) return;
 
-    wf_register_tileview_menu(obj);
-
     return;
 }
 

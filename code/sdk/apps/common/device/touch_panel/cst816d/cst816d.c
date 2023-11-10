@@ -58,6 +58,9 @@ static ft_param module_param = {0};
 #define I2C_MASTER_CI2C0 0
 #define i2c_t uint8_t
 
+static u16 released_timer_id = 0xffff;
+static bool released_timer_create = false;
+
 static int16_t touch_x = 0;
 static int16_t touch_y = 0;
 static bool pressed_state = false;
@@ -450,6 +453,17 @@ void cst816d_reset()
 static bool touch_flag = 0;
 static void touch_event_handler(void *priv);
 
+static void released_timeout_cb(void *priv)
+{
+    set_dev_pressed_state(false);
+    released_timer_create = false;
+    sys_timeout_del(released_timer_id);
+
+    printf("%s\n", __func__);
+
+    return;
+}
+
 static int touch_int_handler()
 {
     touch_flag = 1;
@@ -457,6 +471,15 @@ static int touch_int_handler()
 #if defined(CONFIG_CPU_BR28)
     touch_event_handler(NULL);
 #endif
+
+    if(!released_timer_create)
+    {
+        released_timer_create = true;
+        released_timer_id = sys_timeout_add(NULL, released_timeout_cb, 30);
+    }else
+    {
+        sys_timer_re_run(released_timer_id);
+    }
 
     return 0;
 }
@@ -708,11 +731,11 @@ bool cst816d_read(lv_indev_data_t *data)
     data->point.y = buf[4] | ((buf[3] & 0xF) << 8);
     set_dev_touch_x(data->point.x);
     set_dev_touch_y(data->point.y);
-    data->state = (buf[0] != 0) ? LV_INDEV_STATE_PR : LV_INDEV_STATE_REL;
-    if(data->state == LV_INDEV_STATE_PR)
-        set_dev_pressed_state(true);
-    else
-        set_dev_pressed_state(false);
+    // data->state = (buf[0] != 0) ? LV_INDEV_STATE_PR : LV_INDEV_STATE_REL;
+    // if(data->state == LV_INDEV_STATE_PR)
+    set_dev_pressed_state(true);
+    // else
+    //     set_dev_pressed_state(false);
     
     //printf("touch_down:%d  (%d, %d)\n", touch_down, touch_x, touch_y);
 

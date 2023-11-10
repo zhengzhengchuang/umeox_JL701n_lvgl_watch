@@ -7,6 +7,7 @@ extern "C" {
 
 #include "../include/ui_menu.h"
 #include "../include/ui_act_id.h"
+#include "../ui_cover/ui_cover.h"
 #include "../ui_tileview/ui_tileview.h"
 #include "../ui_translate/ui_translate.h"
 
@@ -16,6 +17,8 @@ typedef struct
     ui_act_id_t prev_act_id;
 
     lv_obj_t *ui_menu_container;
+
+    ui_cover_info_t ui_cover_info;
 
     ui_menu_load_info_t menu_load_info;
 

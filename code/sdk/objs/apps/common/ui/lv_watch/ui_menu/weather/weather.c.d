@@ -179,6 +179,7 @@ objs/apps/common/ui/lv_watch/ui_menu/weather/weather.c.o: \
   apps/common/ui/lvgl/src/extra/widgets/span/lv_span.h \
   apps/common/ui/lv_watch/ui_menu/weather/../.././poc_modem/poc_modem_ui.h \
   apps/common/ui/lv_watch/ui_menu/weather/../.././poc_modem/poc_modem_cache.h \
+  apps/common/ui/lv_watch/ui_menu/weather/../.././poc_modem/../ui_cover/ui_cover.h \
   apps/common/ui/lv_watch/ui_menu/weather/../.././poc_modem/../ui_tileview/ui_tileview.h \
   apps/common/ui/lv_watch/ui_menu/weather/../.././poc_modem/../ui_translate/ui_translate.h \
   apps/common/ui/lv_watch/ui_menu/weather/../.././poc_modem/../../../../../cpu/br28/ui_driver/lvgl/lvgl_main.h \

@@ -19,7 +19,7 @@ void translate_info_clear(void)
     return;
 }
 
-void translate_register_up_menu(ui_act_id_t act_id)
+static void translate_register_up_menu(ui_act_id_t act_id)
 {
     ui_menu_load_info_t *menu_load_info = NULL;
 
@@ -38,7 +38,7 @@ void translate_register_up_menu(ui_act_id_t act_id)
     return;
 }
 
-void translate_register_down_menu(ui_act_id_t act_id)
+static void translate_register_down_menu(ui_act_id_t act_id)
 {
     ui_menu_load_info_t *menu_load_info = NULL;
 
@@ -57,7 +57,7 @@ void translate_register_down_menu(ui_act_id_t act_id)
     return;
 }
 
-void translate_register_left_menu(ui_act_id_t act_id)
+static void translate_register_left_menu(ui_act_id_t act_id)
 {
     ui_menu_load_info_t *menu_load_info = NULL;
 
@@ -76,7 +76,7 @@ void translate_register_left_menu(ui_act_id_t act_id)
     return;
 }
 
-void translate_register_right_menu(ui_act_id_t act_id)
+static void translate_register_right_menu(ui_act_id_t act_id)
 {
     ui_menu_load_info_t *menu_load_info = NULL;
 
@@ -95,7 +95,7 @@ void translate_register_right_menu(ui_act_id_t act_id)
     return;
 }
 
-void translate_register_center_menu(ui_act_id_t act_id)
+static void translate_register_center_menu(ui_act_id_t act_id)
 {
     ui_menu_load_info_t *menu_load_info = NULL;
 
@@ -130,7 +130,7 @@ void translate_register_all_menu(ui_act_id_t up, ui_act_id_t down, ui_act_id_t l
     if(ui_act_id_validity(right))
         translate_register_right_menu(right); 
 
-    if(center)
+    if(ui_act_id_validity(center))
         translate_register_center_menu(center);
   
     return;
@@ -165,9 +165,6 @@ static void translate_menu_scroll_judge(void)
     bool hor_scroll_en = false;
     bool ver_scroll_en = false;
     lv_point_t vert_point = {0};
-
-    int16_t lcd_w = lv_disp_get_hor_res(NULL);
-    int16_t lcd_h = lv_disp_get_ver_res(NULL);
 
     lv_indev_get_vect(lv_indev_get_act(), &vert_point);
 
@@ -298,8 +295,6 @@ static void translate_menu_scroll_handle(void)
 
 static void translate_menu_anim_cb(void *var, int32_t anim_val)
 {
-    printf("*****%s:%d\n", __func__, anim_val);
-
     lv_dir_t *translate_scroll_dir = \
         &p_ui_info_cache->ui_translate_info.translate_scroll_dir;
 
@@ -379,15 +374,18 @@ static void translate_menu_anim_ready_cb(lv_anim_t *a)
 
     *translate_animing = false;
 
-    printf("++++++++++%s\n", __func__);
+    // if(translate_mode == 1)
+    // {
+    //     lv_obj_t *tileview_obj = p_ui_info_cache->ui_tileview_info.tileview_obj;
+    //     if(tileview_obj)
+    //         lv_obj_add_flag(tileview_obj, LV_OBJ_FLAG_SCROLLABLE);
+    // }
 
     return;
 }
 
 static void translate_menu_released_handle(void)
 {
-    printf("*****%s\n", __func__);
-
     int16_t lcd_w = lv_disp_get_hor_res(NULL);
     int16_t lcd_h = lv_disp_get_ver_res(NULL);
 
@@ -490,6 +488,12 @@ static void translate_menu_pressing_cb(lv_event_t *e)
     else
         translate_menu_scroll_handle();
 
+    // if(*translate_scroll_dir != LV_DIR_NONE && translate_mode == 1)
+    // {
+    //     lv_obj_t *tileview_obj = p_ui_info_cache->ui_tileview_info.tileview_obj;
+    //     if(tileview_obj)
+    //         lv_obj_clear_flag(tileview_obj, LV_OBJ_FLAG_SCROLLABLE);
+    // }
 
     return;
 }
@@ -499,14 +503,10 @@ static void translate_menu_released_cb(lv_event_t *e)
     bool *translate_animing = \
         &p_ui_info_cache->ui_translate_info.translate_animing;
 
-    printf("-----%s:%d\n", __func__, *translate_animing);
-
     if(*translate_animing) return;
 
     lv_dir_t *translate_scroll_dir = \
         &p_ui_info_cache->ui_translate_info.translate_scroll_dir;
-
-    printf("-----%s:0x%x\n", __func__, *translate_scroll_dir);
 
     if(*translate_scroll_dir == LV_DIR_NONE)
         return;
@@ -521,12 +521,6 @@ static void translate_menu_event_cb(lv_event_t *e)
     if(!e) return;
 
     lv_event_code_t event_code = lv_event_get_code(e);
-
-    if(event_code >= LV_EVENT_COVER_CHECK)
-        return;
-
-    if(event_code != LV_EVENT_PRESSING)
-        printf("++++++%d\n", event_code);
 
     if(event_code == LV_EVENT_PRESSED)
         translate_menu_pressed_cb(e);
@@ -569,6 +563,9 @@ void translate_menu_create_by_tv(lv_obj_t *obj)
         menu_load_info = p_ui_info_cache->ui_translate_info.translate_menu_load[i];
         translate_dir_point.x = p_ui_info_cache->ui_translate_info.translate_dir_points[i].x;
         translate_dir_point.y = p_ui_info_cache->ui_translate_info.translate_dir_points[i].y;
+
+        if(translate_dir_point.x == 0 && translate_dir_point.y == 0)
+            continue;
 
         widget_obj_para.obj_x = translate_dir_point.x*lcd_w;
         widget_obj_para.obj_y = translate_dir_point.y*lcd_h;
