@@ -25,6 +25,9 @@ enum
     /********天气页面*********/
     Act_Id_Weather,
 
+    /********工具页面*********/
+    Act_Id_Tool_Box,
+
     Act_Id_Max,
 };
 typedef uint16_t ui_act_id_t;

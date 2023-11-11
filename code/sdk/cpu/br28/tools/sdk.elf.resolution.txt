@@ -12507,8 +12507,8 @@ objs/cpu/br28/user_p11_cmd.c.o
 -r=objs/cpu/br28/user_p11_cmd.c.o,CONFIG_CPU_UNMASK_IRQ_ENABLE,l
 objs/apps/common/ui/lv_watch/lv_watch.c.o
 -r=objs/apps/common/ui/lv_watch/lv_watch.c.o,ui_menu_jump,pl
--r=objs/apps/common/ui/lv_watch/lv_watch.c.o,ui_menu_jump_post_msg,l
 -r=objs/apps/common/ui/lv_watch/lv_watch.c.o,ui_act_id_validity,pl
+-r=objs/apps/common/ui/lv_watch/lv_watch.c.o,ui_menu_jump_post_msg,l
 -r=objs/apps/common/ui/lv_watch/lv_watch.c.o,ui_get_sys_time,pl
 -r=objs/apps/common/ui/lv_watch/lv_watch.c.o,dev_open,l
 -r=objs/apps/common/ui/lv_watch/lv_watch.c.o,dev_ioctl,l
@@ -12702,9 +12702,16 @@ objs/apps/common/ui/lv_watch/ui_cover/ui_cover.c.o
 -r=objs/apps/common/ui/lv_watch/ui_cover/ui_cover.c.o,lv_event_get_code,l
 -r=objs/apps/common/ui/lv_watch/ui_cover/ui_cover.c.o,lv_indev_get_vect,l
 -r=objs/apps/common/ui/lv_watch/ui_cover/ui_cover.c.o,lv_indev_get_act,l
--r=objs/apps/common/ui/lv_watch/ui_cover/ui_cover.c.o,puts,l
+-r=objs/apps/common/ui/lv_watch/ui_cover/ui_cover.c.o,lv_obj_set_style_translate_x,l
+-r=objs/apps/common/ui/lv_watch/ui_cover/ui_cover.c.o,lv_obj_set_style_translate_y,l
+-r=objs/apps/common/ui/lv_watch/ui_cover/ui_cover.c.o,printf,l
+-r=objs/apps/common/ui/lv_watch/ui_cover/ui_cover.c.o,common_widget_anim_create,l
+-r=objs/apps/common/ui/lv_watch/ui_cover/ui_cover.c.o,lv_anim_path_ease_out,l
+-r=objs/apps/common/ui/lv_watch/ui_cover/ui_cover.c.o,lv_anim_start,l
+-r=objs/apps/common/ui/lv_watch/ui_cover/ui_cover.c.o,ui_menu_jump,l
 -r=objs/apps/common/ui/lv_watch/ui_cover/ui_cover.c.o,p_ui_info_cache,l
 -r=objs/apps/common/ui/lv_watch/ui_cover/ui_cover.c.o,widget_obj_para,l
+-r=objs/apps/common/ui/lv_watch/ui_cover/ui_cover.c.o,widget_anim_para,l
 objs/apps/common/ui/lv_watch/ui_tileview/ui_tileview.c.o
 -r=objs/apps/common/ui/lv_watch/ui_tileview/ui_tileview.c.o,tileview_info_clear,pl
 -r=objs/apps/common/ui/lv_watch/ui_tileview/ui_tileview.c.o,tileview_get_center_menu,pl

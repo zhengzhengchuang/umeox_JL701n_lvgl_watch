@@ -10,6 +10,9 @@
 */
 void ui_menu_jump(ui_act_id_t act_id)
 {
+    if(!ui_act_id_validity(act_id))
+        return;
+
     ui_menu_jump_post_msg(act_id);
 
     return;

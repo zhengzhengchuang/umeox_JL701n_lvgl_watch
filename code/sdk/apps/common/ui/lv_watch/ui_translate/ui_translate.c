@@ -374,13 +374,6 @@ static void translate_menu_anim_ready_cb(lv_anim_t *a)
 
     *translate_animing = false;
 
-    // if(translate_mode == 1)
-    // {
-    //     lv_obj_t *tileview_obj = p_ui_info_cache->ui_tileview_info.tileview_obj;
-    //     if(tileview_obj)
-    //         lv_obj_add_flag(tileview_obj, LV_OBJ_FLAG_SCROLLABLE);
-    // }
-
     return;
 }
 
@@ -487,13 +480,6 @@ static void translate_menu_pressing_cb(lv_event_t *e)
         translate_menu_scroll_judge();
     else
         translate_menu_scroll_handle();
-
-    // if(*translate_scroll_dir != LV_DIR_NONE && translate_mode == 1)
-    // {
-    //     lv_obj_t *tileview_obj = p_ui_info_cache->ui_tileview_info.tileview_obj;
-    //     if(tileview_obj)
-    //         lv_obj_clear_flag(tileview_obj, LV_OBJ_FLAG_SCROLLABLE);
-    // }
 
     return;
 }

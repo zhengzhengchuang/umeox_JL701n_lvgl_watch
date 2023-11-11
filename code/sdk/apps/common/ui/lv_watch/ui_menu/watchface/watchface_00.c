@@ -35,8 +35,7 @@ static void menu_create_cb(lv_obj_t *obj)
 {
     if(!obj) return;
 
-    cover_register_all_menu(obj, Act_Id_Watchface, \
-        Act_Id_Weather, LV_DIR_TOP);
+    
  
     return;
 }
