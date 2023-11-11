@@ -12700,7 +12700,6 @@ objs/apps/common/ui/lv_watch/ui_cover/ui_cover.c.o
 -r=objs/apps/common/ui/lv_watch/ui_cover/ui_cover.c.o,common_widget_obj_create,l
 -r=objs/apps/common/ui/lv_watch/ui_cover/ui_cover.c.o,lv_obj_add_event_cb,l
 -r=objs/apps/common/ui/lv_watch/ui_cover/ui_cover.c.o,lv_event_get_code,l
--r=objs/apps/common/ui/lv_watch/ui_cover/ui_cover.c.o,printf,l
 -r=objs/apps/common/ui/lv_watch/ui_cover/ui_cover.c.o,lv_indev_get_vect,l
 -r=objs/apps/common/ui/lv_watch/ui_cover/ui_cover.c.o,lv_indev_get_act,l
 -r=objs/apps/common/ui/lv_watch/ui_cover/ui_cover.c.o,puts,l

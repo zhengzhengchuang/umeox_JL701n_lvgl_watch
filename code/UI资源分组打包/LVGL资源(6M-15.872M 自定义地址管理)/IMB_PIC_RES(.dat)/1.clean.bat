@@ -1,3 +1,0 @@
-del /q "output\*.*"
-
-::pause
