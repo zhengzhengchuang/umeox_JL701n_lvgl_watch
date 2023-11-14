@@ -43,8 +43,12 @@
 //                                 IIC配置                                        //
 //*********************************************************************************//
 /*软件IIC设置*/
-#define TCFG_SW_I2C0_CLK_PORT               IO_PORTG_03                             //软件IIC  CLK脚选择
-#define TCFG_SW_I2C0_DAT_PORT               IO_PORTG_04                             //软件IIC  DAT脚选择
+#define TCFG_SW_I2C0_CLK_PORT               IO_PORTG_03                             //软件IIC0  CLK脚选择
+#define TCFG_SW_I2C0_DAT_PORT               IO_PORTG_04                             //软件IIC0  DAT脚选择
+
+#define TCFG_SW_I2C1_CLK_PORT               IO_PORTB_04                             //软件IIC1  CLK脚选择
+#define TCFG_SW_I2C1_DAT_PORT               IO_PORTB_05                             //软件IIC1  DAT脚选择
+
 #define TCFG_SW_I2C0_DELAY_CNT              50                                      //IIC延时参数，影响通讯时钟频率
 
 /*硬件IIC端口选择

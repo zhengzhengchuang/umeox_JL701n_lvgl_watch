@@ -1,6 +1,5 @@
-#include "gSensor/gSensor_manage.h"
 #include "app_config.h"
-
+#include "gSensor/gSensor_manage.h"
 
 #if TCFG_P11GSENSOR_EN
 

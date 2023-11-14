@@ -3,6 +3,8 @@
 #include "../poc_modem/poc_modem_ui.h"
 #include "../poc_modem/poc_modem_cache.h"
 
+#if UI_USE_COVER
+
 static lv_anim_t cover_anim;
 static const int16_t cover_scroll_limit = 10;
 
@@ -410,3 +412,4 @@ void cover_register_all_menu(lv_obj_t *obj, ui_act_id_t bg, \
 
     return;
 }
+#endif

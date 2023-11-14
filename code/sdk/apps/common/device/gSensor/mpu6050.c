@@ -1,6 +1,6 @@
 #include "gSensor/mpu6050.h"
 #include "gSensor/gSensor_manage.h"
-#include "app_config.h"
+
 
 #if TCFG_MPU6050_EN
 
@@ -112,4 +112,4 @@ REGISTER_GRAVITY_SENSOR(gSensor) = {
     .gravity_sensor_ctl   = mpu6050_ctl,
 };
 
-#endif //TCFG_MPU6050_EN
+#endif

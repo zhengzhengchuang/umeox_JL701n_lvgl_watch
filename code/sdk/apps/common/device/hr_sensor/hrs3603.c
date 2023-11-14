@@ -278,7 +278,6 @@ void hrs3603_spo2_enable(void)
 
 u8 hx3603_init()
 {
-
     if (sensor_iic_init_status == 0) {
         spin_lock_init(&sensor_iic);
         sensor_iic_init_status = 1;

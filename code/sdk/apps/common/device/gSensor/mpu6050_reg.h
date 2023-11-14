@@ -1,6 +1,10 @@
 #ifndef __MPU6050_REG_H_
 #define __MPU6050_REG_H_
 
+#include "app_config.h"
+
+#if TCFG_MPU6050_EN
+
 #define MPU_ACK_WAIT_TIME           200    //us
 #define MPU6050_AD0_LOW
 
@@ -594,5 +598,5 @@
 #define MPU6050_RA_WHO_AM_I         0x75
 //bit6-bit1 设备身份验证 0x34 最高位和最低位都剔除掉
 
-
+#endif
 #endif

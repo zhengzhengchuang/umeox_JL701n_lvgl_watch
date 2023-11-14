@@ -25,9 +25,17 @@ void ui_menu_exit_prepare(ui_act_id_t act_id)
     if(p_ui_info_cache->ui_menu_container)
         lv_obj_del(p_ui_info_cache->ui_menu_container);
 
-    tileview_info_clear();
+#if UI_USE_COVER
+    cover_info_clear();
+#endif
 
+#if UI_USE_TILEVIEW
+    tileview_info_clear();
+#endif
+
+#if UI_USE_TRANSLATE
     translate_info_clear();
+#endif
 
     common_widget_para_init();
    

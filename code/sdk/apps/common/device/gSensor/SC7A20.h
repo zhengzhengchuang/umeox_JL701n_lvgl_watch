@@ -4,6 +4,8 @@ Copyright (c) 2019 Silan MEMS. All Rights Reserved.
 #ifndef SC7A20_H
 #define SC7A20_H
 
+
+#if 1
 /********添加IIC头文件******************/
 //#include "i2c.h"
 /***************************************/
@@ -28,8 +30,6 @@ Copyright (c) 2019 Silan MEMS. All Rights Reserved.
 
 #define click_pp_num    (unsigned short)10*25  //10对应0.5s(不需要管后面的*25)
 #define click_max_num   (unsigned short)60*25  // 60对应3s
-
-
 
 /*************驱动初始化函数**************/
 unsigned char  SC7A20_Config(void);
@@ -111,6 +111,7 @@ char SC7A20_click_status(void);
 #define SC7A20_TIME_WINDOW      0x3D
 #define SC7A20_ACT_THS          0x3E
 #define SC7A20_ACT_DURATION     0x3F
+#endif
 
 #endif // SC7A20_H
 

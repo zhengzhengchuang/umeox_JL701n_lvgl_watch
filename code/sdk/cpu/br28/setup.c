@@ -196,6 +196,17 @@ void setup_arch()
 
     wdt_init(WDT_16S);
     /* wdt_close(); */
+
+    extern const int config_asser;
+    if(!config_asser){
+        P11_WDT->KEY = 0x048C159D; 
+        P11_WDT->KEY = 0x26AE37BF;
+        P11_WDT->CON &= ~BIT(7);
+        P11_WDT->KEY = 0x048C159D; 
+        P11_WDT->KEY = 0x26AE37BF;
+        SFR(P11_WDT->CON, 6, 1, 0);
+    }
+    
     efuse_init();
 
     clk_voltage_init(TCFG_CLOCK_MODE, SYSVDD_VOL_SEL_126V);

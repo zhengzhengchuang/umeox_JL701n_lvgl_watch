@@ -1,5 +1,6 @@
 objs/apps/common/ui/lv_watch/lv_watch.c.o: \
   apps/common/ui/lv_watch/lv_watch.c apps/common/ui/lv_watch/lv_watch.h \
+  apps/common/ui/lv_watch/./include/ui_conf.h \
   apps/common/ui/lv_watch/./include/ui_menu.h \
   apps/common/ui/lv_watch/./include/ui_act_id.h \
   apps/common/ui/lv_watch/./include/../../lvgl/lvgl.h \

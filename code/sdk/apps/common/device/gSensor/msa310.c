@@ -1,9 +1,8 @@
-#include "gSensor/gSensor_manage.h"
-#include "app_config.h"
-
-#include "gSensor/msa310.h"
-#include "gSensor/msa310_function.h"
 #include "math.h"
+#include "gSensor/msa310.h"
+#include "gSensor/gSensor_manage.h"
+#include "gSensor/msa310_function.h"
+
 
 #if TCFG_MSA310_EN
 

@@ -80,6 +80,8 @@ int soft_iic_init(soft_iic_dev iic)
 {
     u32 scl, sda;
 
+    printf("%s:iic = %d\n", __func__, iic);
+
     scl = iic_get_scl(iic);
     sda = iic_get_sda(iic);
     //printf("%s:scl = %d, sda = %d\n", __func__, scl, sda);

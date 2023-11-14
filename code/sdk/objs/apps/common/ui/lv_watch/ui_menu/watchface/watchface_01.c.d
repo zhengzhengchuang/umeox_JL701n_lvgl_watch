@@ -3,6 +3,7 @@ objs/apps/common/ui/lv_watch/ui_menu/watchface/watchface_01.c.o: \
   apps/common/ui/lv_watch/ui_menu/watchface/watchface_01.h \
   apps/common/ui/lv_watch/ui_menu/watchface/watchface_main.h \
   apps/common/ui/lv_watch/ui_menu/watchface/../../lv_watch.h \
+  apps/common/ui/lv_watch/ui_menu/watchface/../.././include/ui_conf.h \
   apps/common/ui/lv_watch/ui_menu/watchface/../.././include/ui_menu.h \
   apps/common/ui/lv_watch/ui_menu/watchface/../.././include/ui_act_id.h \
   apps/common/ui/lv_watch/ui_menu/watchface/../.././include/../../lvgl/lvgl.h \

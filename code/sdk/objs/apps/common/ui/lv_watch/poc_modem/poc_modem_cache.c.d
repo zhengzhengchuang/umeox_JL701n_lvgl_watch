@@ -177,5 +177,6 @@ objs/apps/common/ui/lv_watch/poc_modem/poc_modem_cache.c.o: \
   apps/common/ui/lvgl/src/extra/widgets/imgbtn/lv_imgbtn.h \
   apps/common/ui/lvgl/src/extra/widgets/span/lv_span.h \
   apps/common/ui/lv_watch/poc_modem/../ui_cover/ui_cover.h \
+  apps/common/ui/lv_watch/poc_modem/../ui_cover/../include/ui_conf.h \
   apps/common/ui/lv_watch/poc_modem/../ui_tileview/ui_tileview.h \
   apps/common/ui/lv_watch/poc_modem/../ui_translate/ui_translate.h

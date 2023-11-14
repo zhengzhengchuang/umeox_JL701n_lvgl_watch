@@ -1,6 +1,8 @@
 #ifndef __MSA310_H__
 #define __MSA310_H__
 
+#include "app_config.h"
+
 #if TCFG_MSA310_EN
 #include "gSensor/gSensor_manage.h"
 

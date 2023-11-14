@@ -5,8 +5,11 @@
 extern "C" {
 #endif
 
+#include "../include/ui_conf.h"
 #include "../include/ui_menu.h"
 #include "../include/ui_act_id.h"
+
+#if UI_USE_COVER
 
 #define COVER_MENU_NUM (2)//0:背景层 1:前景层
 
@@ -24,6 +27,8 @@ typedef struct
 void cover_info_clear(void);
 void cover_register_all_menu(lv_obj_t *obj, ui_act_id_t bg, \
     ui_act_id_t fg, lv_dir_t dir);
+#endif
+
 #ifdef __cplusplus
 } /* extern "C" */
 #endif

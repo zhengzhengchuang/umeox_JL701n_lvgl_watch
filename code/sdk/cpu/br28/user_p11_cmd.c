@@ -249,8 +249,6 @@ int vir_p11_i2c_write_u8regs(u8 dev, uint8_t address, uint8_t reg,
 int vir_p11_i2c_write_u16regs(u8 dev, uint8_t address, uint16_t reg,
                               void *data, size_t length)
 {
-
-
     ASSERT(vir_iic_m2p_wbuf);
     ASSERT(!cpu_irq_disabled());//不能关中断，预防死锁
     ASSERT(length < 250);
@@ -320,11 +318,8 @@ int vir_p11_i2c_read_u16regs(u8 dev, uint16_t address, uint16_t reg,
     return 0;
 }
 
-
-
 #define     ALP_IO_DEBUG_0(i,x)       //{P11_PORT->PB_OUT &= ~BIT(x), P11_PORT->PB_DIR &= ~BIT(x), P11_PORT->PB_SEL |= BIT(x);}
 #define     ALP_IO_DEBUG_1(i,x)       //{P11_PORT->PB_OUT |=  BIT(x), P11_PORT->PB_DIR &= ~BIT(x), P11_PORT->PB_SEL |= BIT(x);}
-
 
 //iic 地址是7bit地址
 int vir_p11_i2c_read_u8regs(u8 dev, uint16_t address, uint8_t reg,
@@ -362,10 +357,6 @@ int vir_p11_i2c_read_u8regs(u8 dev, uint16_t address, uint8_t reg,
     ALP_IO_DEBUG_0(B, 8);
     return 0;
 }
-
-
-
-
 
 
 /**

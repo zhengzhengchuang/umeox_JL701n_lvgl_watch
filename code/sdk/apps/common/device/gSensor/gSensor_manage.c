@@ -42,8 +42,6 @@
 #include "debug.h"
 
 
-
-
 static const struct gsensor_platform_data *platform_data;
 G_SENSOR_INTERFACE *gSensor_hdl = NULL;
 G_SENSOR_INFO  __gSensor_info = {.iic_delay = 10};
@@ -246,7 +244,6 @@ void gsensor_io_ctl(u8 cmd, void *arg)
 
 int gravity_sensor_init(void *_data)
 {
-
     if (sensor_iic_init_status == 0) {
         spin_lock_init(&sensor_iic);
         sensor_iic_init_status = 1;

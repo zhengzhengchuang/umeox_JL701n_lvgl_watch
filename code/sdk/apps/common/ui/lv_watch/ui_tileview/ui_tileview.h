@@ -5,9 +5,11 @@
 extern "C" {
 #endif
 
+#include "../include/ui_conf.h"
 #include "../include/ui_menu.h"
 #include "../include/ui_act_id.h"
 
+#if UI_USE_TILEVIEW
 
 /********上、下、左、右、中心********/
 #define TILEVIEW_DIR_NUM (5)
@@ -33,10 +35,11 @@ typedef struct
 }ui_tileview_info_t;
 
 void tileview_info_clear(void);
-void tileview_menu_create(lv_obj_t *obj);
 lv_obj_t *tileview_get_center_menu(void);
-void tileview_register_all_menu(ui_act_id_t up, ui_act_id_t down, ui_act_id_t left, \
-    ui_act_id_t right, ui_act_id_t center);
+void tileview_register_all_menu(lv_obj_t *obj, ui_act_id_t up, ui_act_id_t down, \
+    ui_act_id_t left, ui_act_id_t right, ui_act_id_t center);
+#endif
+
 #ifdef __cplusplus
 }
 #endif

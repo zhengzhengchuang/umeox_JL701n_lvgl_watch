@@ -1,5 +1,31 @@
 objs/apps/common/device/gSensor/msa310.c.o: \
-  apps/common/device/gSensor/msa310.c \
+  apps/common/device/gSensor/msa310.c C:/JL/pi32/pi32v2-include\math.h \
+  C:/JL/pi32/pi32v2-include\sys/reent.h \
+  C:/JL/pi32/pi32v2-include\_ansi.h C:/JL/pi32/pi32v2-include\newlib.h \
+  C:/JL/pi32/pi32v2-include\sys/config.h \
+  C:/JL/pi32/pi32v2-include\machine/ieeefp.h \
+  C:/JL/pi32/pi32v2-include\sys/features.h \
+  C:/JL/pi32/pi32v2-include\sys/_types.h \
+  C:/JL/pi32/pi32v2-include\machine/_types.h \
+  C:/JL/pi32/pi32v2-include\machine/_default_types.h \
+  C:/JL/pi32/pi32v2-include\sys/lock.h \
+  apps/common/device\gSensor/msa310.h apps/watch/include\app_config.h \
+  apps/watch/board/br28\board_config.h include_lib\media/audio_def.h \
+  apps/watch/board/br28/board_701n_demo/board_701n_demo_cfg.h \
+  apps/watch/board/br28/board_701n_demo/board_701n_demo_global_build_cfg.h \
+  apps/watch/board/br28/board_7012a_demo/board_7012a_demo_cfg.h \
+  apps/watch/board/br28/board_7012a_demo/board_7012a_demo_global_build_cfg.h \
+  apps/watch/board/br28/board_7012a7_demo/board_7012a7_demo_cfg.h \
+  apps/watch/board/br28/board_7012a7_demo/board_7012a7_demo_global_build_cfg.h \
+  apps/watch/board/br28/board_701n_lvgl_demo/board_701n_lvgl_demo_cfg.h \
+  apps/watch/board/br28/board_701n_lvgl_demo/board_701n_lvgl_demo_global_build_cfg.h \
+  apps/common/device/usb\usb_std_class_def.h \
+  apps/common/device/usb\usb_common_def.h \
+  apps/watch/board/br28/board_ad2802e_demo/board_ad2802e_demo_cfg.h \
+  apps/watch/board/br28/board_ad2802e_demo/board_ad2802e_demo_global_build_cfg.h \
+  include_lib/btctrler\btcontroller_mode.h \
+  apps/watch/include/user_cfg_id.h apps/watch/include/ui/res_config.h \
+  apps/watch/include/macro_default.h \
   apps/common/device\gSensor/gSensor_manage.h \
   include_lib/system/generic\printf.h \
   include_lib/system/generic/typedef.h \
@@ -33,16 +59,7 @@ objs/apps/common/device/gSensor/msa310.c.o: \
   include_lib/driver/cpu/br28\asm/power/power_reset.h \
   include_lib/driver/cpu/br28\asm/power/power_compat.h \
   include_lib/system\generic/errno-base.h \
-  C:/JL/pi32/pi32v2-include\string.h C:/JL/pi32/pi32v2-include/_ansi.h \
-  C:/JL/pi32/pi32v2-include\newlib.h \
-  C:/JL/pi32/pi32v2-include\sys/config.h \
-  C:/JL/pi32/pi32v2-include\machine/ieeefp.h \
-  C:/JL/pi32/pi32v2-include\sys/features.h \
-  C:/JL/pi32/pi32v2-include\sys/reent.h \
-  C:/JL/pi32/pi32v2-include\sys/_types.h \
-  C:/JL/pi32/pi32v2-include\machine/_types.h \
-  C:/JL/pi32/pi32v2-include\machine/_default_types.h \
-  C:/JL/pi32/pi32v2-include\sys/lock.h \
+  C:/JL/pi32/pi32v2-include\string.h \
   C:/JL/pi32/pi32v2-include\sys/cdefs.h \
   C:/JL/pi32/pi32v2-include\sys/string.h \
   C:/JL/pi32/pi32v2-include\strings.h \
@@ -52,23 +69,7 @@ objs/apps/common/device/gSensor/msa310.c.o: \
   include_lib/system/generic\cpu.h \
   include_lib/driver/cpu/br28\asm/iic_hw.h \
   include_lib/driver/cpu/br28\asm/iic_soft.h include_lib/system\timer.h \
-  include_lib/system/generic/list.h apps/watch/include\app_config.h \
-  apps/watch/board/br28\board_config.h include_lib\media/audio_def.h \
-  apps/watch/board/br28/board_701n_demo/board_701n_demo_cfg.h \
-  apps/watch/board/br28/board_701n_demo/board_701n_demo_global_build_cfg.h \
-  apps/watch/board/br28/board_7012a_demo/board_7012a_demo_cfg.h \
-  apps/watch/board/br28/board_7012a_demo/board_7012a_demo_global_build_cfg.h \
-  apps/watch/board/br28/board_7012a7_demo/board_7012a7_demo_cfg.h \
-  apps/watch/board/br28/board_7012a7_demo/board_7012a7_demo_global_build_cfg.h \
-  apps/watch/board/br28/board_701n_lvgl_demo/board_701n_lvgl_demo_cfg.h \
-  apps/watch/board/br28/board_701n_lvgl_demo/board_701n_lvgl_demo_global_build_cfg.h \
-  apps/common/device/usb\usb_std_class_def.h \
-  apps/common/device/usb\usb_common_def.h \
-  apps/watch/board/br28/board_ad2802e_demo/board_ad2802e_demo_cfg.h \
-  apps/watch/board/br28/board_ad2802e_demo/board_ad2802e_demo_global_build_cfg.h \
-  include_lib/btctrler\btcontroller_mode.h \
-  apps/watch/include/user_cfg_id.h apps/watch/include/ui/res_config.h \
-  apps/watch/include/macro_default.h include_lib/system\event.h \
+  include_lib/system/generic/list.h include_lib/system\event.h \
   include_lib/system/generic/rect.h include_lib\system/includes.h \
   include_lib/system/init.h include_lib/system/spinlock.h \
   include_lib/system/generic\irq.h include_lib/system/task.h \
@@ -120,6 +121,4 @@ objs/apps/common/device/gSensor/msa310.c.o: \
   include_lib/driver/cpu/br28\asm/rtc.h \
   include_lib/driver/device\rtc_calculate.h \
   include_lib/driver\device/sdio_host_init.h \
-  apps/common/device\gSensor/msa310.h \
-  apps/common/device\gSensor/msa310_function.h \
-  C:/JL/pi32/pi32v2-include\math.h
+  apps/common/device\gSensor/msa310_function.h

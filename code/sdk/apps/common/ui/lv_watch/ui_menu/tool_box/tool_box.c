@@ -24,7 +24,7 @@ static void menu_display_cb(lv_obj_t *obj)
     return;
 }
 
-const ui_menu_load_info_t menu_load_weather = 
+const ui_menu_load_info_t menu_load_tool_box = 
 {
     .menu_arg = NULL,
     .lock_flag = false,

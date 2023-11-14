@@ -2,6 +2,7 @@ objs/apps/common/ui/lv_watch/ui_menu/split_screen/split_screen.c.o: \
   apps/common/ui/lv_watch/ui_menu/split_screen/split_screen.c \
   apps/common/ui/lv_watch/ui_menu/split_screen/split_screen.h \
   apps/common/ui/lv_watch/ui_menu/split_screen/../../lv_watch.h \
+  apps/common/ui/lv_watch/ui_menu/split_screen/../.././include/ui_conf.h \
   apps/common/ui/lv_watch/ui_menu/split_screen/../.././include/ui_menu.h \
   apps/common/ui/lv_watch/ui_menu/split_screen/../.././include/ui_act_id.h \
   apps/common/ui/lv_watch/ui_menu/split_screen/../.././include/../../lvgl/lvgl.h \

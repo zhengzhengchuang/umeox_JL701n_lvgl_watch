@@ -18,15 +18,21 @@ typedef struct
 
     lv_obj_t *ui_menu_container;
 
+#if UI_USE_COVER
     ui_cover_info_t ui_cover_info;
+#endif
 
     ui_menu_load_info_t menu_load_info;
 
     ui_watchface_id_t cur_watchface_id;
 
+#if UI_USE_TILEVIEW
     ui_tileview_info_t ui_tileview_info;
+#endif
 
+#if UI_USE_TRANSLATE
     ui_translate_info_t ui_translate_info;
+#endif
 }ui_info_cache_t;
 extern ui_info_cache_t *p_ui_info_cache;
 extern const ui_menu_load_info_t *watchface_load_info_cache[Watchface_Id_Max];

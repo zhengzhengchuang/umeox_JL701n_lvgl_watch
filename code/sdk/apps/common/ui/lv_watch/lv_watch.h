@@ -5,6 +5,7 @@
 extern "C" {
 #endif
 
+#include "./include/ui_conf.h"
 #include "./include/ui_menu.h"
 #include "./include/ui_act_id.h"
 #include "./poc_modem/poc_modem_ui.h"

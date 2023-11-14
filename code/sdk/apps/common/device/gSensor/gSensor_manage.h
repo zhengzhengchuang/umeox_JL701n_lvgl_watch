@@ -1,5 +1,6 @@
 #ifndef _GSENSOR_MANAGE_H
 #define _GSENSOR_MANAGE_H
+
 #include "printf.h"
 #include "cpu.h"
 //#include "iic.h"

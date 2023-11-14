@@ -67,7 +67,7 @@
 #define    VM_SPORT_INFO_SLEEP_DETECTION	 47
 #define    VM_SPORT_INFO_FALL_DETECTION      48
 #define    VM_SPORT_INFO_RAISE_WRIST         49
-#define 	VM_SPORT_INFO_DAILY_DATA		 50
+#define    VM_SPORT_INFO_DAILY_DATA		 50
 
 #define     VM_VIR_RTC_TIME                  51
 #define     VM_VIR_ALM_TIME                  52

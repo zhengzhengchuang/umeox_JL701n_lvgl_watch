@@ -3,6 +3,7 @@
 #include "../poc_modem/poc_modem_ui.h"
 #include "../poc_modem/poc_modem_cache.h"
 
+#if UI_USE_TILEVIEW
 
 void tileview_info_clear(void)
 {
@@ -115,28 +116,6 @@ static void tileview_register_center_menu(ui_act_id_t act_id)
     return;
 }
 
-/*********如果那个方向没有的话，传入Act_Id_Null即可************/
-void tileview_register_all_menu(ui_act_id_t up, ui_act_id_t down, ui_act_id_t left, \
-    ui_act_id_t right, ui_act_id_t center)
-{
-    if(ui_act_id_validity(up))
-        tileview_register_up_menu(up);
-    
-    if(ui_act_id_validity(down))
-        tileview_register_down_menu(down);
-
-    if(ui_act_id_validity(left))
-        tileview_register_left_menu(left);
-
-    if(ui_act_id_validity(right))
-        tileview_register_right_menu(right); 
-
-    if(ui_act_id_validity(center))
-        tileview_register_center_menu(center); 
-
-    return;
-}
-
 static void tileview_event_cb(lv_event_t *e)
 {
     if(!e) return;
@@ -168,7 +147,7 @@ static void tileview_event_cb(lv_event_t *e)
     return;
 }
 
-void tileview_menu_create(lv_obj_t *obj)
+static void tileview_menu_create(lv_obj_t *obj)
 {
     if(!obj) return;
 
@@ -215,3 +194,30 @@ void tileview_menu_create(lv_obj_t *obj)
 
     return;
 }
+
+/*********如果那个方向没有的话，传入Act_Id_Null即可************/
+void tileview_register_all_menu(lv_obj_t *obj, ui_act_id_t up, ui_act_id_t down, \
+    ui_act_id_t left, ui_act_id_t right, ui_act_id_t center)
+{
+    if(!obj) return;
+
+    if(ui_act_id_validity(up))
+        tileview_register_up_menu(up);
+    
+    if(ui_act_id_validity(down))
+        tileview_register_down_menu(down);
+
+    if(ui_act_id_validity(left))
+        tileview_register_left_menu(left);
+
+    if(ui_act_id_validity(right))
+        tileview_register_right_menu(right); 
+
+    if(ui_act_id_validity(center))
+        tileview_register_center_menu(center); 
+
+    tileview_menu_create(obj);
+
+    return;
+}
+#endif

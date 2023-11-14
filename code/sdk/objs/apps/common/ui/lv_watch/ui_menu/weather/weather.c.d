@@ -2,6 +2,7 @@ objs/apps/common/ui/lv_watch/ui_menu/weather/weather.c.o: \
   apps/common/ui/lv_watch/ui_menu/weather/weather.c \
   apps/common/ui/lv_watch/ui_menu/weather/weather.h \
   apps/common/ui/lv_watch/ui_menu/weather/../../lv_watch.h \
+  apps/common/ui/lv_watch/ui_menu/weather/../.././include/ui_conf.h \
   apps/common/ui/lv_watch/ui_menu/weather/../.././include/ui_menu.h \
   apps/common/ui/lv_watch/ui_menu/weather/../.././include/ui_act_id.h \
   apps/common/ui/lv_watch/ui_menu/weather/../.././include/../../lvgl/lvgl.h \

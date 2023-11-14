@@ -2,6 +2,7 @@ objs/apps/common/ui/lv_watch/ui_menu/tool_box/tool_box.c.o: \
   apps/common/ui/lv_watch/ui_menu/tool_box/tool_box.c \
   apps/common/ui/lv_watch/ui_menu/tool_box/tool_box.h \
   apps/common/ui/lv_watch/ui_menu/tool_box/../../lv_watch.h \
+  apps/common/ui/lv_watch/ui_menu/tool_box/../.././include/ui_conf.h \
   apps/common/ui/lv_watch/ui_menu/tool_box/../.././include/ui_menu.h \
   apps/common/ui/lv_watch/ui_menu/tool_box/../.././include/ui_act_id.h \
   apps/common/ui/lv_watch/ui_menu/tool_box/../.././include/../../lvgl/lvgl.h \

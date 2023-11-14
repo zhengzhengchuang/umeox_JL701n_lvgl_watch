@@ -6,7 +6,10 @@ extern "C" {
 #endif
 
 #include "../include/ui_menu.h"
+#include "../include/ui_conf.h"
 #include "../include/ui_act_id.h"
+
+#if UI_USE_TRANSLATE
 
 #define TRANSLATE_DIR_NUM (5)
 
@@ -42,6 +45,8 @@ void translate_menu_create_by_tv(lv_obj_t *obj);
 void translate_menu_create_by_obj(lv_obj_t *obj);
 void translate_register_all_menu(ui_act_id_t up, ui_act_id_t down, ui_act_id_t left, \
     ui_act_id_t right, ui_act_id_t center);
+#endif
+
 #ifdef __cplusplus
 } /* extern "C" */
 #endif

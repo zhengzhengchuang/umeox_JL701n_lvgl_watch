@@ -2,6 +2,7 @@ objs/apps/common/ui/lv_watch/comm_widget/common_clock.c.o: \
   apps/common/ui/lv_watch/comm_widget/common_clock.c \
   apps/common/ui/lv_watch/comm_widget/common_clock.h \
   apps/common/ui/lv_watch/comm_widget/../lv_watch.h \
+  apps/common/ui/lv_watch/comm_widget/.././include/ui_conf.h \
   apps/common/ui/lv_watch/comm_widget/.././include/ui_menu.h \
   apps/common/ui/lv_watch/comm_widget/.././include/ui_act_id.h \
   apps/common/ui/lv_watch/comm_widget/.././include/../../lvgl/lvgl.h \

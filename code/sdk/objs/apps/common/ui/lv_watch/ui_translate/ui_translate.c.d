@@ -176,6 +176,7 @@ objs/apps/common/ui/lv_watch/ui_translate/ui_translate.c.o: \
   apps/common/ui/lvgl/src/extra/widgets/led/lv_led.h \
   apps/common/ui/lvgl/src/extra/widgets/imgbtn/lv_imgbtn.h \
   apps/common/ui/lvgl/src/extra/widgets/span/lv_span.h \
+  apps/common/ui/lv_watch/ui_translate/../include/ui_conf.h \
   apps/common/ui/lv_watch/ui_translate/../lv_watch.h \
   apps/common/ui/lv_watch/ui_translate/.././poc_modem/poc_modem_ui.h \
   apps/common/ui/lv_watch/ui_translate/.././poc_modem/poc_modem_cache.h \

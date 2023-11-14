@@ -1,6 +1,7 @@
 objs/apps/common/ui/lv_watch/ui_tileview/ui_tileview.c.o: \
   apps/common/ui/lv_watch/ui_tileview/ui_tileview.c \
   apps/common/ui/lv_watch/ui_tileview/ui_tileview.h \
+  apps/common/ui/lv_watch/ui_tileview/../include/ui_conf.h \
   apps/common/ui/lv_watch/ui_tileview/../include/ui_menu.h \
   apps/common/ui/lv_watch/ui_tileview/../include/ui_act_id.h \
   apps/common/ui/lv_watch/ui_tileview/../include/../../lvgl/lvgl.h \

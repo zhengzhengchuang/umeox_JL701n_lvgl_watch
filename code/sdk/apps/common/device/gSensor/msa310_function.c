@@ -1,12 +1,3 @@
-/**
-  ******************************************************************************
-  * @file    msa300_app_fixpoint.c
-  * @author  memsensing algorithm team
-  * @version V1.1.0
-  * @date    16- 8 -2018
-  * @brief   This file provides pedometer function of G-sensor MSA30x application
-  ******************************************************************************
-**/
 #include "gSensor/gSensor_manage.h"
 #include "gSensor/msa310_function.h"
 

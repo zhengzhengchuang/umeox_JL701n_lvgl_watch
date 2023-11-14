@@ -1102,6 +1102,7 @@ static int watch_api_init(void)
     watch.init_status = 1;
     return 1;
 }
+
 /* 计步开关 */
 static u8 step_start(void)
 {

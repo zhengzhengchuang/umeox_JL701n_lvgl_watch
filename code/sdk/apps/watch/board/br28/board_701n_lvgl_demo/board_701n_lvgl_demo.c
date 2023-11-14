@@ -468,8 +468,16 @@ const struct ui_devices_cfg ui_cfg_data = {
 const struct soft_iic_config soft_iic_cfg[] = {
     //iic0 data
     {
-        .scl = TCFG_SW_I2C0_CLK_PORT,                   //IIC CLK脚
-        .sda = TCFG_SW_I2C0_DAT_PORT,                   //IIC DAT脚
+        .scl = TCFG_SW_I2C0_CLK_PORT,                   //IIC0 CLK脚
+        .sda = TCFG_SW_I2C0_DAT_PORT,                   //IIC0 DAT脚
+        .delay = TCFG_SW_I2C0_DELAY_CNT,                //软件IIC延时参数，影响通讯时钟频率
+        .io_pu = 1,                                     //是否打开上拉电阻，如果外部电路没有焊接上拉电阻需要置1
+    },
+
+    //iic1 data
+    {
+        .scl = TCFG_SW_I2C1_CLK_PORT,                   //IIC1 CLK脚
+        .sda = TCFG_SW_I2C1_DAT_PORT,                   //IIC1 DAT脚
         .delay = TCFG_SW_I2C0_DELAY_CNT,                //软件IIC延时参数，影响通讯时钟频率
         .io_pu = 1,                                     //是否打开上拉电阻，如果外部电路没有焊接上拉电阻需要置1
     },
@@ -1311,7 +1319,7 @@ void board_init()
 #else
 
 #if (TCFG_HR_SENSOR_ENABLE||TCFG_GSENSOR_ENABLE||TCFG_SPO2_SENSOR_ENABLE||TCFG_BMP280_ENABLE)
-        extern int watch_sensor_open(void);
+    extern int watch_sensor_open(void);
     watch_sensor_open();
 #endif //TCFG_xxSENSOR_ENABLE
 #endif

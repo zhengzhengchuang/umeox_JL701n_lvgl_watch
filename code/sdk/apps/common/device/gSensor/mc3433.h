@@ -1,6 +1,10 @@
 #ifndef __MC3433_H_
 #define __MC3433_H_
 
+#include "app_config.h"
+
+#if TCFG_MC3433_EN
+
 #define MC3433_XOUT_ACCEL_REG       0x00
 #define MC3433_YOUT_ACCEL_REG       0x01
 #define MC3433_ZOUT_ACCEL_REG       0x02
@@ -53,5 +57,6 @@ enum {
     RESOLUTION_7BIT,
     RESOLUTION_8BIT,
 };
+#endif
 
 #endif

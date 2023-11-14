@@ -1,6 +1,5 @@
 #include "gSensor/mc3433.h"
 #include "gSensor/gSensor_manage.h"
-#include "app_config.h"
 
 #if TCFG_MC3433_EN
 
@@ -87,5 +86,5 @@ REGISTER_GRAVITY_SENSOR(gSensor) = {
     .gravity_sensor_ctl   = mc3433_ctl,
 };
 
-#endif //TCFG_MC3433_EN
+#endif
 

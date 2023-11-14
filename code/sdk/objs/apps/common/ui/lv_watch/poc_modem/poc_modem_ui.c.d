@@ -1,6 +1,7 @@
 objs/apps/common/ui/lv_watch/poc_modem/poc_modem_ui.c.o: \
   apps/common/ui/lv_watch/poc_modem/poc_modem_ui.c \
   apps/common/ui/lv_watch/poc_modem/../lv_watch.h \
+  apps/common/ui/lv_watch/poc_modem/.././include/ui_conf.h \
   apps/common/ui/lv_watch/poc_modem/.././include/ui_menu.h \
   apps/common/ui/lv_watch/poc_modem/.././include/ui_act_id.h \
   apps/common/ui/lv_watch/poc_modem/.././include/../../lvgl/lvgl.h \

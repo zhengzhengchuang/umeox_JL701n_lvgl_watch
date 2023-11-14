@@ -264,6 +264,7 @@ INCLUDES := \
 	-Iapps/common/pay/upay_t_head/soc/softse \
 	-Iapps/common/timestamp \
 	-Iapps/common/device/gSensor/silan \
+	-Iapps/common/device/gSensor/qmi8658 \
 	-Iapps/common/uC-Shell/Cfg/Template \
 	-Iapps/common/uC-Shell/Cmd/General \
 	-Iapps/common/uC-Shell/Source \
@@ -302,6 +303,7 @@ c_SRC_FILES := \
 	apps/common/device/gSensor/msa310_function.c \
 	apps/common/device/gSensor/p11_gsensor.c \
 	apps/common/device/gSensor/silan/silan_motion_module.c \
+	apps/common/device/gSensor/qmi8658/qmi8658.c \
 	apps/common/device/hr_sensor/hrSensor_manage.c \
 	apps/common/device/hr_sensor/hrs3300.c \
 	apps/common/device/hr_sensor/hrs3603.c \

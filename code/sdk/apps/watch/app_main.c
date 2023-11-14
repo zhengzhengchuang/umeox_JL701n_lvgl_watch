@@ -25,17 +25,31 @@
 #define LOG_CLI_ENABLE
 #include "debug.h"
 
-
-
 APP_VAR app_var;
 
+#if 0
+u32 get_user_time_cnt(void)
+{
+    static u32 cnt = 0;
+
+    cnt = (u32)((P2M_LPTIME3_CNT3 << 24) | (P2M_LPTIME3_CNT2 << 16) | (P2M_LPTIME3_CNT1 << 8) | (P2M_LPTIME3_CNT0));
+   //cnt +=  (P11_LPTMR3->CNT );
+//    if(!read_cnt_flag){
+//        cnt = 10;
+//    }
+
+    u8 curr_freq_div = (__get_lrc_hz() / 32000);
+    cnt = (cnt / curr_freq_div);
+    printf("%s = %d\n",__func__,cnt);
+    printf("---lrc_hz = %d,curr_freq_div = %d\n",__get_lrc_hz(),curr_freq_div);
+    return cnt;
+}
+#endif
 
 void app_entry_idle()
 {
     app_task_switch_to(APP_IDLE_TASK);
 }
-
-
 
 void app_task_loop()
 {

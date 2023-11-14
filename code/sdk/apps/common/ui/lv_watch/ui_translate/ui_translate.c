@@ -3,6 +3,8 @@
 #include "../poc_modem/poc_modem_ui.h"
 #include "../poc_modem/poc_modem_cache.h"
 
+#if UI_USE_TRANSLATE
+
 static lv_anim_t translate_anim;
 static uint8_t translate_mode = 0;//0:obj 1:tileview
 static const uint8_t up_menu_idx = 0;
@@ -657,3 +659,4 @@ void translate_menu_create_by_obj(lv_obj_t *obj)
 
     return;
 }
+#endif

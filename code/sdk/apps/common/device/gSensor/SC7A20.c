@@ -1,10 +1,7 @@
+#include "math.h"
+#include "app_config.h"
 #include "gSensor/SC7A20.h"
 #include "gSensor/gSensor_manage.h"
-#include "app_config.h"
-
-#include "gSensor/SC7A20.h"
-#include "math.h"
-
 
 #if TCFG_SC7A20_EN
 

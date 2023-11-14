@@ -92,7 +92,16 @@
         "common_translate.h": "c",
         "ui_translate.h": "c",
         "ui_button.h": "c",
-        "ui_cover.h": "c"
+        "ui_cover.h": "c",
+        "ui_conf.h": "c",
+        "qmi8658.h": "c",
+        "sc7a20.h": "c",
+        "gsensor_manage.h": "c",
+        "btcontroller_mode.h": "c",
+        "math.h": "c",
+        "mpu6050_reg.h": "c",
+        "iic_sensor.h": "c",
+        "log.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }
