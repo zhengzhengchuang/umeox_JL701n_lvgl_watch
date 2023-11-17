@@ -209,5 +209,6 @@ objs/apps/watch/board/br28/board_701n_lvgl_demo/board_701n_lvgl_demo.c.o: \
   C:/JL/pi32/pi32v2-include\machine/stdlib.h \
   C:/JL/pi32/pi32v2-include\alloca.h \
   include_lib/btctrler/classic/hci_lmp.h \
+  apps/watch/board/br28/board_701n_lvgl_demo/../../../../common/device/sensor_iic/sensor_iic.h \
   apps/watch/board/br28/board_701n_lvgl_demo/../../../../../cpu/br28/ui_driver/lvgl/lvgl_main.h \
   include_lib/system\debug.h

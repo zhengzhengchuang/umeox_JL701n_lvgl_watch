@@ -32,6 +32,7 @@
 #include "include/nandflash_ftl.h"
 #include "usb/otg.h"
 #include "le_smartbox_adv.h"
+#include "../../../../common/device/sensor_iic/sensor_iic.h"
 #include "../../../../../cpu/br28/ui_driver/lvgl/lvgl_main.h"
 #if TCFG_PAY_ALIOS_ENABLE
 #if (TCFG_PAY_ALIOS_WAY_SEL == TCFG_PAY_ALIOS_WAY_ALIYUN)
@@ -1117,6 +1118,8 @@ static void board_devices_init(void)
 	uart_key_init();
 #endif /* #if TCFG_UART_KEY_ENABLE */
 
+    sensor_iic_init();
+
 #if (TCFG_HR_SENSOR_ENABLE||TCFG_SPO2_SENSOR_ENABLE)
     hr_sensor_init(&hrSensor_data);
 #endif
@@ -1124,6 +1127,10 @@ static void board_devices_init(void)
 #if TCFG_GSENSOR_ENABLE
     gravity_sensor_init((void*)&gSensor_data);
 #endif      //end if CONFIG_GSENSOR_ENABLE
+
+#if TCFG_QMI8658_EN
+    qmi8658_init();
+#endif
 
 #if TCFG_IMUSENSOR_ENABLE
     imu_sensor_init(imu_sensor_data,sizeof(imu_sensor_data));

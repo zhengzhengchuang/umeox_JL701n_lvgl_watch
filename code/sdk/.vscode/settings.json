@@ -101,7 +101,12 @@
         "math.h": "c",
         "mpu6050_reg.h": "c",
         "iic_sensor.h": "c",
-        "log.h": "c"
+        "log.h": "c",
+        "sensor_iic.h": "c",
+        "spinlock.h": "c",
+        "typedef.h": "c",
+        "app_core.h": "c",
+        "cache.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

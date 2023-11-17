@@ -24,7 +24,5 @@
 #include "asm/includes.h"
 #include "device/sdio_host_init.h"
 
-
-
 #endif
 

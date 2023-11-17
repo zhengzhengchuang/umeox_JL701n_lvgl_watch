@@ -293,6 +293,7 @@ c_SRC_FILES := \
 	apps/common/dev_manager/dev_manager.c \
 	apps/common/dev_manager/dev_reg.c \
 	apps/common/dev_manager/dev_update.c \
+	apps/common/device/sensor_iic/sensor_iic.c \
 	apps/common/device/bmp280/bmp280.c \
 	apps/common/device/detection.c \
 	apps/common/device/gSensor/SC7A20.c \
@@ -832,50 +833,6 @@ c_SRC_FILES := \
 	apps/watch/task_manager/task_key.c \
 	apps/watch/third_party_profile/ancs_client_demo/ancs_client_demo.c \
 	apps/watch/third_party_profile/trans_data_demo/trans_data_demo.c \
-	apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_action_alarm.c \
-	apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_action_altimeter.c \
-	apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_action_breath_train.c \
-	apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_action_calculator.c \
-	apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_action_calendar.c \
-	apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_action_detection.c \
-	apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_action_dial.c \
-	apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_action_drawer.c \
-	apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_action_file.c \
-	apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_action_findphone.c \
-	apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_action_flashlight.c \
-	apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_action_heat.c \
-	apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_action_menu.c \
-	apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_action_music.c \
-	apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_action_music_menu.c \
-	apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_action_notice.c \
-	apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_action_oxygen.c \
-	apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_action_pc.c \
-	apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_action_pressure.c \
-	apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_action_pulldown_menu.c \
-	apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_action_qrcode.c \
-	apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_action_record.c \
-	apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_action_set.c \
-	apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_action_sport_info.c \
-	apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_action_sportrecord.c \
-	apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_action_standby_dial.c \
-	apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_action_stopwatch.c \
-	apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_action_train.c \
-	apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_action_train_status.c \
-	apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_action_voice.c \
-	apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_action_watch.c \
-	apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_action_watchex.c \
-	apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_action_weather.c \
-	apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_batcharge_action.c \
-	apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_bt_page_action.c \
-	apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_bt_page_api.c \
-	apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_bt_scan.c \
-	apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_page_touch.c \
-	apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_phone_action.c \
-	apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_phonebook_action.c \
-	apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_scan_touch.c \
-	apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_sportrecord_browse.c \
-	apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_timer_action.c \
-	apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_upgrade_action.c \
 	apps/watch/ui/lcd/lyrics_api.c \
 	apps/watch/ui/lcd/ui_screen_saver.c \
 	apps/watch/ui/lcd/ui_sys_param_api.c \

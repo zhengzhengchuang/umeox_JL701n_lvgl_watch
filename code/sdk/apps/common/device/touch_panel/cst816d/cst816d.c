@@ -425,8 +425,6 @@ bool cst816d_upgrade(void)
     return false;
 }
 
-extern void timer1_run(u32 precesion);
-
 void ctp_delay_us(unsigned int time)
 {
     udelay(time);
