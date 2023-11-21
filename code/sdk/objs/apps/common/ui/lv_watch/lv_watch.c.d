@@ -181,6 +181,8 @@ objs/apps/common/ui/lv_watch/lv_watch.c.o: \
   apps/common/ui/lv_watch/./poc_modem/../ui_cover/ui_cover.h \
   apps/common/ui/lv_watch/./poc_modem/../ui_tileview/ui_tileview.h \
   apps/common/ui/lv_watch/./poc_modem/../ui_translate/ui_translate.h \
+  apps/common/ui/lv_watch/./poc_modem/../comm_func/common_stopwatch.h \
+  apps/common/ui/lv_watch/./poc_modem/../comm_func/common_countdown.h \
   apps/common/ui/lv_watch/./poc_modem/../../../../../cpu/br28/ui_driver/lvgl/lvgl_main.h \
   apps/common/ui/lv_watch/./comm_widget/common_clock.h \
   apps/common/ui/lv_watch/./comm_widget/../lv_watch.h \

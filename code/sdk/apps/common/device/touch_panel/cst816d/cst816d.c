@@ -58,7 +58,7 @@ static ft_param module_param = {0};
 #define I2C_MASTER_CI2C0 0
 #define i2c_t uint8_t
 
-static u16 released_timer_id = 0xffff;
+static u16 released_timer_id = 0;
 static bool released_timer_create = false;
 
 static int16_t touch_x = 0;
@@ -455,7 +455,9 @@ static void released_timeout_cb(void *priv)
 {
     set_dev_pressed_state(false);
     released_timer_create = false;
-    sys_timeout_del(released_timer_id);
+    if(released_timer_id)
+        sys_timeout_del(released_timer_id);
+    released_timer_id = 0;
 
     printf("%s\n", __func__);
 
@@ -473,10 +475,13 @@ static int touch_int_handler()
     if(!released_timer_create)
     {
         released_timer_create = true;
-        released_timer_id = sys_timeout_add(NULL, released_timeout_cb, 30);
+
+        if(!released_timer_id)
+            released_timer_id = sys_timeout_add(NULL, released_timeout_cb, 30);
     }else
     {
-        sys_timer_re_run(released_timer_id);
+        if(released_timer_id)
+            sys_timer_re_run(released_timer_id);
     }
 
     return 0;

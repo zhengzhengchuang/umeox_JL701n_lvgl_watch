@@ -7,7 +7,6 @@ extern "C" {
 
 #include "../include/ui_conf.h"
 #include "../include/ui_menu.h"
-#include "../include/ui_act_id.h"
 
 #if UI_USE_TILEVIEW
 

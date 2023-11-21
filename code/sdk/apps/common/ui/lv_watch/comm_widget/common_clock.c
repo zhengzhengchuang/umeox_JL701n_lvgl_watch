@@ -1,13 +1,16 @@
 #include "common_clock.h"
 
 static uint8_t clk_p_num = 0;
+static uint16_t clk_p_timer_id = 0;
 static lv_obj_t *clk_p_obj[3] = {NULL};
-static uint32_t clk_p_timer_id = 0xffffffff;
 static struct sys_time clk_p_utc_time = {0};
 static common_clock_pointer_para_t *clk_p_para = NULL;
 
 void common_clock_pointer_para_init(void)
 {
+    if(!clk_p_timer_id) 
+        return;
+
     clk_p_num = 0;
 
     clk_p_para = NULL; 
@@ -15,10 +18,9 @@ void common_clock_pointer_para_init(void)
     for(uint8_t i = 0; i < 3; i++)
        clk_p_obj[i] = NULL;
 
-    if(clk_p_timer_id != 0xffffffff)
-        sys_timer_del(clk_p_timer_id);
+    sys_timer_del(clk_p_timer_id);
 
-    clk_p_timer_id = 0xffffffff;
+    clk_p_timer_id = 0;
 
     return;
 }
@@ -68,7 +70,7 @@ void common_clock_pointer_create(lv_obj_t *obj, const common_clock_pointer_para_
 
     clk_p_num = num;
     clk_p_para = para;
-    clk_p_timer_id = 0xffffffff; 
+    clk_p_timer_id = 0; 
     for(uint8_t i = 0; i < 3; i++)
        clk_p_obj[i] = NULL;
 
@@ -102,7 +104,7 @@ void common_clock_pointer_create(lv_obj_t *obj, const common_clock_pointer_para_
             lv_img_set_angle(clk_p_obj[i], clock_second_angle);
     }
 
-    if(clk_p_timer_id == 0xffffffff)
+    if(!clk_p_timer_id)
         clk_p_timer_id = (uint32_t)sys_timer_add(NULL, common_clock_pointer_timer_cb, 100);
 
     return;

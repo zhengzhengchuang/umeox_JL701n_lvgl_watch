@@ -35,6 +35,8 @@ static void menu_create_cb(lv_obj_t *obj)
 {
     if(!obj) return;
 
+    common_user_countdown_create(60);
+
     return;
 }
 
