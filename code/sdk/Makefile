@@ -988,6 +988,8 @@ c_SRC_FILES := \
 	apps/common/ui/lv_watch/comm_widget/common_widget.c \
 	apps/common/ui/lv_watch/comm_func/common_stopwatch.c \
 	apps/common/ui/lv_watch/comm_func/common_countdown.c \
+	apps/common/ui/lv_watch/comm_remind/remind_task.c \
+	apps/common/ui/lv_watch/comm_remind/alarm_manage.c \
 	apps/common/ui/lv_watch/ui_translate/ui_translate.c \
 	apps/common/ui/lv_watch/ui_cover/ui_cover.c \
 	apps/common/ui/lv_watch/ui_tileview/ui_tileview.c \

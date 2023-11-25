@@ -128,7 +128,7 @@ objs/cpu/br28/ui_driver/imb_demo.c.o: cpu/br28/ui_driver/imb_demo.c \
   include_lib/driver/cpu/br28\asm/psram_api.h \
   include_lib/system/ui_new\res/jpeg_decoder.h \
   include_lib/driver/cpu/br28\asm/psram_hw.h \
-  cpu/br28/ui_driver/imb_demo.h apps/common\ui/ui/jl_images/FILE_index.h \
+  cpu/br28/ui_driver/imb_demo.h apps/common\ui/ui/jl_images/file_index.h \
   apps/common\ui/lvgl/src/draw/lv_draw_img.h \
   apps/common\ui/lvgl/src/draw/lv_img_decoder.h \
   apps/common\ui/lvgl/src/draw/../lv_conf_internal.h \

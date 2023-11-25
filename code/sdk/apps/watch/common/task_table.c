@@ -18,9 +18,18 @@ const struct task_info task_info_table[] = {
 #else
     {"btstack",             3,      0,  768,   512  },
 #endif
+
+#if TCFG_SPO2_SENSOR_ENABLE
     {"spo2read",			1,	    0,  256	, 	0},
+#endif
+
+#if TCFG_HR_SENSOR_ENABLE
     {"heartrate",			1,		0,  256,	0},
+#endif
+
+#if TCFG_GSENSOR_ENABLE
     {"gsensor",				1,	    0,  768,     0  },
+#endif
 
 #if (TCFG_USER_TWS_ENABLE && TCFG_REVERB_ENABLE)
     {"audio_dec",           3,      0,  768 + 128,   128  },
@@ -88,6 +97,9 @@ const struct task_info task_info_table[] = {
     {"audio_vad",           1,     1,   512,   128 },
 #if PRODUCT_TEST_ENABLE
     {"pt",					1,	    0,  512,	  128  },
+#endif
+#if 0
+    {"remind_task",       1,     1,   128,   128},
 #endif
     {0, 0},
 };

@@ -43,11 +43,11 @@ void common_clock_pointer_refresh(int *refr_msg)
     {
         if(!clk_p_obj[i]) continue;
 
-        if(clk_p_para[i].clk_p_type == Clk_Pointer_Type_Hour)
+        if(clk_p_para[i].clk_p_type == clk_pointer_type_hour)
             lv_img_set_angle(clk_p_obj[i], clock_hour_angle);
-        else if(clk_p_para[i].clk_p_type == Clk_Pointer_Type_Minute)
+        else if(clk_p_para[i].clk_p_type == clk_pointer_type_minute)
             lv_img_set_angle(clk_p_obj[i], clock_minute_angle);
-        else if(clk_p_para[i].clk_p_type == Clk_Pointer_Type_Second)
+        else if(clk_p_para[i].clk_p_type == clk_pointer_type_second)
             lv_img_set_angle(clk_p_obj[i], clock_second_angle);
     }
 
@@ -57,7 +57,7 @@ void common_clock_pointer_refresh(int *refr_msg)
 static void common_clock_pointer_timer_cb(void *priv)
 {
     int clk_p_refr_img[1];
-    clk_p_refr_img[0] = Ui_Msg_Clock_Pointer_refresh;\
+    clk_p_refr_img[0] = ui_msg_clock_pointer_refresh;\
     post_ui_msg(clk_p_refr_img, 1);
 
     return;
@@ -92,15 +92,17 @@ void common_clock_pointer_create(lv_obj_t *obj, const common_clock_pointer_para_
     
     for(uint8_t i = 0; i < clk_p_num; i++)
     {
+        int16_t align_offset = clk_p_para[i].clk_p_center - clk_p_para[i].clk_p_height/2;
+
         widget_img_para.file_img_dat = clk_p_para[i].clk_p_file_dat;
         clk_p_obj[i] = common_widget_img_create(&widget_img_para, NULL);
-        lv_obj_align(clk_p_obj[i], LV_ALIGN_CENTER, 0, -clk_p_para[i].clk_p_height/2);
+        lv_obj_align(clk_p_obj[i], LV_ALIGN_CENTER, 0, -align_offset);
         lv_img_set_pivot(clk_p_obj[i], clk_p_para[i].clk_p_width/2, clk_p_para[i].clk_p_center);
-        if(clk_p_para[i].clk_p_type == Clk_Pointer_Type_Hour)
+        if(clk_p_para[i].clk_p_type == clk_pointer_type_hour)
             lv_img_set_angle(clk_p_obj[i], clock_hour_angle);
-        else if(clk_p_para[i].clk_p_type == Clk_Pointer_Type_Minute)
+        else if(clk_p_para[i].clk_p_type == clk_pointer_type_minute)
             lv_img_set_angle(clk_p_obj[i], clock_minute_angle);
-        else if(clk_p_para[i].clk_p_type == Clk_Pointer_Type_Second)
+        else if(clk_p_para[i].clk_p_type == clk_pointer_type_second)
             lv_img_set_angle(clk_p_obj[i], clock_second_angle);
     }
 

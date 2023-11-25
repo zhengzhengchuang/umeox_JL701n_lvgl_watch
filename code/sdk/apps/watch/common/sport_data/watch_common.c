@@ -1046,16 +1046,11 @@ static int watch_api_init(void)
 
 
 #if(GSENSOR_TASK_USED == USED_TASK)
-
-
-
     if (strcmp(os_current_task(), "gsensor")) {
         while (watch.task_run) {
             os_time_dly(1);
         }
     }
-
-
 #endif
 
     PED_parameter PP = { 250, 1000, 600, 300, 900};//PP计步参数，参数分别为：幅度阈值1，幅度阈值2，幅度阈值3，最短步时长，跑步阈值
@@ -1086,8 +1081,6 @@ static int watch_api_init(void)
     watch.sensor_timer_id = sys_s_hi_timer_add(NULL, refresh_watch_data_check_cb, (int)SENSOR_INTERVAL / 2); //算法传入的数值
 #else
 
-
-
     if (!watch.task_init) {
         os_sem_create(&sensor_kick.g_sem, 0);
         os_sem_create(&sensor_kick.hr_sem, 0);
@@ -1095,7 +1088,6 @@ static int watch_api_init(void)
         task_create(refresh_watch_Task, NULL, "gsensor");
         watch.task_init = 1;
     }
-
 
 #endif
     clock_add_set(WATCH_SPORT_CLK);

@@ -55,7 +55,9 @@ void bl_ts_set_intup(char level);
 void BI6133_evt_handle(uint8_t status, uint8_t move, uint16_t x, uint16_t y);
 void ctp_enter_low_power(void);
 void ctp_exit_low_power(void);
-
+int16_t get_dev_touch_x(void);
+int16_t get_dev_touch_y(void);
+u8 get_dev_pressed_state(void);
 #endif
 #endif
 

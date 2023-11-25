@@ -15,6 +15,8 @@
 #include "app_config.h"
 #include "key_event_deal.h"
 
+#include "../../../../apps/common/device/touch_panel/bl6133.h"
+
 #if LVGL_TEST_ENABLE
 
 /*********************

@@ -7,10 +7,14 @@ extern "C" {
 
 #include "../include/ui_menu.h"
 
+#define STOPWATCH_RECORD_EN (0)
+
+#if STOPWATCH_RECORD_EN
 //*********************************************************************************//
 //                                  通用秒表记录最大数                                //
 //*********************************************************************************//
 #define STOPWATCH_RECORD_MAX (50)
+#endif
 
 //*********************************************************************************//
 //                                  通用秒表属性状态                                  //
@@ -41,13 +45,17 @@ typedef struct
     uint8_t stopwatch_record_cnt;
     stopwatch_attribute_data_t stopwatch_data;
     stopwatch_attribute_state_t stopwatch_state;
+#if STOPWATCH_RECORD_EN
     stopwatch_attribute_data_t stopwatch_record_data[STOPWATCH_RECORD_MAX];
+#endif
 }common_stopwatch_para_t;
 
 void common_user_stopwatch_reset(void);
 void common_user_stopwatch_pause(void);
 void common_user_stopwatch_resume(void);
+#if STOPWATCH_RECORD_EN
 void common_user_stopwatch_record(void);
+#endif
 void common_user_stopwatch_create(void);
 #ifdef __cplusplus
 } /* extern "C" */

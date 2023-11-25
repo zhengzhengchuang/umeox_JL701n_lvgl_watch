@@ -353,7 +353,7 @@ static u32 sfc1_flash_ext_init(u32 data_width)
 }
 static int _norflash_init(const char *name, struct norflash_sfc_dev_platform_data *pdata)
 {
-    log_info("norflash_sfc_init >>>>");
+    printf("norflash_sfc_init >>>>");
 
     struct norflash_partition *part;
     if (_norflash.spi_num == (int) - 1) {

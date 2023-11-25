@@ -216,7 +216,7 @@ void app_main()
         ex_flash_file_download_init();
     }
 #endif
-    sys_timer_add(NULL, mem_printf, 1000);
+    //sys_timer_add(NULL, mem_printf, 1000);
     app_task_loop();
 }
 

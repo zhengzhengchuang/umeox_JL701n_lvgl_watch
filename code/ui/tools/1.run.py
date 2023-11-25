@@ -1,7 +1,7 @@
 ﻿import os
 
 
-head_name = 'FILE'  #自定义头名字
+head_name = 'file'  #自定义头名字
 
 # 打开文件并读取内容
 file_path = "H-name.txt"  # 将文件路径替换为你的文件路径
@@ -202,24 +202,21 @@ clear_file_contents(f"./bin_out/{head_name}.bin")
 # Step 4: Generate C structure
 struct_text = f'#include "{head_name}_index.h" \n'
 struct_text += '''
-
-//struct FileIndex {
-//    char *name;
-//    int addr;
-//    int len;
-//};
 '''
-struct_text += f"const struct FileIndex {head_name}_index[] = " + "{\n"
+struct_text += f"const struct file_index_t {head_name}_index[] = " + "{\n"
 
 define_text = f'#ifndef __{head_name}_index_h \n'
 define_text += f'#define __{head_name}_index_h \n'
 define_text += '''
-struct FileIndex {
+
+struct file_index_t {
     char *name;
     int addr;
     int len;
 };
-extern const struct FileIndex FILE_index[] ;
+
+extern const struct file_index_t file_index[];
+
 '''
 
 output_bin = b""

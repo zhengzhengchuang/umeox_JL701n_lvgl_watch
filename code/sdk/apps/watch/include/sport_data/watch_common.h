@@ -183,6 +183,7 @@ struct sensor_heart_rate {
     char *workbuf;
     char *wear_workbuf;
 };
+
 struct watch_SPO2_data {
     int len;
     int fs;

@@ -7,7 +7,7 @@ void ui_menu_jump_post_msg(ui_act_id_t act_id)
     int msg_buf[2] = {0};
     uint8_t msg_arg_len = 2;
 
-    msg_buf[0] = Ui_Msg_Menu_jump;
+    msg_buf[0] = ui_msg_menu_jump;
     msg_buf[1] = act_id;
 
     post_ui_msg(msg_buf, msg_arg_len);

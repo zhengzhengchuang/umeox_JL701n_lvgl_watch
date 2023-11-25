@@ -172,7 +172,7 @@ static void lvgl_task(void *p)
     // 等TE的帧率 = TE频率/2，帧率是固定的，如屏幕的TE是44Hz，那么实际刷新是22Hz
     // 不等TE的帧率 = 极限刷屏的帧率
     extern volatile u8 usr_wait_te;
-    usr_wait_te = 0;
+    usr_wait_te = 1;
 
     //  用户动态控制是否全屏刷
     // extern volatile u8 usr_full_screen;
@@ -241,20 +241,20 @@ void ui_msg_handle(int *msg, u8 len)
 
     switch(msg_cmd)
     {
-        case Ui_Msg_Menu_jump:
+        case ui_msg_menu_jump:
         {
             ui_act_id_t act_id = msg[1];
             ui_menu_jump_handle(act_id);
         }  
             break;
 
-        case Ui_Msg_Menu_refresh:
+        case ui_msg_menu_refresh:
         {
-            printf("*************Ui_Msg_Menu_refresh\n");
+            printf("*************ui_msg_menu_refresh\n");
         }
             break;
 
-        case Ui_Msg_Clock_Pointer_refresh:
+        case ui_msg_clock_pointer_refresh:
         {
             common_clock_pointer_refresh(msg);
         }

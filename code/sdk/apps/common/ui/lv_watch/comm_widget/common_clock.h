@@ -9,9 +9,9 @@ extern "C" {
 
 enum
 {
-    Clk_Pointer_Type_Hour = 0x00,
-    Clk_Pointer_Type_Minute,
-    Clk_Pointer_Type_Second,
+    clk_pointer_type_hour = 0x00,
+    clk_pointer_type_minute,
+    clk_pointer_type_second,
 };
 typedef uint8_t clock_pointer_type_t;
 

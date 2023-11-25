@@ -180,10 +180,11 @@ static void  tone_play_end_callback(void *priv, int flag)
         return;
     }
 
-    switch (index) {
-    case IDEX_TONE_POWER_ON:
-        power_on_init();
-        break;
+    switch (index) 
+    {
+        case IDEX_TONE_POWER_ON:
+            power_on_init();
+            break;
     }
 }
 
@@ -192,7 +193,7 @@ void app_poweron_task()
 {
     int msg[32];
 
-    UI_SHOW_MENU(MENU_POWER_UP, 0, 0, NULL);
+    //UI_SHOW_MENU(MENU_POWER_UP, 0, 0, NULL);
 
 #if (TCFG_UI_ENABLE && TCFG_SPI_LCD_ENABLE)
     extern int ui_watch_poweron_update_check();

@@ -25,7 +25,7 @@ static void menu_display_cb(lv_obj_t *obj)
     widget_img_para.img_parent = obj;
     widget_img_para.img_x = 0;
     widget_img_para.img_y = 0;
-    widget_img_para.file_img_dat = FILE_weather_bg_dat;
+    widget_img_para.file_img_dat = file_weather_bg_dat;
     widget_img_para.img_click_attr = false;
     widget_img_para.event_cb = NULL;
     common_widget_img_create(&widget_img_para, NULL);

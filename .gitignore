@@ -53,7 +53,6 @@ cpu/br28/tools/download/watch/tone.cfg
 cpu/br28/tools/download/watch/update.ufw
 cpu/br28/tools/download/watch/upgrade.zip
 cpu/br28/tools/app.bin
-cpu/br28/tools/download.bat
 cpu/br28/tools/isd_config.ini
 cpu/br28/tools/sdk.elf
 cpu/br28/tools/sdk.elf.0.0.preopt.bc

@@ -4999,6 +4999,9 @@ void lcd_disp_init(void *arg, void **buf1, void **buf2, int *lenp)
     if (__this->lcd->buffer_malloc) {
         __this->lcd->buffer_malloc(&buf, &len);
     }
+
+    printf("%s:len = %d\n", __func__, len);
+
     *buf2 = lcd_buffer_init(0, buf, len / info.buf_num, info.buf_num);
     *buf1 = buf;
     *lenp = len;    
@@ -5116,9 +5119,7 @@ void lvgl_disp_init(void *arg, void **buf1, void **buf2, int *lcd_w,int *lcd_h, 
     *colums = info.width;
     *lines = buflen / info.buf_num / info.stride;
 
-
-
-#if   PSRAM_FULL_SCREEN
+#if PSRAM_FULL_SCREEN
     psram_buf1 = malloc_psram(info.width*info.height*2);
     psram_buf2 = malloc_psram(info.width*info.height*2);
 
@@ -6675,7 +6676,7 @@ static lv_res_t lv_draw_jl_jpg_img(struct _lv_draw_ctx_t * draw_buf, const lv_dr
         return LV_RES_INV;
     }
     
-    struct FileIndex jpgres = {0};
+    struct file_index_t jpgres = {0};
     jpgres.addr = raw_jpeg_data;
     jpgres.len  = raw_jpeg_data_size;
 
@@ -7847,7 +7848,7 @@ static u8 *usr_jpg_dec_stream_input(void *__fat_info, u32 *len, u32 offset_4k)
 
 static u8 *usr_jpg_dec_stream_input2(void *__fat_info, u32 *len, u32 offset_4k)
 {
-    struct FileIndex* info = (struct FileIndex*)__fat_info;
+    struct file_index_t* info = (struct file_index_t*)__fat_info;
     u8 *jpg_stream = info->addr;
     int file_len = info->len;
     u32 offset = offset_4k * 4096;
@@ -8816,26 +8817,28 @@ void close_fd(void)
 //  3.预先拷贝到PSRAM
 
 //  分区句柄，分区所在的物理地址，bin文件在分区的偏移，图片在bin文件中的地址长度，
-void lv_open_res(void *fd, int phyaddr, int offset, struct FileIndex res, lv_img_dsc_t*img_dst)
+void lv_open_res(void *fd, int phyaddr, int offset, struct file_index_t res, lv_img_dsc_t*img_dst)
 {
     if(!fd){
         return;
     }
     lv_close_res(img_dst);
 
+#if 0
     u8 test[16];
     dev_bulk_read(fd, test, 0, 16);
     printf("BEGIN 16");
     put_buf(test, 16);
-
-    
+#endif
 
     printf("file addr:%x", offset + res.addr);
     dev_bulk_read(fd, &(img_dst->header), offset + res.addr, sizeof(lv_img_header_t));
 
+#if 0
     lv_img_header_t tp;
     dev_bulk_read(fd, &(tp), offset + res.addr, sizeof(lv_img_header_t));
     put_buf(&tp, sizeof(lv_img_header_t));
+#endif
 
 #if TCFG_VIRFAT_INSERT_FLASH_ENABLE //内置FLASH资源
     int cpuaddr = sdfile_flash_addr2cpu_addr(phyaddr);
@@ -8844,7 +8847,7 @@ void lv_open_res(void *fd, int phyaddr, int offset, struct FileIndex res, lv_img
 #endif
 
     img_dst->data = cpuaddr + offset + res.addr + sizeof(lv_img_header_t);
-    img_dst->data_size = res.len - sizeof(lv_img_header_t);;
+    img_dst->data_size = res.len - sizeof(lv_img_header_t);
     printf("zero %d, cf %d, h %d, re %d, w %d, addr %x, size %d",
         img_dst->header.always_zero,
         img_dst->header.cf,

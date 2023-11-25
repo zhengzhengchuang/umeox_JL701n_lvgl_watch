@@ -108,7 +108,21 @@
         "app_core.h": "c",
         "cache.h": "c",
         "common_stopwatch.h": "c",
-        "common_countdown.h": "c"
+        "common_countdown.h": "c",
+        "remind_timer.h": "c",
+        "common_remind.h": "c",
+        "syscfg_id.h": "c",
+        "app_task.h": "c",
+        "app_msg.h": "c",
+        "event.h": "c",
+        "remind_task.h": "c",
+        "alarm_set_api.h": "c",
+        "alarm_manage.h": "c",
+        "watch_common.h": "c",
+        "timestamp.h": "c",
+        "ioctl.h": "c",
+        "lv_port_indev.h": "c",
+        "bl6133.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

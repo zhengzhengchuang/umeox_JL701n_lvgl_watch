@@ -9,9 +9,11 @@ extern "C" {
 #include "../include/ui_act_id.h"
 #include "../ui_cover/ui_cover.h"
 #include "../ui_tileview/ui_tileview.h"
+#include "../comm_remind/alarm_manage.h"
 #include "../ui_translate/ui_translate.h"
 #include "../comm_func/common_stopwatch.h"
 #include "../comm_func/common_countdown.h"
+
 
 typedef struct
 {
@@ -36,9 +38,13 @@ typedef struct
     ui_translate_info_t ui_translate_info;
 #endif
 
+#if USER_ALARM_EN
+    alarm_manage_para_t alarm_manage_para;
+#endif
+
     common_stopwatch_para_t common_stopwatch_para;
 
-    common_countdown_para_t common_countdown_para;
+    common_countdown_para_t common_countdown_para; 
 }ui_info_cache_t;
 extern ui_info_cache_t *p_ui_info_cache;
 extern const ui_menu_load_info_t *watchface_load_info_cache[Watchface_Id_Max];

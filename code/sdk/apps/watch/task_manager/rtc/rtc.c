@@ -507,7 +507,6 @@ static void rtc_app_init()
     ui_update_status(STATUS_RTC_MODE);
     clock_idle(RTC_IDLE_CLOCK);
     sys_key_event_enable();
-
 }
 
 

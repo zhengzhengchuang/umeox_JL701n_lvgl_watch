@@ -457,8 +457,6 @@ void _lv_disp_refr_timer(lv_timer_t * tmr)
 
     REFR_TRACE("finished");
 
-
-
     int a = jiffies_msec();
 #if PSRAM_FULL_SCREEN
     extern volatile u8 usr_full_screen;

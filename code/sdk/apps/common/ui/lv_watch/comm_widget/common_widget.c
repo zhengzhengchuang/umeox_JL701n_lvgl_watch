@@ -48,7 +48,7 @@ lv_obj_t *common_widget_img_create(common_widget_img_para_t *img_para, uint16_t 
         return NULL;
 
     open_fd("usr_nor");
-    lv_open_res(get_res_fd(), RES_BASE_ADDR, 0, FILE_index[img_para->file_img_dat], \
+    lv_open_res(get_res_fd(), RES_BASE_ADDR, 0, file_index[img_para->file_img_dat], \
         &user_img_dsc.img_dst_gather[user_img_dsc.img_dst_cnt]);
 
     lv_obj_t *common_widget_img = lv_img_create(img_para->img_parent);
@@ -78,7 +78,7 @@ void common_widget_img_replace_src(lv_obj_t *obj, uint32_t file_img_dat, uint16_
     if(!obj) return;
 
     open_fd("usr_nor");
-    lv_open_res(get_res_fd(), RES_BASE_ADDR, 0, FILE_index[file_img_dat], \
+    lv_open_res(get_res_fd(), RES_BASE_ADDR, 0, file_index[file_img_dat], \
         &user_img_dsc.img_dst_gather[img_dsc_idx]);
 
     lv_img_set_src(obj, &user_img_dsc.img_dst_gather[img_dsc_idx]);

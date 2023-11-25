@@ -793,6 +793,21 @@ volatile u8 touch_down = 0;
 volatile int touch_x = 0;
 volatile int touch_y = 0;
 
+int16_t get_dev_touch_x(void)
+{
+    return touch_x;
+}
+
+int16_t get_dev_touch_y(void)
+{
+    return touch_y;
+}
+
+u8 get_dev_pressed_state(void)
+{
+    return touch_down;
+}
+
 static int touch_event_handler(){
     struct touch_info cinfo;
     int i = 0;

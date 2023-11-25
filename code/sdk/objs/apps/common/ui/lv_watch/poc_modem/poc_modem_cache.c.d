@@ -179,6 +179,7 @@ objs/apps/common/ui/lv_watch/poc_modem/poc_modem_cache.c.o: \
   apps/common/ui/lv_watch/poc_modem/../ui_cover/ui_cover.h \
   apps/common/ui/lv_watch/poc_modem/../ui_cover/../include/ui_conf.h \
   apps/common/ui/lv_watch/poc_modem/../ui_tileview/ui_tileview.h \
+  apps/common/ui/lv_watch/poc_modem/../comm_remind/alarm_manage.h \
   apps/common/ui/lv_watch/poc_modem/../ui_translate/ui_translate.h \
   apps/common/ui/lv_watch/poc_modem/../comm_func/common_stopwatch.h \
   apps/common/ui/lv_watch/poc_modem/../comm_func/common_countdown.h

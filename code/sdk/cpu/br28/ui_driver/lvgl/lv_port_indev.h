@@ -19,7 +19,6 @@ extern "C" {
  *********************/
 #include "lvgl.h"
 #include "ui/lcd_spi/lcd_drive.h"
-#include "../../../../apps/common/device/touch_panel/cst816d/cst816d.h"
 
 /*********************
  *      DEFINES

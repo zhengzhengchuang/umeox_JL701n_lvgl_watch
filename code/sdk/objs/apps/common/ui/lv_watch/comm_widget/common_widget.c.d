@@ -175,5 +175,5 @@ objs/apps/common/ui/lv_watch/comm_widget/common_widget.c.o: \
   apps/common/ui/lvgl/src/extra/widgets/imgbtn/lv_imgbtn.h \
   apps/common/ui/lvgl/src/extra/widgets/span/lv_span.h \
   apps/common/ui/lv_watch/comm_widget/../../../../../cpu/br28/ui_driver/imb_demo.h \
-  apps/common\ui/ui/jl_images/FILE_index.h \
+  apps/common\ui/ui/jl_images/file_index.h \
   apps/common/ui/lv_watch/comm_widget/../../../../../cpu/br28/ui_driver/lvgl/lvgl_main.h

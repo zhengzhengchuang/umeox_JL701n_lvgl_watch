@@ -48,9 +48,11 @@ void common_user_stopwatch_reset(void)
         &p_ui_info_cache->common_stopwatch_para.stopwatch_state;
     *stopwatch_state = stopwatch_state_reset;
 
+#if STOPWATCH_RECORD_EN
     stopwatch_attribute_data_t *stopwatch_record_data = \
         p_ui_info_cache->common_stopwatch_para.stopwatch_record_data;
     memset(stopwatch_record_data, 0, sizeof(stopwatch_attribute_data_t)*STOPWATCH_RECORD_MAX);
+#endif
 
     bool *stopwatch_already_exist = \
         &p_ui_info_cache->common_stopwatch_para.stopwatch_already_exist;
@@ -96,6 +98,7 @@ void common_user_stopwatch_resume(void)
     return;
 }
 
+#if STOPWATCH_RECORD_EN
 //*********************************************************************************//
 //                                  记录通用秒表                                     //
 //*********************************************************************************//
@@ -119,6 +122,7 @@ void common_user_stopwatch_record(void)
 
     return;
 }
+#endif
 
 //*********************************************************************************//
 //                                  创建通用秒表                                     //
@@ -144,9 +148,11 @@ void common_user_stopwatch_create(void)
         &p_ui_info_cache->common_stopwatch_para.stopwatch_state;
     *stopwatch_state = stopwatch_state_start;
 
+#if STOPWATCH_RECORD_EN
     stopwatch_attribute_data_t *stopwatch_record_data = \
         p_ui_info_cache->common_stopwatch_para.stopwatch_record_data;
     memset(stopwatch_record_data, 0, sizeof(stopwatch_attribute_data_t)*STOPWATCH_RECORD_MAX);
+#endif
 
     if(!stopwatch_timer_id)
         stopwatch_timer_id = sys_timer_add(NULL, common_user_stopwatch_timeout_cb, stopwatch_timer_inv);

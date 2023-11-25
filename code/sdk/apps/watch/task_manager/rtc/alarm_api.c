@@ -261,8 +261,10 @@ static void alarm_vm_read_info(PT_ALARM_MAP map)
     }
 
     //贪睡闹钟不记忆
-    for (i = 0; i < (M_MAX_ALARM_NUMS); i++) {
-        if ((map->map) & BIT(i)) {
+    for (i = 0; i < (M_MAX_ALARM_NUMS); i++) 
+    {
+        if((map->map) & BIT(i)) 
+        {
             ret = syscfg_read(VM_ALARM_0 + i, &tmp, sizeof(T_ALARM_VM));
             if (ret != sizeof(T_ALARM_VM) || tmp.head != RTC_MASK) {
                 alarm_printf("can't find the %d alarm from vm.\n", i);
@@ -700,7 +702,7 @@ static void __alarm_get_the_earliest(void)
     alarm_map.active_map = 0 ;
     for (i = 0; i < (M_MAX_ALARM_NUMS + M_MAX_SNOOZE_ALARM_NUM); i++) {
         if (alarm_map.map_sw & BIT(i)) {
-            alarm_map.active_map |= BIT(i) ;
+            alarm_map.active_map |= BIT(i);
             pTmp = &(alarm_tab[i].time);
             index = i;
             break;
@@ -713,7 +715,9 @@ static void __alarm_get_the_earliest(void)
         alarm_hw_set_sw(0);
         return;
     }
-    for (i = index + 1; i < (M_MAX_ALARM_NUMS + M_MAX_SNOOZE_ALARM_NUM); i++) {
+
+    for (i = index + 1; i < (M_MAX_ALARM_NUMS + M_MAX_SNOOZE_ALARM_NUM); i++) 
+    {
         if (alarm_map.map_sw & BIT(i)) {
             ret = alarm_cmp_time(pTmp, &(alarm_tab[i].time));
             if (0 == ret) {
@@ -812,11 +816,6 @@ u8 alarm_get_total(void)
     return total;
 }
 
-
-
-
-
-
 void rtc_update_time_api(struct sys_time *time)
 {
     if (!is_sys_time_online()) {
@@ -828,6 +827,8 @@ void rtc_update_time_api(struct sys_time *time)
     local_irq_enable();
     __alarm_get_the_earliest();
     alarm_vm_write_mask(&alarm_map);
+
+    printf("%s\n", __func__);
 }
 
 
@@ -897,13 +898,14 @@ u8 alarm_add(PT_ALARM p, u8 index)
     if (alarm_map.table[index] == 0xff) {
         int max = -1;
         for (int i = 0; i < M_MAX_ALARM_NUMS; i++) {
-            if (alarm_map.table[i] != 0xff && alarm_map.table[i] >  max) {
+            if (alarm_map.table[i] != 0xff && alarm_map.table[i] > max) {
                 max = alarm_map.table[i];
             }
         }
         max++;
         alarm_map.table[index] = max;
     }
+
     alarm_map.map |= BIT(index);
     if (0 == p->sw) {
         alarm_printf("close the %dth alarm!\n", p->index);
@@ -912,6 +914,7 @@ u8 alarm_add(PT_ALARM p, u8 index)
         alarm_printf("set the %dth alarm!\n", p->index);
         alarm_map.map_sw |= BIT(p->index);
     }
+    
     alarm_tab[index].index      = p->index;
     alarm_tab[index].sw         = p->sw;
     alarm_tab[index].mode       = p->mode;
@@ -1046,6 +1049,8 @@ static void alarm_check(void *priv)
     } else {
         sys_timeout_add(NULL, alarm_check, 100);
     }
+
+    printf("********%s\n", __func__);
 }
 
 #if (defined(CONFIG_CPU_BR28))
@@ -1092,6 +1097,7 @@ void alarm_init()
     if (dev_handle) {
         return ;
     }
+
     dev_handle = dev_open("rtc", NULL);
     if (!dev_handle) {
         ASSERT(0, "%s %d \n", __func__, __LINE__);

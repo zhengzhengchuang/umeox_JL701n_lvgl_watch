@@ -138,12 +138,6 @@ void alarm_stop(u8 reason)
     rtc_app_alarm_ring_play(0);
 }
 
-
-
-
-
-
-
 static void  __alarm_ring_play(void *p)
 {
     if (alarm_active_flag_get()) {

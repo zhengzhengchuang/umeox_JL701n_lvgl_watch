@@ -34,6 +34,7 @@
 #include "le_smartbox_adv.h"
 #include "../../../../common/device/sensor_iic/sensor_iic.h"
 #include "../../../../../cpu/br28/ui_driver/lvgl/lvgl_main.h"
+#include "../../../common/ui/lv_watch/comm_remind/remind_task.h"
 #if TCFG_PAY_ALIOS_ENABLE
 #if (TCFG_PAY_ALIOS_WAY_SEL == TCFG_PAY_ALIOS_WAY_ALIYUN)
 #include "upay.h"
@@ -292,8 +293,8 @@ const struct vad_mic_platform_data vad_mic_data = {
 const struct iokey_port iokey_list[] = {
     {
         .connect_way = TCFG_IOKEY0_WAY,          //IO按键的连接方式
-        .key_type.one_io.port = TCFG_IOKEY0,    //IO按键对应的引脚
-        .key_value = 0,                                       //按键值
+        .key_type.one_io.port = TCFG_IOKEY0,     //IO按键对应的引脚
+        .key_value = 0,                          //按键值
     },
 
     {
@@ -316,6 +317,7 @@ const struct iokey_port iokey_list[] = {
     },
 #endif
 };
+
 const struct iokey_platform_data iokey_data = {
     .enable = TCFG_IOKEY_ENABLE,                              //是否使能IO按键
     .num = ARRAY_SIZE(iokey_list),                            //IO按键的个数
@@ -591,7 +593,7 @@ NORFLASH_DEV_PLATFORM_DATA_END()
 // #define NORFLASH_USER_FAT_SIZE                           CONFIG_EXTERN_FLASH_SIZE/2//      (1792*1024)//1.75M
 
 
-const u32 g_res_nor_unencry_start_addr = FLASH_SIZE_4M+FLASH_SIZE_2M;//CONFIG_EXTERN_FLASH_SIZE - CONFIG_EXTERN_FLASH_SIZE/2; // 不加密区域起始地址
+const u32 g_res_nor_unencry_start_addr = 0x000000;//FLASH_SIZE_4M+FLASH_SIZE_2M;//CONFIG_EXTERN_FLASH_SIZE - CONFIG_EXTERN_FLASH_SIZE/2; // 不加密区域起始地址
 #if TCFG_NORFLASH_SFC_DEV_ENABLE
 SFC_SPI_PLATFORM_DATA_BEGIN(sfc_spi_data)
     .spi_hw_index    = 1,
@@ -600,19 +602,19 @@ SFC_SPI_PLATFORM_DATA_BEGIN(sfc_spi_data)
     .sfc_encry       = TCFG_SFC_ENCRY_ENABLE, //是否加密
     .sfc_clk_div     = 0, //时钟分频: sfc_fre = sys_clk / div;
     .unencry_start_addr = g_res_nor_unencry_start_addr,//不加密区域
-    .unencry_size  = FLASH_SIZE_8M+FLASH_SIZE_2M,//CONFIG_EXTERN_FLASH_SIZE/2,
+    .unencry_size  = FLASH_SIZE_16M,//FLASH_SIZE_8M+FLASH_SIZE_2M,//CONFIG_EXTERN_FLASH_SIZE/2,
 SFC_SPI_PLATFORM_DATA_END()
 
 NORFLASH_SFC_DEV_PLATFORM_DATA_BEGIN(norflash_sfc_dev_data)
     .sfc_spi_pdata     = &sfc_spi_data,
-    .start_addr     = 0,
-    .size           = FLASH_SIZE_4M+FLASH_SIZE_2M,//CONFIG_EXTERN_FLASH_SIZE/2,// - CONFIG_EXTERN_USER_VM_FLASH_SIZE,
+    .start_addr     = 0x000000,
+    .size           = 0x000000,//FLASH_SIZE_4M+FLASH_SIZE_2M,//CONFIG_EXTERN_FLASH_SIZE/2,// - CONFIG_EXTERN_USER_VM_FLASH_SIZE,
 NORFLASH_SFC_DEV_PLATFORM_DATA_END()
 
 NORFLASH_SFC_DEV_PLATFORM_DATA_BEGIN(norflash_usr_dev_data)
     .sfc_spi_pdata     = &sfc_spi_data,
-    .start_addr     = FLASH_SIZE_4M+FLASH_SIZE_2M,//CONFIG_EXTERN_FLASH_SIZE/2,
-    .size           = FLASH_SIZE_8M+FLASH_SIZE_2M,//CONFIG_EXTERN_FLASH_SIZE - CONFIG_EXTERN_FLASH_SIZE/2,
+    .start_addr     = 0x000000,//FLASH_SIZE_4M+FLASH_SIZE_2M,//CONFIG_EXTERN_FLASH_SIZE/2,
+    .size           = FLASH_SIZE_16M,//FLASH_SIZE_8M+FLASH_SIZE_2M,//CONFIG_EXTERN_FLASH_SIZE - CONFIG_EXTERN_FLASH_SIZE/2,
 NORFLASH_SFC_DEV_PLATFORM_DATA_END()
 
 // NORFLASH_SFC_DEV_PLATFORM_DATA_BEGIN(norflash_norfs_fat_dev_data)
@@ -793,7 +795,6 @@ IMU_SENSOR_PLATFORM_DATA_BEGIN(imu_sensor_data)
 IMU_SENSOR_PLATFORM_DATA_END();
 #endif
 
-
 /************************** rtc ****************************/
 #if TCFG_RTC_ENABLE
 const struct sys_time def_sys_time = {  //初始一下当前时间
@@ -914,7 +915,6 @@ REGISTER_DEVICES(device_table) = {
     {"ui_vm",   &inside_norflash_fs_dev_ops , (void *)&norflash_norfs_inside_vm_dev_data},
 #endif
 #endif//TCFG_NORFLASH_SFC_DEV_ENABLE
-
 };
 
 /************************** LOW POWER config ****************************/
@@ -1302,6 +1302,7 @@ void board_init()
 #if TCFG_RTC_ENABLE
     alarm_init();
 #endif
+    //remind_task_init();
 
 #if TCFG_SENSOR_DEBUG_ENABLE
     data_export_init();

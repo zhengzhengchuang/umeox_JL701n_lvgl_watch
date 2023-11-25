@@ -8,13 +8,13 @@ extern "C" {
 #define UI_TASK_NAME "ui"
 
 /*自定义UI资源起始地址*/
-#define RES_BASE_ADDR (0x600000)
+#define RES_BASE_ADDR (0x000000)
 
 enum
 {
-    Ui_Msg_Menu_jump = 0x00,
-    Ui_Msg_Menu_refresh,
-    Ui_Msg_Clock_Pointer_refresh,
+    ui_msg_menu_jump = 0x00,
+    ui_msg_menu_refresh,
+    ui_msg_clock_pointer_refresh,
 };
 
 int lvgl_test_init(void *param);

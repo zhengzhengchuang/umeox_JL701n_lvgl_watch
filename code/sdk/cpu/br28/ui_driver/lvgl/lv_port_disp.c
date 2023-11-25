@@ -26,6 +26,9 @@
 #define MY_DISP_VLOCK_H			60
 #endif
 
+extern void lvgl_disp_init(void *arg, void **buf1, void **buf2, \
+    int *lcd_w,int *lcd_h, int *colums, int *lines);
+
 /**********************
  *      TYPEDEFS
  **********************/
@@ -59,7 +62,6 @@ void lv_port_disp_init(void *lcd)
      * -----------------------*/
 #if USR_LVGL_IMB2D_EN
     //  LCD句柄     BUF1    BUF2    内存行  内存列
-    extern void lvgl_disp_init(void *arg, void **buf1, void **buf2, int *lcd_w,int *lcd_h, int *colums, int *lines);
     void *buf_2_1;
     void *buf_2_2;
     int lcd_w;
@@ -200,7 +202,7 @@ static void disp_flush(lv_disp_drv_t *disp_drv, const lv_area_t *area, lv_color_
     int top		= area->y1;
     int width	= area->x2 - area->x1 + 1;
     int height	= area->y2 - area->y1 + 1;
-    // y_printf("[%d,%d,%d,%d]", left, top, width, height);
+    //g_printf("[%d,%d,%d,%d]", left, top, width, height);
 
 //  休眠判断,休眠不能跑硬件推屏
     if(lcd_sleep_status()){
@@ -214,15 +216,16 @@ static void disp_flush(lv_disp_drv_t *disp_drv, const lv_area_t *area, lv_color_
         // lcd_wait();
         extern void lv_lcd_data_copy(u8 *lcd_buf, int left, int top, int width, int height);
         lv_lcd_data_copy(color_p,  left,  top,  width,  height);
-    }
-    else    
+    }else    
     {
         if((color_p >= 0x2000000) && (color_p < (0x2000000 + 0x1000000))){
             psram_flush_invaild_cache(color_p, width*height*2);        
             lcd_draw_area(0, psram_cache2nocache_addr(color_p), left, top, width, height, top==0);
-        } else {
+        } else 
+        {
             extern volatile u8 usr_wait_te;
-            usr_wait_te = 0;
+            // usr_wait_te = 0;
+            //printf("usr_wait_te = %d\n", usr_wait_te);
             lcd_draw_area(0, color_p, left, top, width, height, usr_wait_te?top==0:0);   
             if(disp_drv->draw_buf->buf2 == NULL){   //单buf整屏需要等待，双buf不需要等
                 lcd_wait();  

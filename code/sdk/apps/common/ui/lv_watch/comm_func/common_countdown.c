@@ -4,7 +4,7 @@
 
 static u16 countdown_timer_id = 0;
 static u8 countdown_timeout_cnt = 0;
-static const u32 countdown_timer_inv = 20;
+static const u32 countdown_timer_inv = 1000;
 
 static void common_user_countdown_timeout_cb(void *priv)
 {
@@ -37,6 +37,11 @@ static void common_user_countdown_timeout_cb(void *priv)
         }else
             countdown_data->countdown_over_total_cnt += 1;
     }
+
+    struct sys_time s_time;
+    ui_get_sys_time(&s_time);
+    printf("%d-%d-%d\n", s_time.year, s_time.month, s_time.day);
+    printf("%d:%d:%d\n", s_time.hour, s_time.min, s_time.sec);
 
     return;
 }

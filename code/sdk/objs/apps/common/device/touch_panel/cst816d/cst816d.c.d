@@ -155,5 +155,4 @@ objs/apps/common/device/touch_panel/cst816d/cst816d.c.o: \
   apps/watch/include\ui/ui_style.h apps/watch/include\ui/style_JL_new.h \
   apps/watch/include\ui/style_DIAL_new.h \
   apps/watch/include\ui/style_upgrade_new.h \
-  apps/watch/include\ui/style_sidebar.h \
-  apps/common/device/touch_panel/cst816d/capacitive_hynitron_cst816d_update.h
+  apps/watch/include\ui/style_sidebar.h
