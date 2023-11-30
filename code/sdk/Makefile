@@ -329,6 +329,9 @@ c_SRC_FILES := \
 	apps/common/device/touch_panel/IT7259E.c \
 	apps/common/device/touch_panel/bl6133.c \
 	apps/common/device/touch_panel/bl_fw_update.c \
+	apps/common/device/touch_panel/chsc6x/chsc6x_comp.c \
+	apps/common/device/touch_panel/chsc6x/chsc6x_main.c \
+	apps/common/device/touch_panel/chsc6x/chsc6x_platform.c \
 	apps/common/device/touch_panel/cst816d/cst816d.c \
 	apps/common/device/touch_panel/cst816s/cst816s.c \
 	apps/common/device/touch_panel/ft6336g.c \
@@ -536,32 +539,9 @@ c_SRC_FILES := \
     apps/common/ui/lvgl/src/font/lv_font_dejavu_16_persian_hebrew.c  \
     apps/common/ui/lvgl/src/font/lv_font_fmt_txt.c  \
     apps/common/ui/lvgl/src/font/lv_font_loader.c  \
-    apps/common/ui/lvgl/src/font/lv_font_montserrat_10.c  \
+	apps/common/ui/lvgl/src/font/font_common_32.c  \
     apps/common/ui/lvgl/src/font/lv_font_montserrat_12.c  \
-    apps/common/ui/lvgl/src/font/lv_font_montserrat_12_subpx.c  \
-    apps/common/ui/lvgl/src/font/lv_font_montserrat_14.c  \
-    apps/common/ui/lvgl/src/font/lv_font_montserrat_16.c  \
-    apps/common/ui/lvgl/src/font/lv_font_montserrat_18.c  \
-    apps/common/ui/lvgl/src/font/lv_font_montserrat_20.c  \
-    apps/common/ui/lvgl/src/font/lv_font_montserrat_22.c  \
-    apps/common/ui/lvgl/src/font/lv_font_montserrat_24.c  \
-    apps/common/ui/lvgl/src/font/lv_font_montserrat_26.c  \
-    apps/common/ui/lvgl/src/font/lv_font_montserrat_28.c  \
-    apps/common/ui/lvgl/src/font/lv_font_montserrat_28_compressed.c  \
-    apps/common/ui/lvgl/src/font/lv_font_montserrat_30.c  \
-    apps/common/ui/lvgl/src/font/lv_font_montserrat_32.c  \
-    apps/common/ui/lvgl/src/font/lv_font_montserrat_34.c  \
-    apps/common/ui/lvgl/src/font/lv_font_montserrat_36.c  \
-    apps/common/ui/lvgl/src/font/lv_font_montserrat_38.c  \
-    apps/common/ui/lvgl/src/font/lv_font_montserrat_40.c  \
-    apps/common/ui/lvgl/src/font/lv_font_montserrat_42.c  \
-    apps/common/ui/lvgl/src/font/lv_font_montserrat_44.c  \
-    apps/common/ui/lvgl/src/font/lv_font_montserrat_46.c  \
-    apps/common/ui/lvgl/src/font/lv_font_montserrat_48.c  \
-    apps/common/ui/lvgl/src/font/lv_font_montserrat_8.c  \
-    apps/common/ui/lvgl/src/font/lv_font_simsun_16_cjk.c  \
-    apps/common/ui/lvgl/src/font/lv_font_unscii_16.c  \
-    apps/common/ui/lvgl/src/font/lv_font_unscii_8.c  \
+	apps/common/ui/lvgl/src/font/lv_font_montserrat_32.c  \
     apps/common/ui/lvgl/src/hal/lv_hal_disp.c  \
     apps/common/ui/lvgl/src/hal/lv_hal_indev.c  \
     apps/common/ui/lvgl/src/hal/lv_hal_tick.c  \
@@ -972,6 +952,7 @@ c_SRC_FILES := \
 	cpu/br28/ui_driver/lcd_drive/lcd_spi/lcd_qspi_ST77916_320x386.c \
 	cpu/br28/ui_driver/lcd_drive/lcd_spi/lcd_spi_st7789_BOE1.54_update_240x240.c \
 	cpu/br28/ui_driver/lcd_drive/lcd_spi/lcd_spi_st7789v_240x240.c \
+	cpu/br28/ui_driver/lcd_drive/lcd_spi/lcd_qspi_ft2308_368x448.c \
 	cpu/br28/ui_driver/lcd_seg/lcd_seg3x9_driver.c \
 	cpu/br28/ui_driver/led7/led7_driver.c \
 	cpu/br28/ui_driver/lvgl/lv_port_disp.c \

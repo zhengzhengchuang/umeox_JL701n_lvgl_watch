@@ -120,40 +120,4 @@ objs/apps/common/device/touch_panel/bl6133.c.o: \
   include_lib/driver/cpu/br28\asm/iic_soft.h \
   include_lib/driver/cpu/br28\asm/mcpwm.h \
   apps/common/device/touch_panel/bl6133.h \
-  apps/common/device/touch_panel/bl6133_custom.h \
-  include_lib/system\debug.h include_lib/system/ui_new\ui/ui.h \
-  include_lib/system/ui_new\ui/window.h \
-  include_lib/system/ui_new\ui/layer.h \
-  include_lib/system/ui_new\ui/layout.h \
-  include_lib/system/ui_new\ui/ui_core.h \
-  include_lib/system/ui_new\res/resfile.h \
-  include_lib/system/ui_new\ui/ui_effect.h \
-  include_lib/system/ui_new\ui/control.h \
-  include_lib/system/ui_new\ui/ui_button.h \
-  include_lib/system/ui_new\ui/ui_grid.h \
-  include_lib/system/ui_new\ui/ui_time.h \
-  include_lib/system/ui_new\ui/p.h \
-  include_lib/system/ui_new\ui/ui_camera.h \
-  include_lib/system/ui_new\ui/ui_pic.h \
-  include_lib/system/ui_new\ui/ui_text.h \
-  include_lib/system/ui_new\font/font_all.h \
-  include_lib/system/ui_new\font/font_sdfs.h \
-  include_lib/system/ui_new\ui/ui_battery.h \
-  include_lib/system/ui_new\ui/ui_browser.h \
-  include_lib/system/ui_new\ui/ui_slider.h \
-  include_lib/system/ui_new\ui/ui_slider_vert.h \
-  include_lib/system/ui_new\ui/ui_number.h \
-  include_lib/system/ui_new\ui/ui_watch.h \
-  include_lib/system/ui_new\ui/ui_progress.h \
-  include_lib/system/ui_new\ui/ui_progress_multi.h \
-  include_lib/system/ui_new\ui/ui_rotate.h \
-  include_lib/system/ui_new\ui/ui_page_manager.h \
-  include_lib/system/ui_new\ui/ui_compass.h \
-  apps/watch/include\ui/ui_api.h \
-  apps/watch/include\ui/lcd_spi/lcd_drive.h \
-  include_lib/driver/cpu/br28\asm/spi.h \
-  include_lib/system/ui_new/ui/cpu/br28\asm/imd.h \
-  apps/watch/include\ui/ui_style.h apps/watch/include\ui/style_JL_new.h \
-  apps/watch/include\ui/style_DIAL_new.h \
-  apps/watch/include\ui/style_upgrade_new.h \
-  apps/watch/include\ui/style_sidebar.h
+  apps/common/device/touch_panel/bl6133_custom.h

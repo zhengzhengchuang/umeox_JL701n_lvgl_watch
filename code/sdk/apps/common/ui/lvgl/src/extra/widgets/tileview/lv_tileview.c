@@ -160,14 +160,14 @@ static void tileview_event_cb(lv_event_t * e)
 
     if(code == LV_EVENT_SCROLL_END) 
     {
-        printf("***********%s\n", __func__);
+        //printf("***********%s\n", __func__);
 
         event_filter++;
         event_filter %= 2;
         if(event_filter) return;
 
         lv_indev_t * indev = lv_indev_get_act();
-        printf("%s:%d\n", __func__, indev->proc.state);
+        //printf("%s:%d\n", __func__, indev->proc.state);
         if(indev && indev->proc.state == LV_INDEV_STATE_PRESSED) {
             return;
         }
@@ -175,19 +175,19 @@ static void tileview_event_cb(lv_event_t * e)
         lv_coord_t w = lv_obj_get_content_width(obj);
         lv_coord_t h = lv_obj_get_content_height(obj);
 
-        printf("%s:w = %d, h = %d\n", __func__, w, h);
+        //printf("%s:w = %d, h = %d\n", __func__, w, h);
 
         lv_point_t scroll_end;
         lv_obj_get_scroll_end(obj, &scroll_end);
         lv_coord_t left = scroll_end.x;
         lv_coord_t top = scroll_end.y;
 
-        printf("%s:left = %d, top = %d\n", __func__, left, top);
+        //printf("%s:left = %d, top = %d\n", __func__, left, top);
 
         lv_coord_t tx = ((left + (w / 2)) / w) * w;
         lv_coord_t ty = ((top + (h / 2)) / h) * h;
 
-        printf("%s:tx = %d, ty = %d\n", __func__, tx, ty);
+        //printf("%s:tx = %d, ty = %d\n", __func__, tx, ty);
 
         lv_dir_t dir = LV_DIR_ALL;
         uint32_t i;

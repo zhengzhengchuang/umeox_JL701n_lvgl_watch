@@ -122,7 +122,14 @@
         "timestamp.h": "c",
         "ioctl.h": "c",
         "lv_port_indev.h": "c",
-        "bl6133.h": "c"
+        "bl6133.h": "c",
+        "lv_font.h": "c",
+        "chsc6x_flash_boot.h": "c",
+        "chsc6x_ramcode.h": "c",
+        "chsc6x_comp.h": "c",
+        "chsc6x_platform.h": "c",
+        "printf.h": "c",
+        "gpio.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

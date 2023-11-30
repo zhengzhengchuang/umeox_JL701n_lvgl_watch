@@ -8,9 +8,9 @@
 
 #include "board_config.h"
 #if FILE_OR_ADDR_TEST//VAR
-#include "ui/ui/jl_images/FILE_index.h"
+//#include "ui/ui/jl_images/FILE_index.h"
 
-#if 1
+#if 0
 volatile lv_img_dsc_t ui_img_bg1_png;      // assets\bg1.png
 volatile lv_img_dsc_t ui_img_flash_png;      // assets\flash.png
 volatile lv_img_dsc_t ui_img_weather_sun_cloud_png;      // assets\weather_sun_cloud.png
@@ -58,7 +58,7 @@ volatile lv_img_dsc_t ui_img_s6_png;      // assets\s6.png
 volatile lv_img_dsc_t ui_img_s7_png;      // assets\s7.png
 #endif
 
-#define RES_BASE_ADDR   0x600000   //自定义区起始地址
+//#define RES_BASE_ADDR   0x600000   //自定义区起始地址
 //  初始化资源，4字节一个资源
 void res_init(){
     #if 0
@@ -112,6 +112,7 @@ void res_init(){
 }
 #endif
 
+#if 0
 ///////////////////// VARIABLES ////////////////////
 void sec_Animation(lv_obj_t * TargetObject, int delay);
 void min_Animation(lv_obj_t * TargetObject, int delay);
@@ -1034,3 +1035,4 @@ void ui_init(void)
     lv_disp_load_scr(ui_watch_digital);
 #endif
 }
+#endif 

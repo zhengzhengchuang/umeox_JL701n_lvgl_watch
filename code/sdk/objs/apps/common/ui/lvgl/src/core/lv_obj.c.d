@@ -136,7 +136,6 @@ objs/apps/common/ui/lvgl/src/core/lv_obj.c.o: \
   apps/common/ui/lvgl/src/widgets/lv_switch.h \
   apps/common/ui/lvgl/src/lv_api_map.h \
   apps/common/ui/lvgl/src/extra/lv_extra.h \
-  apps/common/ui/lvgl/src/core/../extra/libs/gif/gifdec.h \
   apps/common/ui/lvgl/src/core/../extra/libs/qrcode/lv_qrcode.h \
   apps/common/ui/lvgl/src/core/../extra/libs/sjpg/lv_sjpg.h \
   apps/common/ui/lvgl/src/core/../extra/libs/freetype/lv_freetype.h \

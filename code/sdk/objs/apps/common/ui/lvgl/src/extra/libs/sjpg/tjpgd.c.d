@@ -51,5 +51,4 @@ objs/apps/common/ui/lvgl/src/extra/libs/sjpg/tjpgd.c.o: \
   include_lib/driver/cpu/br28\asm/power/power_port.h \
   include_lib/driver/cpu/br28\asm/power/power_wakeup.h \
   include_lib/driver/cpu/br28\asm/power/power_reset.h \
-  include_lib/driver/cpu/br28\asm/power/power_compat.h \
-  apps/common/ui/lvgl/src/extra/libs/sjpg/tjpgdcnf.h
+  include_lib/driver/cpu/br28\asm/power/power_compat.h

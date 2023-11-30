@@ -254,6 +254,9 @@ static inline const lv_font_t * lv_font_default(void)
     return LV_FONT_DEFAULT;
 }
 
+//用户自定义
+LV_FONT_DECLARE(font_common_32);
+
 #ifdef __cplusplus
 } /*extern "C"*/
 #endif

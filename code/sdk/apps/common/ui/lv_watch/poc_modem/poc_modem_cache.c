@@ -1,4 +1,6 @@
-﻿#include "poc_modem_cache.h"
+﻿#include "app_config.h"
+#include "poc_modem_cache.h"
+
 
 ui_info_cache_t *p_ui_info_cache = NULL;
 static ui_info_cache_t ui_info_cache = {0};
@@ -16,6 +18,8 @@ ui_act_id_t ui_cache_get_cur_act_id(void)
 void ui_cache_set_cur_act_id(ui_act_id_t cur_act_id)
 {
     p_ui_info_cache->cur_act_id = cur_act_id;
+
+    return;
 }
 
 ui_act_id_t ui_cache_get_prev_act_id(void)
@@ -26,6 +30,8 @@ ui_act_id_t ui_cache_get_prev_act_id(void)
 void ui_cache_set_prev_act_id(ui_act_id_t prev_act_id)
 {
     p_ui_info_cache->prev_act_id = prev_act_id;
+
+    return;
 }
 
 ui_watchface_id_t ui_cache_get_cur_watchface_id(void)
@@ -36,6 +42,20 @@ ui_watchface_id_t ui_cache_get_cur_watchface_id(void)
 void ui_cache_set_cur_watchface_id(ui_watchface_id_t id)
 {
     p_ui_info_cache->cur_watchface_id = id;
+
+    return;
+}
+
+uint8_t ui_cache_get_backlight_val(void)
+{
+    return p_ui_info_cache->sys_backlight_val;
+}
+
+void ui_cache_set_backlight_val(uint8_t val)
+{
+    p_ui_info_cache->sys_backlight_val = val;
+
+    return;
 }
 
 void ui_info_cache_init(ui_act_id_t act_id)
@@ -52,6 +72,9 @@ void ui_info_cache_init(ui_act_id_t act_id)
 
     /************启动默认表盘************/
     ui_cache_set_cur_watchface_id(Watchface_Id_00);
+
+    /************启动默认背光值************/
+    ui_cache_set_backlight_val(DEFAULT_BACKLIGHT_VAL);
 
     return;
 }

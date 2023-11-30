@@ -1118,7 +1118,7 @@ static void board_devices_init(void)
 	uart_key_init();
 #endif /* #if TCFG_UART_KEY_ENABLE */
 
-    sensor_iic_init();
+    //sensor_iic_init();
 
 #if (TCFG_HR_SENSOR_ENABLE||TCFG_SPO2_SENSOR_ENABLE)
     hr_sensor_init(&hrSensor_data);
@@ -1207,8 +1207,6 @@ void board_init()
 	sd_power_config(4);
 #endif
 
-
-
 // 触摸屏 和 屏公用复位，先初始化触摸
 #if TCFG_TOUCH_PANEL_ENABLE
 #if TCFG_TP_IT7259E_ENABLE
@@ -1240,6 +1238,10 @@ void board_init()
     bl6133_test();
     extern void bl6133_int_en();
     bl6133_int_en();
+#endif
+#if TCFG_TP_CHSC6X_ENABLE
+    extern void chsc6x_init(void);
+    chsc6x_init();
 #endif
 #endif
 

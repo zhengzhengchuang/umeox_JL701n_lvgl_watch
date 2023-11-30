@@ -20,6 +20,8 @@ typedef struct
     ui_act_id_t cur_act_id;
     ui_act_id_t prev_act_id;
 
+    uint8_t sys_backlight_val;
+
     lv_obj_t *ui_menu_container;
 
 #if UI_USE_COVER
@@ -57,6 +59,9 @@ void ui_cache_set_prev_act_id(ui_act_id_t prev_act_id);
 
 ui_watchface_id_t ui_cache_get_cur_watchface_id(void);
 void ui_cache_set_cur_watchface_id(ui_watchface_id_t id);
+
+uint8_t ui_cache_get_backlight_val(void);
+void ui_cache_set_backlight_val(uint8_t val);
 
 void ui_info_cache_init(ui_act_id_t act_id);
 #ifdef __cplusplus

@@ -67,7 +67,7 @@ static void lvgl_task(void *p)
     }
 
     lcd_sleep_ctrl(0);
-    //lcd_get_hdl()->backlight_ctrl(100);
+
     lv_disp_get_default()->driver->render_start_cb = render_start_cb;
 
     // Set the rounder_cb function    

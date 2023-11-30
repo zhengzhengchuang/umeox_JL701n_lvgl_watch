@@ -137,7 +137,6 @@ objs/apps/common/ui/lvgl/src/extra/libs/ffmpeg/lv_ffmpeg.c.o: \
   apps/common/ui/lvgl/src/extra/libs/png/lv_png.h \
   apps/common/ui/lvgl/src/extra/libs/gif/lv_gif.h \
   apps/common/ui/lvgl/src/extra/libs/gif/../../../lvgl.h \
-  apps/common/ui/lvgl/src/extra/libs/gif/gifdec.h \
   apps/common/ui/lvgl/src/extra/libs/qrcode/lv_qrcode.h \
   apps/common/ui/lvgl/src/extra/libs/qrcode/../../../lvgl.h \
   apps/common/ui/lvgl/src/extra/libs/sjpg/lv_sjpg.h \

@@ -551,7 +551,7 @@ DAC硬件上的连接方式,可选的配置：
 #define TCFG_LCD_SPI_ST7789V_ENABLE         DISABLE_THIS_MOUDLE
 #define TCFG_LCD_SPI_ST7789_BOE1_54_ENABLE  DISABLE_THIS_MOUDLE
 #define TCFG_LCD_SPI_RM69330_ENABLE        	DISABLE_THIS_MOUDLE
-#define TCFG_LCD_SPI_SH8601A_ENABLE        	ENABLE_THIS_MOUDLE
+#define TCFG_LCD_SPI_SH8601A_ENABLE        	DISABLE_THIS_MOUDLE
 #define TCFG_LCD_SPI_ICNA3310B_ENABLE       DISABLE_THIS_MOUDLE
 #define TCFG_LCD_QSPI_ST77903_ENABLE        DISABLE_THIS_MOUDLE
 #define TCFG_LCD_QSPI_ST77903_V1_ENABLE     DISABLE_THIS_MOUDLE
@@ -565,6 +565,7 @@ DAC硬件上的连接方式,可选的配置：
 #define TCFG_LCD_OLED_ENABLE	            DISABLE_THIS_MOUDLE
 #define TCFG_LCD_GC9A01_ENABLE              DISABLE_THIS_MOUDLE
 #define TCFG_LCD_QSPI_ST77916_ENABLE        DISABLE_THIS_MOUDLE
+#define TCFG_LCD_QSPI_FT2308_ENABLE         ENABLE_THIS_MOUDLE
 
 #define TCFG_LRC_LYRICS_ENABLE              DISABLE_THIS_MOUDLE  //歌词显示
 
@@ -573,7 +574,7 @@ DAC硬件上的连接方式,可选的配置：
 #define LCD_MATCH_BY_ID                     1 //通过屏幕id来匹配
 #define TCFG_LCD_MATCH_MODE                 LCD_MATCH_BY_LOGO
 #if (TCFG_LCD_MATCH_MODE == LCD_MATCH_BY_LOGO)
-#define LCD_LOGO                            "st77916"
+#define LCD_LOGO                            "ft2308"
 #else
 #define LCD_LOGO                            "null"//通过id匹配, 忽略logo参数
 #endif
@@ -582,11 +583,12 @@ DAC硬件上的连接方式,可选的配置：
 #define TCFG_TFT_LCD_DEV_SPI_HW_NUM			1// 0: SPI0    1: SPI1    2: SPI2 配置lcd选择的spi口
 #define TCFG_TOUCH_PANEL_ENABLE             ENABLE//DISABLE
 #define TCFG_TOUCH_USER_IIC_TYPE            0  //0:软件IIC  1:硬件IIC
-#define TCFG_TP_BL6133_ENABLE               ENABLE_THIS_MOUDLE//注意: iic 时钟需小于200k
+#define TCFG_TP_BL6133_ENABLE               DISABLE_THIS_MOUDLE//注意: iic 时钟需小于200k
 #define TCFG_TP_IT7259E_ENABLE              DISABLE_THIS_MOUDLE
 #define TCFG_TP_FT6336G_ENABLE				DISABLE_THIS_MOUDLE
 #define TCFG_TP_CST816S_ENABLE              DISABLE_THIS_MOUDLE
 #define TCFG_TP_CST816D_ENABLE              DISABLE_THIS_MOUDLE
+#define TCFG_TP_CHSC6X_ENABLE               ENABLE_THIS_MOUDLE
 #define TCFG_TP_INT_IO                      IO_PORTG_05 //TP中断脚
 #define TCFG_TP_RESET_IO                    IO_PORTG_06 //TP复位脚
 #define TCFG_TP_POWER_IO                    IO_PORTA_05 //TP电源脚
@@ -612,6 +614,9 @@ DAC硬件上的连接方式,可选的配置：
 //2:使用MCPWM模块控制背光(低功耗不能输出)
 #define TCFG_BACKLIGHT_PWM_MODE             0
 #define TCFG_BACKLIGHT_PWM_IO               IO_PORTB_10
+#define MIN_BACKLIGHT_VAL                   (20)
+#define MAX_BACKLIGHT_VAL                   (100)
+#define DEFAULT_BACKLIGHT_VAL               (80)
 #if (TCFG_BACKLIGHT_PWM_MODE == 1)
 #undef  TCFG_PWMLED_ENABLE
 #define TCFG_PWMLED_ENABLE					DISABLE_THIS_MOUDLE			//是否支持PMW LED推灯模块
@@ -846,7 +851,7 @@ DAC硬件上的连接方式,可选的配置：
 #define TCFG_GSENSOR_DETECT_IO                    (-1) //传感器中断io
 #define TCFG_GSENSOR_ALGO_SILAN                   (0) //士兰微的G-Sensor算法
 
-#define TCFG_QMI8658_EN                           (1)
+#define TCFG_QMI8658_EN                           (0)
 
 //*********************************************************************************//
 //                                  imu-sensor配置                                   //

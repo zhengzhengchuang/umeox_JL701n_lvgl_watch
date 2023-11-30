@@ -1152,6 +1152,8 @@ int lcd_drv_init(void *p)
     /* SPI发送屏幕初始化代码 */
     lcd_drv_cmd_list(__lcd->lcd_cmd, __lcd->cmd_cnt);
 
+    printf("****************lcd_drv_cmd_list end\n");
+
 #if 0
     if (lcd_qspi_st77903_mode()) 
     {

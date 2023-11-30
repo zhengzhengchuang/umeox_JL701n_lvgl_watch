@@ -42,3 +42,37 @@ apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_scan_touch.c \
 apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_sportrecord_browse.c \
 apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_timer_action.c \
 apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_upgrade_action.c \
+
+
+
+
+
+
+
+
+
+apps/common/ui/lvgl/src/font/lv_font_montserrat_10.c  \
+apps/common/ui/lvgl/src/font/lv_font_montserrat_12_subpx.c  \
+apps/common/ui/lvgl/src/font/lv_font_montserrat_14.c  \
+apps/common/ui/lvgl/src/font/lv_font_montserrat_16.c  \
+apps/common/ui/lvgl/src/font/lv_font_montserrat_18.c  \
+apps/common/ui/lvgl/src/font/lv_font_montserrat_20.c  \
+apps/common/ui/lvgl/src/font/lv_font_montserrat_22.c  \
+apps/common/ui/lvgl/src/font/lv_font_montserrat_24.c  \
+apps/common/ui/lvgl/src/font/lv_font_montserrat_26.c  \
+apps/common/ui/lvgl/src/font/lv_font_montserrat_28.c  \
+apps/common/ui/lvgl/src/font/lv_font_montserrat_28_compressed.c  \
+apps/common/ui/lvgl/src/font/lv_font_montserrat_30.c  \
+apps/common/ui/lvgl/src/font/lv_font_montserrat_32.c  \
+apps/common/ui/lvgl/src/font/lv_font_montserrat_34.c  \
+apps/common/ui/lvgl/src/font/lv_font_montserrat_36.c  \
+apps/common/ui/lvgl/src/font/lv_font_montserrat_38.c  \
+apps/common/ui/lvgl/src/font/lv_font_montserrat_40.c  \
+apps/common/ui/lvgl/src/font/lv_font_montserrat_42.c  \
+apps/common/ui/lvgl/src/font/lv_font_montserrat_44.c  \
+apps/common/ui/lvgl/src/font/lv_font_montserrat_46.c  \
+apps/common/ui/lvgl/src/font/lv_font_montserrat_48.c  \
+apps/common/ui/lvgl/src/font/lv_font_montserrat_8.c  \
+apps/common/ui/lvgl/src/font/lv_font_simsun_16_cjk.c  \
+apps/common/ui/lvgl/src/font/lv_font_unscii_16.c  \
+apps/common/ui/lvgl/src/font/lv_font_unscii_8.c  \

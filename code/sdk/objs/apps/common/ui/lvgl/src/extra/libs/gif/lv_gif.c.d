@@ -190,5 +190,4 @@ objs/apps/common/ui/lvgl/src/extra/libs/gif/lv_gif.c.o: \
   apps/common/ui/lvgl/src/extra/widgets/imgbtn/lv_imgbtn.h \
   apps/common/ui/lvgl/src/extra/widgets/imgbtn/../../../lvgl.h \
   apps/common/ui/lvgl/src/extra/widgets/span/lv_span.h \
-  apps/common/ui/lvgl/src/extra/widgets/span/../../../lvgl.h \
-  apps/common/ui/lvgl/src/extra/libs/gif/gifdec.h
+  apps/common/ui/lvgl/src/extra/widgets/span/../../../lvgl.h

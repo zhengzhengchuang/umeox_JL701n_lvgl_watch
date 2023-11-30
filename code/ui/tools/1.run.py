@@ -1,31 +1,26 @@
 ﻿import os
+import struct
 
-
-head_name = 'file'  #自定义头名字
+#自定义头名字
+head_name = 'file'
 
 # 打开文件并读取内容
-file_path = "H-name.txt"  # 将文件路径替换为你的文件路径
-with open(file_path, "r", encoding="utf-8") as file:
-    content = file.read()
-    head_name = content
-    print(content)
-
-
+# file_path = "H-name.txt"  # 将文件路径替换为你的文件路径
+# with open(file_path, "r", encoding="utf-8") as file:
+#     content = file.read()
+#     head_name = content
+#     print(content)
+    
 #os.system('clean.bat')
 
-os.system('del /q "bin_tmp\*.*"');
+#os.system('del /q 'bin_tmp\*.*"')
 
-os.system('del /q "bin_out\*.*"');
-
-
+#os.system('del /q "bin_out\*.*"')
 
 def is_ok_by_extension(file_path, name):
     # 获取文件的后缀名
     file_extension = file_path.split('.')[-1].lower()
     return file_extension == name
-
-
-
 
 def get_image_dimensions(image_path):
     with open(image_path, 'rb') as image_file:
@@ -58,9 +53,6 @@ def get_image_dimensions(image_path):
             # 加入暂停
             input("按回车键继续执行...")   
 
-
-
-
 # 定义输入文件夹和输出文件夹的路径
 input_folder = "dat_tmp"
 output_folder = "bin_tmp"
@@ -69,6 +61,7 @@ output_folder = "bin_tmp"
 if not os.path.exists(output_folder):
     os.makedirs(output_folder)
 
+"""
 # 获取输入文件夹中所有的bin文件
 bin_files = [file for file in os.listdir(input_folder) if file.endswith(".bin")]
 
@@ -82,10 +75,7 @@ for bin_file in bin_files:
         output_file.write(input_file.read())
     
 print("bin文件拷贝完成！")
-
-
-import os
-import struct
+"""
 
 output_data = []  # 用于存储解包后的数据
 
@@ -95,11 +85,11 @@ for filename in os.listdir(input_folder):
         file_path = os.path.join(input_folder, filename)
         with open(file_path, 'rb') as file:
             head = file.read(4)
-            print(head)
+            # print(head)
             # 读取文件头并按照BBHHHIIII格式解包
             header = file.read(struct.calcsize('BBHHHIIII'))
             unpacked_data = struct.unpack('BBHHHIIII', header)
-            print(unpacked_data)
+            # print(unpacked_data)
 
             cf = unpacked_data[0]
             w = unpacked_data[3]
@@ -123,7 +113,7 @@ for filename in os.listdir(input_folder):
             # print("source", cf, w, h)
             # print("check", tcf, tw, th)
             
-            print(file_path,packed_data)
+            # print(file_path,packed_data)
             lvhead = struct.pack('BBBB', *packed_data)
             
             file.seek(0)
@@ -135,7 +125,7 @@ for filename in os.listdir(input_folder):
             with open(output_path, "wb") as output_file:
                 output_file.write(output_data)
                 
-
+"""
 # 遍历文件夹中的文件('.jpg','.bmp','.png','.sjpg','.gif') 没有加速功能
 for filename in os.listdir(input_folder):
     if filename.endswith(('.jpg','.bmp','.png','.sjpg','.gif')):
@@ -180,34 +170,36 @@ for filename in os.listdir(input_folder):
             # 打开输入文件和输出文件，分别读取和写入数据
             with open(output_path, "wb") as output_file:
                 output_file.write(output_data)
-                      
-
-import os
-
+"""
 
 
 # Step 1: Read and sort bin files
 bin_folder = "./bin_tmp/"
 bin_files = sorted([f for f in os.listdir(bin_folder) if f.endswith(".bin")])
+# print(bin_files)
 
 # Step 2: Concatenate bin files
 def clear_file_contents(file_path):
     with open(file_path, 'w') as file:
         file.truncate(0)
 
-clear_file_contents(f"./bin_out/{head_name}_addresses.txt")
+# clear_file_contents(f"./bin_out/{head_name}_addresses.txt")
 clear_file_contents(f"./bin_out/{head_name}_index.c")
 clear_file_contents(f"./bin_out/{head_name}.bin")
 
 # Step 4: Generate C structure
-struct_text = f'#include "{head_name}_index.h" \n'
-struct_text += '''
-'''
+struct_text = f'#include "{head_name}_index.h" \n\n'
+# print(struct_text)
+# struct_text += ''''''
+
 struct_text += f"const struct file_index_t {head_name}_index[] = " + "{\n"
 
-define_text = f'#ifndef __{head_name}_index_h \n'
-define_text += f'#define __{head_name}_index_h \n'
+define_text = f'#ifndef __FILE_INDEX_H__ \n'
+define_text += f'#define __FILE_INDEX_H__ \n'
 define_text += '''
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 struct file_index_t {
     char *name;
@@ -218,29 +210,57 @@ struct file_index_t {
 extern const struct file_index_t file_index[];
 
 '''
+# print(define_text)
 
-output_bin = b""
 current_address = 0x00000000
+output_bin = b""
+
+# 添加字库
+font_folder = "./font/"
+font_list = []
+for font in os.listdir(font_folder):
+    font_list.append(font)
+
+for i in range(len(font_list)):
+    file_name = os.path.join(font_folder, font_list[i])
+    with open(file_name, mode="rb") as font_bin:
+        output_bin += font_bin.read()
+
+    fontname_without_extension = os.path.splitext(font_list[i])[0] + "_address"
+    #print(fontname_without_extension)
+    define_text += f"#define {fontname_without_extension} (0x{current_address:08X})\n\n"
+
+    file_size = os.path.getsize(file_name)
+    # print(file_size)
+    current_address += file_size
+
 for index, filename in enumerate(bin_files):
+    # print(index, filename)
     with open(os.path.join(bin_folder, filename), "rb") as bin_file:
         file_data = bin_file.read()
         output_bin += file_data
+        # print(output_bin)
 
         # Step 3: Generate #define text
         # 去除文件名后缀
         filename_without_extension = os.path.splitext(filename)[0]
+        # print(filename_without_extension)
         # 替换小数点为下划线
-        processed_filename = filename_without_extension.replace(".", "_")
-        
-        define_text += f"#define {head_name}_{processed_filename}             0x{index:08X}\n"
+        processed_filename = filename_without_extension.replace(".dat", "_index")
+        # print(processed_filename)
 
+        define_text += f"#define {processed_filename} (0x{index:08X})\n"
+        # print(define_text)
         
         # Step 3: Generate #define text
         # 去除文件名后缀
         filename_without_extension = os.path.splitext(filename)[0]
+        # print(filename_without_extension)
         # 替换小数点为下划线
-        processed_filename = filename_without_extension.replace(".", "_")
-        struct_text += f"    {{ \"{head_name}_{processed_filename}\", 0x{current_address :08X} ,{len(file_data)}}},\n"
+        processed_filename = filename_without_extension.replace(".dat", "_index")
+        # print(processed_filename)
+        struct_text += f"    {{ \"{processed_filename}\", 0x{current_address :08X} ,{len(file_data)}}},\n"
+        # print(struct_text)
             
         # Align to 4 bytes
         padding = b"\x00" * (4 - (len(output_bin) % 4))
@@ -256,10 +276,17 @@ struct_text += "};"
 with open(f"./bin_out/{head_name}_index.c", "w") as struct_file:
     struct_file.write(struct_text)
 
+define_text += '''
+#ifdef __cplusplus
+} /* extern "C" */
+#endif
+'''
 define_text += f'#endif'
-with open(f"./bin_out/{head_name}_index.h", "a") as define_file:
+# print(define_text)
+with open(f"./bin_out/{head_name}_index.h", "w") as define_file:
     define_file.write(define_text)
-    print(define_text[:-1])
+    # print(define_text[:-1])
 
 # 加入暂停
-#input("按回车键继续执行...")   
+#input("按回车键继续执行...")
+

@@ -92,6 +92,8 @@ void lv_img_set_src(lv_obj_t * obj, const void * src)
     }
 #endif
 
+    //printf("%s:src_type = %d\n", __func__, src_type);
+
     /*If the new source type is unknown free the memories of the old source*/
     if(src_type == LV_IMG_SRC_UNKNOWN) {
         LV_LOG_WARN("lv_img_set_src: unknown image type");
@@ -105,7 +107,7 @@ void lv_img_set_src(lv_obj_t * obj, const void * src)
 
     lv_img_header_t header;
     lv_img_decoder_get_info(src, &header);
-
+    
     /*Save the source*/
     if(src_type == LV_IMG_SRC_VARIABLE) {
         /*If memory was allocated because of the previous `src_type` then free it*/

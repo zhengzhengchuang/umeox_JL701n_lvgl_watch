@@ -1,10 +1,10 @@
 #include "file_index.h" 
 
 const struct file_index_t file_index[] = {
-    { "file_watchface_00_bg_dat", 0x00000000 ,90516},
-    { "file_watchface_00_hour_dat", 0x00016198 ,2396},
-    { "file_watchface_00_minute_dat", 0x00016AF8 ,5712},
-    { "file_watchface_00_second_dat", 0x0001814C ,3552},
-    { "file_watchface_00_sunny_dat", 0x00018F30 ,59960},
-    { "file_weather_bg_dat", 0x0002796C ,90516},
+    { "watchface_00_bg_index", 0x0000237F ,27084},
+    { "watchface_00_hour_index", 0x00008D4C ,3124},
+    { "watchface_00_min_index", 0x00009984 ,4744},
+    { "watchface_00_sec_index", 0x0000AC10 ,3936},
+    { "watchface_00_sports_index", 0x0000BB74 ,4728},
+    { "weather_bg_index", 0x0000CDF0 ,196152},
 };

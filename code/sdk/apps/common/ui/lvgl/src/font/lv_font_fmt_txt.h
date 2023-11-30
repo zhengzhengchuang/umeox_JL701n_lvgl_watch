@@ -28,7 +28,7 @@ extern "C" {
 
 /** This describes a glyph.*/
 typedef struct {
-#if LV_FONT_FMT_TXT_LARGE == 0
+#if (LV_FONT_FMT_TXT_LARGE == 0)
     uint32_t bitmap_index : 20;     /**< Start index of the bitmap. A font can be max 1 MB.*/
     uint32_t adv_w : 12;            /**< Draw the next glyph after this width. 8.4 format (real_value * 16 is stored).*/
     uint8_t box_w;                  /**< Width of the glyph's bounding box*/

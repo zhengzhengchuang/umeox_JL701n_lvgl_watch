@@ -2868,9 +2868,6 @@ void watch_set_need_reload(u8 need)
     watch_need_load = !!need;
 }
 
-
-
-
 int switch_ui_page(u8 page, u8 prj)
 {
     static u8 last_watch_style = 0xff;

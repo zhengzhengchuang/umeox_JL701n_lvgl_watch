@@ -313,6 +313,8 @@ lv_res_t lv_img_decoder_built_in_info(lv_img_decoder_t * decoder, const void * s
             }
         }
 
+        //printf("%s:LV_IMG_SRC_FILE\n", __func__);
+
         if(header->cf < CF_BUILT_IN_FIRST || header->cf > CF_BUILT_IN_LAST) return LV_RES_INV;
     }
     else if(src_type == LV_IMG_SRC_SYMBOL) {
@@ -472,6 +474,8 @@ lv_res_t lv_img_decoder_built_in_read_line(lv_img_decoder_t * decoder, lv_img_de
     LV_UNUSED(decoder); /*Unused*/
 
     lv_res_t res = LV_RES_INV;
+
+    // printf("*****%s\n", __func__);
 
     if(dsc->header.cf == LV_IMG_CF_TRUE_COLOR || dsc->header.cf == LV_IMG_CF_TRUE_COLOR_ALPHA ||
        dsc->header.cf == LV_IMG_CF_TRUE_COLOR_CHROMA_KEYED) {

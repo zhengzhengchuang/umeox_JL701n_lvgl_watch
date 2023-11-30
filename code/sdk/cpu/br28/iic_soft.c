@@ -347,7 +347,7 @@ int soft_iic_write_buf(soft_iic_dev iic, const void *buf, int len)
     }
     for (i = 0; i < len; i++) {
         ack = soft_iic_tx_byte(iic, ((u8 *)buf)[i]);
-        if (ack == 0) {
+        if(ack == 0) {
             break;
         }
     }

@@ -58,7 +58,4 @@ objs/apps/common/ui/lvgl/src/extra/libs/gif/gifdec.c.o: \
   apps/common/ui/lvgl/src/extra/libs/gif/../../../misc/lv_mem.h \
   apps/common/ui/lvgl/src/extra/libs/gif/../../../misc/lv_color.h \
   apps/common/ui/lvgl/src/extra/libs/gif/../../../misc/lv_assert.h \
-  apps/common/ui/lvgl/src/extra/libs/gif/../../../misc/lv_math.h \
-  C:/JL/pi32/pi32v2-include\stdlib.h \
-  C:/JL/pi32/pi32v2-include\machine/stdlib.h \
-  C:/JL/pi32/pi32v2-include\alloca.h
+  apps/common/ui/lvgl/src/extra/libs/gif/../../../misc/lv_math.h

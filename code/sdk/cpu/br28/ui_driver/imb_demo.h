@@ -13,7 +13,12 @@ void *get_res_fd(void);
 void open_fd(char *name);
 
 void lv_close_res(lv_img_dsc_t*img_dst);
-void lv_open_res(void *fd, int phyaddr, int offset, struct file_index_t res, lv_img_dsc_t*img_dst);
+void lv_open_res(void *fd, int phyaddr, int offset, \
+    struct file_index_t res, lv_img_dsc_t*img_dst);
+
+u8 *get_g_font_buf(void);
+void lv_open_font(int offset, int len);
+
 #ifdef __cplusplus
 }
 #endif

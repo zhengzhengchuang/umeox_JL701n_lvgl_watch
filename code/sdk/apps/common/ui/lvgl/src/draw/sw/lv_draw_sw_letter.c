@@ -97,7 +97,8 @@ void lv_draw_sw_letter(lv_draw_ctx_t * draw_ctx, const lv_draw_label_dsc_t * dsc
 {
     lv_font_glyph_dsc_t g;
     bool g_ret = lv_font_get_glyph_dsc(dsc->font, &g, letter, '\0');
-    if(g_ret == false) {
+    if(g_ret == false) 
+    {
         /*Add warning if the dsc is not found
          *but do not print warning for non printable ASCII chars (e.g. '\n')*/
         if(letter >= 0x20 &&
@@ -136,7 +137,8 @@ void lv_draw_sw_letter(lv_draw_ctx_t * draw_ctx, const lv_draw_label_dsc_t * dsc
     if(gpos.x + g.box_w < draw_ctx->clip_area->x1 ||
        gpos.x > draw_ctx->clip_area->x2 ||
        gpos.y + g.box_h < draw_ctx->clip_area->y1 ||
-       gpos.y > draw_ctx->clip_area->y2)  {
+       gpos.y > draw_ctx->clip_area->y2) 
+    {
         return;
     }
 
@@ -192,7 +194,8 @@ LV_ATTRIBUTE_FAST_MEM static void draw_letter_normal(lv_draw_ctx_t * draw_ctx, c
     }
 #endif
 
-    switch(bpp) {
+    switch(bpp) 
+    {
         case 1:
             bpp_opa_table_p = _lv_bpp1_opa_table;
             bitmask_init  = 0x80;

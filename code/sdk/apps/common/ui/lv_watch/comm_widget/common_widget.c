@@ -73,6 +73,7 @@ lv_obj_t *common_widget_img_create(common_widget_img_para_t *img_para, uint16_t 
     return common_widget_img;
 }
 
+#if 0
 void common_widget_img_replace_src(lv_obj_t *obj, uint32_t file_img_dat, uint16_t img_dsc_idx)
 {
     if(!obj) return;
@@ -87,6 +88,41 @@ void common_widget_img_replace_src(lv_obj_t *obj, uint32_t file_img_dat, uint16_
 
     return;
 }
+#endif
+
+/*********************************************************************************
+                                  标签控件                                       
+*********************************************************************************/
+common_widget_label_para_t widget_label_para = {0};
+
+static const lv_font_t *default_text_font(void)
+{
+    return (&font_common_32);
+}
+
+lv_obj_t *common_widget_label_create(common_widget_label_para_t *label_para)
+{
+    if(!label_para) 
+        return NULL;
+
+    lv_obj_t *common_widget_label = lv_label_create(label_para->label_parent);
+    lv_obj_set_pos(common_widget_label, label_para->label_x, label_para->label_y);
+    lv_label_set_text(common_widget_label, label_para->label_text);
+    lv_label_set_long_mode(common_widget_label, label_para->long_mode);
+    lv_obj_set_size(common_widget_label, label_para->label_w, label_para->label_h);
+    lv_obj_set_style_text_align(common_widget_label, label_para->text_align, LV_PART_MAIN);
+    lv_obj_set_style_text_color(common_widget_label, label_para->label_text_color, LV_PART_MAIN);
+    if(label_para->user_text_font)
+        lv_obj_set_style_text_font(common_widget_label, label_para->user_text_font, LV_PART_MAIN);
+    else
+        lv_obj_set_style_text_font(common_widget_label, default_text_font(), LV_PART_MAIN);
+  
+
+    return common_widget_label;
+}
+
+
+
 
 /*********************************************************************************
                                   基容器控件                                       
@@ -421,6 +457,9 @@ void common_widget_para_init(void)
     /**************图片控件参数复位**************/
     memset(&user_img_dsc, 0, sizeof(user_img_dsc_t));
     memset(&widget_img_para, 0, sizeof(common_widget_img_para_t));
+
+    /**************标签控件参数复位**************/
+    memset(&widget_label_para, 0, sizeof(common_widget_label_para_t));
 
     /**************基控件参数复位**************/
     memset(&widget_obj_para, 0, sizeof(common_widget_obj_para_t));

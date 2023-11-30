@@ -104,7 +104,43 @@ typedef struct
 }common_widget_img_para_t;
 extern common_widget_img_para_t widget_img_para;
 lv_obj_t *common_widget_img_create(common_widget_img_para_t *img_para, uint16_t *img_dsc_idx);
-void common_widget_img_replace_src(lv_obj_t *obj, uint32_t file_img_dat, uint16_t img_dsc_idx);
+
+
+
+
+/*********************************************************************************
+                                  标签控件                                       
+*********************************************************************************/
+typedef struct
+{
+    /*标签的父对象*/
+    lv_obj_t *label_parent;
+
+    /*标签的坐标*/
+    int16_t label_x;
+    int16_t label_y;
+
+    /*标签的宽高*/
+    uint16_t label_w;
+    uint16_t label_h;
+
+    /*标签长文本模式*/
+    lv_label_long_mode_t long_mode;
+
+    /*标签文本对齐*/
+    lv_text_align_t text_align;
+
+    /*标签显示文本*/
+    char *label_text;
+
+    /*标签文本颜色*/
+    lv_color_t label_text_color;
+
+    /*标签用户文本字体*/
+    const lv_font_t *user_text_font; //NULL:默认字体，非NULL:用户自定义字体
+}common_widget_label_para_t;
+extern common_widget_label_para_t widget_label_para;
+lv_obj_t *common_widget_label_create(common_widget_label_para_t *label_para);
 
 
 

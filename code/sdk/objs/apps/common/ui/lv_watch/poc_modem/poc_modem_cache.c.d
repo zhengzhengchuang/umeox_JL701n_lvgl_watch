@@ -1,5 +1,22 @@
 objs/apps/common/ui/lv_watch/poc_modem/poc_modem_cache.c.o: \
   apps/common/ui/lv_watch/poc_modem/poc_modem_cache.c \
+  apps/watch/include\app_config.h apps/watch/board/br28\board_config.h \
+  include_lib\media/audio_def.h \
+  apps/watch/board/br28/board_701n_demo/board_701n_demo_cfg.h \
+  apps/watch/board/br28/board_701n_demo/board_701n_demo_global_build_cfg.h \
+  apps/watch/board/br28/board_7012a_demo/board_7012a_demo_cfg.h \
+  apps/watch/board/br28/board_7012a_demo/board_7012a_demo_global_build_cfg.h \
+  apps/watch/board/br28/board_7012a7_demo/board_7012a7_demo_cfg.h \
+  apps/watch/board/br28/board_7012a7_demo/board_7012a7_demo_global_build_cfg.h \
+  apps/watch/board/br28/board_701n_lvgl_demo/board_701n_lvgl_demo_cfg.h \
+  apps/watch/board/br28/board_701n_lvgl_demo/board_701n_lvgl_demo_global_build_cfg.h \
+  apps/common/device/usb\usb_std_class_def.h \
+  apps/common/device/usb\usb_common_def.h \
+  apps/watch/board/br28/board_ad2802e_demo/board_ad2802e_demo_cfg.h \
+  apps/watch/board/br28/board_ad2802e_demo/board_ad2802e_demo_global_build_cfg.h \
+  include_lib/btctrler\btcontroller_mode.h \
+  apps/watch/include/user_cfg_id.h apps/watch/include/ui/res_config.h \
+  apps/watch/include/macro_default.h \
   apps/common/ui/lv_watch/poc_modem/poc_modem_cache.h \
   apps/common/ui/lv_watch/poc_modem/../include/ui_menu.h \
   apps/common/ui/lv_watch/poc_modem/../include/ui_act_id.h \
@@ -138,7 +155,6 @@ objs/apps/common/ui/lv_watch/poc_modem/poc_modem_cache.c.o: \
   apps/common/ui/lvgl/src/extra/libs/png/lv_png.h \
   apps/common/ui/lvgl/src/extra/libs/gif/lv_gif.h \
   apps/common/ui/lvgl/src/extra/libs/gif/../../../lvgl.h \
-  apps/common/ui/lvgl/src/extra/libs/gif/gifdec.h \
   apps/common/ui/lvgl/src/extra/libs/qrcode/lv_qrcode.h \
   apps/common/ui/lvgl/src/extra/libs/sjpg/lv_sjpg.h \
   apps/common/ui/lvgl/src/extra/libs/freetype/lv_freetype.h \
