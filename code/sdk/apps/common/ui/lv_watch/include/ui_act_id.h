@@ -28,6 +28,9 @@ enum
     /********工具页面*********/
     Act_Id_Tool_Box,
 
+    /********菜单页面*********/
+    Act_Id_Menu,
+
     Act_Id_Max,
 };
 typedef uint16_t ui_act_id_t;

@@ -976,6 +976,7 @@ c_SRC_FILES := \
 	apps/common/ui/lv_watch/ui_cover/ui_cover.c \
 	apps/common/ui/lv_watch/ui_tileview/ui_tileview.c \
 	apps/common/ui/lv_watch/ui_menu/weather/weather.c \
+	apps/common/ui/lv_watch/ui_menu/menu/apple_network.c \
 	apps/common/ui/lv_watch/ui_menu/watchface/watchface_00.c \
 	apps/common/ui/lv_watch/ui_menu/watchface/watchface_01.c \
 	apps/common/ui/lv_watch/ui_menu/watchface/watchface_main.c \

@@ -34,6 +34,7 @@ extern const ui_menu_load_info_t menu_load_weather;
 extern const ui_menu_load_info_t menu_load_tool_box;
 extern const ui_menu_load_info_t menu_load_watchface_00;
 extern const ui_menu_load_info_t menu_load_watchface_01;
+extern const ui_menu_load_info_t menu_load_apple_network;
 
 #ifdef __cplusplus
 }

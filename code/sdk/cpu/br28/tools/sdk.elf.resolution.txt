@@ -3629,6 +3629,7 @@ objs/apps/common/ui/lvgl/src/misc/lv_mem.c.o
 -r=objs/apps/common/ui/lvgl/src/misc/lv_mem.c.o,lv_mem_deinit,pl
 -r=objs/apps/common/ui/lvgl/src/misc/lv_mem.c.o,lv_mem_alloc,pl
 -r=objs/apps/common/ui/lvgl/src/misc/lv_mem.c.o,malloc,l
+-r=objs/apps/common/ui/lvgl/src/misc/lv_mem.c.o,printf,l
 -r=objs/apps/common/ui/lvgl/src/misc/lv_mem.c.o,lv_mem_free,pl
 -r=objs/apps/common/ui/lvgl/src/misc/lv_mem.c.o,free,l
 -r=objs/apps/common/ui/lvgl/src/misc/lv_mem.c.o,lv_mem_realloc,pl
@@ -12103,6 +12104,9 @@ objs/apps/common/ui/lv_watch/ui_menu/weather/weather.c.o
 -r=objs/apps/common/ui/lv_watch/ui_menu/weather/weather.c.o,lv_obj_align,l
 -r=objs/apps/common/ui/lv_watch/ui_menu/weather/weather.c.o,menu_load_weather,pl
 -r=objs/apps/common/ui/lv_watch/ui_menu/weather/weather.c.o,widget_img_para,l
+objs/apps/common/ui/lv_watch/ui_menu/menu/apple_network.c.o
+-r=objs/apps/common/ui/lv_watch/ui_menu/menu/apple_network.c.o,tileview_register_all_menu,l
+-r=objs/apps/common/ui/lv_watch/ui_menu/menu/apple_network.c.o,menu_load_apple_network,pl
 objs/apps/common/ui/lv_watch/ui_menu/watchface/watchface_00.c.o
 -r=objs/apps/common/ui/lv_watch/ui_menu/watchface/watchface_00.c.o,tileview_register_all_menu,l
 -r=objs/apps/common/ui/lv_watch/ui_menu/watchface/watchface_00.c.o,common_widget_img_create,l

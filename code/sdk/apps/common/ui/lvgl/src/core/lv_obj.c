@@ -607,7 +607,6 @@ static void lv_obj_draw(lv_event_t * e)
 
 static void draw_scrollbar(lv_obj_t * obj, lv_draw_ctx_t * draw_ctx)
 {
-
     lv_area_t hor_area;
     lv_area_t ver_area;
     lv_obj_get_scrollbar_area(obj, &hor_area, &ver_area);

@@ -137,7 +137,7 @@ void * lv_mem_alloc(size_t size)
 #endif
 
     if(alloc == NULL) {
-        LV_LOG_INFO("couldn't allocate memory (%lu bytes)", (unsigned long)size);
+        printf("couldn't allocate memory (%d bytes)", (unsigned int)size);
 #if LV_LOG_LEVEL <= LV_LOG_LEVEL_INFO
         lv_mem_monitor_t mon;
         lv_mem_monitor(&mon);
