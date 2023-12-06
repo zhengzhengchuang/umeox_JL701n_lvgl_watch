@@ -79,29 +79,31 @@ static void key_io_reset(void)
 {
     int i;
 
-    for (i = 0; i < __this->num; i++) {
-        switch (__this->port[i].connect_way) {
-        case ONE_PORT_TO_HIGH:
-            key_io_pull_down_input(__this->port[i].key_type.one_io.port);
-            break;
+    for (i = 0; i < __this->num; i++) 
+    {
+        switch (__this->port[i].connect_way) 
+        {
+            case ONE_PORT_TO_HIGH:
+                key_io_pull_down_input(__this->port[i].key_type.one_io.port);
+                break;
 
-        case ONE_PORT_TO_LOW:
+            case ONE_PORT_TO_LOW:
 #if (TCFG_IO_MULTIPLEX_WITH_SD == ENABLE)
-            if (TCFG_MULTIPLEX_PORT != __this->port[i].key_type.one_io.port) {
-                key_io_pull_up_input(__this->port[i].key_type.one_io.port);
-            }
+                if (TCFG_MULTIPLEX_PORT != __this->port[i].key_type.one_io.port) {
+                    key_io_pull_up_input(__this->port[i].key_type.one_io.port);
+                }
 #else
 
-            key_io_pull_up_input(__this->port[i].key_type.one_io.port);
+                key_io_pull_up_input(__this->port[i].key_type.one_io.port);
 #endif
-            break;
+                break;
 
-        case DOUBLE_PORT_TO_IO:
-            break;
+            case DOUBLE_PORT_TO_IO:
+                break;
 
-        default:
-            ASSERT(0, "IO KEY CONNECT ERR!!!");
-            break;
+            default:
+                ASSERT(0, "IO KEY CONNECT ERR!!!");
+                break;
         }
     }
 }
@@ -225,7 +227,8 @@ u8 io_get_key_value(void)
     }
 
     //再扫描两个IO接按键方式, in_port: 上拉输入, out_port: 输出低
-    for (i = 0; i < __this->num; i++) {
+    for (i = 0; i < __this->num; i++) 
+    {
         connect_way = __this->port[i].connect_way;
         if (connect_way == DOUBLE_PORT_TO_IO) {//标准双io
             press_value = 0;

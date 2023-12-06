@@ -347,12 +347,6 @@ RAM1_SIZE = RAM1_END - RAM1_BEG;
 
 
 CODE_BEG = 0x6000120;
-
-
-
-PSRAM_BEGIN = 0x2000000;
-PSRAM_SIZE = (2 * 1024 * 1024);
-PSRAM_END = PSRAM_BEGIN + PSRAM_SIZE;
 MEMORY
 {
  code0(rx) : ORIGIN = CODE_BEG, LENGTH = 0x200000
@@ -362,7 +356,7 @@ MEMORY
 
 
 
- psram(rwx) : ORIGIN = PSRAM_BEGIN, LENGTH = PSRAM_SIZE
+
 
 }
 
@@ -657,33 +651,6 @@ SECTIONS
      *(.reserved_segment)
     } > ram0
     _RESERVED_END = .;
-
-
- . = ORIGIN(psram);
- .ps_ram_data_code ALIGN(32):
- {
-     *(.psram_data)
-     *(.psram_code)
-  . = ALIGN(4);
- } > psram
-
- .ps_ram_bss ALIGN(32):
- {
-     *(.psram_bss)
-  . = ALIGN(4);
- } > psram
-
- .ps_ram_noinit ALIGN(32):
- {
-     *(.psram_noinit)
-  . = ALIGN(4);
- } > psram
-
- _PSRAM_HEAP_BEGIN = .;
- _PSRAM_HEAP_END = PSRAM_END;
-
-
-
 }
 
 
@@ -3003,24 +2970,6 @@ aec_size = SIZEOF(.overlay_aec);
 aac_addr = ADDR(.overlay_aac);
 aac_begin = aec_begin + aec_size;
 aac_size = SIZEOF(.overlay_aac);
-
-
-ps_ram_data_code_addr = ADDR(.ps_ram_data_code);
-ps_ram_data_code_begin = aac_begin + aac_size;
-ps_ram_data_code_size = SIZEOF(.ps_ram_data_code);
-
-ps_ram_bss_addr = ADDR(.ps_ram_bss);
-ps_ram_bss_size = SIZEOF(.ps_ram_bss);
-
-ps_ram_noinit_addr = ADDR(.ps_ram_noinit);
-ps_ram_noinit_size = SIZEOF(.ps_ram_noinit);
-
-ps_ram_size = PSRAM_SIZE;
-
-PROVIDE(PSRAM_HEAP_BEGIN = _PSRAM_HEAP_BEGIN);
-PROVIDE(PSRAM_HEAP_END = _PSRAM_HEAP_END);
-_PSRAM_MALLOC_SIZE = _PSRAM_HEAP_END - _PSRAM_HEAP_BEGIN;
-PROVIDE(PSRAM_MALLOC_SIZE = _PSRAM_HEAP_END - _PSRAM_HEAP_BEGIN);
 ASSERT(_HEAP_BEGIN > bss_begin,"_HEAP_BEGIN < bss_begin");
 ASSERT(_HEAP_BEGIN > data_addr,"_HEAP_BEGIN < data_addr");
 ASSERT(_HEAP_BEGIN > data_code_addr,"_HEAP_BEGIN < data_code_addr");

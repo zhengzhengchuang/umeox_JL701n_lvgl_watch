@@ -617,7 +617,8 @@ static int music_key_event_opr(struct sys_event *event)
 
     log_i("music task msg = %d\n", msg[0]);
 
-    switch (msg[0]) {
+    switch (msg[0]) 
+    {
     case KEY_MUSIC_DEVICE_TONE_END:
 #if (MUSIC_DEVICE_TONE_EN)
         logo = (char *)msg[1];

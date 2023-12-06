@@ -219,8 +219,10 @@ static void disp_flush(lv_disp_drv_t *disp_drv, const lv_area_t *area, lv_color_
     }else    
     {
         if((color_p >= 0x2000000) && (color_p < (0x2000000 + 0x1000000))){
+            #if TCFG_PSRAM_DEV_ENABLE
             psram_flush_invaild_cache(color_p, width*height*2);        
             lcd_draw_area(0, psram_cache2nocache_addr(color_p), left, top, width, height, top==0);
+            #endif
         } else 
         {
             extern volatile u8 usr_wait_te;

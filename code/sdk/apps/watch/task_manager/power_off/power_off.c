@@ -56,11 +56,13 @@ extern int lcd_sleep_ctrl(u8 enter);
 /*----------------------------------------------------------------------------*/
 void power_off_deal(struct sys_event *event, u8 step)
 {
-    switch (step) {
+    switch (step) 
+    {
     case 0:
         goto_poweroff_first_flag = 0;
     case 1:
-        if (goto_poweroff_first_flag == 0) {
+        if (goto_poweroff_first_flag == 0) 
+        {
             goto_poweroff_first_flag = 1;
             goto_poweroff_cnt = 0;
             goto_poweroff_flag = 0;
@@ -68,7 +70,8 @@ void power_off_deal(struct sys_event *event, u8 step)
 #if TCFG_APP_BT_EN
             if ((BT_STATUS_CONNECTING == get_bt_connect_status()) ||
                 (BT_STATUS_TAKEING_PHONE == get_bt_connect_status()) ||
-                (BT_STATUS_PLAYING_MUSIC == get_bt_connect_status())) {
+                (BT_STATUS_PLAYING_MUSIC == get_bt_connect_status())) 
+            {
                 /* if (get_call_status() != BT_CALL_HANGUP) {
                    log_info("call hangup\n");
                    user_send_cmd_prepare(USER_CTRL_HFP_CALL_HANGUP, 0, NULL);
@@ -77,7 +80,8 @@ void power_off_deal(struct sys_event *event, u8 step)
                    break;
                    } */
                 if ((get_call_status() == BT_CALL_INCOMING) ||
-                    (get_call_status() == BT_CALL_OUTGOING)) {
+                    (get_call_status() == BT_CALL_OUTGOING)) 
+                    {
                     log_info("key call reject\n");
                     /* user_send_cmd_prepare(USER_CTRL_HFP_CALL_HANGUP, 0, NULL); */
                     goto_poweroff_first_flag = 0;
@@ -98,7 +102,7 @@ void power_off_deal(struct sys_event *event, u8 step)
                 break;
             }
 #endif
-            user_send_cmd_prepare(USER_CTRL_ALL_SNIFF_EXIT, 0, NULL);
+            //user_send_cmd_prepare(USER_CTRL_ALL_SNIFF_EXIT, 0, NULL);
 #endif
             goto_poweroff_flag = 1;
             break;
@@ -111,7 +115,8 @@ void power_off_deal(struct sys_event *event, u8 step)
 #endif
         log_info("poweroff flag:%d cnt:%d\n", goto_poweroff_flag, goto_poweroff_cnt);
 
-        if (goto_poweroff_flag) {
+        if (goto_poweroff_flag) 
+        {
             goto_poweroff_cnt++;
 
 #if CONFIG_TWS_POWEROFF_SAME_TIME
@@ -125,7 +130,8 @@ void power_off_deal(struct sys_event *event, u8 step)
                 }
             }
 #else
-            if (goto_poweroff_cnt >= POWER_OFF_CNT) {
+            if (goto_poweroff_cnt >= POWER_OFF_CNT) 
+            {
                 goto_poweroff_cnt = 0;
 #if TCFG_APP_BT_EN
                 sys_enter_soft_poweroff(NULL);
@@ -199,17 +205,19 @@ static inline void poweroff_wait_ui()
 
 void poweroff_tone_end(void *priv, int flag)
 {
-    if (app_var.goto_poweroff_flag) {
+    if (app_var.goto_poweroff_flag) 
+    {
         log_info("audio_play_event_end,enter soft poweroff");
-        extern void timer(void *p);
+        //extern void timer(void *p);
         poweroff_wait_ui();//等待关机显示完毕
-        while (get_ui_busy_status()) {
-        }
+        // while (get_ui_busy_status()) {
+        // }
 #if (TCFG_CHARGE_ENABLE && TCFG_CHARGE_POWERON_ENABLE)
         extern u8 get_charge_online_flag(void);
-        if (get_charge_online_flag()) {
+        if(get_charge_online_flag()) {
             cpu_reset();
-        } else {
+        } else 
+        {
             power_set_soft_poweroff();
         }
 #else
@@ -227,25 +235,30 @@ void poweroff_tone_end(void *priv, int flag)
 /*----------------------------------------------------------------------------*/
 static void poweroff_app_start()
 {
-    int ret = false;
-    if (app_var.goto_poweroff_flag) {
-        UI_WINDOW_PREEMPTION_POSH(ID_WINDOW_POWER_OFF, NULL, NULL, UI_WINDOW_PREEMPTION_TYPE_POWEROFF);
+    if(app_var.goto_poweroff_flag) 
+    {
+        //UI_WINDOW_PREEMPTION_POSH(ID_WINDOW_POWER_OFF, NULL, NULL, UI_WINDOW_PREEMPTION_TYPE_POWEROFF);
         syscfg_write(CFG_MUSIC_VOL, &app_var.music_volume, 1);
         os_taskq_flush();
 
-        ret = tone_play_with_callback_by_name((char *)tone_table[IDEX_TONE_POWER_OFF], 1,
-                                              poweroff_tone_end, (void *)IDEX_TONE_POWER_OFF);
-        if (ret) {
-            y_printf("power_off tone play err,enter soft poweroff");
+        tone_play_with_callback_by_name((char *)tone_table[IDEX_TONE_POWER_OFF], 1, \
+            poweroff_tone_end, (void *)IDEX_TONE_POWER_OFF);
+
+#if 0
+        printf("%s:ret = %d\n", __func__, ret);
+        if(ret) 
+        {
+            printf("power_off tone play err,enter soft poweroff");
             poweroff_wait_ui();
             //等待关机显示完毕
 #if USR_LVGL_IMB2D_EN
-            while (get_ui_busy_status()) {
-                log_info("ui_status:%d\n", get_ui_busy_status());
-            }
+            // while (get_ui_busy_status()) {
+            //     log_info("ui_status:%d\n", get_ui_busy_status());
+            // }
 #endif
             power_set_soft_poweroff();
         }
+#endif
     }
 }
 
@@ -261,7 +274,8 @@ void app_poweroff_task()
     int res;
     int msg[32];
     poweroff_app_start();
-    while (1) {
+    while (1) 
+    {
         app_task_get_msg(msg, ARRAY_SIZE(msg), 1);
 
         switch (msg[0]) {

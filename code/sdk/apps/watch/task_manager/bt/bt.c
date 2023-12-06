@@ -1076,21 +1076,21 @@ int bt_key_event_handler(struct sys_event *event)
     struct key_event *key = &event->u.key;
     int key_event = event->u.key.event;
     int key_value = event->u.key.value;
+ 
 
+    // if (bt_key_event_filter_before() == false) {
+    //     return false;
+    // }
 
-    if (bt_key_event_filter_before() == false) {
-        return false;
-    }
-
-    if (bt_ui_key_event_filter(key_event) == true) { //判断为ui 按键直接到ui
-        return true;
-    }
+    // if (bt_ui_key_event_filter(key_event) == true) { //判断为ui 按键直接到ui
+    //     return true;
+    // }
 
     log_debug("bt key_event:%d %d %d %d\n", key_event, key->value, key->event, key->init);
 
-    if (bt_key_event_filter_after(key_event) == true) {
-        return true;
-    }
+    // if (bt_key_event_filter_after(key_event) == true) {
+    //     return true;
+    // }
 
     static int curr_page = 0;
 

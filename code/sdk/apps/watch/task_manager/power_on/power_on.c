@@ -142,7 +142,6 @@ static int power_on_init(void)
 
 static int power_on_unint(void)
 {
-
     UI_SHOW_WINDOW(ID_WINDOW_DIAL);
 
     tone_play_stop();
@@ -151,21 +150,18 @@ static int power_on_unint(void)
 }
 
 
-
-
-
-
 static int poweron_sys_event_handler(struct sys_event *event)
 {
-    switch (event->type) {
-    case SYS_KEY_EVENT:
-        break;
-    case SYS_BT_EVENT:
-        break;
-    case SYS_DEVICE_EVENT:
-        break;
-    default:
-        return false;
+    switch (event->type) 
+    {
+        case SYS_KEY_EVENT:
+            break;
+        case SYS_BT_EVENT:
+            break;
+        case SYS_DEVICE_EVENT:
+            break;
+        default:
+            return false;
     }
     return false;
 }
@@ -220,7 +216,8 @@ void app_poweron_task()
             break;
         }
 
-        if (app_task_exitting()) {
+        if (app_task_exitting()) 
+        {
             power_on_unint();
             poweron_idle = 1;
             return;

@@ -105,10 +105,7 @@ u8 bt_ui_key_event_filter(int msg)
         break;
     default:
         return false;
-
     }
-
-    printf("bt_ui_key\n");
 #if 0
     t.event = event;
     t.pos.x = 120 - 16;
@@ -116,7 +113,7 @@ u8 bt_ui_key_event_filter(int msg)
     ui_touch_msg_post(&t);
     return true;
 #endif
-    ui_key_msg_post(msg);
+    //ui_key_msg_post(msg);
     return true;
 #endif
     return false;

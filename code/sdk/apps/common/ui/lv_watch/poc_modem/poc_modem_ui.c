@@ -38,6 +38,8 @@ void ui_menu_exit_prepare(ui_act_id_t act_id)
 #endif
 
     common_widget_para_init();
+
+    common_refresh_timer_destroy();
    
     if(act_id != exit_act_id && p_ui_info_cache->menu_load_info.return_flag)
         ui_cache_set_prev_act_id(exit_act_id);
@@ -105,6 +107,8 @@ void ui_menu_jump_handle(ui_act_id_t act_id)
 
     if(p_ui_info_cache->menu_load_info.create_func_cb)
         p_ui_info_cache->menu_load_info.create_func_cb(p_ui_info_cache->ui_menu_container);
+
+    common_refresh_timer_create();
 
     return;
 }

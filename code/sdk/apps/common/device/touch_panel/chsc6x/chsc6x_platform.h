@@ -23,7 +23,7 @@
 #define CHSC6X_RES_MAX_Y	(448)
 
 /*MACRO SWITCH for driver update TP FW */
-#define CHSC6X_AUTO_UPGRADE           (0)
+#define CHSC6X_AUTO_UPGRADE           (1)
 
 /*MACRO SWITCH for multi TP_VENDOR Compatible update TP FW */
 #define CHSC6X_MUL_VENDOR_UPGRADE     (0)

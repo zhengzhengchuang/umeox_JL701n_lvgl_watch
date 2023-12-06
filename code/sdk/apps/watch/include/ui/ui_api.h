@@ -95,7 +95,7 @@ extern int ui_server_msg_post(const char *msg, ...);
 extern int ui_hide_curr_main();
 extern int ui_touch_msg_post(struct touch_event *event);
 extern int ui_touch_msg_post_withcallback(struct touch_event *event, void (*cb)(u8 finish));
-extern int ui_key_msg_post(int msg);
+//extern int ui_key_msg_post(int msg);
 extern void key_ui_takeover(u8 on);
 extern int key_is_ui_takeover();
 

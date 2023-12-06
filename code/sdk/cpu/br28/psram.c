@@ -115,7 +115,8 @@ static void psram_io_init(u8 port, u8 mode)
 {
     /* printf("psram sel %d:port %c\n", port, port + 'A'); */
 
-    if (port == PSRAM_PORT_SEL_PORTA) {
+    if (port == PSRAM_PORT_SEL_PORTA) 
+    {
         gpio_set_output_value(PSRAM_PORTA_CS, 1);
         gpio_set_direction(PSRAM_PORTA_CS, 0);
         gpio_set_pull_up(PSRAM_PORTA_CS, 0);
@@ -223,7 +224,6 @@ static void psram_power_on(u8 port)
 
     // > 150uS
     udelay(250);
-
 }
 
 static void psram_power_off(u8 port)

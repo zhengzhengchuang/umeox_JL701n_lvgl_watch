@@ -855,6 +855,8 @@ int daily_motion_info_get(struct motion_info *info)
 static u8 search_gsensor_cnt = 0;
 static u8 algo_cnt = 0;
 short gsensorbuf[WATCHLEN];
+
+#if 0
 static void refresh_watch_data(void *param)
 {
     printf("%s %s", __func__, os_current_task());
@@ -900,7 +902,7 @@ static void refresh_watch_data(void *param)
         //step_distance_kcal_file_write();
     }
 }
-
+#endif
 
 #if(GSENSOR_TASK_USED == USED_TASK)
 
@@ -1036,7 +1038,7 @@ static int watch_api_init(void)
 {
     printf("%s", __func__);
     char search_gsensor;
-    gsensor_io_ctl(SEARCH_SENSOR, &search_gsensor);
+    //gsensor_io_ctl(SEARCH_SENSOR, &search_gsensor);
     if (search_gsensor == 0) {
         log_e("watch_gsensor_not_find");
         return 0;
@@ -1582,7 +1584,7 @@ int detection_ioctrl(int arg_num, int *arg) //打开检测功能，注册回调�
 }
 
 
-
+#if 0
 //计步、抬腕、睡眠、跌倒、久坐检测功能开关，用于打开或关闭某一功能
 u8 set_watch_motion_switch(u8 watch_type, u8 enable)
 {
@@ -1616,6 +1618,7 @@ u8 set_watch_motion_switch(u8 watch_type, u8 enable)
     }
     return 1;
 }
+
 //计步、抬腕、睡眠、跌倒、久坐检测功能查询
 u8 get_watch_motion_switch(u8 watch_type)
 {
@@ -1640,6 +1643,8 @@ u8 get_watch_motion_switch(u8 watch_type)
 
     return -1;
 }
+#endif
+
 /***************************************************
  			 清除数据
 ****************************************************/

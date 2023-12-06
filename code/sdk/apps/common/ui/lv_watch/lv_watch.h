@@ -10,6 +10,7 @@ extern "C" {
 #include "./include/ui_act_id.h"
 #include "./poc_modem/poc_modem_ui.h"
 #include "./ui_tileview/ui_tileview.h"
+#include "./comm_refr/common_refresh.h"
 #include "./comm_widget/common_clock.h"
 #include "./poc_modem/poc_modem_cache.h"
 #include "./comm_widget/common_widget.h"

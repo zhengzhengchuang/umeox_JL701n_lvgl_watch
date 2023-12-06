@@ -129,7 +129,8 @@
         "chsc6x_comp.h": "c",
         "chsc6x_platform.h": "c",
         "printf.h": "c",
-        "gpio.h": "c"
+        "gpio.h": "c",
+        "common_refresh.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

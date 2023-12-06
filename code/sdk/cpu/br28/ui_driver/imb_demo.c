@@ -55,6 +55,8 @@ struct CacheFile {
     u8  data[0];
 };
 struct CacheFile* readFromCache(char* indexfile);
+
+#if 0
 const char * lv_fs_get_num(const char * fn)
 {
     size_t i;
@@ -69,6 +71,7 @@ const char * lv_fs_get_num(const char * fn)
 
     return ""; /*Empty string if no '.' in the file name.*/
 }
+#endif
 
 /*----------------------------------------------------------------------------*/
 /**@brief    创建背景任务
@@ -4830,9 +4833,7 @@ static ui_res_t ui_res_gropu[] = {
 
 //  P->lv普通文件访问
 
-
-
-
+#if 1
 struct rect *image_set_crop(int x, int y, int width, int height)
 {
     static struct rect crop = {0};
@@ -4842,6 +4843,8 @@ struct rect *image_set_crop(int x, int y, int width, int height)
     crop.height = height;
     return &crop;
 }
+#endif
+
 enum LOAD_METHOD {
     LOAD_FROM_FLASH_WITH_TAB,       //flash数据带地址映射表选择该方式，该方式只支持压缩数据(L1格式除外)
     LOAD_FROM_FLASH_WITHOUT_TAB,    //flash数据不带地址映射表选择该方式，该方式支持压缩数据或者非压缩数据
@@ -4852,6 +4855,7 @@ enum LOAD_METHOD {
     LOAD_FROM_STATIC_RAM,           //若希望外部去释放malloc/malloc_vlt/malloc_psram申请的内存或者或者是一个静态
     //数组时选择该方式，imb任务销毁的时候不对该内存做释放处理
 };
+
 static const struct ui_platform_api br28_platform_api = {
     .malloc             = malloc,
     .free               = free,
@@ -5006,14 +5010,6 @@ void lcd_disp_init(void *arg, void **buf1, void **buf2, int *lenp)
     psram_flush_invaild_cache(*buf2, len);
     psram_flush_invaild_cache(*buf1, len);
 #endif
-    // psram_flush_invaild_cache(*buf2, len);
-    // psram_flush_invaild_cache(*buf1, len);
-
-    // *buf2 = psram_cache2nocache_addr(*buf2);
-    // *buf1 = psram_cache2nocache_addr(*buf1);
-
-    // memset(__lcd->lcd_buf, 0xff, __lcd->lcd_buf_size);
-// #if defined(TCFG_PSRAM_DEV_ENABLE) && TCFG_PSRAM_DEV_ENABLE
 
     struct rect rect;
     rect.left   = 0;
@@ -5023,8 +5019,6 @@ void lcd_disp_init(void *arg, void **buf1, void **buf2, int *lenp)
     ui_core_init(&br28_platform_api, &rect);
 }
 
-    // psram_flush_invaild_cache(*buf2, len);
-    // psram_flush_invaild_cache(*buf1, len);
 int imb_api_init()
 {
     int ret = 0;
@@ -5115,6 +5109,9 @@ void lvgl_disp_init(void *arg, void **buf1, void **buf2, int *lcd_w,int *lcd_h, 
 #if PSRAM_FULL_SCREEN
     psram_buf1 = malloc_psram(info.width*info.height*2);
     psram_buf2 = malloc_psram(info.width*info.height*2);
+
+    printf("psram_buf1 = %p, psram_buf2 = %p\n", \
+        psram_buf1, psram_buf2);
 
     psram_act =psram_buf1;
 #endif

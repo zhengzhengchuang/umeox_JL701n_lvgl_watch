@@ -945,7 +945,7 @@ int chsc6x_tp_dect(struct ts_fw_infos *pfw_infos, unsigned char *update_ret_flag
         g_pfw_infos->chsc6x_rpt_lcd_y = buf_tmpcfg[39];
         g_pfw_infos->chsc6x_chip_id = buf_tmpcfg[53]&0xff;
         g_pfw_infos->chsc6x_chip_type = (buf_tmpcfg[53]>>8)&0xf;
-        chsc6x_info("chsc6x: vid=%d,pid=%d,boot_ver=0x%x,cfg_ver=%d,chip_id=0x%x\r\n", \
+        chsc6x_info("%s:chsc6x: vid=%d,pid=%d,boot_ver=0x%x,cfg_ver=%d,chip_id=0x%x\r\n", __func__, \
             g_pfw_infos->chsc6x_vendor_id,g_pfw_infos->chsc6x_project_id,g_pfw_infos->chsc6x_boot_version, \
             g_pfw_infos->chsc6x_cfg_version,g_pfw_infos->chsc6x_chip_id \
         );

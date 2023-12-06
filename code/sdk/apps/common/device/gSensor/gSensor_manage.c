@@ -58,6 +58,7 @@ extern int gsensorlen;
 #define BUF_SIZE gsensorlen*3
 #endif
 
+#if 0
 void gSensor_event_to_user(u8 event)
 {
     struct sys_event e;
@@ -170,6 +171,7 @@ void write_gsensor_data_handle(u8 index, u8 gpio)
         return ;
     }
 }
+
 u8 gravity_sensor_command(u8 w_chip_id, u8 register_address, u8 function_command)
 {
     spin_lock(&sensor_iic);
@@ -293,7 +295,7 @@ int gravity_sensor_init(void *_data)
             }
             cbuf_init(data_w_cbuf, data_buf, BUF_SIZE);
             /* port_edge_wkup_set_callback(write_gsensor_data_handle); */
-            port_edge_wkup_set_callback_by_index(4, write_gsensor_data_handle); // 序号需要和板级配置中的wk_param对应上
+            //port_edge_wkup_set_callback_by_index(4, write_gsensor_data_handle); // 序号需要和板级配置中的wk_param对应上
             printf("cbuf_init");
 #endif
         }
@@ -359,3 +361,4 @@ int gsensor_enable(void)
     printf("gsensor_reset_succeed\n");
     return 0;
 }
+#endif

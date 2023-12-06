@@ -79,7 +79,8 @@ static void check_power_on_key(void)
         // log_info("vm read pt_test_result faild\n");
     }
 #endif
-    while (1) {
+    while (1) 
+    {
         clr_wdt();
         os_time_dly(1);
 

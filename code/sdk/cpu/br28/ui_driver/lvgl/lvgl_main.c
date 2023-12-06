@@ -250,13 +250,19 @@ void ui_msg_handle(int *msg, u8 len)
 
         case ui_msg_menu_refresh:
         {
-            printf("*************ui_msg_menu_refresh\n");
+            common_refresh_msg_handle();
         }
             break;
 
         case ui_msg_clock_pointer_refresh:
         {
             common_clock_pointer_refresh(msg);
+        }
+            break;
+
+        case ui_msg_key_handle:
+        {
+            printf("%s:key_value = %d, key_event = %d\n", __func__, msg[1], msg[2]);
         }
             break;
         
@@ -296,12 +302,18 @@ __retry:
     return err;
 }
 
-int ui_key_msg_post(int key)
+void ui_key_msg_post(int key_value, int key_event)
 {
-    printf("%s\n", __func__);
+    int key_msg[3] = {0xff};
 
-    return 1;
+    key_msg[0] = ui_msg_key_handle;
+    key_msg[1] = key_value;
+    key_msg[2] = key_event;
+    post_ui_msg(key_msg, 3);
+
+    return;
 }
+
 #if 0
 int ui_key_msg_post(int key)
 {

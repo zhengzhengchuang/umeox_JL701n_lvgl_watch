@@ -325,14 +325,14 @@ bool smartbox_key_event_filter_before(int key_event)
         printf("COMMON KEY_VOL_UP\n");
         extern void volume_up(void);
         volume_up();
-        UI_SHOW_MENU(MENU_MAIN_VOL, 1000, app_audio_get_volume(APP_AUDIO_CURRENT_STATE), NULL);
+        //UI_SHOW_MENU(MENU_MAIN_VOL, 1000, app_audio_get_volume(APP_AUDIO_CURRENT_STATE), NULL);
         ret = true;
         break;
     case KEY_VOL_DOWN:
         printf("COMMON KEY_VOL_DOWN\n");
         extern void volume_down(void);
         volume_down();
-        UI_SHOW_MENU(MENU_MAIN_VOL, 1000, app_audio_get_volume(APP_AUDIO_CURRENT_STATE), NULL);
+        //UI_SHOW_MENU(MENU_MAIN_VOL, 1000, app_audio_get_volume(APP_AUDIO_CURRENT_STATE), NULL);
         ret = true;
         break;
     }

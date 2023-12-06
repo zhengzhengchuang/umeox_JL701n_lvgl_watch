@@ -452,7 +452,8 @@ int lcd_drv_backlight_ctrl_base(u8 percent)
 {
     if (__lcd->backlight_ctrl) {
         __lcd->backlight_ctrl(percent);
-    } else if (lcd_dat->pin_bl != -1) {
+    } else if (lcd_dat->pin_bl != -1) 
+    {
 #if (TCFG_BACKLIGHT_PWM_MODE == 0)
         if (percent > 0) {
             gpio_direction_output(lcd_dat->pin_bl, 1);
@@ -1456,7 +1457,8 @@ __attribute__((weak)) void ctp_exit_sleep(void)
 
 static void lcd_st77903_stop(void)
 {
-    if (lcd_qspi_st77903_mode()) {
+    if (lcd_qspi_st77903_mode()) 
+    {
         if (st77903_frame_mode == SINGAL_FRAME_MODE) {
             __lcd->lcd_exit = 1;
             while (__lcd->lcd_exit) {
@@ -1545,8 +1547,10 @@ void update_process_before_cpu_reset(void)
 
 static void lcd_st77903_start(void)
 {
-    if (lcd_qspi_st77903_mode()) {
-        if (st77903_frame_mode == SINGAL_FRAME_MODE) {
+    if (lcd_qspi_st77903_mode()) 
+    {
+        if (st77903_frame_mode == SINGAL_FRAME_MODE) 
+        {
             lcd_buf_malloc();
 
             __lcd->lcd_enter = 1;
@@ -1557,7 +1561,8 @@ static void lcd_st77903_start(void)
             }
 
             timer4_init();
-        } else {
+        }else 
+        {
             int lcd_w;
             int lcd_h;
             int lcd_stride;
@@ -1680,26 +1685,31 @@ static void tp_drv_power_on()
  * 				3、lcd_sleep_in 记录LCD的休眠状态
  *********************************************************************************************************
  */
-extern void ui_effect_exit();
+//extern void ui_effect_exit();
 int lcd_sleep_ctrl(u8 enter)
 {
-    struct lcd_sleep_headler *p;
+    //struct lcd_sleep_headler *p;
     if ((!!enter) == lcd_sleep_in) {
         return -1;
     }
-    while (is_lcd_busy);
+
+    while(is_lcd_busy);
+
     is_lcd_busy = 0x11;
 
-    if (enter) {
-        ui_effect_exit();
+    if (enter) 
+    {
+        //ui_effect_exit();
         lcd_drv_backlight_ctrl_base(0);
 #if TCFG_TP_SLEEP_EN
-        ctp_enter_sleep();
+        //ctp_enter_sleep();
+        extern void chsc6x_suspend(void);
+        chsc6x_suspend();
 #endif /* #if TCFG_TP_SLEEP_EN */
 #if TP_POWER_DOWN_EN
         tp_drv_power_off();
 #endif
-        lcd_st77903_stop();
+        //lcd_st77903_stop();
 
 #if LCD_POWER_DOWN_EN == 0
         if (__lcd->entersleep) {
@@ -1714,13 +1724,15 @@ int lcd_sleep_ctrl(u8 enter)
         lcd_sleep_in = true;
 #endif
 
-        list_for_each_lcd_sleep_headler(p) {
-            if (p->enter) {
-                p->enter();
-            }
-        }
+        // list_for_each_lcd_sleep_headler(p) 
+        // {
+        //     if (p->enter) {
+        //         p->enter();
+        //     }
+        // }
         clock_remove_set(DEC_UI_CLK);
-    } else {
+    } else 
+    {
         clock_add_set(DEC_UI_CLK);
         //  纯自定义地址资源需要打开flash电源
         extern void norflash_flash_power_check();
@@ -1733,7 +1745,9 @@ int lcd_sleep_ctrl(u8 enter)
         tp_drv_power_on();
 #endif
 #if TCFG_TP_SLEEP_EN
-        ctp_exit_sleep();
+        //ctp_exit_sleep();
+        extern void chsc6x_resume(void);
+        chsc6x_resume();
 #endif /* #if TCFG_TP_SLEEP_EN */
 
 #if LCD_POWER_DOWN_EN == 0
@@ -1746,15 +1760,16 @@ int lcd_sleep_ctrl(u8 enter)
         lcd_sleep_in = false;
 #endif
 
-        lcd_st77903_start();
-        list_for_each_lcd_sleep_headler(p) {
-            if (p->exit) {
-                p->exit();
-            }
-        }
+        //lcd_st77903_start();
+        // list_for_each_lcd_sleep_headler(p) {
+        //     if (p->exit) {
+        //         p->exit();
+        //     }
+        // }
     }
 
     is_lcd_busy = 0;
+
     return 0;
 }
 

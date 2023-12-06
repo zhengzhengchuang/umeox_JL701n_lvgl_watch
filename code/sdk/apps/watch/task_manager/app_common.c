@@ -252,10 +252,9 @@ int app_common_key_msg_deal(struct sys_event *event)
     struct key_event *key = &event->u.key;
     int key_event = event->u.key.event;
     int key_value = event->u.key.value;
-
-    if (key_event == KEY_NULL) {
+ 
+    if (key_event == KEY_NULL)
         return false;
-    }
 
 #if TCFG_UI_ENABLE
     if (key_is_ui_takeover()) {
@@ -276,7 +275,7 @@ int app_common_key_msg_deal(struct sys_event *event)
     }
 #endif
 
-#if USR_LVGL_IMB2D_EN
+#if 0
     switch (key_event) {
     default:
         if (key_event < 0x80) {
@@ -293,12 +292,14 @@ int app_common_key_msg_deal(struct sys_event *event)
     }
 #endif
 
-    log_info("common_key_event:%d\n", key_event);
+    log_info("key_value = %d, key_event:%d\n", key_value, key_event);
 
+#if 0
     if ((key_event != KEY_POWEROFF) && (key_event != KEY_POWEROFF_HOLD)) {
         extern u8 goto_poweroff_first_flag;
         goto_poweroff_first_flag = 0;
     }
+#endif
 
 #if (SMART_BOX_EN)
     extern bool smartbox_key_event_filter_before(int key_event);
@@ -306,11 +307,12 @@ int app_common_key_msg_deal(struct sys_event *event)
         return true;
     }
 #endif
-    struct watch_execise __execise_hd;
-    watch_execise_handle_get(&__execise_hd);
-    u8 sport_status = __execise_hd.execise_ctrl_status_get();
+    // struct watch_execise __execise_hd;
+    // watch_execise_handle_get(&__execise_hd);
+    // u8 sport_status = __execise_hd.execise_ctrl_status_get();
 
-    switch (key_event) {
+    switch (key_event) 
+    {
     case KEY_CHANGE_PAGE:
         log_info("   KEY_CHANGE_PAGE  \n");
         if (app_get_curr_task() == APP_WATCH_UPDATE_TASK ||
@@ -319,7 +321,7 @@ int app_common_key_msg_deal(struct sys_event *event)
             break;
         }
 
-        lcd_ui_key_change_page(key_value);
+        //lcd_ui_key_change_page(key_value);
         if (get_call_status() == BT_CALL_HANGUP) {
             extern void smartbox_extra_flash_opt_dial_nodify(void);
             smartbox_extra_flash_opt_dial_nodify();
@@ -443,11 +445,14 @@ int app_common_key_msg_deal(struct sys_event *event)
         break;
 #endif
 
+#if 0
     case  KEY_POWEROFF:
     case  KEY_POWEROFF_HOLD:
         power_off_deal(event, key_event - KEY_POWEROFF);
         break;
+#endif
 
+#if 0
     case KEY_IR_NUM_0:
     case KEY_IR_NUM_1:
     case KEY_IR_NUM_2:
@@ -459,6 +464,7 @@ int app_common_key_msg_deal(struct sys_event *event)
     case KEY_IR_NUM_8:
     case KEY_IR_NUM_9:
         break;
+#endif
 
     case KEY_CHANGE_MODE:
 #if (TCFG_DEC2TWS_ENABLE)
@@ -493,7 +499,7 @@ int app_common_key_msg_deal(struct sys_event *event)
 #if (TCFG_DEC2TWS_ENABLE)
         bt_tws_sync_volume();
 #endif
-        UI_SHOW_MENU(MENU_MAIN_VOL, 1000, app_audio_get_volume(APP_AUDIO_CURRENT_STATE), NULL);
+        //UI_SHOW_MENU(MENU_MAIN_VOL, 1000, app_audio_get_volume(APP_AUDIO_CURRENT_STATE), NULL);
         break;
 
     case KEY_VOL_DOWN:
@@ -503,7 +509,7 @@ int app_common_key_msg_deal(struct sys_event *event)
 #if (TCFG_DEC2TWS_ENABLE)
         bt_tws_sync_volume();
 #endif
-        UI_SHOW_MENU(MENU_MAIN_VOL, 1000, app_audio_get_volume(APP_AUDIO_CURRENT_STATE), NULL);
+        //UI_SHOW_MENU(MENU_MAIN_VOL, 1000, app_audio_get_volume(APP_AUDIO_CURRENT_STATE), NULL);
         break;
 
     case  KEY_EQ_MODE:
@@ -581,7 +587,8 @@ int app_common_key_msg_deal(struct sys_event *event)
 #endif/*RECORDER_MIX_EN*/
         break;
     default:
-        ui_key_msg_post(key_event);
+        // extern void ui_key_msg_post(int key_value, int key_event);
+        // ui_key_msg_post(key_value, key_event);
 #ifdef CONFIG_BOARD_AC695X_SOUNDCARD
         soundcard_key_event_deal(key_event);
 #endif

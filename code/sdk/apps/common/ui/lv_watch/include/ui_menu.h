@@ -8,6 +8,7 @@ extern "C" {
 #include "ui_act_id.h"
 #include "../../lvgl/lvgl.h"
 
+typedef void (*ui_menu_key_func_cb)(int, int);
 typedef void (*ui_menu_create_func_cb)(lv_obj_t *);
 typedef void (*ui_menu_refresh_func_cb)(lv_obj_t *);
 typedef void (*ui_menu_destory_func_cb)(lv_obj_t *);
@@ -21,7 +22,8 @@ typedef struct
     bool return_flag;  //当前页面是否返回上一级的机制。
     ui_act_id_t menu_id; 
     uint32_t user_display_time;//0默认显示时间，>0用户自定义显示时间，0xffffffff常亮
-    uint32_t user_refresh_time_inv;  //0默认刷新时间间隔，>0用户自定义刷新时间间隔 
+    uint32_t user_refresh_time_inv;  //0默认刷新时间间隔，>0用户自定义刷新时间间隔
+    ui_menu_key_func_cb key_func_cb;//菜单按键回调函数
     ui_menu_create_func_cb create_func_cb;
     ui_menu_refresh_func_cb refresh_func_cb;
     ui_menu_destory_func_cb destory_func_cb;

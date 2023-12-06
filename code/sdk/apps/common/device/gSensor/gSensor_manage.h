@@ -53,30 +53,30 @@ typedef struct {
     int  check_timer_hdl;
 } G_SENSOR_INFO;
 
-int gravity_sensor_init(void *_data);
-int gsensor_enable(void);
-int gsensor_disable(void);
-void gsensor_io_ctl(u8 cmd, void *arg);
-u8 gravity_sensor_command(u8 w_chip_id, u8 register_address, u8 function_command);
-int _gravity_sensor_get_ndata(u8 r_chip_id, u8 register_address, u8 *buf, int data_len);
-int get_gSensor_data(short *buf);
-int gSensor_read_data(u8 *buf, u8 buflen);
-int read_gsensor_buf(short *buf);
-int read_gsensor_nbuf(short *buf, short datalen);
-extern G_SENSOR_INTERFACE  gsensor_dev_begin[];
-extern G_SENSOR_INTERFACE gsensor_dev_end[];
+// int gravity_sensor_init(void *_data);
+// int gsensor_enable(void);
+// int gsensor_disable(void);
+//void gsensor_io_ctl(u8 cmd, void *arg);
+//u8 gravity_sensor_command(u8 w_chip_id, u8 register_address, u8 function_command);
+//int _gravity_sensor_get_ndata(u8 r_chip_id, u8 register_address, u8 *buf, int data_len);
+//int get_gSensor_data(short *buf);
+//int gSensor_read_data(u8 *buf, u8 buflen);
+// int read_gsensor_buf(short *buf);
+// int read_gsensor_nbuf(short *buf, short datalen);
+// extern G_SENSOR_INTERFACE  gsensor_dev_begin[];
+// extern G_SENSOR_INTERFACE gsensor_dev_end[];
 
-#define REGISTER_GRAVITY_SENSOR(gSensor) \
-	static G_SENSOR_INTERFACE gSensor SEC_USED(.gsensor_dev)
+// #define REGISTER_GRAVITY_SENSOR(gSensor) \
+// 	static G_SENSOR_INTERFACE gSensor SEC_USED(.gsensor_dev)
 
-#define list_for_each_gsensor(c) \
-	for (c=gsensor_dev_begin; c<gsensor_dev_end; c++)
+// #define list_for_each_gsensor(c) \
+// 	for (c=gsensor_dev_begin; c<gsensor_dev_end; c++)
 
-#define GSENSOR_PLATFORM_DATA_BEGIN(data) \
-		static const struct gsensor_platform_data data = {
+// #define GSENSOR_PLATFORM_DATA_BEGIN(data) \
+// 		static const struct gsensor_platform_data data = {
 
-#define GSENSOR_PLATFORM_DATA_END() \
-};
+// #define GSENSOR_PLATFORM_DATA_END() \
+// };
 
 /*
 enum {

@@ -43,9 +43,9 @@ void chsc6x_iic_init(u8 iic)
     return;
 }
 
-static void chsc6x_mdelay(u32 ms)
+static void chsc6x_udelay(u32 us)
 {
-    mdelay(ms);
+    delay(us);
 
     return;
 }
@@ -56,22 +56,38 @@ static void chsc6x_mdelay(u32 ms)
 int chsc6x_i2c_read(unsigned char id, unsigned char *p_data, unsigned short lenth)
 {    
     int ret = -1;
-    unsigned char addr_7_bit = id >> 1;
-
+    unsigned char addr_8_bit_r = id + 0x01;
+    
     iic_start(tp_iic_hdl());
 
-    if(!iic_tx_byte(tp_iic_hdl(), (addr_7_bit << 1) | 0x01)) 
+    if(!iic_tx_byte(tp_iic_hdl(), id)) 
     {
         iic_stop(tp_iic_hdl());
         return -1;
     }
+    chsc6x_udelay(chsc6x_iic_delay);
 
-    chsc6x_mdelay(chsc6x_iic_delay);
+    if(!iic_tx_byte(tp_iic_hdl(), 0x00)) 
+    {
+        iic_stop(tp_iic_hdl());
+        return -1;
+    }
+    chsc6x_udelay(chsc6x_iic_delay);
+
+    iic_start(tp_iic_hdl());
+
+    if(!iic_tx_byte(tp_iic_hdl(), addr_8_bit_r)) 
+    {
+        iic_stop(tp_iic_hdl());
+        return -1;
+    }
+    chsc6x_udelay(chsc6x_iic_delay);
+
     ret = iic_read_buf(tp_iic_hdl(), p_data, lenth);
-    chsc6x_mdelay(chsc6x_iic_delay);
+    chsc6x_udelay(chsc6x_iic_delay);
     iic_stop(tp_iic_hdl());
-    chsc6x_mdelay(chsc6x_iic_delay);
-
+    chsc6x_udelay(chsc6x_iic_delay);
+    
     if(ret == lenth)
         return ret;
 
@@ -81,6 +97,8 @@ int chsc6x_i2c_read(unsigned char id, unsigned char *p_data, unsigned short lent
 /* RETURN:0->pass else->fail */
 int chsc6x_read_bytes_u16addr_sub(unsigned char id, unsigned short adr, unsigned char *rxbuf, unsigned short lenth)
 {
+    //printf("******%s\n", __func__);
+
     int ret = -1;
     unsigned char reg[2] = {0};
     unsigned char addr_7_bit = id >> 1;
@@ -96,7 +114,7 @@ int chsc6x_read_bytes_u16addr_sub(unsigned char id, unsigned short adr, unsigned
         iic_stop(tp_iic_hdl());
         return -1;
     }
-    chsc6x_mdelay(chsc6x_iic_delay);
+    chsc6x_udelay(chsc6x_iic_delay);
 
     int w_len = 0;
     w_len = iic_write_buf(tp_iic_hdl(), reg, 2);
@@ -105,7 +123,7 @@ int chsc6x_read_bytes_u16addr_sub(unsigned char id, unsigned short adr, unsigned
         iic_stop(tp_iic_hdl());
         return -1; 
     }
-    chsc6x_mdelay(chsc6x_iic_delay);
+    chsc6x_udelay(chsc6x_iic_delay);
 
     iic_start(tp_iic_hdl());
     if(!iic_tx_byte(tp_iic_hdl(), (addr_7_bit << 1) | 0x01)) 
@@ -113,12 +131,12 @@ int chsc6x_read_bytes_u16addr_sub(unsigned char id, unsigned short adr, unsigned
         iic_stop(tp_iic_hdl());
         return -1;
     }
-    chsc6x_mdelay(chsc6x_iic_delay);
+    chsc6x_udelay(chsc6x_iic_delay);
 
     ret = iic_read_buf(tp_iic_hdl(), rxbuf, lenth);
-    chsc6x_mdelay(chsc6x_iic_delay);
+    chsc6x_udelay(chsc6x_iic_delay);
     iic_stop(tp_iic_hdl());
-    chsc6x_mdelay(chsc6x_iic_delay);
+    chsc6x_udelay(chsc6x_iic_delay);
     
     if(ret == lenth)
         return 0;
@@ -129,9 +147,10 @@ int chsc6x_read_bytes_u16addr_sub(unsigned char id, unsigned short adr, unsigned
 /* RETURN:0->pass else->fail */
 int chsc6x_write_bytes_u16addr_sub(unsigned char id, unsigned short adr, unsigned char *txbuf, unsigned short lenth)
 {
+
     int ret = -1;
     unsigned char reg[2] = {0};
-    unsigned char addr_7_bit = id >> 1;
+    unsigned char addr_7_bit = id >> 1;//.0x2e
 
     reg[0] = (adr>>8) & (0xff);  
     reg[1] = adr & (0xff);
@@ -143,15 +162,21 @@ int chsc6x_write_bytes_u16addr_sub(unsigned char id, unsigned short adr, unsigne
         iic_stop(tp_iic_hdl());
         return -1;
     }
-    chsc6x_mdelay(chsc6x_iic_delay);
+    chsc6x_udelay(chsc6x_iic_delay);
 
-    iic_write_buf(tp_iic_hdl(), reg, 2);
-    chsc6x_mdelay(chsc6x_iic_delay);
+    int write_len = 0;
+    write_len = iic_write_buf(tp_iic_hdl(), reg, 2);
+    if(write_len != 2)
+    {
+        iic_stop(tp_iic_hdl());
+        return -1; 
+    }
+    chsc6x_udelay(chsc6x_iic_delay);
 
     ret = iic_write_buf(tp_iic_hdl(), txbuf, lenth);
-    chsc6x_mdelay(chsc6x_iic_delay);
+    chsc6x_udelay(chsc6x_iic_delay);
     iic_stop(tp_iic_hdl());
-    chsc6x_mdelay(chsc6x_iic_delay);
+    chsc6x_udelay(chsc6x_iic_delay);
 
     if(ret == lenth)
         return 0;
@@ -161,7 +186,7 @@ int chsc6x_write_bytes_u16addr_sub(unsigned char id, unsigned short adr, unsigne
 
 void chsc6x_msleep(int ms)
 {
-    chsc6x_mdelay(32*ms);
+    mdelay(ms);
 
     return;
 }
@@ -169,9 +194,9 @@ void chsc6x_msleep(int ms)
 void chsc6x_tp_reset(void)
 {
     CHSC6X_RESET_L();
-    chsc6x_mdelay(30);//30ms
+    mdelay(30);//30ms
     CHSC6X_RESET_H();
-    chsc6x_mdelay(30);//30ms
+    mdelay(30);//30ms
 
     return;
 }
@@ -179,7 +204,7 @@ void chsc6x_tp_reset(void)
 void chsc6x_tp_reset_active(void)
 {
     CHSC6X_RESET_L();
-    chsc6x_mdelay(30);//30ms
+    mdelay(30);//30ms
     CHSC6X_RESET_H();
 
     return;

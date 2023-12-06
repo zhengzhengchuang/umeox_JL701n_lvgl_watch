@@ -105,16 +105,17 @@
 #define DEVICE_EVENT_FROM_ADAPTER      (('A' << 24) | ('D' << 16) | ('A' << 8) | '\0')
 #define DEVICE_EVENT_FROM_BOARD_UART   (('B' << 24) | ('D' << 16) | ('U' << 8) | '\0')
 
+/*仅支持单击、长按、双击*/
 enum {
     KEY_EVENT_CLICK,
     KEY_EVENT_LONG,
-    KEY_EVENT_HOLD,
-    KEY_EVENT_UP,
+    // KEY_EVENT_HOLD,
+    // KEY_EVENT_UP,
     KEY_EVENT_DOUBLE_CLICK,
-    KEY_EVENT_TRIPLE_CLICK,
-    KEY_EVENT_FOURTH_CLICK,
-    KEY_EVENT_FIRTH_CLICK,
-    KEY_EVENT_USER,
+    // KEY_EVENT_TRIPLE_CLICK,
+    // KEY_EVENT_FOURTH_CLICK,
+    // KEY_EVENT_FIRTH_CLICK,
+    // KEY_EVENT_USER,
     KEY_EVENT_MAX,
 };
 

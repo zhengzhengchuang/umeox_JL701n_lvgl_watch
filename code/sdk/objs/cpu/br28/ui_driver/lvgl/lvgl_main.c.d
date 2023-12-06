@@ -273,6 +273,7 @@ objs/cpu/br28/ui_driver/lvgl/lvgl_main.c.o: \
   apps/watch/include/task_manager/bt\../../../../common/ui/lv_watch/./poc_modem/../ui_translate/ui_translate.h \
   apps/watch/include/task_manager/bt\../../../../common/ui/lv_watch/./poc_modem/../comm_func/common_stopwatch.h \
   apps/watch/include/task_manager/bt\../../../../common/ui/lv_watch/./poc_modem/../comm_func/common_countdown.h \
+  apps/watch/include/task_manager/bt\../../../../common/ui/lv_watch/./comm_refr/common_refresh.h \
   apps/watch/include/task_manager/bt\../../../../common/ui/lv_watch/./comm_widget/common_clock.h \
   apps/watch/include/task_manager/bt\../../../../common/ui/lv_watch/./comm_widget/../lv_watch.h \
   apps/watch/include/task_manager/bt\../../../../common/ui/lv_watch/./comm_widget/common_widget.h \

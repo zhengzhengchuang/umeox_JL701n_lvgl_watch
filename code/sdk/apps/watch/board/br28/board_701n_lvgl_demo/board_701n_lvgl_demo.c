@@ -724,7 +724,6 @@ static void psram_init(void)
 
 	return;
 }
-
 #endif /* #if TCFG_PSRAM_DEV_ENABLE */
 
 
@@ -962,13 +961,13 @@ struct port_wakeup port2 = {
 	// 暂时先用作触摸板外部中断检测
     .pullup_down_enable = ENABLE,                            //配置I/O 内部上下拉是否使能
     .edge               = FALLING_EDGE,                      //唤醒方式选择,可选：上升沿\下降沿
-    .iomap              = TCFG_IOKEY0,                    //唤醒口选择
+    .iomap              = TCFG_IOKEY0,                       //唤醒口选择
 };
 struct port_wakeup port4 = {
 	// 暂时先用作触摸板外部中断检测
     .pullup_down_enable = ENABLE,                            //配置I/O 内部上下拉是否使能
     .edge               = FALLING_EDGE,                      //唤醒方式选择,可选：上升沿\下降沿
-    .iomap              = TCFG_IOKEY1,                    //唤醒口选择
+    .iomap              = TCFG_IOKEY1,                       //唤醒口选择
 };
 #endif
 
@@ -979,7 +978,7 @@ struct port_wakeup port3 = {
 	//gsensor唤醒
     .pullup_down_enable = ENABLE,                            //配置I/O 内部上下拉是否使能
     .edge               = FALLING_EDGE,                      //唤醒方式选择,可选：上升沿\下降沿
-    .iomap              = IO_PORTB_03,                    //唤醒口选择
+    .iomap              = IO_PORTB_03,                       //唤醒口选择
 };
 #endif
 
@@ -1484,9 +1483,7 @@ void sleep_enter_callback(u8  step)
 #if TCFG_PSRAM_DEV_ENABLE
 		psram_hw_enter_sleep();
 #endif /* #if TCFG_PSRAM_DEV_ENABLE */
-
 		sleep_enter_callback_common(NULL);
-
 	}
 }
 
@@ -1520,7 +1517,7 @@ static void aport_wakeup_callback(u8 index, u8 gpio, u8 edge)
 #endif
 }
 
-
+#if 0
 bool port_active_is_keyio_query(u8 gpio)
 {
 
@@ -1539,8 +1536,7 @@ bool port_active_is_keyio_query(u8 gpio)
 
     return false;
 }
-
-
+#endif
 
 void board_power_init(void)
 {

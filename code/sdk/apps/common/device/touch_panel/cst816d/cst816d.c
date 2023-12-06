@@ -867,6 +867,8 @@ void cst816d_init()
     // io配置在板级，定义在板级头文件，这里只是注册回调函数
     port_edge_wkup_set_callback_by_index(1, touch_int_handler); // 序号需要和板级配置中的wk_param对应上
 #endif
+
+
 #endif
 }
 

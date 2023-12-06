@@ -53,8 +53,10 @@ void app_entry_idle()
 
 void app_task_loop()
 {
-    while (1) {
-        switch (app_curr_task) {
+    while (1) 
+    {
+        switch (app_curr_task) 
+        {
         case APP_POWERON_TASK:
             log_info("APP_POWERON_TASK \n");
             app_poweron_task();

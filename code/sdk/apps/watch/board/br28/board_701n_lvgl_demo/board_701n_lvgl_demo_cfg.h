@@ -155,8 +155,7 @@
 //*********************************************************************************//
 //                                  PSRAM 配置                                     //
 //*********************************************************************************//
-#define TCFG_PSRAM_DEV_ENABLE 				1//DISABLE_THIS_MOUDLE
-// #define TCFG_PSRAM_DEV_ENABLE 				ENABLE_THIS_MOUDLE
+#define TCFG_PSRAM_DEV_ENABLE 				0
 #define TCFG_PSRAM_POWER_PORT				IO_PORTE_06
 #define TCFG_PSRAM_PORT_SEL 				PSRAM_PORT_SEL_PORTA
 #define TCFG_PSRAM_INIT_CLK 				PSRAM_CLK_96MHZ //psram初始化时钟频率, 见: enum PSRAM_CLK_TABLE
@@ -167,7 +166,7 @@
    PSRAM_MODE_4_WIRE_CMD4_ADR4_DAT4
 */
 #define TCFG_PSRAM_MODE 					PSRAM_MODE_4_WIRE_CMD1_ADR4_DAT4
-#define TCFG_PSRAM_SIZE 					(2 * 1024 * 1024) //8 Mbyte
+#define TCFG_PSRAM_SIZE 					(2 * 1024 * 1024) //2 Mbyte
 
 #define TCFG_PSRAM_UI_EFFECT 				DISABLE_THIS_MOUDLE
 
@@ -887,7 +886,7 @@ DAC硬件上的连接方式,可选的配置：
 //*********************************************************************************//
 #define TCFG_AUTO_SHUT_DOWN_TIME		          0   //没有蓝牙连接自动关机时间
 #define TCFG_SYS_LVD_EN						      1   //电量检测使能
-#define TCFG_POWER_ON_NEED_KEY				      0	  //是否需要按按键开机配置
+#define TCFG_POWER_ON_NEED_KEY				      1	  //是否需要按按键开机配置
 #define TWFG_APP_POWERON_IGNORE_DEV         	  4000//上电忽略挂载设备，0时不忽略，非0则n毫秒忽略
 
 #if TCFG_IOKEY_ENABLE

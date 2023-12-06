@@ -74,6 +74,10 @@ static lv_indev_state_t encoder_state;
  *   GLOBAL FUNCTIONS
  **********************/
 
+extern bool dev_touch_down(void);
+extern unsigned short dev_touch_x(void);
+extern unsigned short dev_touch_y(void);
+
 void lv_port_indev_init(void)
 {
     /**
@@ -216,7 +220,7 @@ static void touchpad_read(lv_indev_drv_t *indev_drv, lv_indev_data_t *data)
 static bool touchpad_is_pressed(void)
 {
     /*Your code comes here*/
-    return false;//get_dev_pressed_state();
+    return dev_touch_down();
 }
 
 /*Get the x and y coordinates if the touchpad is pressed*/
@@ -228,8 +232,8 @@ static void touchpad_get_xy(lv_coord_t *x, lv_coord_t *y)
         lcd_get_hdl()->get_screen_info(&info);
     }
     
-    int16_t temp_x = 0;//get_dev_touch_x();
-    int16_t temp_y = 0;//get_dev_touch_y();
+    int16_t temp_x = dev_touch_x();
+    int16_t temp_y = dev_touch_y();
 
     if(temp_x < 0)
         (*x) = 0;

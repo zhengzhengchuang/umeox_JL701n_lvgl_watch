@@ -1,6 +1,7 @@
 //#include "system/init.h"
 #include "asm/iic_soft.h"
 #include "generic/gpio.h"
+#include "typedef.h"
 
 #pragma bss_seg(".iic_soft.data.bss")
 #pragma data_seg(".iic_soft.data")
