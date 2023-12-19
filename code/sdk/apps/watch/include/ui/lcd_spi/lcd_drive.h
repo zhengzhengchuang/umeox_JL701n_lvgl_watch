@@ -476,10 +476,9 @@ void lcd_bl_l();
 void lcd_bl_h();
 u8   lcd_bl_io();
 
-void lcd_bl_ctrl(u8 val);
+//void lcd_bl_ctrl(u8 val);
 void lcd_en_ctrl(u8 val);
 
-int lcd_backlight_status();
 int lcd_sleep_status();
 
 // int lcd_drv_backlight_ctrl(u8 percent);

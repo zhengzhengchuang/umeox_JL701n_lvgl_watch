@@ -10,7 +10,7 @@ typedef struct filter_avg {
     unsigned char count;
 } filter_avg_t;
 
-extern G_SENSOR_INTERFACE *gSensor_hdl;
+//extern G_SENSOR_INTERFACE *gSensor_hdl;
 //读取xyz数据存入均值滤波器，存满进行计算，滤波后样本存入sample,如何读取存满就不多说了。
 static void filter_calculate(filter_avg_t *filter, axis_info_t *sample)
 {
@@ -200,7 +200,7 @@ static void get_sample(axis_info_t *sample)
     sample->z = offsetZ + ampZ * sinf((float)PI  *  c) + rand() % (int)ampZ / 10;
     //printf("%d ,%d ,%d\r\n", sample->x ,sample->y ,sample->z  );
 #else
-    gSensor_hdl->gravity_sensor_ctl(GET_ACCEL_DATA, sample);
+    //gSensor_hdl->gravity_sensor_ctl(GET_ACCEL_DATA, sample);
     /* printf("%d ,%d ,%d\r\n", sample->x ,sample->y ,sample->z); */
 #endif
 }

@@ -39,7 +39,7 @@
 #include "debug.h"
 
 
-#define POWER_OFF_CNT       10
+#define POWER_OFF_CNT      10
 
 static u8 goto_poweroff_cnt = 0;
 u8 goto_poweroff_first_flag = 0;
@@ -61,8 +61,10 @@ void power_off_deal(struct sys_event *event, u8 step)
     case 0:
         goto_poweroff_first_flag = 0;
     case 1:
-        if (goto_poweroff_first_flag == 0) 
+        if(goto_poweroff_first_flag == 0) 
         {
+            printf("%s\n", __func__);
+
             goto_poweroff_first_flag = 1;
             goto_poweroff_cnt = 0;
             goto_poweroff_flag = 0;
@@ -81,13 +83,14 @@ void power_off_deal(struct sys_event *event, u8 step)
                    } */
                 if ((get_call_status() == BT_CALL_INCOMING) ||
                     (get_call_status() == BT_CALL_OUTGOING)) 
-                    {
+                {
                     log_info("key call reject\n");
                     /* user_send_cmd_prepare(USER_CTRL_HFP_CALL_HANGUP, 0, NULL); */
                     goto_poweroff_first_flag = 0;
                     goto_poweroff_flag = 0;
                     break;
-                } else if (get_call_status() == BT_CALL_ACTIVE) {
+                } else if (get_call_status() == BT_CALL_ACTIVE) 
+                {
                     log_info("key call hangup\n");
                     /* user_send_cmd_prepare(USER_CTRL_HFP_CALL_HANGUP, 0, NULL); */
                     goto_poweroff_first_flag = 0;
@@ -295,6 +298,7 @@ void app_poweroff_task()
     }
 }
 
+#if 0
 extern void sdx_dev_entry_lowpower(const char *sdx_name);
 u8 poweroff_entry_cbfun(void)
 {
@@ -321,4 +325,4 @@ u8 poweroff_entry_cbfun(void)
 #endif
     return 0;
 }
-
+#endif

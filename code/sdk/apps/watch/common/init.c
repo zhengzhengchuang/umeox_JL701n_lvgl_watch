@@ -84,7 +84,7 @@ static void check_power_on_key(void)
         clr_wdt();
         os_time_dly(1);
 
-        extern u8 get_power_on_status(void);
+        extern u8 get_power_on_status(void);  
         if (get_power_on_status()) {
             putchar('+');
             delay_10ms_cnt++;
@@ -132,6 +132,7 @@ static void app_init()
 #if TCFG_CHARGE_OFF_POWERON_NE
         if ((!update && cpu_reset_by_soft()) || is_ldo5v_wakeup() || get_alarm_wkup_flag()) {
 #else
+    
         if ((!update && cpu_reset_by_soft()) || get_alarm_wkup_flag()) {
 #endif
             app_var.play_poweron_tone = 0;
@@ -171,7 +172,8 @@ static void app_init()
 #endif
 
 #if (TCFG_CHARGE_ENABLE && TCFG_CHARGE_POWERON_ENABLE)
-    if (is_ldo5v_wakeup()) { //LDO5V唤醒
+    if (is_ldo5v_wakeup()) 
+    {   //LDO5V唤醒
         extern u8 get_charge_online_flag(void);
         if (get_charge_online_flag()) { //关机时，充电插入
 
@@ -181,7 +183,7 @@ static void app_init()
     }
 #endif
 
-#if(TCFG_CHARGE_BOX_ENABLE)
+#if (TCFG_CHARGE_BOX_ENABLE)
     /* clock_add_set(CHARGE_BOX_CLK); */
     chgbox_init_app();
 #endif

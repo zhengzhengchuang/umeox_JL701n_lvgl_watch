@@ -179,7 +179,7 @@ static void cover_menu_anim_cb(void *var, int32_t anim_val)
 static void cover_menu_anim_ready_cb(lv_anim_t *a)
 {  
     int32_t anim_end_val = a->end_value;
-    ui_act_id_t jump_act_id = Act_Id_Null;
+    ui_act_id_t jump_act_id = ui_act_id_null;
 
     ui_act_id_t *cover_id_cache = \
         &p_ui_info_cache->ui_cover_info.cover_id_cache;
@@ -190,7 +190,7 @@ static void cover_menu_anim_ready_cb(lv_anim_t *a)
     if(anim_end_val != 0)
        jump_act_id = cover_id_cache[0];
 
-    if(jump_act_id != Act_Id_Null)
+    if(jump_act_id != ui_act_id_null)
         ui_menu_jump(jump_act_id);
 
     *cover_animing = false;

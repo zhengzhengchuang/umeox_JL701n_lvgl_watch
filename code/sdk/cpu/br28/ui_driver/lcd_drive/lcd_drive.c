@@ -673,8 +673,13 @@ void lcd_wait_te()
     }
 
     wait_timeout = jiffies + msecs_to_jiffies(500);
-    while (spi_te_stat()) { //wait low level
-        if (time_after(jiffies, wait_timeout)) {
+    printf("%s:wait_timeout = %d\n", __func__, wait_timeout);
+    printf("%s:jiffies = %d\n", __func__, jiffies);
+    while(spi_te_stat()) 
+    { 
+        //wait low level
+        if(time_after(jiffies, wait_timeout)) 
+        {
             printf("wait te timeout.\n");
             extern void wdt_clear(void);
             wdt_clear();
@@ -684,8 +689,11 @@ void lcd_wait_te()
     }
 
     wait_timeout = jiffies + msecs_to_jiffies(500);
-    while (!spi_te_stat()) {//wait high level
-        if (time_after(jiffies, wait_timeout)) {
+    while (!spi_te_stat()) 
+    {   
+        //wait high level
+        if (time_after(jiffies, wait_timeout)) 
+        {
             printf("wait te timeout.\n");
             extern void wdt_clear(void);
             wdt_clear();
@@ -1404,29 +1412,6 @@ static int lcd_draw_page(u8 *buf, u8 page_star, u8 page_len)
     return 0;
 }
 
-
-
-/*$PAGE*/
-/*
- *********************************************************************************************************
- *                                       GET LCD BACKLIGHT STATUS
- *
- * Description: 获取 LCD 背光状态
- *
- * Arguments  : none
- *
- * Returns    : 0 背光熄灭
- * 				1 背光点亮
- *
- * Notes      :
- *********************************************************************************************************
- */
-
-int lcd_backlight_status()
-{
-    return !!backlight_status;
-}
-
 /*
  *********************************************************************************************************
  *                                       GET LCD BACKLIGHT STATUS
@@ -1459,6 +1444,7 @@ static void lcd_st77903_stop(void)
 {
     if (lcd_qspi_st77903_mode()) 
     {
+        printf("------------%s\n", __func__);
         if (st77903_frame_mode == SINGAL_FRAME_MODE) {
             __lcd->lcd_exit = 1;
             while (__lcd->lcd_exit) {
@@ -1685,7 +1671,6 @@ static void tp_drv_power_on()
  * 				3、lcd_sleep_in 记录LCD的休眠状态
  *********************************************************************************************************
  */
-//extern void ui_effect_exit();
 int lcd_sleep_ctrl(u8 enter)
 {
     //struct lcd_sleep_headler *p;
@@ -1723,19 +1708,11 @@ int lcd_sleep_ctrl(u8 enter)
         lcd_drv_power_off();
         lcd_sleep_in = true;
 #endif
-
-        // list_for_each_lcd_sleep_headler(p) 
-        // {
-        //     if (p->enter) {
-        //         p->enter();
-        //     }
-        // }
         clock_remove_set(DEC_UI_CLK);
     } else 
     {
         clock_add_set(DEC_UI_CLK);
-        //  纯自定义地址资源需要打开flash电源
-        extern void norflash_flash_power_check();
+
         norflash_flash_power_check();
 #if LCD_POWER_DOWN_EN || TP_POWER_DOWN_EN
         os_sem_create(&__lcd->init_sem, 0);
@@ -1759,24 +1736,11 @@ int lcd_sleep_ctrl(u8 enter)
         lcd_drv_power_on();
         lcd_sleep_in = false;
 #endif
-
-        //lcd_st77903_start();
-        // list_for_each_lcd_sleep_headler(p) {
-        //     if (p->exit) {
-        //         p->exit();
-        //     }
-        // }
     }
 
     is_lcd_busy = 0;
 
     return 0;
-}
-
-void lcd_bl_open()
-{
-    lcd_mcpwm_init();
-    lcd_drv_backlight_ctrl_base(backlight_status);
 }
 
 /*********************************************************************************************************

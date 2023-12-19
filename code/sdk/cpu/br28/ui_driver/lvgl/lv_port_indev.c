@@ -206,6 +206,12 @@ static void touchpad_read(lv_indev_drv_t *indev_drv, lv_indev_data_t *data)
     if (touchpad_is_pressed()) {
         touchpad_get_xy(&last_x, &last_y);
         data->state = LV_INDEV_STATE_PR;
+        
+        /*触摸操作时，需重置刷新定时器*/
+        //common_refresh_timer_re_run();
+
+        /*触摸操作时，需重置熄屏定时器*/
+        common_offscreen_timer_re_run();
     } else {
         data->state = LV_INDEV_STATE_REL;
     }

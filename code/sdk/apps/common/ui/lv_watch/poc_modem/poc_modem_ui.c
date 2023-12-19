@@ -1,6 +1,7 @@
 ﻿#include "../lv_watch.h"
 #include "poc_modem_ui.h"
 
+static bool lcd_is_sleep = false;
 
 void ui_menu_jump_post_msg(ui_act_id_t act_id)
 {   
@@ -17,20 +18,30 @@ void ui_menu_jump_post_msg(ui_act_id_t act_id)
 
 void ui_menu_exit_prepare(ui_act_id_t act_id)
 {
-    ui_act_id_t exit_act_id = ui_cache_get_cur_act_id();
-    
-    if(p_ui_info_cache->menu_load_info.destory_func_cb)
-        p_ui_info_cache->menu_load_info.destory_func_cb(NULL);
+    common_refresh_timer_destroy();
+
+    common_offscreen_timer_destroy();
+
+    ui_menu_destory_func_cb destory_func_cb = \
+        p_ui_info_cache->menu_load_info.destory_func_cb;
+    if(destory_func_cb)
+        destory_func_cb(NULL);
 
     if(p_ui_info_cache->ui_menu_container)
+    {
         lv_obj_del(p_ui_info_cache->ui_menu_container);
+        p_ui_info_cache->ui_menu_container = NULL;
+    }
 
 #if UI_USE_COVER
     cover_info_clear();
 #endif
 
 #if UI_USE_TILEVIEW
-    tileview_info_clear();
+    uint8_t tileview_valid_cnt = \
+        p_ui_info_cache->ui_tileview_info.tileview_valid_cnt;
+    if(tileview_valid_cnt)
+        tileview_info_clear();
 #endif
 
 #if UI_USE_TRANSLATE
@@ -39,34 +50,48 @@ void ui_menu_exit_prepare(ui_act_id_t act_id)
 
     common_widget_para_init();
 
-    common_refresh_timer_destroy();
-   
-    if(act_id != exit_act_id && p_ui_info_cache->menu_load_info.return_flag)
-        ui_cache_set_prev_act_id(exit_act_id);
+    if(!lcd_is_sleep)
+        memcpy(&p_ui_info_cache->exit_menu_load_info, \
+                &p_ui_info_cache->menu_load_info, sizeof(ui_menu_load_info_t));
 
-    memset(&p_ui_info_cache->menu_load_info, 0, sizeof(ui_menu_load_info_t));
+    if(ui_act_id_validity(act_id))
+    {
+        if(!lcd_is_sleep)
+        {
+            /**********页面跳转************/
+            ui_act_id_t exit_act_id = p_ui_info_cache->cur_act_id;
+            bool return_flag = p_ui_info_cache->menu_load_info.return_flag;
+            if(act_id != exit_act_id && return_flag)
+                p_ui_info_cache->prev_act_id = exit_act_id;
+        }else
+        { 
+            /**********亮屏加载************/
+            if(act_id == ui_act_id_watchface)
+                p_ui_info_cache->prev_act_id = ui_act_id_null;
+        } 
+
+        lcd_is_sleep = false;
+    }else
+        lcd_is_sleep = true;
+
+    memset(&p_ui_info_cache->menu_load_info, 0, \
+        sizeof(ui_menu_load_info_t));
 
     return;
 }
 
 ui_act_id_t ui_menu_jump_prepare(ui_act_id_t act_id)
 {
-    ui_act_id_t load_act_id = act_id;
+    if(ui_act_id_validity(act_id))
+        p_ui_info_cache->cur_act_id = act_id;
 
-    if(!ui_act_id_validity(load_act_id))
-        load_act_id = Act_Id_Watchface;
-
-    ui_cache_set_cur_act_id(load_act_id);
-
-    return load_act_id;
+    return act_id;
 }
 
 void ui_menu_container_create(void)
 {
     int16_t lcd_w = lv_disp_get_hor_res(NULL);
     int16_t lcd_h = lv_disp_get_ver_res(NULL);
-
-    printf("lcd:w = %d, h = %d\n", lcd_w, lcd_h);
 
     lv_obj_t *ui_menu_container = lv_obj_create(lv_scr_act());
     lv_obj_remove_style(ui_menu_container, NULL, LV_PART_SCROLLBAR|LV_STATE_DEFAULT);
@@ -91,7 +116,7 @@ void ui_menu_jump_handle(ui_act_id_t act_id)
     ui_act_id_t load_act_id = ui_menu_jump_prepare(act_id);
 
     printf("cur act id = %d\n", load_act_id);
-    printf("prev act id = %d\n", ui_cache_get_prev_act_id());
+    printf("prev act id = %d\n", p_ui_info_cache->prev_act_id);
 
     ui_menu_load_info_t *menu_load_info = ui_menu_load_info(load_act_id);
     if(menu_load_info)
@@ -110,37 +135,61 @@ void ui_menu_jump_handle(ui_act_id_t act_id)
 
     common_refresh_timer_create();
 
+    common_offscreen_timer_create();
+
     return;
 }
 
 ui_menu_load_info_t *ui_menu_load_info(ui_act_id_t act_id)
 {
+    bool list_find_ret = false;
     ui_menu_load_info_t *menu_load_info = NULL;
 
-    switch(act_id)
-    {
-        case Act_Id_Watchface:
-        {
-            ui_watchface_id_t cur_watchface_id = ui_cache_get_cur_watchface_id();
-            for(ui_watchface_id_t i = Watchface_Id_00; i < Watchface_Id_Max; i++)
-            {
-                if(cur_watchface_id == i)
-                {
-                    menu_load_info = watchface_load_info_cache[i];
-                    break;
-                }    
-            }
-        }
-            break;
+    if(!ui_act_id_validity(act_id))
+        return NULL;
 
-        case Act_Id_Weather:
+    list_for_ui_menu_load(menu_load_info)
+    {
+        if(menu_load_info->menu_id == act_id)
         {
-            menu_load_info = &menu_load_weather;
+            list_find_ret = true;
+            break;
+        }    
+    }
+
+    if(!list_find_ret)
+        return NULL;
+
+
+    /*对于多页面使用同个id，需要单独拎出来做处理，如：表盘*/
+    if(act_id == ui_act_id_watchface)
+    {
+        ui_watchface_id_t cur_watchface_id = \
+            get_vm_para_cache_with_label(vm_label_watchface_id);
+
+        ui_watchface_id_t i;
+        list_for_ui_watchface_load(i)
+        {
+            if(cur_watchface_id == i)
+            {
+                menu_load_info = watchface_load_info[i];
+                break;
+            }    
         }
-            break;
-        
-        default:
-            break;
+    }else if(act_id == ui_act_id_menu)
+    {
+        ui_menu_style_t menu_style = \
+            get_vm_para_cache_with_label(vm_label_menu_style);
+
+        ui_menu_style_t i;
+        list_for_ui_menu_style(i)
+        {
+            if(menu_style == i)
+            {
+                menu_load_info = menu_style_load_info[i];
+                break;
+            }    
+        }
     }
 
     return menu_load_info;

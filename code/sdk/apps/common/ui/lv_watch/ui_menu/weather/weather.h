@@ -1,5 +1,5 @@
-﻿#ifndef __ACTIVITY_H__
-#define __ACTIVITY_H__
+﻿#ifndef __WEATHER_H__
+#define __WEATHER_H__
 
 #ifdef __cplusplus
 extern "C" {

@@ -275,6 +275,19 @@ void lv_indev_get_vect(const lv_indev_t * indev, lv_point_t * point)
     }
 }
 
+void lv_indev_get_throw(const lv_indev_t * indev, lv_point_t * point)
+{
+    point->x = 0;
+    point->y = 0;
+
+    if(indev == NULL) return;
+
+    if(indev->driver->type == LV_INDEV_TYPE_POINTER || indev->driver->type == LV_INDEV_TYPE_BUTTON) {
+        point->x = indev->proc.types.pointer.scroll_throw_vect.x;
+        point->y = indev->proc.types.pointer.scroll_throw_vect.y;
+    }
+}
+
 void lv_indev_wait_release(lv_indev_t * indev)
 {
     if(indev == NULL)return;
@@ -914,6 +927,8 @@ static void indev_proc_press(_lv_indev_proc_t * proc)
     proc->types.pointer.scroll_throw_vect.x = (proc->types.pointer.scroll_throw_vect.x + proc->types.pointer.vect.x) / 2;
     proc->types.pointer.scroll_throw_vect.y = (proc->types.pointer.scroll_throw_vect.y + proc->types.pointer.vect.y) / 2;
 
+    //printf("----scroll_throw_vect = %d\n", proc->types.pointer.scroll_throw_vect.y);
+
     proc->types.pointer.scroll_throw_vect_ori = proc->types.pointer.scroll_throw_vect;
 
     if(indev_obj_act) 
@@ -990,7 +1005,7 @@ static void indev_proc_release(_lv_indev_proc_t * proc)
     /*Forget the act obj and send a released Call the ancestor's event handler*/
     if(indev_obj_act) 
     {
-        printf("%s:released\n");
+        //printf("%s:released\n");
 
         /*Send RELEASE Call the ancestor's event handler and event*/
         lv_event_send(indev_obj_act, LV_EVENT_RELEASED, indev_act);

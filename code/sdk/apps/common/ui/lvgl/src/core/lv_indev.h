@@ -136,6 +136,7 @@ lv_obj_t * lv_indev_get_scroll_obj(const lv_indev_t * indev);
  * @param point pointer to a point to store the types.pointer.vector
  */
 void lv_indev_get_vect(const lv_indev_t * indev, lv_point_t * point);
+void lv_indev_get_throw(const lv_indev_t * indev, lv_point_t * point);
 
 /**
  * Do nothing until the next release

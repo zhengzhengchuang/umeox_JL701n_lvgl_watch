@@ -251,7 +251,8 @@ static void alarm_vm_read_info(PT_ALARM_MAP map)
     u8 i;
 
     ret = syscfg_read(VM_ALARM_MASK, (u8 *)map, sizeof(T_ALARM_MAP));
-    if (ret != sizeof(T_ALARM_MAP) || map->mask != RTC_MASK) {
+    if (ret != sizeof(T_ALARM_MAP) || map->mask != RTC_MASK) 
+    {
         PRINT_FUN_RETURN_INFO();
         memset(map, 0, sizeof(T_ALARM_MAP));
         map->mask = RTC_MASK;

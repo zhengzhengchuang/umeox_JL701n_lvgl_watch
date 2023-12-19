@@ -4,8 +4,8 @@ static void menu_create_cb(lv_obj_t *obj)
 {
     if(!obj) return;
 
-    tileview_register_all_menu(obj, Act_Id_Null, Act_Id_Null, \
-        Act_Id_Null, Act_Id_Weather, Act_Id_Watchface);
+    tileview_register_all_menu(obj, ui_act_id_null, ui_act_id_null, \
+        ui_act_id_null, ui_act_id_weather, ui_act_id_watchface);
 
     return;
 }
@@ -19,6 +19,12 @@ static void menu_refresh_cb(lv_obj_t *obj)
 {
     if(!obj) return;
 
+    struct sys_time utc_time;
+    ui_get_sys_time(&utc_time);
+    printf("%d-%d-%d %d:%d:%d\n", utc_time.year, \
+        utc_time.month, utc_time.day, utc_time.hour, \
+            utc_time.min, utc_time.sec);
+
     return;
 }
 
@@ -26,7 +32,6 @@ static void menu_display_cb(lv_obj_t *obj)
 {
     if(!obj) return;
 
-#if 1
     widget_img_para.img_parent = obj;
     widget_img_para.img_x = 0;
     widget_img_para.img_y = 0;
@@ -34,23 +39,22 @@ static void menu_display_cb(lv_obj_t *obj)
     widget_img_para.img_click_attr = false;
     widget_img_para.event_cb = NULL;
     common_widget_img_create(&widget_img_para, NULL);
-#endif
 
     return;
 }
 
-static void menu_key_cb(int key_value, int key_event)
+static void menu_key_cb(lv_obj_t *obj, int key_value, int key_event)
 {
     return;
 }
 
-const ui_menu_load_info_t menu_load_watchface_00 = 
+register_ui_menu_load_info(menu_load_watchface_00) = 
 {
     .menu_arg = NULL,
     .lock_flag = false,
     .return_flag = true,
-    .menu_id = Act_Id_Watchface,
-    .user_display_time = 0,
+    .menu_id = ui_act_id_watchface,
+    .user_offscreen_time = Always_OnScreen,
     .user_refresh_time_inv = 500,
     .key_func_cb = menu_key_cb,
     .create_func_cb = menu_create_cb,

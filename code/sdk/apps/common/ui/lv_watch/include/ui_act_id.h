@@ -9,29 +9,38 @@ extern "C" {
 
 enum
 {
-    Watchface_Id_00 = 0x00,
-    Watchface_Id_01,
-    Watchface_Id_Max,
+    ui_watchface_id_00 = 0x00,
+    ui_watchface_id_01,
+
+    ui_watchface_id_max,
 };
 typedef uint8_t ui_watchface_id_t;
 
+#define list_for_ui_watchface_load(id) \
+    for(id = ui_watchface_id_00; id < ui_watchface_id_max; id++)
+
 enum
 {
-    Act_Id_Null = 0,
+    ui_menu_style_00 = 0x00,
+    ui_menu_style_01,
 
-    /********表盘相关页面*********/
-    Act_Id_Watchface,
+    ui_menu_style_max,
+};
+typedef uint8_t ui_menu_style_t;
 
-    /********天气页面*********/
-    Act_Id_Weather,
+#define list_for_ui_menu_style(id) \
+    for(id = ui_menu_style_00; id < ui_menu_style_max; id++)
 
-    /********工具页面*********/
-    Act_Id_Tool_Box,
+enum
+{
+    ui_act_id_null = 0,
 
-    /********菜单页面*********/
-    Act_Id_Menu,
+    ui_act_id_menu,
+    ui_act_id_weather,
+    ui_act_id_tool_box,
+    ui_act_id_watchface,
 
-    Act_Id_Max,
+    ui_act_id_max,
 };
 typedef uint16_t ui_act_id_t;
 

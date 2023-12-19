@@ -661,6 +661,10 @@ SECTIONS
 {
     .text : ALIGN(4)
     {
+        ui_menu_load_begin = .;
+        KEEP(*(.ui_menu_load))
+        ui_menu_load_end = .;
+
         gsensor_dev_begin = .;
         KEEP(*(.gsensor_dev))
         gsensor_dev_end = .;

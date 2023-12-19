@@ -14,6 +14,7 @@ enum
 {
     ui_msg_menu_jump = 0x00,
     ui_msg_menu_refresh,
+    ui_msg_menu_offscreen,
     ui_msg_clock_pointer_refresh,
     ui_msg_key_handle,
 };

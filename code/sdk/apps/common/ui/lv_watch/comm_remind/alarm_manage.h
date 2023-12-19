@@ -7,7 +7,8 @@ extern "C" {
 
 #include "../include/ui_menu.h"
 
-#if USER_ALARM_EN
+#define No_Alarm_Info (0xffffffff)
+
 //*********************************************************************************//
 //                                  闹钟最大个数                                     //
 //*********************************************************************************//
@@ -57,7 +58,6 @@ void common_user_alarm_repeat_modify(uint32_t alarm_union);
 void common_user_alarm_enable_modify(uint32_t alarm_union);
 
 void common_user_alarm_real_time_monitor(void);
-#endif
 #ifdef __cplusplus
 } /* extern "C" */
 #endif

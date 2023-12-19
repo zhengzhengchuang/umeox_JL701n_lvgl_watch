@@ -1,19 +1,18 @@
 #include "../lv_watch.h"
 #include "alarm_manage.h"
-#include "../poc_modem/poc_modem_cache.h"
+#include "../poc_modem/poc_modem_vm.h"
 #include "../../../../watch/include/task_manager/rtc/alarm.h"
 
-#if USER_ALARM_EN
-
-static const uint32_t no_alarm_info = 0xffffffff;
+static bool is_alarm_monitor = true;
+static const uint32_t no_alarm_info = No_Alarm_Info;
 
 uint32_t common_user_alarm_read_info(uint8_t alarm_id)
 {
     uint8_t *alarm_num = \
-        &p_ui_info_cache->alarm_manage_para.alarm_num;
+        &p_vm_para_cache->alarm_manage_para.alarm_num;
 
     alarm_info_union_t *alarm_info = \
-        p_ui_info_cache->alarm_manage_para.alarm_info;
+        p_vm_para_cache->alarm_manage_para.alarm_info;
 
     if(alarm_id >= *alarm_num)
         return no_alarm_info;
@@ -26,10 +25,10 @@ void common_user_alarm_add(uint32_t alarm_union)
     uint8_t alarm_offset = 0;
 
     uint8_t *alarm_num = \
-        &p_ui_info_cache->alarm_manage_para.alarm_num;
+        &p_vm_para_cache->alarm_manage_para.alarm_num;
 
     alarm_info_union_t *alarm_info = \
-        p_ui_info_cache->alarm_manage_para.alarm_info;
+        p_vm_para_cache->alarm_manage_para.alarm_info;
 
     if(*alarm_num >= ALARM_MAX_NUM)
         return;
@@ -73,10 +72,10 @@ void common_user_alarm_time_modify(uint32_t alarm_union)
     uint8_t alarm_offset = 0;
 
     uint8_t *alarm_num = \
-        &p_ui_info_cache->alarm_manage_para.alarm_num;
+        &p_vm_para_cache->alarm_manage_para.alarm_num;
 
     alarm_info_union_t *alarm_info = \
-        p_ui_info_cache->alarm_manage_para.alarm_info;
+        p_vm_para_cache->alarm_manage_para.alarm_info;
 
     if(*alarm_num > ALARM_MAX_NUM)
         return;
@@ -116,10 +115,10 @@ void common_user_alarm_repeat_modify(uint32_t alarm_union)
     uint8_t alarm_offset = 0;
 
     uint8_t *alarm_num = \
-        &p_ui_info_cache->alarm_manage_para.alarm_num;
+        &p_vm_para_cache->alarm_manage_para.alarm_num;
 
     alarm_info_union_t *alarm_info = \
-        p_ui_info_cache->alarm_manage_para.alarm_info;
+        p_vm_para_cache->alarm_manage_para.alarm_info;
 
     if(*alarm_num > ALARM_MAX_NUM)
         return;
@@ -155,10 +154,10 @@ void common_user_alarm_enable_modify(uint32_t alarm_union)
     uint8_t alarm_offset = 0;
 
     uint8_t *alarm_num = \
-        &p_ui_info_cache->alarm_manage_para.alarm_num;
+        &p_vm_para_cache->alarm_manage_para.alarm_num;
 
     alarm_info_union_t *alarm_info = \
-        p_ui_info_cache->alarm_manage_para.alarm_info;
+        p_vm_para_cache->alarm_manage_para.alarm_info;
 
     if(*alarm_num > ALARM_MAX_NUM)
         return;
@@ -190,10 +189,10 @@ void common_user_alarm_enable_modify(uint32_t alarm_union)
 void common_user_alarm_delete_all(void)
 {
     uint8_t *alarm_num = \
-        &p_ui_info_cache->alarm_manage_para.alarm_num;
+        &p_vm_para_cache->alarm_manage_para.alarm_num;
 
     alarm_info_union_t *alarm_info = \
-        p_ui_info_cache->alarm_manage_para.alarm_info;
+        p_vm_para_cache->alarm_manage_para.alarm_info;
 
     if(*alarm_num == 0)
         return;
@@ -212,10 +211,10 @@ void common_user_alarm_delete_one(uint8_t alarm_id)
     uint8_t alarm_id_tmp = 0xff;
 
     uint8_t *alarm_num = \
-        &p_ui_info_cache->alarm_manage_para.alarm_num;
+        &p_vm_para_cache->alarm_manage_para.alarm_num;
 
     alarm_info_union_t *alarm_info = \
-        p_ui_info_cache->alarm_manage_para.alarm_info;
+        p_vm_para_cache->alarm_manage_para.alarm_info;
 
     if(*alarm_num == 0) 
         return;
@@ -258,17 +257,26 @@ void common_user_alarm_real_time_monitor(void)
     struct sys_time alarm_sys_time;
 
     uint8_t *alarm_num = \
-        &p_ui_info_cache->alarm_manage_para.alarm_num;
+        &p_vm_para_cache->alarm_manage_para.alarm_num;
 
     alarm_info_union_t *alarm_info = \
-        p_ui_info_cache->alarm_manage_para.alarm_info;
-
-    printf("************%s\n", __func__);
+        p_vm_para_cache->alarm_manage_para.alarm_info;
 
     if(*alarm_num == 0)
         return;
 
     ui_get_sys_time(&alarm_sys_time);
+
+    if(alarm_sys_time.sec >= 58)
+        is_alarm_monitor = true;
+    
+    if(alarm_sys_time.sec != 0)//闹钟属于分钟处理事情
+        return;
+
+    if(!is_alarm_monitor) 
+        return;
+
+    is_alarm_monitor = false;
 
     for(uint8_t i = 0; i < *alarm_num; i++)
     {
@@ -294,6 +302,8 @@ void common_user_alarm_real_time_monitor(void)
                     {
                         /*闹钟到啦,此处做处理*/
                         common_user_alarm_is_on_handle();
+
+                        printf("%s:repeat\n", __func__);
                     }
                 }
             }
@@ -302,4 +312,3 @@ void common_user_alarm_real_time_monitor(void)
 
     return;
 }
-#endif

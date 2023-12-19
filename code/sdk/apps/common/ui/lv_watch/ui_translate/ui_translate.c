@@ -116,7 +116,7 @@ static void translate_register_center_menu(ui_act_id_t act_id)
     return;
 }
 
-/*********如果那个方向没有的话，传入Act_Id_Null即可************/
+/*********如果那个方向没有的话，传入ui_act_id_null即可************/
 void translate_register_all_menu(ui_act_id_t up, ui_act_id_t down, ui_act_id_t left, \
     ui_act_id_t right, ui_act_id_t center)
 {
@@ -355,7 +355,7 @@ static void translate_menu_anim_ready_cb(lv_anim_t *a)
         p_ui_info_cache->ui_translate_info.translate_id_cache;
 
     int32_t anim_end_val = a->end_value;
-    ui_act_id_t jump_act_id = Act_Id_Null;
+    ui_act_id_t jump_act_id = ui_act_id_null;
 
     if(*translate_scroll_dir == LV_DIR_HOR)
     {
@@ -371,7 +371,7 @@ static void translate_menu_anim_ready_cb(lv_anim_t *a)
             jump_act_id = translate_id_cache[down_menu_idx];
     }
 
-    if(jump_act_id != Act_Id_Null)
+    if(jump_act_id != ui_act_id_null)
         ui_menu_jump(jump_act_id);
 
     *translate_animing = false;

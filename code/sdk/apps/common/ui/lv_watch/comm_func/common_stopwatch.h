@@ -17,7 +17,7 @@ extern "C" {
 #endif
 
 //*********************************************************************************//
-//                                  通用秒表属性状态                                  //
+//                                  通用秒表属性状态                                 //
 //*********************************************************************************//
 typedef enum
 {
@@ -57,6 +57,7 @@ void common_user_stopwatch_resume(void);
 void common_user_stopwatch_record(void);
 #endif
 void common_user_stopwatch_create(void);
+void common_user_stopwatch_timeout_handle(void);
 #ifdef __cplusplus
 } /* extern "C" */
 #endif

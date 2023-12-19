@@ -1134,6 +1134,7 @@ void  bt_status_init_ok(struct bt_event *bt)
         extern void ble_standard_dut_test_init(void);
         ble_standard_dut_test_init();
 #else
+        printf("***********%s\n", __func__);
         bt_ble_init();
 #endif
     }

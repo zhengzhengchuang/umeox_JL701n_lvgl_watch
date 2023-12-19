@@ -195,6 +195,7 @@ float predicted_current(float real_vbat_value, float soc) {
 
 }
 
+#define Vbat_Log_En (0)
 static float current_soc;
 void vbat_calculate_loop() 
 {
@@ -203,7 +204,9 @@ void vbat_calculate_loop()
     float current_vbat;
     // 空载状态下，直接根据 SOC-OCV 反向函数计算 SOC
     current_vbat = (float)(adc_get_voltage(AD_CH_VBAT) * 4)/1000.0;
+    #if Vbat_Log_En
     printf("is_sleep = %d 实际检测出vbat值>>>>>>>>>>>> current_vbat = %f,current_soc = %.2f",is_sleep,current_vbat,current_soc);
+    #endif
     if(is_sleep>2000 && !LVCMP_DET_GET() && 0) { //长时间休眠且非充电状态直接校准 is_sleep累加作为休眠时间设置
         if (current_vbat >= OCV(1.0)) {
             current_soc = 1.0;
@@ -224,13 +227,17 @@ void vbat_calculate_loop()
         // 根据电池状态进行放电或充电运算
         if (!LVCMP_DET_GET()) { // 放电状态        
             current_soc += I * 8 / 3600 / BATTERY_CAPACITY; // 积分运算，单位转换为 mAh
+            #if Vbat_Log_En
             printf("Down 放电状态  %.2f current_soc = %.2f \n", I,current_soc);//电流值
+            #endif
         } else { // 充电状态
 			if(I < BATTERY_CHARGE_SMALL_I){
 				I = BATTERY_CHARGE_SMALL_I;
 			}
             current_soc += I * charge_k * 8 / 3600 / BATTERY_CAPACITY; // 积分运算，单位转换为 mAh
+            #if Vbat_Log_En
             printf("Up 充电状态 Current I: %.2f current_soc = %.2f \n", I,current_soc);//电流值
+            #endif
         }
     }
     // 防止 SOC 值超出范围
@@ -241,14 +248,18 @@ void vbat_calculate_loop()
     }
     // 输出当前 SOC 值
     real_vbat_value = (int)(current_soc*100);
+    #if Vbat_Log_En
     printf("经过算法后的curr_present_k = %d,vm_vbat_value  = %dcurrent_soc = %.2f",real_vbat_value,vm_vbat_value,current_soc);
+    #endif
     
      // 防止电压回弹
      u8 update = 0;
     if( get_charge_online_flag() ) {
         //充电过程中电量下降使用之前电量
         if(real_vbat_value <= vm_vbat_value) {  
+            #if Vbat_Log_En
             printf("充电过程中电量下降使用之前电量");
+            #endif
             // real_vbat_value = vm_vbat_value;
         } else {
             update = 1;
@@ -256,14 +267,18 @@ void vbat_calculate_loop()
     } else {
         //未充电过程中电量上升使用之前电量
         if(real_vbat_value >= vm_vbat_value) {  
+            #if Vbat_Log_En
             printf("未充电过程中电量上升使用之前电量");
+            #endif
             // real_vbat_value= vm_vbat_value; 
         } else {
             update = 1;
         }
     }
     if(update){
+        #if Vbat_Log_En
 	    printf("储存到vm的电量值 vm_vbat_value is %d \n",vm_vbat_value);
+        #endif
         vm_vbat_value = real_vbat_value;
 		int argv[3];
 		argv[0] = (int)write_vm_vbat_value;
@@ -274,7 +289,9 @@ void vbat_calculate_loop()
 			printf("vbat change post ret:%d \n", ret);
 		}
     }
+    #if Vbat_Log_En
     printf("sylon debug:>>>>>>>>>real_vbat_value = %d 实际显示电量:vm_vbat_value=%d is_charge=%d",real_vbat_value,vm_vbat_value, get_charge_online_flag());
+    #endif
     avr_bat_percent_val = vm_vbat_value; //real_vbat_value;
     printf("Current SOC: %d\n", avr_bat_percent_val);
 

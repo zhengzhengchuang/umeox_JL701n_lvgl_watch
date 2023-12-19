@@ -418,10 +418,10 @@ static int bt_connction_status_event_handler(struct bt_event *bt)
         return false;
     }
     //运动相关的
-    static u8 sport_phone_memory = 0;
-    struct watch_execise __execise_hd;
-    watch_execise_handle_get(&__execise_hd);
-    u8 sport_status = __execise_hd.execise_ctrl_status_get();
+    //static u8 sport_phone_memory = 0;
+    // struct watch_execise __execise_hd;
+    // watch_execise_handle_get(&__execise_hd);
+    // u8 sport_status = __execise_hd.execise_ctrl_status_get();
     switch (bt->event) {
     case BT_STATUS_EXIT_OK:
         log_info("BT_STATUS_EXIT_OK\n");

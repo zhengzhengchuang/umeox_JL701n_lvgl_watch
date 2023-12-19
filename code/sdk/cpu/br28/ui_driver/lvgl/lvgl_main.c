@@ -18,10 +18,10 @@
 #if LVGL_TEST_ENABLE
 
 #if LV_USE_LOG && LV_LOG_PRINTF
-static void lv_rt_log(const char *buf)
-{
-    printf(buf);
-}
+// static void lv_rt_log(const char *buf)
+// {
+//     printf(buf);
+// }
 #endif
 
 #if 0
@@ -46,23 +46,27 @@ void render_start_cb(struct _lv_disp_drv_t * disp_drv){
 
 static void lvgl_task(void *p)
 {
-    //printf("++++++++++++++++++++++++lvgl_task++++++++++++++++++++++++++++++++");
-
     // sd_jpg_test();
     int msg[32];
     int ret;
 
 #if LV_USE_LOG && LV_LOG_PRINTF
-    lv_log_register_print_cb(lv_rt_log);
+    //lv_log_register_print_cb(lv_rt_log);
 #endif
 
     lv_init();
 
+    vm_store_para_init();
+    ui_act_id_t start_act_id = \
+        ui_act_id_watchface;
+    ui_info_cache_init(start_act_id);
+    
     lv_port_disp_init(p);
 
     //  等待模式任务启动再启动LVGL
-    while(!app_get_curr_task()){
-        printf("checks");
+    while(!app_get_curr_task())
+    {
+        printf("checks\n");
         os_time_dly(10);
     }
 
@@ -75,11 +79,9 @@ static void lvgl_task(void *p)
 
     lv_port_indev_init();
  
-    lv_port_fs_init();
+    //lv_port_fs_init();
 
-    ui_act_id_t start_act_id = Act_Id_Watchface;
-    ui_info_cache_init(start_act_id);
-    ui_menu_jump(ui_cache_get_cur_act_id());
+    ui_menu_jump(start_act_id);
 
 #if 0
 
@@ -180,16 +182,24 @@ static void lvgl_task(void *p)
 
     static int last_time = 0;
     int time_till_next = 0; //  距离下一次执行时间，此时间与待机低功耗相关
-    while (1) {
+    while(1) 
+    {
         /* 挂起并接收消息 */
-        if(time_till_next == -1){//休眠后一直pend
-            ret  = os_taskq_pend(NULL, msg, ARRAY_SIZE(msg));  
-        }else if(time_till_next >= 10){ //下一次执行时间，单位10ms
-            ret  = os_taskq_pend_timeout(NULL, msg, ARRAY_SIZE(msg), time_till_next/10);  
-        }else{ //小于10ms，不挂起，提高绘图效率
+        if(time_till_next == -1)
+        {
+            //休眠后一直pend
+            ret = os_taskq_pend(NULL, msg, ARRAY_SIZE(msg));  
+        }else if(time_till_next >= 10)
+        { 
+            //下一次执行时间，单位10ms
+            ret = os_taskq_pend_timeout(NULL, msg, ARRAY_SIZE(msg), time_till_next/10);  
+        }else
+        {   
+            //小于10ms，不挂起，提高绘图效率
             ret  = os_taskq_accept(ARRAY_SIZE(msg), msg); 
             wdt_clear();
-            if(jiffies_msec()-last_time>=2000) {
+            if(jiffies_msec()-last_time>=2000) 
+            {
                 last_time = jiffies_msec();
                 printf("--delay 10--"); 
                 os_time_dly(1);
@@ -197,22 +207,8 @@ static void lvgl_task(void *p)
         }
 
         /* 处理消息 */
-        if (ret == OS_TASKQ) {
+        if(ret == OS_TASKQ)
             ui_msg_handle(msg, ARRAY_SIZE(msg));
-#if 0
-            if(msg[0] == UI_MSG_HIDE){
-                lcd_sleep_ctrl(1);
-            } else if(msg[0] == UI_MSG_SHOW){
-                lcd_sleep_ctrl(0);
-            } else if(msg[0] == UI_MSG_KEY) {
-                printf(".........................");
-                if(msg[1] == KEY_UI_SHORTCUT){
-                    lcd_sleep_ctrl(!lcd_sleep_status());//进出休眠
-                    lv_obj_invalidate(lv_scr_act());//触发全屏重绘
-                }
-            }
-#endif 
-        }
 
         /* 运行LVGL和休眠处理 */
         time_till_next = lcd_sleep_status()?-1:lv_task_handler(); //LVGL服务函数，返回下一次执行时间
@@ -254,6 +250,12 @@ void ui_msg_handle(int *msg, u8 len)
         }
             break;
 
+        case ui_msg_menu_offscreen:
+        {
+            common_offscreen_msg_handle();
+        }
+            break;
+
         case ui_msg_clock_pointer_refresh:
         {
             common_clock_pointer_refresh(msg);
@@ -262,7 +264,7 @@ void ui_msg_handle(int *msg, u8 len)
 
         case ui_msg_key_handle:
         {
-            printf("%s:key_value = %d, key_event = %d\n", __func__, msg[1], msg[2]);
+            common_key_msg_handle(msg[1], msg[2]);
         }
             break;
         

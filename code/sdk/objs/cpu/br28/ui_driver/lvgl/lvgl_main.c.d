@@ -265,11 +265,13 @@ objs/cpu/br28/ui_driver/lvgl/lvgl_main.c.o: \
   apps/watch/include/task_manager/bt\../../../../common/ui/lv_watch/./include/ui_conf.h \
   apps/watch/include/task_manager/bt\../../../../common/ui/lv_watch/./include/ui_menu.h \
   apps/watch/include/task_manager/bt\../../../../common/ui/lv_watch/./include/ui_act_id.h \
+  apps/watch/include/task_manager/bt\../../../../common/ui/lv_watch/./comm_key/common_key.h \
   apps/watch/include/task_manager/bt\../../../../common/ui/lv_watch/./poc_modem/poc_modem_ui.h \
+  apps/watch/include/task_manager/bt\../../../../common/ui/lv_watch/./poc_modem/poc_modem_vm.h \
+  apps/watch/include/task_manager/bt\../../../../common/ui/lv_watch/./poc_modem/../comm_remind/alarm_manage.h \
   apps/watch/include/task_manager/bt\../../../../common/ui/lv_watch/./poc_modem/poc_modem_cache.h \
   apps/watch/include/task_manager/bt\../../../../common/ui/lv_watch/./poc_modem/../ui_cover/ui_cover.h \
   apps/watch/include/task_manager/bt\../../../../common/ui/lv_watch/./poc_modem/../ui_tileview/ui_tileview.h \
-  apps/watch/include/task_manager/bt\../../../../common/ui/lv_watch/./poc_modem/../comm_remind/alarm_manage.h \
   apps/watch/include/task_manager/bt\../../../../common/ui/lv_watch/./poc_modem/../ui_translate/ui_translate.h \
   apps/watch/include/task_manager/bt\../../../../common/ui/lv_watch/./poc_modem/../comm_func/common_stopwatch.h \
   apps/watch/include/task_manager/bt\../../../../common/ui/lv_watch/./poc_modem/../comm_func/common_countdown.h \

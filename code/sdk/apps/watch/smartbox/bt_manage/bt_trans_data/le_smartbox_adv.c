@@ -898,8 +898,6 @@ int smartbox_make_set_rsp_data(void)
     offset += make_eir_packet_val(&buf[offset], offset, HCI_EIR_DATATYPE_FLAGS, 0x06, 1);
 #endif
 
-
-
     u8 name_len = strlen(edr_name) + 1;
     // 升级前可能需要在蓝牙名后添加_ota这四个字符的关键字
     if (offset + 2 + name_len > ADV_RSP_PACKET_MAX) {
@@ -915,6 +913,7 @@ int smartbox_make_set_rsp_data(void)
     log_info("rsp_data(%d):", offset);
     log_info_hexdump(buf, offset);
     ble_op_set_rsp_data(offset, buf);
+    
     return 0;
 }
 

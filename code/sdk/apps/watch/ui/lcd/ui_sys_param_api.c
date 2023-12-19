@@ -194,7 +194,8 @@ void ui_set_dark_time(u8 sel)
 #if TCFG_UI_SHUT_DOWN_TIME
     u8 dark_time[4] = {10, 15, 20, 20};
 
-    if (get_ui_sys_param(LightAlwayEn) == 0) {
+    if (get_ui_sys_param(LightAlwayEn) == 0) 
+    {
         if (sel >= sizeof(dark_time)) {
             return;
         }
@@ -603,6 +604,5 @@ REGISTER_WATCH_SYSCFG(sys_param_ops) = {
     .read = read_UIInfo_from_vm,
     .write = write_UIInfo_to_vm,
 };
-
 #endif/* #if TCFG_UI_ENABLE */
 

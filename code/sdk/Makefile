@@ -583,42 +583,7 @@ c_SRC_FILES := \
     apps/common/ui/lvgl/src/widgets/lv_switch.c  \
     apps/common/ui/lvgl/src/widgets/lv_table.c  \
     apps/common/ui/lvgl/src/widgets/lv_textarea.c  \
-    apps/common/ui/ui/ui.c  \
-    apps/common/ui/ui/ui_helpers.c  \
-    apps/common/ui/ui/components/ui_comp.c  \
-    apps/common/ui/ui/components/ui_comp_batterygroup.c  \
-    apps/common/ui/ui/components/ui_comp_buttondown.c  \
-    apps/common/ui/ui/components/ui_comp_buttonround.c  \
-    apps/common/ui/ui/components/ui_comp_buttontop.c  \
-    apps/common/ui/ui/components/ui_comp_dailymissiongroup.c  \
-    apps/common/ui/ui/components/ui_comp_dategroup.c  \
-    apps/common/ui/ui/components/ui_comp_forecastgroup.c  \
-    apps/common/ui/ui/components/ui_comp_hook.c  \
-    apps/common/ui/ui/components/ui_comp_pulsegroup.c  \
-    apps/common/ui/ui/components/ui_comp_stepgroup.c  \
-    apps/common/ui/ui/components/ui_comp_titlegroup.c  \
-    apps/common/ui/ui/components/ui_comp_todayweathergroup.c  \
-    apps/common/ui/ui/components/ui_comp_weathergroup1.c  \
-    apps/common/ui/ui/fonts/ui_font_H1.c  \
-    apps/common/ui/ui/fonts/ui_font_Number_big.c  \
-    apps/common/ui/ui/fonts/ui_font_Number_extra.c  \
-    apps/common/ui/ui/fonts/ui_font_Subtitle.c  \
-    apps/common/ui/ui/fonts/ui_font_Title.c  \
-    apps/common/ui/ui/screens/ui_blood_oxy.c  \
-    apps/common/ui/ui/screens/ui_blood_pressure.c  \
-    apps/common/ui/ui/screens/ui_call.c  \
-    apps/common/ui/ui/screens/ui_ecg.c  \
-    apps/common/ui/ui/screens/ui_measuing.c  \
-    apps/common/ui/ui/screens/ui_watch_analog.c  \
-    apps/common/ui/ui/screens/ui_watch_digital.c  \
-    apps/common/ui/ui/screens/ui_weather_1.c  \
-	apps/common/ui/ui/screens/ui_weather_2.c\
-	apps/common/ui/ui/jl_images/usr_pic_index.c  \
 	apps/common/ui/ui/jl_images/FILE_index.c  \
-	apps/common/ui/ui/images/ui_img_clockwise_hour_png.c  \
-    apps/common/ui/ui/images/ui_img_clockwise_min_png.c  \
-    apps/common/ui/ui/images/ui_img_clockwise_sec_png.c  \
-    apps/common/ui/ui/images/ui_img_sec_dot_png.c  \
 	apps/common/update/ex_flash_file_download.c \
 	apps/common/update/norflash_ufw_update.c \
 	apps/common/update/norflash_update.c \
@@ -964,7 +929,15 @@ c_SRC_FILES := \
 	cpu/br28/user_p11_cmd.c \
 	apps/common/ui/lv_watch/lv_watch.c \
 	apps/common/ui/lv_watch/poc_modem/poc_modem_ui.c \
+	apps/common/ui/lv_watch/poc_modem/poc_modem_vm.c \
 	apps/common/ui/lv_watch/poc_modem/poc_modem_cache.c \
+	apps/common/ui/lv_watch/comm_key/common_key.c \
+	apps/common/ui/lv_watch/comm_parse/common_rev.c \
+	apps/common/ui/lv_watch/comm_parse/common_send.c \
+	apps/common/ui/lv_watch/comm_parse/common_parse.c \
+	apps/common/ui/lv_watch/comm_parse/common_le_set.c \
+	apps/common/ui/lv_watch/comm_parse/common_le_get.c \
+	apps/common/ui/lv_watch/comm_offscr/common_offscreen.c \
 	apps/common/ui/lv_watch/comm_refr/common_refresh.c \
 	apps/common/ui/lv_watch/comm_widget/common_clock.c \
 	apps/common/ui/lv_watch/comm_widget/common_widget.c \
@@ -976,12 +949,13 @@ c_SRC_FILES := \
 	apps/common/ui/lv_watch/ui_cover/ui_cover.c \
 	apps/common/ui/lv_watch/ui_tileview/ui_tileview.c \
 	apps/common/ui/lv_watch/ui_menu/weather/weather.c \
+	apps/common/ui/lv_watch/ui_menu/menu/common_list.c \
 	apps/common/ui/lv_watch/ui_menu/menu/apple_network.c \
 	apps/common/ui/lv_watch/ui_menu/watchface/watchface_00.c \
 	apps/common/ui/lv_watch/ui_menu/watchface/watchface_01.c \
 	apps/common/ui/lv_watch/ui_menu/watchface/watchface_main.c \
-	apps/common/ui/lv_watch/ui_menu/split_screen/split_screen.c \
 	apps/common/ui/lv_watch/ui_menu/tool_box/tool_box.c \
+	apps/common/ui/lv_watch/ui_menu/split_screen/split_screen.c \
 
 # 需要编译的 .S 文件
 S_SRC_FILES := \

@@ -1,14 +1,32 @@
 #include "includes.h"
 #include "remind_task.h"
 #include "../lv_watch.h"
+#include "alarm_manage.h"
 
-#if 0
+
+static uint16_t remind_timer_id = 0;
+
+static void remind_timerout_cb(void *priv)
+{
+    int remind_msg[5] = {0xff};
+
+    /*******一秒钟去监测一下闹钟信息*******/
+    remind_msg[0] = remind_msg_alarm_monitor;
+    post_remind_msg(remind_msg, 1);
+
+    return;
+}
+
 static void remind_task(void *p)
 {
     printf("%s\n", __func__);
 
     int rev_ret;
     int rev_msg[8] = {0};
+
+    /*注意：这里看看有没有影响到功耗*/
+    if(!remind_timer_id)
+        remind_timer_id = sys_timer_add(NULL, remind_timerout_cb, 950);
 
     while(1){
         rev_ret = os_taskq_pend(NULL, rev_msg, ARRAY_SIZE(rev_msg)); 
@@ -29,13 +47,23 @@ void remind_msg_handle(int *rev_msg, u8 len)
 
     switch(msg_cmd)
     {
-#if USER_ALARM_EN
         case remind_msg_alarm_monitor:
         {
             common_user_alarm_real_time_monitor();
-        }  
+        }
             break;
-#endif
+
+        case remind_msg_countdown_timeout:
+        {
+            common_user_countdown_timeout_handle();
+        }
+            break;
+
+        case remind_msg_stopwatch_timeout:
+        {
+            common_user_stopwatch_timeout_handle();
+        }
+            break;
 
         default:
         {
@@ -86,4 +114,3 @@ __retry:
 
     return err;
 }
-#endif

@@ -175,11 +175,13 @@ objs/apps/common/ui/lv_watch/lv_watch.c.o: \
   apps/common/ui/lvgl/src/extra/widgets/led/lv_led.h \
   apps/common/ui/lvgl/src/extra/widgets/imgbtn/lv_imgbtn.h \
   apps/common/ui/lvgl/src/extra/widgets/span/lv_span.h \
+  apps/common/ui/lv_watch/./comm_key/common_key.h \
   apps/common/ui/lv_watch/./poc_modem/poc_modem_ui.h \
+  apps/common/ui/lv_watch/./poc_modem/poc_modem_vm.h \
+  apps/common/ui/lv_watch/./poc_modem/../comm_remind/alarm_manage.h \
   apps/common/ui/lv_watch/./poc_modem/poc_modem_cache.h \
   apps/common/ui/lv_watch/./poc_modem/../ui_cover/ui_cover.h \
   apps/common/ui/lv_watch/./poc_modem/../ui_tileview/ui_tileview.h \
-  apps/common/ui/lv_watch/./poc_modem/../comm_remind/alarm_manage.h \
   apps/common/ui/lv_watch/./poc_modem/../ui_translate/ui_translate.h \
   apps/common/ui/lv_watch/./poc_modem/../comm_func/common_stopwatch.h \
   apps/common/ui/lv_watch/./poc_modem/../comm_func/common_countdown.h \
@@ -197,4 +199,28 @@ objs/apps/common/ui/lv_watch/lv_watch.c.o: \
   apps/common/ui/lv_watch/../../../../include_lib/system/timer.h \
   include_lib/system/generic/list.h \
   apps/common/ui/lv_watch/../../../../include_lib/system/sys_time.h \
-  apps/common/ui/lv_watch/../../../../include_lib/system/device/ioctl_cmds.h
+  apps/common/ui/lv_watch/../../../../include_lib/system/device/ioctl_cmds.h \
+  apps/common/ui/lv_watch/../../../watch/include/ui/lcd_spi/lcd_drive.h \
+  include_lib/driver/cpu/br28\asm/spi.h \
+  include_lib/system\generic/ioctl.h include_lib/system\os/os_api.h \
+  include_lib/system\os/os_cpu.h include_lib/system/generic\jiffies.h \
+  include_lib/system\os/os_error.h include_lib/system\os/os_type.h \
+  include_lib/system\os/ucos_ii.h include_lib/system\os/os_cfg.h \
+  include_lib/system/ui_new/ui/cpu/br28\asm/imd.h \
+  apps/watch/include\app_config.h apps/watch/board/br28\board_config.h \
+  include_lib\media/audio_def.h \
+  apps/watch/board/br28/board_701n_demo/board_701n_demo_cfg.h \
+  apps/watch/board/br28/board_701n_demo/board_701n_demo_global_build_cfg.h \
+  apps/watch/board/br28/board_7012a_demo/board_7012a_demo_cfg.h \
+  apps/watch/board/br28/board_7012a_demo/board_7012a_demo_global_build_cfg.h \
+  apps/watch/board/br28/board_7012a7_demo/board_7012a7_demo_cfg.h \
+  apps/watch/board/br28/board_7012a7_demo/board_7012a7_demo_global_build_cfg.h \
+  apps/watch/board/br28/board_701n_lvgl_demo/board_701n_lvgl_demo_cfg.h \
+  apps/watch/board/br28/board_701n_lvgl_demo/board_701n_lvgl_demo_global_build_cfg.h \
+  apps/common/device/usb\usb_std_class_def.h \
+  apps/common/device/usb\usb_common_def.h \
+  apps/watch/board/br28/board_ad2802e_demo/board_ad2802e_demo_cfg.h \
+  apps/watch/board/br28/board_ad2802e_demo/board_ad2802e_demo_global_build_cfg.h \
+  include_lib/btctrler\btcontroller_mode.h \
+  apps/watch/include/user_cfg_id.h apps/watch/include/ui/res_config.h \
+  apps/watch/include/macro_default.h

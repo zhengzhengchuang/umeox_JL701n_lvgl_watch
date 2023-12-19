@@ -1301,9 +1301,9 @@ void board_init()
 #endif
 
 #if TCFG_RTC_ENABLE
-    alarm_init();
+    //alarm_init(); //不用RTC闹钟，使用用户闹钟
+    remind_task_init();
 #endif
-    //remind_task_init();
 
 #if TCFG_SENSOR_DEBUG_ENABLE
     data_export_init();

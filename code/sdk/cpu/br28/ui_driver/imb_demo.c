@@ -12,6 +12,8 @@
 #include "asm/psram_hw.h"
 #include "asm/psram_api.h"
 #include "imb_demo.h"
+#include "../../../apps/common/ui/lv_watch/poc_modem/poc_modem_vm.h"
+#include "../../../apps/common/ui/lv_watch/poc_modem/poc_modem_cache.h"
 
 OS_MUTEX jpg_cache_MUTEX;
 
@@ -4977,8 +4979,11 @@ void lcd_disp_init(void *arg, void **buf1, void **buf2, int *lenp)
     if(__this->lcd->clear_screen) 
         __this->lcd->clear_screen(0x000000);
 
+    u8 lcd_backlight = \
+        get_vm_para_cache_with_label(vm_label_backlight);
+
     if(__this->lcd->backlight_ctrl)
-        __this->lcd->backlight_ctrl(DEFAULT_BACKLIGHT_VAL);
+        __this->lcd->backlight_ctrl(lcd_backlight);
 
     //while (1);//test
 
@@ -8846,6 +8851,7 @@ void lv_open_res(void *fd, int phyaddr, int offset, struct file_index_t res, lv_
 
     img_dst->data = cpuaddr + offset + res.addr + sizeof(lv_img_header_t);
     img_dst->data_size = res.len - sizeof(lv_img_header_t);
+#if 0
     printf("zero %d, cf %d, h %d, re %d, w %d, addr %x, size %d",
         img_dst->header.always_zero,
         img_dst->header.cf,
@@ -8855,6 +8861,7 @@ void lv_open_res(void *fd, int phyaddr, int offset, struct file_index_t res, lv_
         img_dst->data,
         img_dst->data_size
     );
+#endif
 
     if(img_dst->header.reserved == 0x1 && 1)
     {    //把资源copy到RAM

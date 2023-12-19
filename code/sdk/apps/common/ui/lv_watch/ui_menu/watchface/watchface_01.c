@@ -184,18 +184,23 @@ static void menu_display_cb(lv_obj_t *obj)
     lv_obj_center(steps_target_arc);
 #endif
 
-
     return;
 }
 
-const ui_menu_load_info_t menu_load_watchface_01 = 
+static void menu_key_cb(lv_obj_t *obj, int key_value, int key_event)
+{
+    return;
+}
+
+register_ui_menu_load_info(menu_load_watchface_01) = 
 {
     .menu_arg = NULL,
     .lock_flag = false,
     .return_flag = true,
-    .menu_id = Act_Id_Watchface,
-    .user_display_time = 0,
+    .menu_id = ui_act_id_watchface,
+    .user_offscreen_time = 0,
     .user_refresh_time_inv = 0,
+    .key_func_cb = menu_key_cb,
     .create_func_cb = menu_create_cb,
     .destory_func_cb = menu_destory_cb,
     .refresh_func_cb = menu_refresh_cb,

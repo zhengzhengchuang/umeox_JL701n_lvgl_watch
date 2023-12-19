@@ -41,7 +41,7 @@
 #define LOG_CLI_ENABLE
 #include "debug.h"
 
-
+#if 0
 static const struct gsensor_platform_data *platform_data;
 G_SENSOR_INTERFACE *gSensor_hdl = NULL;
 G_SENSOR_INFO  __gSensor_info = {.iic_delay = 10};
@@ -58,7 +58,6 @@ extern int gsensorlen;
 #define BUF_SIZE gsensorlen*3
 #endif
 
-#if 0
 void gSensor_event_to_user(u8 event)
 {
     struct sys_event e;

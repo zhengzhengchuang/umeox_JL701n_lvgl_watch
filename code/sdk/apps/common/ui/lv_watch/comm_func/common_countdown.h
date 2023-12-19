@@ -42,6 +42,7 @@ typedef struct
 void common_user_countdown_reset(void);
 void common_user_countdown_pause(void);
 void common_user_countdown_resume(void);
+void common_user_countdown_timeout_handle(void);
 void common_user_countdown_create(uint32_t cnt);
 #ifdef __cplusplus
 } /* extern "C" */

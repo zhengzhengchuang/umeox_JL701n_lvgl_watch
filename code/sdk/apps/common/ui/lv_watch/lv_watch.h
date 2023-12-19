@@ -8,6 +8,7 @@ extern "C" {
 #include "./include/ui_conf.h"
 #include "./include/ui_menu.h"
 #include "./include/ui_act_id.h"
+#include "./comm_key/common_key.h"
 #include "./poc_modem/poc_modem_ui.h"
 #include "./ui_tileview/ui_tileview.h"
 #include "./comm_refr/common_refresh.h"
@@ -23,7 +24,9 @@ extern "C" {
 #include "../../../../include_lib/system/device/ioctl_cmds.h"
 
 void ui_menu_jump(ui_act_id_t act_id);
+void ui_ctl_lcd_enter_sleep(bool sleep);
 bool ui_act_id_validity(ui_act_id_t act_id);
+void ui_set_sys_time(struct sys_time *utc_time);
 void ui_get_sys_time(struct sys_time *utc_time);
 #ifdef __cplusplus
 }

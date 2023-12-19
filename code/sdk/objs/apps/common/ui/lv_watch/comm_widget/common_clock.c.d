@@ -177,11 +177,13 @@ objs/apps/common/ui/lv_watch/comm_widget/common_clock.c.o: \
   apps/common/ui/lvgl/src/extra/widgets/led/lv_led.h \
   apps/common/ui/lvgl/src/extra/widgets/imgbtn/lv_imgbtn.h \
   apps/common/ui/lvgl/src/extra/widgets/span/lv_span.h \
+  apps/common/ui/lv_watch/comm_widget/.././comm_key/common_key.h \
   apps/common/ui/lv_watch/comm_widget/.././poc_modem/poc_modem_ui.h \
+  apps/common/ui/lv_watch/comm_widget/.././poc_modem/poc_modem_vm.h \
+  apps/common/ui/lv_watch/comm_widget/.././poc_modem/../comm_remind/alarm_manage.h \
   apps/common/ui/lv_watch/comm_widget/.././poc_modem/poc_modem_cache.h \
   apps/common/ui/lv_watch/comm_widget/.././poc_modem/../ui_cover/ui_cover.h \
   apps/common/ui/lv_watch/comm_widget/.././poc_modem/../ui_tileview/ui_tileview.h \
-  apps/common/ui/lv_watch/comm_widget/.././poc_modem/../comm_remind/alarm_manage.h \
   apps/common/ui/lv_watch/comm_widget/.././poc_modem/../ui_translate/ui_translate.h \
   apps/common/ui/lv_watch/comm_widget/.././poc_modem/../comm_func/common_stopwatch.h \
   apps/common/ui/lv_watch/comm_widget/.././poc_modem/../comm_func/common_countdown.h \

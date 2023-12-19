@@ -40,6 +40,7 @@
 #include "smartbox_update.h"
 #include "le_smartbox_multi_common.h"
 #include "btstack/btstack_event.h"
+#include "../../../../common/ui/lv_watch/comm_parse/common_rev.h"
 #if TCFG_PAY_ALIOS_ENABLE
 #if (TCFG_PAY_ALIOS_WAY_SEL == TCFG_PAY_ALIOS_WAY_ALIYUN)
 #else
@@ -747,7 +748,8 @@ static uint16_t att_read_callback(hci_con_handle_t connection_handle, uint16_t a
     case ATT_CHARACTERISTIC_4a02_01_CLIENT_CONFIGURATION_HANDLE:
 #endif
     case ATT_CHARACTERISTIC_2a05_01_CLIENT_CONFIGURATION_HANDLE:
-    case ATT_CHARACTERISTIC_ae02_01_CLIENT_CONFIGURATION_HANDLE:
+    //case ATT_CHARACTERISTIC_ae02_01_CLIENT_CONFIGURATION_HANDLE:
+    case ATT_CHARACTERISTIC_A6ED0102_D344_460A_8075_B9E8EC90D71B_01_CLIENT_CONFIGURATION_HANDLE:
         if (buffer) {
             buffer[0] = att_get_ccc_config(handle);
             buffer[1] = 0;
@@ -808,7 +810,8 @@ static int att_write_callback(hci_con_handle_t connection_handle, uint16_t att_h
         break;
 #endif
 
-    case ATT_CHARACTERISTIC_ae02_01_CLIENT_CONFIGURATION_HANDLE:
+    //case ATT_CHARACTERISTIC_ae02_01_CLIENT_CONFIGURATION_HANDLE:
+    case ATT_CHARACTERISTIC_A6ED0102_D344_460A_8075_B9E8EC90D71B_01_CLIENT_CONFIGURATION_HANDLE:
 #if (0 == BT_CONNECTION_VERIFY)
         JL_rcsp_auth_reset();
 #endif
@@ -833,14 +836,20 @@ static int att_write_callback(hci_con_handle_t connection_handle, uint16_t att_h
         att_set_ccc_config(handle, buffer[0]);
         break;
 
-    case ATT_CHARACTERISTIC_ae01_01_VALUE_HANDLE:
+    //case ATT_CHARACTERISTIC_ae01_01_VALUE_HANDLE:
+    case ATT_CHARACTERISTIC_A6ED0103_D344_460A_8075_B9E8EC90D71B_01_VALUE_HANDLE:
         /* if (!JL_rcsp_get_auth_flag()) { */
         /*     JL_rcsp_auth_recieve(buffer, buffer_size); */
         /*     break; */
         /* } */
-        if (app_recieve_callback) {
-            app_recieve_callback(0, buffer, buffer_size);
-        }
+        // printf("*****%s\n", __func__);
+        // printf("*****%p\n", app_recieve_callback);
+
+        // if(app_recieve_callback)
+        //     app_recieve_callback(NULL, buffer, buffer_size);
+        umeox_common_le_rev_cb(NULL, buffer, buffer_size);
+
+
         //		JL_rcsp_auth_recieve(data, len);
         break;
 
@@ -1104,6 +1113,7 @@ static int set_adv_enable(void *priv, u32 en)
     }
 
     log_info("con_handle %d\n", con_handle);
+    
     if (con_handle) {
         return APP_BLE_OPERATION_ERROR;
     }
@@ -1173,8 +1183,10 @@ int smartbox_set_adv_enable(void *priv, u32 en)
 
 static int ble_disconnect(void *priv)
 {
-    if (con_handle) {
-        if (BLE_ST_SEND_DISCONN != get_ble_work_state()) {
+    if(con_handle) 
+    {
+        if (BLE_ST_SEND_DISCONN != get_ble_work_state()) 
+        {
             log_info(">>>ble send disconnect\n");
             set_ble_work_state(BLE_ST_SEND_DISCONN);
             ble_user_cmd_prepare(BLE_CMD_DISCONNECT, 1, con_handle);
@@ -1201,7 +1213,8 @@ static int app_send_user_data_do(void *priv, u8 *data, u16 len)
 #if TCFG_BLE_BRIDGE_EDR_ENALBE
     if (check_rcsp_auth_flag) {
         /*触发检测是否认证通过,通过后回连edr*/
-        if (JL_rcsp_get_auth_flag()) {
+        if (JL_rcsp_get_auth_flag()) 
+        {
             check_rcsp_auth_flag = 0;
             log_info("auth_flag is ok\n");
             if (is_bredr_close() == 1) {
@@ -1227,7 +1240,9 @@ static int app_send_user_data_do(void *priv, u8 *data, u16 len)
     }
 #endif
 
-    return app_send_user_data(ATT_CHARACTERISTIC_ae02_01_VALUE_HANDLE, data, len, ATT_OP_AUTO_READ_CCC);
+    //return app_send_user_data(ATT_CHARACTERISTIC_ae02_01_VALUE_HANDLE, data, len, ATT_OP_AUTO_READ_CCC);
+    return app_send_user_data(ATT_CHARACTERISTIC_A6ED0102_D344_460A_8075_B9E8EC90D71B_01_VALUE_HANDLE, \
+        data, len, ATT_OP_AUTO_READ_CCC);
 }
 
 static int app_send_user_data_check(u16 len)

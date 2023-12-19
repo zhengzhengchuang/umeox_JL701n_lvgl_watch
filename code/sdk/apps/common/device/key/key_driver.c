@@ -42,7 +42,7 @@
 #endif
 
 static volatile u8 is_key_active = 0;
-//static volatile u8 key_poweron_flag = 0;
+//static volatile u8 key_poweron_flag = 1;
 
 extern u32 timer_get_ms(void);
 
@@ -59,9 +59,11 @@ int __attribute__((weak)) key_event_remap(struct sys_event *e)
 //=======================================================//
 // 设置按键开机标志位
 //=======================================================//
-void set_key_poweron_flag(u8 flag)
+void set_key_poweron_flag(void)
 {
-    key_poweron_flag = flag;
+    key_poweron_flag = 1;
+
+    printf("*******key_poweron_flag");
 }
 
 //=======================================================//
@@ -100,6 +102,8 @@ static void key_driver_scan(void *_scan_para)
     u8 key_event = 0;
     u8 cur_key_value = NO_KEY;
     u8 key_value = 0;
+
+    
     //static u8 poweron_cnt = 0;
 
     //为了滤掉adkey与mic连在一起时电容充放电导致的开机按键误判,一般用于type-c耳机
@@ -109,7 +113,7 @@ static void key_driver_scan(void *_scan_para)
     /* } */
 
     cur_key_value = scan_para->get_value();
-  
+
     /* if (cur_key_value != NO_KEY) { */
     /*     printf(">>>cur_key_value: %d\n", cur_key_value); */
     /* } */
@@ -119,19 +123,6 @@ static void key_driver_scan(void *_scan_para)
     } else if (is_key_active) {
         is_key_active--;
     }
-
-#if 0
-    struct key_driver_para iokey_scan_para = {
-    .scan_time 	  	  = 10,				//按键扫描频率, 单位: ms
-    .last_key 		  = NO_KEY,  		//上一次get_value按键值, 初始化为NO_KEY;
-    .filter_time  	  = 4,				//按键消抖延时;
-    .long_time 		  = 75,  			//按键判定长按数量
-    .hold_time 		  = (75 + 15),  	//按键判定HOLD数量
-    .click_delay_time = 20,				//按键被抬起后等待连击延时数量
-    .key_type		  = KEY_DRIVER_TYPE_IO,
-    .get_value 		  = io_get_key_value,
-};
-#endif
 
 //===== 按键消抖处理
     if (cur_key_value != scan_para->filter_value && scan_para->filter_time) 
@@ -277,6 +268,28 @@ _notify:
     }
 #endif
 
+#if 0
+    /*过滤掉第一次按键开机引发的事件*/
+    if(TCFG_POWER_ON_NEED_KEY)
+    {
+        if(key_poweron_flag)
+        {
+            key_poweron_flag = 0;
+            return;
+        }
+    }else
+    {
+        if(key_poweron_flag && key_event == KEY_EVENT_LONG)
+        {
+            key_poweron_flag = 0;
+            return;
+        }else
+        {
+            key_poweron_flag = 0;
+        }
+    }
+#endif
+
     // struct sys_event e;
     // key_value &= ~BIT(7);  //BIT(7) 用作按键特殊处理的标志
     // e.type = SYS_KEY_EVENT;
@@ -285,11 +298,12 @@ _notify:
     // e.u.key.event = key_event;
     // e.u.key.value = key_value;
     // e.u.key.tmr = timer_get_ms();
-    //e.arg  = (void *)DEVICE_EVENT_FROM_KEY;
+    // e.arg  = (void *)DEVICE_EVENT_FROM_KEY;
 
     // scan_para->click_cnt = 0;  //单击次数清0
     // scan_para->notify_value = NO_KEY;
 
+    extern void ui_key_msg_post(int key_value, int key_event);
     ui_key_msg_post(key_value, key_event);
 #if 0
     /* printf("key_value: 0x%x, event: %d, key_poweron_flag: %d\n", key_value, key_event, key_poweron_flag); */

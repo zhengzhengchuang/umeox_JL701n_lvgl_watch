@@ -12,6 +12,11 @@ void tileview_info_clear(void)
     return;
 }
 
+lv_obj_t *tileview_obj_container(void)
+{
+    return (p_ui_info_cache->ui_tileview_info.tileview_obj);
+}
+
 lv_obj_t *tileview_get_center_menu(void)
 {
     return (p_ui_info_cache->ui_tileview_info.tileview_center_menu);
@@ -130,7 +135,7 @@ static void tileview_event_cb(lv_event_t *e)
     if(tile_act == p_ui_info_cache->ui_tileview_info.tileview_center_menu)
         return;
 
-    ui_act_id_t new_act_id = Act_Id_Null;
+    ui_act_id_t new_act_id = ui_act_id_null;
     lv_obj_t *menu_load_container = NULL;
     uint8_t tileview_valid_cnt = p_ui_info_cache->ui_tileview_info.tileview_valid_cnt;
     for(uint8_t i = 0; i < tileview_valid_cnt; i++)
@@ -195,7 +200,7 @@ static void tileview_menu_create(lv_obj_t *obj)
     return;
 }
 
-/*********如果那个方向没有的话，传入Act_Id_Null即可************/
+/*********如果那个方向没有的话，传入ui_act_id_null即可************/
 void tileview_register_all_menu(lv_obj_t *obj, ui_act_id_t up, ui_act_id_t down, \
     ui_act_id_t left, ui_act_id_t right, ui_act_id_t center)
 {

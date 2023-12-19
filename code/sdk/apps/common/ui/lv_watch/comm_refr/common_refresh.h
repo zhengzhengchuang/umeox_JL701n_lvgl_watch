@@ -9,6 +9,7 @@ extern "C" {
 
 void common_refresh_msg_handle(void);
 void common_refresh_timer_create(void);
+void common_refresh_timer_re_run(void);
 void common_refresh_timer_destroy(void);
 #ifdef __cplusplus
 } /* extern "C" */

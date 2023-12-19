@@ -30,28 +30,28 @@ typedef struct {
     short z;
 } axis_info_t;
 
-typedef struct {
-    u8   logo[20];
-    u8(*gravity_sensor_init)(void);
-    char (*gravity_sensor_check)(void);
-    int (*gravity_sensor_ctl)(u8 cmd, void *arg);
-} G_SENSOR_INTERFACE;
+// typedef struct {
+//     u8   logo[20];
+//     u8(*gravity_sensor_init)(void);
+//     char (*gravity_sensor_check)(void);
+//     int (*gravity_sensor_ctl)(u8 cmd, void *arg);
+// } G_SENSOR_INTERFACE;
 
 
-struct gsensor_platform_data {
-    u8    iic;
-    char  gSensor_name[20];
-    u32   gSensor_int_io;
-};
+// struct gsensor_platform_data {
+//     u8    iic;
+//     char  gSensor_name[20];
+//     u32   gSensor_int_io;
+// };
 
-typedef struct {
-    u8   iic_hdl;
-    u8   iic_delay;                 //这个延时并非影响iic的时钟频率，而是2Byte数据之间的延时
-    u8   ctl_flag;
-    int  init_flag;
-    int  check_cnt;
-    int  check_timer_hdl;
-} G_SENSOR_INFO;
+// typedef struct {
+//     u8   iic_hdl;
+//     u8   iic_delay;                 //这个延时并非影响iic的时钟频率，而是2Byte数据之间的延时
+//     u8   ctl_flag;
+//     int  init_flag;
+//     int  check_cnt;
+//     int  check_timer_hdl;
+// } G_SENSOR_INFO;
 
 // int gravity_sensor_init(void *_data);
 // int gsensor_enable(void);
