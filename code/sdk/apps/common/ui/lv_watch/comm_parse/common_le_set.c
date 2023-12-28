@@ -1,7 +1,10 @@
 #include "../lv_watch.h"
 #include "common_le_set.h"
 
-void common_le_set_watch_time(uint8_t *para_buf, \
+/*********************************************************************************
+                                  同步远程app时间                                 
+*********************************************************************************/
+void common_le_set_utc_time(uint8_t *para_buf, \
     uint16_t para_len)
 {
     uint8_t idx = 0;
@@ -22,6 +25,8 @@ void common_le_set_watch_time(uint8_t *para_buf, \
     utc_time.min = para_buf[idx++];
     utc_time.sec = para_buf[idx++];
     ui_set_sys_time(&utc_time);
+
+    common_clock_pointer_angle_update();
 
     return;
 }

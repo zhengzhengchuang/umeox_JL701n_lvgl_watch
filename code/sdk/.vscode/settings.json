@@ -150,7 +150,18 @@
         "common_le_set.h": "c",
         "common_le_get.h": "c",
         "common_rev.h": "c",
-        "common_send.h": "c"
+        "common_send.h": "c",
+        "worship_time.h": "c",
+        "common_time.h": "c",
+        "common_date.h": "c",
+        "common_week.h": "c",
+        "widget_refresh.h": "c",
+        "common_data.h": "c",
+        "common_hr.h": "c",
+        "common_bo.h": "c",
+        "common_symbol.h": "c",
+        "common_symb.h": "c",
+        "common_step.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

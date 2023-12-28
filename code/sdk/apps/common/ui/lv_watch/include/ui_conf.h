@@ -8,6 +8,8 @@ extern "C" {
 #define UI_USE_COVER            0
 #define UI_USE_TILEVIEW         1
 #define UI_USE_TRANSLATE        0
+
+#define UI_USE_SPLIT_SCREEN     0
         
 #ifdef __cplusplus
 }

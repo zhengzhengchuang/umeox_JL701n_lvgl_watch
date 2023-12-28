@@ -43,7 +43,8 @@ void common_refresh_timer_create(void)
         cur_refresh_timer_inv = user_refresh_time_inv;
 
     if(!refresh_timer_id)
-        refresh_timer_id = sys_timer_add(NULL, common_refresh_timer_cb, cur_refresh_timer_inv);
+        refresh_timer_id = sys_timer_add(NULL, \
+            common_refresh_timer_cb, cur_refresh_timer_inv);
 
     return;
 }

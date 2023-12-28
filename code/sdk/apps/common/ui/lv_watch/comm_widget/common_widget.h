@@ -80,7 +80,7 @@ lv_obj_t *common_widget_arc_create(common_widget_arc_para_t *arc_para);
 typedef struct
 {
     uint8_t img_dst_cnt;
-    lv_img_dsc_t img_dst_gather[50];
+    lv_img_dsc_t img_dst_gather[70];
 }user_img_dsc_t;
 
 typedef struct 
@@ -103,8 +103,11 @@ typedef struct
     void *user_data;
 }common_widget_img_para_t;
 extern common_widget_img_para_t widget_img_para;
-lv_obj_t *common_widget_img_create(common_widget_img_para_t *img_para, uint16_t *img_dsc_idx);
-
+lv_obj_t *common_widget_img_create(common_widget_img_para_t *img_para, \
+    uint16_t *img_dsc_idx);
+lv_img_dsc_t *common_widget_img_open_res(uint32_t file_img_dat);
+void common_widget_img_replace_src(lv_obj_t *obj, uint32_t file_img_dat, \
+    uint16_t img_dsc_idx);
 
 
 

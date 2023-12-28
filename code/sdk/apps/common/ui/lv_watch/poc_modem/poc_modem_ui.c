@@ -137,6 +137,8 @@ void ui_menu_jump_handle(ui_act_id_t act_id)
 
     common_offscreen_timer_create();
 
+    widget_refresh_timer_create();
+
     return;
 }
 

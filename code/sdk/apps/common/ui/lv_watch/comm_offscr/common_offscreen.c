@@ -13,9 +13,9 @@ static void common_offscreen_timer_cb(void *priv)
     if(cur_offscreen_time == Always_OnScreen)
         return;
         
-    int menu_offscreen_msg[1] = {0xff};
-    menu_offscreen_msg[0] = ui_msg_menu_offscreen;
-    post_ui_msg(menu_offscreen_msg, 1);
+    // int menu_offscreen_msg[1];
+    // menu_offscreen_msg[0] = ui_msg_menu_offscreen;
+    // post_ui_msg(menu_offscreen_msg, 1);
 
     return;
 }
@@ -53,7 +53,7 @@ void common_offscreen_timer_create(void)
     return;
 }
 
-void common_offscreen_timer_re_run(void)
+void common_offscreen_timer_restart(void)
 {
     if(offscreen_timer_id)
         sys_timer_re_run(offscreen_timer_id);

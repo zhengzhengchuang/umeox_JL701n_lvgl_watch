@@ -7,7 +7,9 @@ extern "C" {
 
 #include "../../lv_watch.h"
 
+#if UI_USE_SPLIT_SCREEN
 void menu_split_screen_create(lv_obj_t *obj);
+#endif
 #ifdef __cplusplus
 } /* extern "C" */
 #endif

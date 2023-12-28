@@ -1,7 +1,6 @@
 #include "split_screen.h"
 
-
-
+#if UI_USE_SPLIT_SCREEN
 /**************分屏锁定**************/
 static bool split_screen_lock = false;
 
@@ -259,3 +258,4 @@ void menu_split_screen_create(lv_obj_t *obj)
 
     return;
 }
+#endif

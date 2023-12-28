@@ -10,18 +10,46 @@ extern "C" {
 #include "../comm_remind/alarm_manage.h"
 
 
-//*********************************************************************************//
-//                             vm存储信息，关机会备份到vm                              //
-//*********************************************************************************//
+/*********************************************************************************
+                             vm存储信息，关机会备份到vm                              
+*********************************************************************************/
 enum
 {
+    vm_label_none = 0x00,
+
+    /*******背光亮度*******/
     vm_label_backlight,
+
+    /*******系统时区*******/
     vm_label_time_zone,
+
+    /*******菜单风格*******/
     vm_label_menu_style,
+
+    /*******小时制*******/
     vm_label_time_format,
+
+    /*******表盘选择*******/
     vm_label_watchface_id,
+
+    /*******熄屏时间*******/
     vm_label_offscreen_time,
-      
+
+    /*******心率数据*******/
+    vm_label_hr,
+    vm_label_min_hr,
+    vm_label_max_hr,
+
+    /*******血氧数据*******/
+    vm_label_bo,
+    vm_label_min_bo,
+    vm_label_max_bo,
+
+    /*******日常数据*******/
+    vm_label_daily_step,
+    vm_label_daily_calorie,
+    vm_label_daily_distance,
+
     vm_label_store_max,
 };
 

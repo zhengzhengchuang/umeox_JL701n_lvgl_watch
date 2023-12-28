@@ -200,7 +200,7 @@ static void released_timeout_cb(void *priv)
         sys_timeout_del(released_timer_id);
     released_timer_id = 0;
 
-    printf("%s\n", __func__);
+    //printf("%s\n", __func__);
 
     return;
 }

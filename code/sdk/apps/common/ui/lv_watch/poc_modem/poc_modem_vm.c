@@ -16,9 +16,9 @@ const ui_menu_load_info_t *menu_style_load_info[] =
     &menu_load_common_list, &menu_load_apple_network,
 };
 
-//*********************************************************************************//
-//                             系统带标签参数的缺省值                                  //
-//*********************************************************************************//
+/*********************************************************************************
+                             系统带标签参数的缺省值                                  
+*********************************************************************************/
 static const vm_store_para_with_label_t default_label_para[Vm_Store_Para_Num] = \
 {
     /*********默认屏幕背光亮度 80%*********/
@@ -36,13 +36,28 @@ static const vm_store_para_with_label_t default_label_para[Vm_Store_Para_Num] = 
     /*********默认屏幕熄屏时间 10s*********/
     {.label = vm_label_offscreen_time, .store_para_val = 10*1000},
 
-    /*********默认开机表盘*********/
+    /*********默认表盘*********/
     {.label = vm_label_watchface_id, .store_para_val = ui_watchface_id_00},
+
+    /*********默认心率*********/
+    {.label = vm_label_hr, .store_para_val = 0},
+    {.label = vm_label_min_hr, .store_para_val = 0},
+    {.label = vm_label_max_hr, .store_para_val = 0},
+
+    /*********默认血氧*********/
+    {.label = vm_label_bo, .store_para_val = 0},
+    {.label = vm_label_min_bo, .store_para_val = 0},
+    {.label = vm_label_max_bo, .store_para_val = 0},
+
+    /*********默认日常数据*********/
+    {.label = vm_label_daily_step, .store_para_val = 0},
+    {.label = vm_label_daily_calorie, .store_para_val = 0},
+    {.label = vm_label_daily_distance, .store_para_val = 0},
 };
 
-//*********************************************************************************//
-//                             系统用户闹钟的缺省值                                   //
-//*********************************************************************************//
+/*********************************************************************************
+                             系统用户闹钟的缺省值                                  
+*********************************************************************************/
 static const alarm_manage_para_t default_alarm_para = 
 {
     .alarm_num = 0,

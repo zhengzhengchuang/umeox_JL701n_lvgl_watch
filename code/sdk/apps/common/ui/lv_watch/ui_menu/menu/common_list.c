@@ -1,7 +1,7 @@
 #include "common_list.h"
 
 /****************图标源****************/
-static const uint32_t common_list_icon_src[Common_List_Icon_Num] = 
+static const uint32_t common_list_icon_src[Common_List_Elem_Num] = 
 {
     menu_100_100_icon_00_index, menu_100_100_icon_01_index, menu_100_100_icon_02_index, menu_100_100_icon_03_index, \
     menu_100_100_icon_04_index, menu_100_100_icon_05_index, menu_100_100_icon_06_index, menu_100_100_icon_07_index, \
@@ -16,7 +16,7 @@ static const uint32_t common_list_icon_src[Common_List_Icon_Num] =
 };
 
 /****************文本源****************/
-static const char common_list_text_src[Common_List_Icon_Num][30] = 
+static const char common_list_text_src[Common_List_Elem_Num][30] = 
 {
     "Album", "Unknown", "Menu style", "Bedside lamp", "Call", "Notice", "Sports", "Unknown", \
     "About", "Activity records", "Countdown", "Calculator", "Do not disturb", "Stopwatch", "Alarm clock", "Unknown", \
@@ -26,7 +26,7 @@ static const char common_list_text_src[Common_List_Icon_Num][30] =
 };
 
 /****************元素容器点击索引****************/
-static const uint16_t common_list_elem_container_idx[Common_List_Icon_Num] =
+static const uint16_t common_list_elem_container_idx[Common_List_Elem_Num] =
 {
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, \
     10, 11, 12, 13, 14, 15, 16, 17, 18, 19, \
@@ -57,8 +57,9 @@ static const int16_t common_list_elem_container_sy = 37;
 /****************通用列表元素容器间隔****************/
 static const int16_t common_list_elem_container_inv = 137;
 
-/****************通用列表图标总数****************/
-static const uint16_t common_list_icon_num = Common_List_Icon_Num;
+/****************通用列表元素总数****************/
+static const uint16_t common_list_elem_num = \
+    Common_List_Elem_Num;
 
 /****************通用列表参数内容****************/
 static common_list_ctx_t common_list_ctx = {0};
@@ -69,9 +70,9 @@ static void common_list_container_event_cb(lv_event_t *e);
 
 
 
-//*********************************************************************************//
-//                                  通过对象删除正在进行的动画                        //
-//*********************************************************************************//
+/*********************************************************************************
+                                  通过对象删除正在进行的动画                       
+*********************************************************************************/
 static void del_anim_with_var(void *var)
 {
     if(!var) return;
@@ -82,9 +83,9 @@ static void del_anim_with_var(void *var)
     return;
 }
 
-//*********************************************************************************//
-//                                  通过对象获取正在进行的动画                        //
-//*********************************************************************************//
+/*********************************************************************************
+                                  通过对象获取正在进行的动画                       
+*********************************************************************************/
 static bool anim_progress_with_var(void *var)
 {
     if(lv_anim_get(var, NULL))
@@ -93,9 +94,9 @@ static bool anim_progress_with_var(void *var)
     return false;
 }
 
-//*********************************************************************************//
-//                                  通用列表纵向滚动判断                             //
-//*********************************************************************************//
+/*********************************************************************************
+                                  通用列表纵向滚动判断                             
+*********************************************************************************/
 static void common_list_ver_scroll_judge(void)
 {
     lv_indev_t *indev_act = lv_indev_get_act();
@@ -128,9 +129,9 @@ static void common_list_ver_scroll_judge(void)
     return;
 }
 
-//*********************************************************************************//
-//                                  通用列表计算纵向抛出距离                          //
-//*********************************************************************************//
+/*********************************************************************************
+                                  通用列表计算纵向抛出距离                         
+*********************************************************************************/
 static int16_t common_list_calc_throw_sum(int16_t throw_vert)
 {
     int16_t throw_vert_sum = 0;
@@ -145,9 +146,9 @@ static int16_t common_list_calc_throw_sum(int16_t throw_vert)
     return throw_vert_sum;
 }
 
-//*********************************************************************************//
-//                                  通用列表计算纵向抛出动画                          //
-//*********************************************************************************//
+/*********************************************************************************
+                                  通用列表计算纵向抛出动画                         
+*********************************************************************************/
 static void common_list_throw_anim_cb(void *var, int32_t val)
 {
     common_list_scroll_offset = val;
@@ -157,9 +158,9 @@ static void common_list_throw_anim_cb(void *var, int32_t val)
     return;
 }
 
-//*********************************************************************************//
-//                                  创建通用列表容器                                 //
-//*********************************************************************************//
+/*********************************************************************************
+                                  创建通用列表容器                                 
+*********************************************************************************/
 static void common_list_container_create(lv_obj_t *obj)
 {
     lv_obj_t **common_list_container = \
@@ -184,9 +185,9 @@ static void common_list_container_create(lv_obj_t *obj)
     return;
 }
 
-//*********************************************************************************//
-//                                  通用列表元素容器点击回调                          //
-//*********************************************************************************//
+/*********************************************************************************
+                                  通用列表元素容器点击回调                          
+*********************************************************************************/
 static void common_list_elem_container_click_cb(lv_event_t *e)
 {
     if(!e) return;
@@ -204,14 +205,12 @@ static void common_list_elem_container_click_cb(lv_event_t *e)
 
     printf("******%s:%d\n", __func__, idx);
 
-    //ui_menu_jump(ui_act_id_watchface);
-
     return;
 }
 
-//*********************************************************************************//
-//                                  通用列表元素容器创建                             //
-//*********************************************************************************//
+/*********************************************************************************
+                                  通用列表元素容器创建                             
+*********************************************************************************/
 static void common_list_elem_container_create(void)
 {
     lv_obj_t **common_list_elem_container = \
@@ -230,7 +229,7 @@ static void common_list_elem_container_create(void)
     widget_obj_para.obj_radius = 0;
     widget_obj_para.obj_is_scrollable = false;
 
-    for(uint16_t idx = 0; idx < common_list_icon_num; idx++)
+    for(uint16_t idx = 0; idx < common_list_elem_num; idx++)
     {
         widget_obj_para.obj_x = 0;
         widget_obj_para.obj_y = common_list_elem_container_sy + \
@@ -245,29 +244,29 @@ static void common_list_elem_container_create(void)
     return;
 }
 
-//*********************************************************************************//
-//                                  通用列表元素容器滚动                             //
-//*********************************************************************************//
+/*********************************************************************************
+                                  通用列表元素容器滚动                             
+*********************************************************************************/
 static void common_list_elem_container_scroll(void)
 {
-    int16_t scroll_offset_val = 0;
+    int16_t obj_y = 0;
     lv_obj_t **common_list_elem_container = \
         common_list_ctx.common_list_elem_container;
  
-    for(uint16_t idx = 0; idx < common_list_icon_num; idx++)
+    for(uint16_t idx = 0; idx < common_list_elem_num; idx++)
     {
-        scroll_offset_val = common_list_elem_container_sy + \
-            common_list_elem_container_inv*idx + common_list_scroll_offset + \
-            common_list_scroll_dela;
-        lv_obj_set_y(common_list_elem_container[idx], scroll_offset_val);
+        obj_y = common_list_elem_container_sy + \
+            common_list_elem_container_inv*idx + \
+            common_list_scroll_offset + common_list_scroll_dela;
+        lv_obj_set_y(common_list_elem_container[idx], obj_y);
     }
 
     return;
 }
 
-//*********************************************************************************//
-//                                  通用列表元素图标创建                             //
-//*********************************************************************************//
+/*********************************************************************************
+                                  通用列表元素图标创建                             
+*********************************************************************************/
 static void common_list_elem_icon_create(void)
 {
     lv_obj_t **common_list_icon = \
@@ -281,7 +280,7 @@ static void common_list_elem_icon_create(void)
     widget_img_para.event_cb = NULL;
     widget_img_para.user_data = NULL;
 
-    for(uint16_t idx = 0; idx < common_list_icon_num; idx++)
+    for(uint16_t idx = 0; idx < common_list_elem_num; idx++)
     {
         widget_img_para.img_parent = common_list_elem_container[idx];
         widget_img_para.file_img_dat = common_list_icon_src[idx];
@@ -292,9 +291,9 @@ static void common_list_elem_icon_create(void)
     return;
 }
 
-//*********************************************************************************//
-//                                  通用列表元素标签创建                             //
-//*********************************************************************************//
+/*********************************************************************************
+                                  通用列表元素标签创建                             
+*********************************************************************************/
 static void common_list_elem_label_create(void)
 {
     lv_obj_t **common_list_icon = \
@@ -313,7 +312,7 @@ static void common_list_elem_label_create(void)
     widget_label_para.label_text_color = lv_color_hex(0xffffff);
     widget_label_para.user_text_font = NULL;
 
-    for(uint16_t idx = 0; idx < common_list_icon_num; idx++)
+    for(uint16_t idx = 0; idx < common_list_elem_num; idx++)
     {
         widget_label_para.label_parent = common_list_elem_container[idx];
         widget_label_para.label_text = common_list_text_src[idx];
@@ -325,9 +324,9 @@ static void common_list_elem_label_create(void)
     return;
 }
 
-//*********************************************************************************//
-//                                  通用列表容器事件回调                             //
-//*********************************************************************************//
+/*********************************************************************************
+                                  通用列表容器事件回调                             
+*********************************************************************************/
 static void common_list_container_pressed_cb(lv_event_t *e)
 {
     common_list_scroll_dela = 0;
@@ -369,7 +368,7 @@ static void common_list_container_pressing_cb(lv_event_t *e)
 
         int16_t scroll_top_val = 0;
         int16_t scroll_bottom_val = \
-            (-1)*(common_list_icon_num - common_list_visual_num) * \
+            (-1)*(common_list_elem_num - common_list_visual_num) * \
             common_list_elem_container_inv;
 
         if(common_list_scroll_offset + common_list_scroll_dela > \
@@ -408,7 +407,7 @@ static void common_list_container_release_cb(lv_event_t *e)
 
     int16_t scroll_top_val = 0;
     int16_t scroll_bottom_val = \
-        (-1)*(common_list_icon_num - common_list_visual_num)* \
+        (-1)*(common_list_elem_num - common_list_visual_num)* \
         common_list_elem_container_inv;
 
     int16_t throw_start = common_list_scroll_offset;
@@ -482,9 +481,9 @@ static void common_list_container_event_cb(lv_event_t *e)
     return;
 } 
 
-//*********************************************************************************//
-//                                  通用列表布局创建                                 //
-//*********************************************************************************//
+/*********************************************************************************
+                                  通用列表布局创建                                 
+*********************************************************************************/
 static void common_list_layout_create(void)
 {
     common_list_elem_container_create();
@@ -522,7 +521,8 @@ static void menu_display_cb(lv_obj_t *obj)
 {
     if(!obj) return;
 
-    memset(&common_list_ctx, 0, sizeof(common_list_ctx_t));
+    memset(&common_list_ctx, 0, \
+        sizeof(common_list_ctx_t));
 
     common_list_container_create(obj);
 
@@ -531,7 +531,8 @@ static void menu_display_cb(lv_obj_t *obj)
     return;
 }
 
-static void menu_key_cb(int key_value, int key_event)
+static void menu_key_cb(lv_obj_t *obj, int key_value, \
+    int key_event)
 {
     return;
 }

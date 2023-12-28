@@ -187,7 +187,8 @@ static void menu_display_cb(lv_obj_t *obj)
     return;
 }
 
-static void menu_key_cb(lv_obj_t *obj, int key_value, int key_event)
+static void menu_key_cb(lv_obj_t *obj, int key_value, \
+    int key_event)
 {
     return;
 }

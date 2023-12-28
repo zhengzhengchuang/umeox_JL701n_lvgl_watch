@@ -53,8 +53,14 @@ void common_key_msg_handle(int key_value, int key_event)
         //common_refresh_timer_re_run();
 
         /*******亮屏按键操作时，需重置熄屏定时器*******/
-        common_offscreen_timer_re_run();
+        common_offscreen_timer_restart();
 
+        int bo_data = \
+            get_vm_para_cache_with_label(vm_label_bo);
+        bo_data += 5;
+            set_vm_para_cache_with_label(vm_label_bo, \
+                bo_data);
+#if 0
         /*******页面不锁定，主按键返回表盘*******/
         bool menu_lock_flag = \
             p_ui_info_cache->menu_load_info.lock_flag;
@@ -74,6 +80,7 @@ void common_key_msg_handle(int key_value, int key_event)
             p_ui_info_cache->menu_load_info.key_func_cb;
         if(key_func_cb)
             key_func_cb(obj, key_value, key_event);
+#endif
     }
 
     return;

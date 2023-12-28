@@ -11,7 +11,7 @@ extern "C" {
 #if UI_USE_TILEVIEW
 
 /********上、下、左、右、中心********/
-#define TILEVIEW_DIR_NUM (5)
+#define Tileview_Dir_Num (5)
 
 typedef struct
 {
@@ -27,10 +27,10 @@ typedef struct
     lv_obj_t *tileview_center_menu;
 
     /*可视化菜单容器*/
-    ui_act_id_t tileview_id_cache[TILEVIEW_DIR_NUM];
-    lv_point_t tileview_dir_points[TILEVIEW_DIR_NUM];
-    lv_obj_t *tileview_side_menu_cache[TILEVIEW_DIR_NUM-1];//tileview四边容器 上、下、左、右
-    ui_menu_load_info_t *tileview_menu_load[TILEVIEW_DIR_NUM]; 
+    ui_act_id_t tileview_id_cache[Tileview_Dir_Num];
+    lv_point_t tileview_dir_points[Tileview_Dir_Num];
+    lv_obj_t *tileview_side_menu_cache[Tileview_Dir_Num-1];//tileview四边容器 上、下、左、右
+    ui_menu_load_info_t *tileview_menu_load[Tileview_Dir_Num]; 
 }ui_tileview_info_t;
 
 void tileview_info_clear(void);

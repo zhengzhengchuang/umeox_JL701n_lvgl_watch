@@ -16,6 +16,7 @@ enum
     ui_msg_menu_refresh,
     ui_msg_menu_offscreen,
     ui_msg_clock_pointer_refresh,
+    ui_msg_comm_widget_refresh,
     ui_msg_key_handle,
 };
 

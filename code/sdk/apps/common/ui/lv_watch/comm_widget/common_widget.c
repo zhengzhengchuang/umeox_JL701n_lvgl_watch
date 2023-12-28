@@ -42,17 +42,27 @@ lv_obj_t *common_widget_arc_create(common_widget_arc_para_t *arc_para)
 *********************************************************************************/
 static user_img_dsc_t user_img_dsc = {0};
 common_widget_img_para_t widget_img_para = {0};
-lv_obj_t *common_widget_img_create(common_widget_img_para_t *img_para, uint16_t *img_dsc_idx)
+lv_obj_t *common_widget_img_create(common_widget_img_para_t *img_para, \
+    uint16_t *img_dsc_idx)
 {
     if(!img_para)
         return NULL;
 
-    open_fd("usr_nor");
-    lv_open_res(get_res_fd(), RES_BASE_ADDR, 0, file_index[img_para->file_img_dat], \
-        &user_img_dsc.img_dst_gather[user_img_dsc.img_dst_cnt]);
+    uint8_t img_dst_cnt = \
+        user_img_dsc.img_dst_cnt;
+    lv_img_dsc_t *img_dst_gather = \
+        user_img_dsc.img_dst_gather;
 
+    if(!(img_dst_gather[img_dst_cnt].data))
+    {
+        open_fd("usr_nor");
+        lv_open_res(get_res_fd(), RES_BASE_ADDR, 0, file_index[img_para->file_img_dat], \
+            &img_dst_gather[img_dst_cnt]);
+        close_fd();
+    }
+    
     lv_obj_t *common_widget_img = lv_img_create(img_para->img_parent);
-    lv_img_set_src(common_widget_img, &user_img_dsc.img_dst_gather[user_img_dsc.img_dst_cnt]);
+    lv_img_set_src(common_widget_img, &img_dst_gather[img_dst_cnt]);
     lv_obj_set_pos(common_widget_img, img_para->img_x, img_para->img_y);
 
     if(img_para->img_click_attr)
@@ -61,34 +71,51 @@ lv_obj_t *common_widget_img_create(common_widget_img_para_t *img_para, uint16_t 
         lv_obj_clear_flag(common_widget_img, LV_OBJ_FLAG_CLICKABLE);
     
     if(img_para->event_cb)
-        lv_obj_add_event_cb(common_widget_img, img_para->event_cb, LV_EVENT_SHORT_CLICKED, img_para->user_data);
-
-    close_fd();
+        lv_obj_add_event_cb(common_widget_img, img_para->event_cb, \
+            LV_EVENT_SHORT_CLICKED, img_para->user_data);
 
     if(img_dsc_idx)
-        *img_dsc_idx = user_img_dsc.img_dst_cnt;
+        *img_dsc_idx = img_dst_cnt;
 
     user_img_dsc.img_dst_cnt++;
 
     return common_widget_img;
 }
 
-#if 0
-void common_widget_img_replace_src(lv_obj_t *obj, uint32_t file_img_dat, uint16_t img_dsc_idx)
+lv_img_dsc_t *common_widget_img_open_res(uint32_t file_img_dat)
 {
-    if(!obj) return;
+    static lv_img_dsc_t widget_img_dst;
 
     open_fd("usr_nor");
     lv_open_res(get_res_fd(), RES_BASE_ADDR, 0, file_index[file_img_dat], \
-        &user_img_dsc.img_dst_gather[img_dsc_idx]);
-
-    lv_img_set_src(obj, &user_img_dsc.img_dst_gather[img_dsc_idx]);
-
+        &widget_img_dst);
     close_fd();
+
+    return (&widget_img_dst);
+}
+
+void common_widget_img_replace_src(lv_obj_t *obj, uint32_t file_img_dat, \
+    uint16_t img_dsc_idx)
+{
+    if(!obj) return;
+
+    uint8_t img_dst_cnt = \
+        user_img_dsc.img_dst_cnt;
+    lv_img_dsc_t *img_dst_gather = \
+        user_img_dsc.img_dst_gather;
+
+    if(img_dsc_idx >= img_dst_cnt)
+        return;
+
+    open_fd("usr_nor");
+    lv_open_res(get_res_fd(), RES_BASE_ADDR, 0, file_index[file_img_dat], \
+        &img_dst_gather[img_dsc_idx]);
+    close_fd();
+
+    lv_img_set_src(obj, &img_dst_gather[img_dsc_idx]);
 
     return;
 }
-#endif
 
 /*********************************************************************************
                                   标签控件                                       
@@ -136,15 +163,20 @@ lv_obj_t *common_widget_obj_create(common_widget_obj_para_t *obj_para)
     lv_obj_t *common_widget_obj = lv_obj_create(obj_para->obj_parent);
     lv_obj_set_size(common_widget_obj, obj_para->obj_width, obj_para->obj_height);
     lv_obj_set_pos(common_widget_obj, obj_para->obj_x, obj_para->obj_y);
-    if(obj_para->obj_bg_opax == LV_OPA_100)
-        lv_obj_set_style_bg_color(common_widget_obj, obj_para->obj_bg_color, LV_PART_MAIN);
-    else if(obj_para->obj_bg_opax == LV_OPA_0)
-        lv_obj_set_style_bg_opa(common_widget_obj, obj_para->obj_bg_opax, LV_PART_MAIN);
-    else
-    {
-        lv_obj_set_style_bg_opa(common_widget_obj, obj_para->obj_bg_opax, LV_PART_MAIN);
-        lv_obj_set_style_bg_color(common_widget_obj, obj_para->obj_bg_color, LV_PART_MAIN);
-    }
+    lv_obj_set_style_bg_opa(common_widget_obj, obj_para->obj_bg_opax, LV_PART_MAIN);
+    lv_obj_set_style_bg_color(common_widget_obj, obj_para->obj_bg_color, LV_PART_MAIN);
+
+#if 0
+    // if(obj_para->obj_bg_opax == LV_OPA_100)
+    //     lv_obj_set_style_bg_color(common_widget_obj, obj_para->obj_bg_color, LV_PART_MAIN);
+    // else if(obj_para->obj_bg_opax == LV_OPA_0)
+    //     lv_obj_set_style_bg_opa(common_widget_obj, obj_para->obj_bg_opax, LV_PART_MAIN);
+    // else
+    // {
+    //     lv_obj_set_style_bg_opa(common_widget_obj, obj_para->obj_bg_opax, LV_PART_MAIN);
+    //     lv_obj_set_style_bg_color(common_widget_obj, obj_para->obj_bg_color, LV_PART_MAIN);
+    // }
+#endif
 
     if(obj_para->obj_border_width)
     {
@@ -448,39 +480,57 @@ void common_widget_anim_create(common_widget_anim_para_t *anim_para)
 *********************************************************************************/
 void common_widget_para_init(void)
 {
+    /**************元素参数初始化**************/
+    widget_refresh_init();
+    common_time_widget_init();
+    common_date_widget_init();
+    common_week_widget_init();
+    common_data_widget_init();
+
     /**************时钟指针参数初始化**************/
     common_clock_pointer_para_init();
 
     /**************弧形控件参数复位**************/
-    memset(&widget_arc_para, 0, sizeof(common_widget_arc_para_t));
+    memset(&widget_arc_para, 0, \
+        sizeof(common_widget_arc_para_t));
 
     /**************图片控件参数复位**************/
-    memset(&user_img_dsc, 0, sizeof(user_img_dsc_t));
-    memset(&widget_img_para, 0, sizeof(common_widget_img_para_t));
+    memset(&user_img_dsc, 0, \
+        sizeof(user_img_dsc_t));
+    memset(&widget_img_para, 0, \
+        sizeof(common_widget_img_para_t));
 
     /**************标签控件参数复位**************/
-    memset(&widget_label_para, 0, sizeof(common_widget_label_para_t));
+    memset(&widget_label_para, 0, \
+        sizeof(common_widget_label_para_t));
 
     /**************基控件参数复位**************/
-    memset(&widget_obj_para, 0, sizeof(common_widget_obj_para_t));
+    memset(&widget_obj_para, 0, \
+        sizeof(common_widget_obj_para_t));
 
     /**************滑块控件参数复位**************/
-    memset(&widget_slider_para, 0, sizeof(common_widget_slider_para_t));
+    memset(&widget_slider_para, 0, \
+        sizeof(common_widget_slider_para_t));
 
     /**************开关控件参数复位**************/
-    memset(&widget_switch_para, 0, sizeof(common_widget_switch_para_t));
+    memset(&widget_switch_para, 0, \
+        sizeof(common_widget_switch_para_t));
 
     /**************滚轮控件参数复位**************/
-    memset(&widget_roller_para, 0, sizeof(common_widget_roller_para_t));
+    memset(&widget_roller_para, 0, \
+        sizeof(common_widget_roller_para_t));
 
     /**************按钮控件参数复位**************/
-    memset(&widget_button_para, 0, sizeof(common_widget_button_para_t));
+    memset(&widget_button_para, 0, \
+        sizeof(common_widget_button_para_t));
 
     /**************图表控件参数复位**************/
-    memset(&widget_chart_para, 0, sizeof(common_widget_chart_para_t));
+    memset(&widget_chart_para, 0, \
+        sizeof(common_widget_chart_para_t));
 
     /**************动画相关参数复位**************/
-    memset(&widget_anim_para, 0, sizeof(common_widget_anim_para_t));
+    memset(&widget_anim_para, 0, \
+        sizeof(common_widget_anim_para_t));
 
     return;
 }

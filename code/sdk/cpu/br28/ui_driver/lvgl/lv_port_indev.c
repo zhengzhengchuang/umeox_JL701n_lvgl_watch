@@ -211,7 +211,7 @@ static void touchpad_read(lv_indev_drv_t *indev_drv, lv_indev_data_t *data)
         //common_refresh_timer_re_run();
 
         /*触摸操作时，需重置熄屏定时器*/
-        common_offscreen_timer_re_run();
+        common_offscreen_timer_restart();
     } else {
         data->state = LV_INDEV_STATE_REL;
     }

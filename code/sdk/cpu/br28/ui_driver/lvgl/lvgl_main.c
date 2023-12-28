@@ -238,40 +238,32 @@ void ui_msg_handle(int *msg, u8 len)
     switch(msg_cmd)
     {
         case ui_msg_menu_jump:
-        {
             ui_act_id_t act_id = msg[1];
-            ui_menu_jump_handle(act_id);
-        }  
+            ui_menu_jump_handle(act_id);  
             break;
 
         case ui_msg_menu_refresh:
-        {
             common_refresh_msg_handle();
-        }
             break;
 
         case ui_msg_menu_offscreen:
-        {
             common_offscreen_msg_handle();
-        }
             break;
 
         case ui_msg_clock_pointer_refresh:
-        {
-            common_clock_pointer_refresh(msg);
-        }
+            common_clock_pointer_refresh();
+            break;
+        
+        case ui_msg_comm_widget_refresh:
+            widget_refresh_handle();
             break;
 
         case ui_msg_key_handle:
-        {
             common_key_msg_handle(msg[1], msg[2]);
-        }
             break;
         
         default:
-        {
             printf("*************ui msg not found\n");
-        }
             break;
     }
 

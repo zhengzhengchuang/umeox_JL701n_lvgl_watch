@@ -14,6 +14,8 @@ static void menu_destory_cb(lv_obj_t *obj)
 
 static void menu_refresh_cb(lv_obj_t *obj)
 {
+    if(!obj) return;
+
     return;
 }
 
@@ -24,7 +26,8 @@ static void menu_display_cb(lv_obj_t *obj)
     return;
 }
 
-static void menu_key_cb(lv_obj_t *obj, int key_value, int key_event)
+static void menu_key_cb(lv_obj_t *obj, int key_value, \
+    int key_event)
 {
     return;
 }

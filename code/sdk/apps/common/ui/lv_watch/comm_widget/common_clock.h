@@ -7,6 +7,16 @@ extern "C" {
 
 #include "../lv_watch.h"
 
+/*********************************************************************************
+                        1、秒针按秒转动  2、秒针无级转动                                     
+*********************************************************************************/
+#define Clock_Pointer_Rot (2)
+
+/*********************************************************************************
+                        无效角度                                     
+*********************************************************************************/
+#define Clock_Pointer_Inv_Angle (-1)
+
 enum
 {
     clk_pointer_type_hour = 0x00,
@@ -26,9 +36,11 @@ typedef struct
     clock_pointer_type_t clk_p_type;
 }common_clock_pointer_para_t;
 
+void common_clock_pointer_refresh(void);
 void common_clock_pointer_para_init(void);
-void common_clock_pointer_refresh(int *refr_msg);
-void common_clock_pointer_create(lv_obj_t *obj, const common_clock_pointer_para_t *para, uint8_t num);
+void common_clock_pointer_angle_update(void);
+void common_clock_pointer_create(lv_obj_t *obj, \
+    const common_clock_pointer_para_t *para, uint8_t num);
 #ifdef __cplusplus
 } /* extern "C" */
 #endif

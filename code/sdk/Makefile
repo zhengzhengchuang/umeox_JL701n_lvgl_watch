@@ -583,7 +583,7 @@ c_SRC_FILES := \
     apps/common/ui/lvgl/src/widgets/lv_switch.c  \
     apps/common/ui/lvgl/src/widgets/lv_table.c  \
     apps/common/ui/lvgl/src/widgets/lv_textarea.c  \
-	apps/common/ui/ui/jl_images/FILE_index.c  \
+	apps/common/ui/ui/jl_images/file_index.c  \
 	apps/common/update/ex_flash_file_download.c \
 	apps/common/update/norflash_ufw_update.c \
 	apps/common/update/norflash_update.c \
@@ -939,8 +939,16 @@ c_SRC_FILES := \
 	apps/common/ui/lv_watch/comm_parse/common_le_get.c \
 	apps/common/ui/lv_watch/comm_offscr/common_offscreen.c \
 	apps/common/ui/lv_watch/comm_refr/common_refresh.c \
+	apps/common/ui/lv_watch/comm_widget/common_time.c \
+	apps/common/ui/lv_watch/comm_widget/common_bo.c \
+	apps/common/ui/lv_watch/comm_widget/common_hr.c \
+	apps/common/ui/lv_watch/comm_widget/common_step.c \
+	apps/common/ui/lv_watch/comm_widget/common_data.c \
+	apps/common/ui/lv_watch/comm_widget/common_date.c \
+	apps/common/ui/lv_watch/comm_widget/common_week.c \
 	apps/common/ui/lv_watch/comm_widget/common_clock.c \
 	apps/common/ui/lv_watch/comm_widget/common_widget.c \
+	apps/common/ui/lv_watch/comm_widget/widget_refresh.c \
 	apps/common/ui/lv_watch/comm_func/common_stopwatch.c \
 	apps/common/ui/lv_watch/comm_func/common_countdown.c \
 	apps/common/ui/lv_watch/comm_remind/remind_task.c \
@@ -956,6 +964,7 @@ c_SRC_FILES := \
 	apps/common/ui/lv_watch/ui_menu/watchface/watchface_main.c \
 	apps/common/ui/lv_watch/ui_menu/tool_box/tool_box.c \
 	apps/common/ui/lv_watch/ui_menu/split_screen/split_screen.c \
+	apps/common/ui/lv_watch/ui_menu/worship_time/worship_time.c \
 
 # 需要编译的 .S 文件
 S_SRC_FILES := \

@@ -7,6 +7,9 @@ extern "C" {
 
 #include "../../lvgl/lvgl.h"
 
+#define LCD_WIDTH  (368)
+#define LCD_HEIGHT (448)
+
 enum
 {
     ui_watchface_id_00 = 0x00,
@@ -39,6 +42,7 @@ enum
     ui_act_id_weather,
     ui_act_id_tool_box,
     ui_act_id_watchface,
+    ui_act_id_worship_time,
 
     ui_act_id_max,
 };
