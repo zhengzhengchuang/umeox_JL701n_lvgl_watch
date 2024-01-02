@@ -90,7 +90,7 @@ void common_hr_refresh(void)
         else
             continue;
 
-        int16_t __data = \
+        int __data = \
             get_vm_para_cache_with_label(vm_label_type); 
 
         uint32_t num_addr_index = \
@@ -156,13 +156,13 @@ void common_hr_refresh(void)
         int16_t refresh_x, refresh_y;
         for(uint8_t j = 0; j < data_bit_num; j++)
         {
-            if(!common_widget_hr[j + obj_idx] || \
-                hr_dsc_idx[j + obj_idx] == 0xffff)
-                continue;
-
             if(j)
                width_sum += \
                 hr_data_width[j - 1];
+
+            if(!common_widget_hr[j + obj_idx] || \
+                hr_dsc_idx[j + obj_idx] == 0xffff)
+                continue;
 
             refresh_x = hr_data_sx + width_sum + \
                 p_comm_hr_para[i]->num_inv*j;

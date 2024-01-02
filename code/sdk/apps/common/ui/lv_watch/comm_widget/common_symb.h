@@ -21,7 +21,7 @@ extern "C" {
 #define Comm_Symbol_18 (18) //(°)
 #define Comm_Symbol_19 (19) //(_)
 #define Comm_Symbol_20 (20) //(')
-#define Comm_Symbol_21 (20) //('')
+#define Comm_Symbol_21 (21) //('')
 
 #ifdef __cplusplus
 } /* extern "C" */

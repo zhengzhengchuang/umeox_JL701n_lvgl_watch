@@ -104,7 +104,8 @@ void lv_txt_get_size(lv_point_t * size_res, const char * text, const lv_font_t *
     uint16_t letter_height = lv_font_get_line_height(font);
 
     /*Calc. the height and longest line*/
-    while(text[line_start] != '\0') {
+    while(text[line_start] != '\0') 
+    {
         new_line_start += _lv_txt_get_next_line(&text[line_start], font, letter_space, max_width, NULL, flag);
 
         if((unsigned long)size_res->y + (unsigned long)letter_height + (unsigned long)line_space > LV_MAX_OF(lv_coord_t)) {

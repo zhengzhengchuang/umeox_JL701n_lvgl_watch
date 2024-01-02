@@ -3,35 +3,29 @@
 /****************图标源****************/
 static const uint32_t common_list_icon_src[Common_List_Elem_Num] = 
 {
-    menu_100_100_icon_00_index, menu_100_100_icon_01_index, menu_100_100_icon_02_index, menu_100_100_icon_03_index, \
-    menu_100_100_icon_04_index, menu_100_100_icon_05_index, menu_100_100_icon_06_index, menu_100_100_icon_07_index, \
-    menu_100_100_icon_08_index, menu_100_100_icon_09_index, menu_100_100_icon_10_index, menu_100_100_icon_11_index, \
-    menu_100_100_icon_12_index, menu_100_100_icon_13_index, menu_100_100_icon_14_index, menu_100_100_icon_15_index, \
-    menu_100_100_icon_16_index, menu_100_100_icon_17_index, menu_100_100_icon_18_index, menu_100_100_icon_19_index, \
-    menu_100_100_icon_20_index, menu_100_100_icon_21_index, menu_100_100_icon_22_index, menu_100_100_icon_23_index, \
-    menu_100_100_icon_24_index, menu_100_100_icon_25_index, menu_100_100_icon_26_index, menu_100_100_icon_27_index, \
-    menu_100_100_icon_28_index, menu_100_100_icon_29_index, menu_100_100_icon_30_index, menu_100_100_icon_31_index, \
-    menu_100_100_icon_32_index, menu_100_100_icon_33_index, menu_100_100_icon_34_index, menu_100_100_icon_35_index, \
-    menu_100_100_icon_36_index, 
+    menu_100_100_icon_00_index, menu_100_100_icon_01_index, menu_100_100_icon_02_index, \
+    menu_100_100_icon_03_index, menu_100_100_icon_04_index, menu_100_100_icon_05_index, \
+    menu_100_100_icon_06_index, menu_100_100_icon_07_index, menu_100_100_icon_08_index, \
+    menu_100_100_icon_09_index, menu_100_100_icon_10_index, menu_100_100_icon_11_index, \
+    menu_100_100_icon_12_index, menu_100_100_icon_13_index, menu_100_100_icon_14_index, \
+    menu_100_100_icon_15_index, \
 };
 
-/****************文本源****************/
-static const char common_list_text_src[Common_List_Elem_Num][30] = 
+/****************文本源id****************/
+static const comm_lang_txtid_t common_list_text_id[Common_List_Elem_Num] = 
 {
-    "Album", "Unknown", "Menu style", "Bedside lamp", "Call", "Notice", "Sports", "Unknown", \
-    "About", "Activity records", "Countdown", "Calculator", "Do not disturb", "Stopwatch", "Alarm clock", "Unknown", \
-    "Calendar", "Set up", "Sound and Vibration", "Flashlight", "Sleep", "Temperature", "Weather", "Unknown", \
-    "Unknown", "Heart rate", "Blood sugar", "Blood pressure", "Blood oxygen", "Unknown", "Unknown", "Music", \
-    "Game", "Language", "Exercise records", "Find phone", "Compass",
+    lang_txtid_phone, lang_txtid_notify, lang_txtid_quran_player, \
+    lang_txtid_prayer_times, lang_txtid_azkar, lang_txtid_tasbih_reminder, \
+    lang_txtid_allah_99_name, lang_txtid_hijri_calendar, lang_txtid_sleep, \
+    lang_txtid_heart_rate, lang_txtid_spo2, lang_txtid_sports, lang_txtid_alarm, \
+    lang_txtid_more, lang_txtid_settings, lang_txtid_pedometer,
 };
 
 /****************元素容器点击索引****************/
 static const uint16_t common_list_elem_container_idx[Common_List_Elem_Num] =
 {
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, \
-    10, 11, 12, 13, 14, 15, 16, 17, 18, 19, \
-    20, 21, 22, 23, 24, 25, 26, 27, 28, 29, \
-    30, 31, 32, 33, 34, 35, 36,
+    10, 11, 12, 13, 14, 15, 
 };
 
 /****************通用列表滚动参数****************/
@@ -237,8 +231,9 @@ static void common_list_elem_container_create(void)
             common_list_scroll_dela;
         common_list_elem_container[idx] = common_widget_obj_create(&widget_obj_para);
         lv_obj_add_flag(common_list_elem_container[idx], LV_OBJ_FLAG_EVENT_BUBBLE);
-        lv_obj_add_event_cb(common_list_elem_container[idx], common_list_elem_container_click_cb, \
-            LV_EVENT_SHORT_CLICKED, (void *)&common_list_elem_container_idx[idx]);
+        lv_obj_add_event_cb(common_list_elem_container[idx], \
+            common_list_elem_container_click_cb, LV_EVENT_SHORT_CLICKED, \
+                (void *)&common_list_elem_container_idx[idx]);
     }
 
     return;
@@ -306,19 +301,24 @@ static void common_list_elem_label_create(void)
     widget_label_para.label_x = 0;
     widget_label_para.label_y = 0;
     widget_label_para.label_w = 200;
-    widget_label_para.label_h = 37;
-    widget_label_para.long_mode = LV_LABEL_LONG_SCROLL;
+    widget_label_para.label_h = 37*2;
+    widget_label_para.long_mode = LV_LABEL_LONG_WRAP;
     widget_label_para.text_align = LV_TEXT_ALIGN_LEFT;
     widget_label_para.label_text_color = lv_color_hex(0xffffff);
     widget_label_para.user_text_font = NULL;
 
     for(uint16_t idx = 0; idx < common_list_elem_num; idx++)
     {
-        widget_label_para.label_parent = common_list_elem_container[idx];
-        widget_label_para.label_text = common_list_text_src[idx];
-        common_list_label[idx] = common_widget_label_create(&widget_label_para);
+        widget_label_para.label_parent = \
+            common_list_elem_container[idx];
+        widget_label_para.label_text = \
+            get_lang_txt_with_id(common_list_text_id[idx]);
+        common_list_label[idx] = \
+            common_widget_label_create(&widget_label_para);
         lv_obj_align_to(common_list_label[idx], common_list_icon[idx], \
             LV_ALIGN_OUT_RIGHT_MID, 20, 0);
+        lv_obj_set_style_bg_opa(common_list_label[idx], LV_OPA_50, LV_PART_MAIN);
+        lv_obj_set_style_bg_color(common_list_label[idx], lv_color_hex(0xff0000), LV_PART_MAIN);
     }
 
     return;

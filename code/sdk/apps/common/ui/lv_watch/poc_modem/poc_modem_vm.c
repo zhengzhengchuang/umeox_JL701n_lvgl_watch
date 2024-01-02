@@ -1,5 +1,6 @@
 ﻿#include "syscfg_id.h"
 #include "app_config.h"
+#include "../lv_watch.h"
 #include "poc_modem_vm.h"
 
 
@@ -13,7 +14,7 @@ const ui_menu_load_info_t *watchface_load_info[] =
 };
 const ui_menu_load_info_t *menu_style_load_info[] = 
 {
-    &menu_load_common_list, &menu_load_apple_network,
+    &menu_load_common_list, /*&menu_load_apple_network,*/
 };
 
 /*********************************************************************************
@@ -22,22 +23,32 @@ const ui_menu_load_info_t *menu_style_load_info[] =
 static const vm_store_para_with_label_t default_label_para[Vm_Store_Para_Num] = \
 {
     /*********默认屏幕背光亮度 80%*********/
-    {.label = vm_label_backlight, .store_para_val = 80}, 
+    {.label = vm_label_backlight, \
+        .store_para_val = 80}, 
 
     /*********时区默认 深圳：东八区*********/
-    {.label = vm_label_time_zone, .store_para_val = 0x08}, 
+    {.label = vm_label_time_zone, \
+        .store_para_val = 0x08}, 
 
     /*********默认菜单风格*********/
-    {.label = vm_label_menu_style, .store_para_val = ui_menu_style_00},
+    {.label = vm_label_menu_style, \
+        .store_para_val = ui_menu_style_00},
 
     /*********默认时间格式:24小时制*********/
-    {.label = vm_label_time_format, .store_para_val = 0x00},
+    {.label = vm_label_time_format, \
+        .store_para_val = 0x00},
 
     /*********默认屏幕熄屏时间 10s*********/
-    {.label = vm_label_offscreen_time, .store_para_val = 10*1000},
+    {.label = vm_label_offscreen_time, \
+        .store_para_val = 10*1000},
 
     /*********默认表盘*********/
-    {.label = vm_label_watchface_id, .store_para_val = ui_watchface_id_00},
+    {.label = vm_label_watchface_id, \
+        .store_para_val = ui_watchface_id_00},
+
+    /*********默认系统语言*********/
+    {.label = vm_label_sys_language, \
+        .store_para_val = comm_language_id_english},
 
     /*********默认心率*********/
     {.label = vm_label_hr, .store_para_val = 0},
@@ -51,6 +62,7 @@ static const vm_store_para_with_label_t default_label_para[Vm_Store_Para_Num] = 
 
     /*********默认日常数据*********/
     {.label = vm_label_daily_step, .store_para_val = 0},
+    {.label = vm_label_daily_pace, .store_para_val = 0},
     {.label = vm_label_daily_calorie, .store_para_val = 0},
     {.label = vm_label_daily_distance, .store_para_val = 0},
 };
@@ -79,13 +91,15 @@ int get_vm_para_cache_with_label(uint16_t label)
     return default_label_para[label].store_para_val;
 }
 
-bool set_vm_para_cache_with_label(uint16_t label, int16_t vm_val)
+bool set_vm_para_cache_with_label(uint16_t label, \
+    int vm_val)
 {
     for(uint16_t i = 0; i < Vm_Store_Para_Num; i++)
     {
         if(p_vm_para_cache->vm_store_para[i].label == label)
         {
-            p_vm_para_cache->vm_store_para[i].store_para_val = vm_val;
+            p_vm_para_cache->vm_store_para[i].store_para_val = \
+                vm_val;
             return true;
         }     
     }

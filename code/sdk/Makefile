@@ -932,6 +932,8 @@ c_SRC_FILES := \
 	apps/common/ui/lv_watch/poc_modem/poc_modem_vm.c \
 	apps/common/ui/lv_watch/poc_modem/poc_modem_cache.c \
 	apps/common/ui/lv_watch/comm_key/common_key.c \
+	apps/common/ui/lv_watch/comm_lang/lang_conf.c \
+	apps/common/ui/lv_watch/comm_lang/lang_table.c \
 	apps/common/ui/lv_watch/comm_parse/common_rev.c \
 	apps/common/ui/lv_watch/comm_parse/common_send.c \
 	apps/common/ui/lv_watch/comm_parse/common_parse.c \
@@ -943,6 +945,9 @@ c_SRC_FILES := \
 	apps/common/ui/lv_watch/comm_widget/common_bo.c \
 	apps/common/ui/lv_watch/comm_widget/common_hr.c \
 	apps/common/ui/lv_watch/comm_widget/common_step.c \
+	apps/common/ui/lv_watch/comm_widget/common_pace.c \
+	apps/common/ui/lv_watch/comm_widget/common_calorie.c \
+	apps/common/ui/lv_watch/comm_widget/common_distance.c \
 	apps/common/ui/lv_watch/comm_widget/common_data.c \
 	apps/common/ui/lv_watch/comm_widget/common_date.c \
 	apps/common/ui/lv_watch/comm_widget/common_week.c \
@@ -958,7 +963,6 @@ c_SRC_FILES := \
 	apps/common/ui/lv_watch/ui_tileview/ui_tileview.c \
 	apps/common/ui/lv_watch/ui_menu/weather/weather.c \
 	apps/common/ui/lv_watch/ui_menu/menu/common_list.c \
-	apps/common/ui/lv_watch/ui_menu/menu/apple_network.c \
 	apps/common/ui/lv_watch/ui_menu/watchface/watchface_00.c \
 	apps/common/ui/lv_watch/ui_menu/watchface/watchface_01.c \
 	apps/common/ui/lv_watch/ui_menu/watchface/watchface_main.c \

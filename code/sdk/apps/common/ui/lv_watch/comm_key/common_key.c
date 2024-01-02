@@ -55,11 +55,14 @@ void common_key_msg_handle(int key_value, int key_event)
         /*******亮屏按键操作时，需重置熄屏定时器*******/
         common_offscreen_timer_restart();
 
-        int bo_data = \
-            get_vm_para_cache_with_label(vm_label_bo);
-        bo_data += 5;
-            set_vm_para_cache_with_label(vm_label_bo, \
-                bo_data);
+        int distance_data = \
+            get_vm_para_cache_with_label(\
+                vm_label_daily_distance);
+        distance_data += 100;
+
+        set_vm_para_cache_with_label(\
+            vm_label_daily_distance, \
+            distance_data);
 #if 0
         /*******页面不锁定，主按键返回表盘*******/
         bool menu_lock_flag = \

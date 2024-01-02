@@ -35,6 +35,9 @@ enum
     /*******熄屏时间*******/
     vm_label_offscreen_time,
 
+    /*******系统语言*******/
+    vm_label_sys_language,
+
     /*******心率数据*******/
     vm_label_hr,
     vm_label_min_hr,
@@ -47,6 +50,7 @@ enum
 
     /*******日常数据*******/
     vm_label_daily_step,
+    vm_label_daily_pace,
     vm_label_daily_calorie,
     vm_label_daily_distance,
 
@@ -75,7 +79,8 @@ extern const ui_menu_load_info_t *menu_style_load_info[];
 
 void vm_store_para_init(void);
 int get_vm_para_cache_with_label(uint16_t label);
-bool set_vm_para_cache_with_label(uint16_t label, int16_t vm_val);
+bool set_vm_para_cache_with_label(uint16_t label, \
+    int vm_val);
 #ifdef __cplusplus
 }
 #endif

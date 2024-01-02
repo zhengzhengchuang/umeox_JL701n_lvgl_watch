@@ -161,7 +161,13 @@
         "common_bo.h": "c",
         "common_symbol.h": "c",
         "common_symb.h": "c",
-        "common_step.h": "c"
+        "common_step.h": "c",
+        "common_calorie.h": "c",
+        "common_pace.h": "c",
+        "common_distance.h": "c",
+        "lang_conf.h": "c",
+        "lang_table.h": "c",
+        "lang_txtid.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

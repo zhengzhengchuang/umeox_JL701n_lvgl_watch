@@ -138,9 +138,10 @@ static void menu_display_cb(lv_obj_t *obj)
     //     Comm_Data_Type_Bo, &bo_data);
 #endif
 
-#if 1
-    int bo_data = \
-        get_vm_para_cache_with_label(vm_label_bo);
+#if 0
+    int distance_data = \
+        get_vm_para_cache_with_label(\
+            vm_label_daily_distance);
     comm_data_para.data_x = 100;
     comm_data_para.data_y = 290;
     comm_data_para.num_inv = 0;
@@ -150,7 +151,7 @@ static void menu_display_cb(lv_obj_t *obj)
     comm_data_para.data_align = \
         Comm_Data_Align_Center;
     common_data_widget_create(&comm_data_para, \
-        Comm_Data_Type_Bo, &bo_data);
+        Comm_Data_Type_Distance, &distance_data);
 #endif
 
     return;

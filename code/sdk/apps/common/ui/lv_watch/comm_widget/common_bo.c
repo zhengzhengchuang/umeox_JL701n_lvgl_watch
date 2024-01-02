@@ -90,7 +90,7 @@ void common_bo_refresh(void)
         else
             continue;
 
-        int16_t __data = \
+        int __data = \
             get_vm_para_cache_with_label(vm_label_type); 
 
         uint32_t num_addr_index = \
@@ -125,7 +125,7 @@ void common_bo_refresh(void)
             sizeof(bo_num_str));
 
         if(!__data)
-            memcpy(bo_num_str, (void *)"__%", 3);
+            memcpy(bo_num_str, (void *)"__", 2);
         else
             sprintf(bo_num_str, "%d%%", __data);
 
@@ -171,13 +171,13 @@ void common_bo_refresh(void)
         int16_t refresh_x, refresh_y;
         for(uint8_t j = 0; j < data_bit_num; j++)
         {
-            if(!common_widget_bo[j + obj_idx] || \
-                bo_dsc_idx[j + obj_idx] == 0xffff)
-                continue;
-
             if(j)
                 width_sum += \
                     bo_data_width[j - 1];
+
+            if(!common_widget_bo[j + obj_idx] || \
+                bo_dsc_idx[j + obj_idx] == 0xffff)
+                continue;
 
             refresh_x = bo_data_sx + width_sum + \
                 p_comm_bo_para[i]->num_inv*j;
@@ -252,7 +252,7 @@ void common_bo_widget_create(comm_data_para_t *data_para, \
         sizeof(bo_num_str));
 
     if(!__data)
-        memcpy(bo_num_str, (void *)"__%", 3);
+        memcpy(bo_num_str, (void *)"__", 2);
     else
         sprintf(bo_num_str, "%d%%", __data);
 
