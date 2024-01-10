@@ -101,8 +101,9 @@ void common_user_countdown_timeout_handle(void)
         {
             countdown_data->countdown_cur_cnt -= 1;
 
-            countdown_data->countdown_per = (countdown_data->countdown_cur_cnt*100)/ \
-                countdown_data->countdown_total_cnt;
+            countdown_data->countdown_per = \
+                (countdown_data->countdown_cur_cnt*100)/ \
+                    countdown_data->countdown_total_cnt;
 
             if(!(countdown_data->countdown_cur_cnt))
             {
@@ -149,7 +150,8 @@ void common_user_countdown_create(uint32_t cnt)
     *countdown_state = countdown_state_start;
 
     if(!countdown_timer_id)
-        countdown_timer_id = sys_hi_timeout_add(NULL, common_user_countdown_timeout_cb, countdown_timer_inv);
+        countdown_timer_id = sys_hi_timeout_add(NULL, \
+            common_user_countdown_timeout_cb, countdown_timer_inv);
 
     *countdown_already_exist = true;
 

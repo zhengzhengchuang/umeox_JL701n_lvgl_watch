@@ -5,17 +5,52 @@
 /**************熄屏定时器id**************/
 static uint16_t offscreen_timer_id = 0;
 
+/**************页面定时锁定定时器id**************/
+static uint16_t menu_lock_timer_id = 0;
+
 /**************当前熄屏时间**************/
 static uint32_t cur_offscreen_time = 0;
+
+/**************函数声明**************/
+static void common_menu_lock_timer_cb(void *priv);
+
+
+void common_menu_lock_timer_del(void)
+{
+    set_menu_timer_lock_flag(false);
+
+    if(menu_lock_timer_id)
+        sys_timeout_del(menu_lock_timer_id);
+    
+    menu_lock_timer_id = 0;
+}
+
+void common_menu_lock_timer_add(void)
+{
+    set_menu_timer_lock_flag(true);
+
+    if(!menu_lock_timer_id)
+        menu_lock_timer_id = sys_timeout_add(NULL, \
+            common_menu_lock_timer_cb, 3*60*1000);
+
+    return;
+}
 
 static void common_offscreen_timer_cb(void *priv)
 {
     if(cur_offscreen_time == Always_OnScreen)
         return;
         
-    // int menu_offscreen_msg[1];
-    // menu_offscreen_msg[0] = ui_msg_menu_offscreen;
-    // post_ui_msg(menu_offscreen_msg, 1);
+    int menu_offscreen_msg[1];
+    menu_offscreen_msg[0] = ui_msg_menu_offscreen;
+    post_ui_msg(menu_offscreen_msg, 1);
+
+    return;
+}
+
+static void common_menu_lock_timer_cb(void *priv)
+{
+    common_menu_lock_timer_del();
 
     return;
 }
@@ -31,6 +66,8 @@ void common_offscreen_msg_handle(void)
     /**************关掉TE, 下次亮屏能缩短时间**************/
     extern volatile u8 usr_wait_te;
     usr_wait_te = 0;
+
+    common_menu_lock_timer_add();
 
     return;
 }
@@ -48,7 +85,8 @@ void common_offscreen_timer_create(void)
         cur_offscreen_time = sys_offscreen_time;
 
     if(!offscreen_timer_id)
-        offscreen_timer_id = sys_timeout_add(NULL, common_offscreen_timer_cb, cur_offscreen_time);
+        offscreen_timer_id = sys_timeout_add(NULL, \
+            common_offscreen_timer_cb, cur_offscreen_time);
 
     return;
 }

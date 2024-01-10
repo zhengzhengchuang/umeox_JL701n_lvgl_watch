@@ -1,14 +1,17 @@
 #include "watchface_00.h"
 
-static const common_clock_pointer_para_t clk_p_para[] = 
+static const common_clock_pointer_para_t \
+    clk_p_para[] = 
 {
     [0] = 
     {
         .clk_p_width = 16,
         .clk_p_height = 103,
         .clk_p_center = 103,
-        .clk_p_type = clk_pointer_type_hour,
-        .clk_p_file_dat = watchface_00_clock_hour_index,
+        .clk_p_type = \
+            clk_pointer_type_hour,
+        .clk_p_file_dat = \
+            watchface_00_clock_hour_index,
     },
 
     [1] = 
@@ -16,8 +19,10 @@ static const common_clock_pointer_para_t clk_p_para[] =
         .clk_p_width = 16,
         .clk_p_height = 172,
         .clk_p_center = 172,
-        .clk_p_type = clk_pointer_type_minute,
-        .clk_p_file_dat = watchface_00_clock_minute_index,
+        .clk_p_type = \
+            clk_pointer_type_minute,
+        .clk_p_file_dat = \
+            watchface_00_clock_minute_index,
     },
 
     [2] = 
@@ -25,8 +30,10 @@ static const common_clock_pointer_para_t clk_p_para[] =
         .clk_p_width = 16,
         .clk_p_height = 208,
         .clk_p_center = 158,
-        .clk_p_type = clk_pointer_type_second,
-        .clk_p_file_dat = watchface_00_clock_second_index,
+        .clk_p_type = \
+            clk_pointer_type_second,
+        .clk_p_file_dat = \
+            watchface_00_clock_second_index,
     },
 };
 
@@ -34,8 +41,9 @@ static void menu_create_cb(lv_obj_t *obj)
 {
     if(!obj) return;
 
-    tileview_register_all_menu(obj, ui_act_id_null, ui_act_id_null, \
-        ui_act_id_null, ui_act_id_weather, ui_act_id_watchface);
+    tileview_register_all_menu(obj, ui_act_id_null, \
+        ui_act_id_null, ui_act_id_null, ui_act_id_weather, \
+            ui_act_id_watchface);
 
     return;
 }
@@ -75,100 +83,25 @@ static void menu_display_cb(lv_obj_t *obj)
         common_widget_img_create(&widget_img_para, NULL);
     lv_obj_center(clock_dot);
 
-#if 0
-    comm_time_para.time_x = 100;
-    comm_time_para.time_y = 270;
-    comm_time_para.num_inv = 0;
-    comm_time_para.time_parent = obj;
-    comm_time_para.num_addr_index = \
-        watchface_00_time_00_index;
-    common_time_widget_create(&comm_time_para, \
-        comm_time_mode_hh_mm);
-
-    comm_time_para.time_y = 320;
-    common_time_widget_create(&comm_time_para, \
-        comm_time_mode_hh_mm);
-#endif
-
-#if 0
-    comm_date_para.date_x = 100;
-    comm_date_para.date_y = 260;
-    comm_date_para.num_inv = 0;
-    comm_date_para.date_parent = obj;
-    comm_date_para.num_addr_index = \
-        watchface_00_time_00_index;
-    common_date_widget_create(&comm_date_para, \
-        comm_date_mode_mm_dd);
-
-    comm_date_para.date_y = 310;
-    common_date_widget_create(&comm_date_para, \
-        comm_date_mode_mm_dd);
-#endif
-
-#if 0
-    // comm_week_para.week_x = 269;
-    // comm_week_para.week_y = 200;
-    // comm_week_para.week_parent = obj;
-    // comm_week_para.week_addr_index = \
-    //     watchface_00_week_en_00_index;
-    // common_week_widget_create(&comm_week_para);
-
-    // comm_week_para.week_x = 230-54;
-    // comm_week_para.week_y = 200;
-    // common_week_widget_create(&comm_week_para);
-
-    // 
-
-    // int bo_data = \
-    //     get_vm_para_cache_with_label(vm_label_bo);
-    // comm_data_para.data_x = 100;
-    // comm_data_para.data_y = 290;
-    // comm_data_para.num_inv = 0;
-    // comm_data_para.data_parent = obj;
-    // comm_data_para.num_addr_index = \
-    //     watchface_00_time_00_index;
-    // comm_data_para.data_align = \
-    //     Comm_Data_Align_Center;
-    // common_data_widget_create(&comm_data_para, \
-    //     Comm_Data_Type_Bo, &bo_data);
-
-    // comm_data_para.data_x = 210;
-    // comm_data_para.data_y = 290;
-    // common_data_widget_create(&comm_data_para, \
-    //     Comm_Data_Type_Bo, &bo_data);
-#endif
-
-#if 0
-    int distance_data = \
-        get_vm_para_cache_with_label(\
-            vm_label_daily_distance);
-    comm_data_para.data_x = 100;
-    comm_data_para.data_y = 290;
-    comm_data_para.num_inv = 0;
-    comm_data_para.data_parent = obj;
-    comm_data_para.num_addr_index = \
-        comm_num_30x40_ye_00_index;
-    comm_data_para.data_align = \
-        Comm_Data_Align_Center;
-    common_data_widget_create(&comm_data_para, \
-        Comm_Data_Type_Distance, &distance_data);
-#endif
-
     return;
 }
 
 static void menu_key_cb(lv_obj_t *obj, int key_value, \
     int key_event)
 {
+    if(!obj) return;
+
     return;
 }
 
-register_ui_menu_load_info(menu_load_watchface_00) = 
+register_ui_menu_load_info(\
+    menu_load_watchface_00) = 
 {
     .menu_arg = NULL,
     .lock_flag = false,
     .return_flag = true,
-    .menu_id = ui_act_id_watchface,
+    .menu_id = \
+        ui_act_id_watchface,
     .user_offscreen_time = 0,
     .user_refresh_time_inv = 500,
     .key_func_cb = menu_key_cb,

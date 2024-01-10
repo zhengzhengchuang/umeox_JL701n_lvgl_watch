@@ -1,5 +1,5 @@
 #include "common_widget.h"
-
+#include "../comm_lang/lang_conf.h"
 
 
 /*********************************************************************************
@@ -122,9 +122,12 @@ void common_widget_img_replace_src(lv_obj_t *obj, uint32_t file_img_dat, \
 *********************************************************************************/
 common_widget_label_para_t widget_label_para = {0};
 
-static const lv_font_t *default_text_font(void)
+static const lv_font_t *sys_default_label_font(void)
 {
-    return (&font_common_32);
+    const lv_font_t *sel_font = \
+        &font_common_32;
+
+    return sel_font;
 }
 
 lv_obj_t *common_widget_label_create(common_widget_label_para_t *label_para)
@@ -142,7 +145,7 @@ lv_obj_t *common_widget_label_create(common_widget_label_para_t *label_para)
     if(label_para->user_text_font)
         lv_obj_set_style_text_font(common_widget_label, label_para->user_text_font, LV_PART_MAIN);
     else
-        lv_obj_set_style_text_font(common_widget_label, default_text_font(), LV_PART_MAIN);
+        lv_obj_set_style_text_font(common_widget_label, sys_default_label_font(), LV_PART_MAIN);
   
 
     return common_widget_label;
@@ -465,7 +468,8 @@ void common_widget_anim_create(common_widget_anim_para_t *anim_para)
         lv_anim_set_exec_cb(anim_para->anim, anim_para->anim_exec_xcb);
 
     lv_anim_set_time(anim_para->anim, anim_para->anim_duration);
-    lv_anim_set_values(anim_para->anim, anim_para->anim_start_val, anim_para->anim_end_val);
+    lv_anim_set_values(anim_para->anim, anim_para->anim_start_val, \
+        anim_para->anim_end_val);
 
     if(anim_para->is_start_anim)
         lv_anim_start(anim_para->anim);

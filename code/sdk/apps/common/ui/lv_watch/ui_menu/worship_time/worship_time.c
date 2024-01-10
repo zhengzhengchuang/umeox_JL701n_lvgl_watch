@@ -1,8 +1,8 @@
 #include "worship_time.h"
 
-
 /****************元素容器点击索引****************/
-static const uint16_t elem_container_idx[Wsptime_List_Elem_Num] = \
+static const uint16_t elem_container_idx[\
+    Wsptime_List_Elem_Num] = 
 {
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 
 };
@@ -377,11 +377,17 @@ static void wsptime_list_container_release_cb(lv_event_t *e)
 
     int16_t throw_adjust = 0;
     uint32_t anim_duration = 0;
-    if(throw_end > scroll_right_val && throw_end < scroll_left_val)
+    uint32_t anim_min_duration = 300;
+    uint32_t anim_max_duration = 900;
+
+    if(throw_end > scroll_right_val && \
+        throw_end < scroll_left_val)
     {
-        throw_adjust = throw_end%wsptime_list_elem_container_inv;
+        throw_adjust = \
+            throw_end%wsptime_list_elem_container_inv;
 		if(throw_adjust <= (-1)*(wsptime_list_elem_container_inv/2))
-            throw_end -=(wsptime_list_elem_container_inv + throw_adjust);	
+            throw_end -= \
+                (wsptime_list_elem_container_inv + throw_adjust);	
 		else
             throw_end -= throw_adjust;
 
@@ -392,29 +398,35 @@ static void wsptime_list_container_release_cb(lv_event_t *e)
         throw_end = scroll_left_val;
 
         if(throw_start != scroll_left_val)
-            anim_duration = LV_ABS(scroll_left_val - throw_start)*2;
+            anim_duration = \
+                LV_ABS(scroll_left_val - throw_start)*2;
         else
-            anim_duration = 300;
+            anim_duration = anim_min_duration;
     }else if(throw_end < scroll_right_val)
     {
         throw_end = scroll_right_val;
 
         if(throw_start != scroll_left_val)
-            anim_duration = LV_ABS(scroll_right_val - throw_start)*2;
+            anim_duration = \
+                LV_ABS(scroll_right_val - throw_start)*2;
         else
-            anim_duration = 300;
+            anim_duration = anim_min_duration;
     }
 
-    if(anim_duration < 300) anim_duration = 300;
-    if(anim_duration > 1500) anim_duration = 1500;
+    if(anim_duration < anim_min_duration) 
+        anim_duration = anim_min_duration;
+    if(anim_duration > anim_max_duration) 
+        anim_duration = anim_max_duration;
 
     lv_anim_t throw_anim;
     lv_obj_t *wsptime_list_container = \
         wsptime_list_ctx.wsptime_list_container;
 
     widget_anim_para.anim = &throw_anim;
-    widget_anim_para.anim_obj = wsptime_list_container;
-    widget_anim_para.anim_exec_xcb = wsptime_list_throw_anim_cb; 
+    widget_anim_para.anim_obj = \
+        wsptime_list_container;
+    widget_anim_para.anim_exec_xcb = \
+        wsptime_list_throw_anim_cb; 
     widget_anim_para.anim_duration = anim_duration;
     widget_anim_para.anim_start_val = throw_start;
     widget_anim_para.anim_end_val = throw_end;
@@ -431,7 +443,8 @@ static void wsptime_list_container_event_cb(lv_event_t *e)
 {
     if(!e) return;
 
-    lv_event_code_t event_code = lv_event_get_code(e);
+    lv_event_code_t event_code = \
+        lv_event_get_code(e);
 
     if(event_code == LV_EVENT_PRESSED)
         wsptime_list_container_pressed_cb(e);
@@ -457,8 +470,9 @@ static void menu_create_cb(lv_obj_t *obj)
 {
     if(!obj) return;
 
-    tileview_register_all_menu(obj, ui_act_id_null, ui_act_id_null, \
-        ui_act_id_null, ui_act_id_null, ui_act_id_worship_time);
+    tileview_register_all_menu(obj, ui_act_id_null, \
+        ui_act_id_null, ui_act_id_null, ui_act_id_null, \
+            ui_act_id_worship_time);
 
     return;
 }
@@ -492,15 +506,19 @@ static void menu_display_cb(lv_obj_t *obj)
 static void menu_key_cb(lv_obj_t *obj, int key_value, \
     int key_event)
 {
+    if(!obj) return;
+
     return;
 }
 
-register_ui_menu_load_info(menu_load_worship_time) = 
+register_ui_menu_load_info(\
+    menu_load_worship_time) = 
 {
     .menu_arg = NULL,
     .lock_flag = false,
     .return_flag = true,
-    .menu_id = ui_act_id_worship_time,
+    .menu_id = \
+        ui_act_id_worship_time,
     .user_offscreen_time = 0,
     .user_refresh_time_inv = 0,
     .key_func_cb = menu_key_cb,

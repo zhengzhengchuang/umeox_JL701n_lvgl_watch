@@ -614,6 +614,7 @@ static uint32_t lv_txt_utf8_next(const char * txt, uint32_t * i)
     else {
         /*2 bytes UTF-8 code*/
         if(LV_IS_2BYTES_UTF8_CODE(txt[*i])) {
+            //printf("LV_IS_2BYTES_UTF8_CODE\n");
             result = (uint32_t)(txt[*i] & 0x1F) << 6;
             (*i)++;
             if(LV_IS_INVALID_UTF8_CODE(txt[*i])) return 0;
@@ -622,6 +623,8 @@ static uint32_t lv_txt_utf8_next(const char * txt, uint32_t * i)
         }
         /*3 bytes UTF-8 code*/
         else if(LV_IS_3BYTES_UTF8_CODE(txt[*i])) {
+            //printf("LV_IS_3BYTES_UTF8_CODE\n");
+            //printf("%s:0x%x\n", __func__, txt[*i]);
             result = (uint32_t)(txt[*i] & 0x0F) << 12;
             (*i)++;
 

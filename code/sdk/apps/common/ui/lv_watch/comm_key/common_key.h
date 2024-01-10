@@ -13,6 +13,8 @@ enum
     Common_Key_Val_Max,
 };
 
+bool get_menu_timer_lock_flag(void);
+void set_menu_timer_lock_flag(bool flag);
 void common_key_msg_handle(int key_value, int key_event);
 #ifdef __cplusplus
 } /* extern "C" */

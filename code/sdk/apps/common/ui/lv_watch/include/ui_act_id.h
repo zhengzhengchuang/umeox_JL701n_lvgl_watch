@@ -26,6 +26,7 @@ enum
 {
     ui_menu_style_00 = 0x00,
     ui_menu_style_01,
+    ui_menu_style_02,
 
     ui_menu_style_max,
 };
@@ -40,9 +41,16 @@ enum
 
     ui_act_id_menu,
     ui_act_id_weather,
+    ui_act_id_hr_warn,
     ui_act_id_tool_box,
+    ui_act_id_sedentary,
     ui_act_id_watchface,
-    ui_act_id_worship_time,
+    ui_act_id_off_wrist,
+    ui_act_id_device_op, 
+    ui_act_id_ota_update,
+    ui_act_id_low_battery,
+    ui_act_id_worship_time,   
+    ui_act_id_watchface_transp,
 
     ui_act_id_max,
 };

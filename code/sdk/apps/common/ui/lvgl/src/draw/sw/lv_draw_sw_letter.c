@@ -96,6 +96,7 @@ void lv_draw_sw_letter(lv_draw_ctx_t * draw_ctx, const lv_draw_label_dsc_t * dsc
                        uint32_t letter)
 {
     lv_font_glyph_dsc_t g;
+    //printf("letter = 0x%x\n", letter);
     bool g_ret = lv_font_get_glyph_dsc(dsc->font, &g, letter, '\0');
     if(g_ret == false) 
     {
@@ -123,6 +124,7 @@ void lv_draw_sw_letter(lv_draw_ctx_t * draw_ctx, const lv_draw_label_dsc_t * dsc
             draw_ctx->draw_rect(draw_ctx, &glyph_dsc, &glyph_coords);
 #endif
         }
+
         return;
     }
 

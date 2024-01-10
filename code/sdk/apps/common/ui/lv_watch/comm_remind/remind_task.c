@@ -26,7 +26,8 @@ static void remind_task(void *p)
 
     /*注意：这里看看有没有影响到功耗*/
     if(!remind_timer_id)
-        remind_timer_id = sys_timer_add(NULL, remind_timerout_cb, 950);
+        remind_timer_id = sys_timer_add(NULL, \
+            remind_timerout_cb, 1000);
 
     while(1){
         rev_ret = os_taskq_pend(NULL, rev_msg, ARRAY_SIZE(rev_msg)); 

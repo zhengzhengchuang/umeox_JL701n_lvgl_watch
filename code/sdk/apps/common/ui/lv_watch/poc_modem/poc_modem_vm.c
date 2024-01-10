@@ -10,11 +10,12 @@ vm_store_para_cache_t *p_vm_para_cache = NULL;
 static vm_store_para_cache_t vm_para_cache = {0};
 const ui_menu_load_info_t *watchface_load_info[] = 
 {
-    &menu_load_watchface_00, &menu_load_watchface_01,
+    &menu_load_watchface_00, &menu_load_watchface_01, \
 };
 const ui_menu_load_info_t *menu_style_load_info[] = 
 {
-    &menu_load_common_list, /*&menu_load_apple_network,*/
+    &menu_load_common_list, &menu_load_common_list1, \
+    &menu_load_common_list2,
 };
 
 /*********************************************************************************
@@ -48,7 +49,7 @@ static const vm_store_para_with_label_t default_label_para[Vm_Store_Para_Num] = 
 
     /*********默认系统语言*********/
     {.label = vm_label_sys_language, \
-        .store_para_val = comm_language_id_english},
+        .store_para_val = comm_language_id_chinese},
 
     /*********默认心率*********/
     {.label = vm_label_hr, .store_para_val = 0},

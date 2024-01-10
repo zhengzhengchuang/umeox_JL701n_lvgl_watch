@@ -29,15 +29,19 @@ static void menu_display_cb(lv_obj_t *obj)
 static void menu_key_cb(lv_obj_t *obj, int key_value, \
     int key_event)
 {
+    if(!obj) return;
+
     return;
 }
 
-register_ui_menu_load_info(menu_load_tool_box) = 
+register_ui_menu_load_info(\
+    menu_load_tool_box) = 
 {
     .menu_arg = NULL,
     .lock_flag = false,
     .return_flag = true,
-    .menu_id = ui_act_id_tool_box,
+    .menu_id = \
+        ui_act_id_tool_box,
     .user_offscreen_time = 0,
     .user_refresh_time_inv = 0,
     .key_func_cb = menu_key_cb,

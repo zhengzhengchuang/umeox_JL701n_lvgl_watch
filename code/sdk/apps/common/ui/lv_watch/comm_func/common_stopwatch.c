@@ -82,7 +82,8 @@ void common_user_stopwatch_resume(void)
     *stopwatch_state = stopwatch_state_start;
 
     if(!stopwatch_timer_id)
-        stopwatch_timer_id = sys_hi_timer_add(NULL, common_user_stopwatch_timeout_cb, stopwatch_timer_inv);
+        stopwatch_timer_id = sys_hi_timer_add(NULL, \
+            common_user_stopwatch_timeout_cb, stopwatch_timer_inv);
 
     return;
 }
@@ -173,7 +174,8 @@ void common_user_stopwatch_create(void)
 #endif
 
     if(!stopwatch_timer_id)
-        stopwatch_timer_id = sys_hi_timer_add(NULL, common_user_stopwatch_timeout_cb, stopwatch_timer_inv);
+        stopwatch_timer_id = sys_hi_timer_add(NULL, \
+            common_user_stopwatch_timeout_cb, stopwatch_timer_inv);
 
     *stopwatch_already_exist = true;
 

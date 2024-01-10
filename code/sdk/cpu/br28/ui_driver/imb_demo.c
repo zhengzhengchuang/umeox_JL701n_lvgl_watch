@@ -8898,12 +8898,6 @@ void lv_open_font(int offset, int len)
     if(len > FONT_BUF_LEN)
         len = FONT_BUF_LEN;
 
-    // open_fd("usr_nor");
-
-    // dev_bulk_read(get_res_fd(), g_font_buf, offset, len);
-
-    // close_fd();
-
     uint8_t *font_src_addr = (uint8_t *)offset;
 
     memcpy(g_font_buf, font_src_addr, len);

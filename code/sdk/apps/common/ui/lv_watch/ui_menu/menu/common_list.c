@@ -1,7 +1,8 @@
 #include "common_list.h"
 
 /****************图标源****************/
-static const uint32_t common_list_icon_src[Common_List_Elem_Num] = 
+static const uint32_t common_list_icon_src[\
+    Common_List_Elem_Num] = 
 {
     menu_100_100_icon_00_index, menu_100_100_icon_01_index, menu_100_100_icon_02_index, \
     menu_100_100_icon_03_index, menu_100_100_icon_04_index, menu_100_100_icon_05_index, \
@@ -12,7 +13,8 @@ static const uint32_t common_list_icon_src[Common_List_Elem_Num] =
 };
 
 /****************文本源id****************/
-static const comm_lang_txtid_t common_list_text_id[Common_List_Elem_Num] = 
+static const comm_lang_txtid_t common_list_text_id[\
+    Common_List_Elem_Num] = 
 {
     lang_txtid_phone, lang_txtid_notify, lang_txtid_quran_player, \
     lang_txtid_prayer_times, lang_txtid_azkar, lang_txtid_tasbih_reminder, \
@@ -22,16 +24,19 @@ static const comm_lang_txtid_t common_list_text_id[Common_List_Elem_Num] =
 };
 
 /****************元素容器点击索引****************/
-static const uint16_t common_list_elem_container_idx[Common_List_Elem_Num] =
+static const uint16_t common_list_elem_container_idx[\
+    Common_List_Elem_Num] =
 {
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, \
     10, 11, 12, 13, 14, 15, 
 };
 
 /****************通用列表滚动参数****************/
-static bool common_list_ver_scroll = false;
 static int16_t common_list_scroll_dela = 0;
 static int16_t common_list_scroll_offset = 0;
+
+/****************通用列表是否滚动****************/
+static bool common_list_ver_scroll = false;
 
 /****************通用列表按压点相关****************/
 static lv_point_t common_list_min_point = {0};
@@ -39,29 +44,38 @@ static lv_point_t common_list_max_point = {0};
 static lv_point_t common_list_now_point = {0};
 static lv_point_t common_list_start_point = {0};
 
-/****************通用列表图标半径****************/
-static const uint16_t common_list_icon_r = 50;
-
-/****************通用列表可视化个数****************/
-static const uint8_t common_list_visual_num = 3;
-
-/****************通用列表元素容器起始y****************/
-static const int16_t common_list_elem_container_sy = 37;
-
-/****************通用列表元素容器间隔****************/
-static const int16_t common_list_elem_container_inv = 137;
+/****************通用列表参数内容****************/
+static common_list_ctx_t common_list_ctx = \
+    {0};
 
 /****************通用列表元素总数****************/
 static const uint16_t common_list_elem_num = \
     Common_List_Elem_Num;
 
-/****************通用列表参数内容****************/
-static common_list_ctx_t common_list_ctx = {0};
+/****************通用列表可视化行****************/
+static const uint8_t common_list_visual_line = \
+    3;
+
+/****************通用列表元素容器sx****************/
+static const int16_t common_list_elem_container_sx = \
+    0;
+
+/****************通用列表元素容器起始y****************/
+static const int16_t common_list_elem_container_sy = \
+    17;
+
+/****************通用列表元素容器宽****************/
+static const int16_t common_list_elem_container_width = \
+    Common_List_Container_W;
+
+/****************通用列表2元素容器高****************/
+static const int16_t common_list_elem_container_height = \
+    (138);
+
 
 /****************函数声明定义****************/
 static void common_list_elem_container_scroll(void);
 static void common_list_container_event_cb(lv_event_t *e);
-
 
 
 /*********************************************************************************
@@ -163,18 +177,25 @@ static void common_list_container_create(lv_obj_t *obj)
     widget_obj_para.obj_parent = obj;
     widget_obj_para.obj_x = 0;
     widget_obj_para.obj_y = 0;
-    widget_obj_para.obj_width = Common_List_Container_W;
-    widget_obj_para.obj_height = Common_List_Container_H;
-    widget_obj_para.obj_bg_opax = LV_OPA_100;
-    widget_obj_para.obj_bg_color = lv_color_hex(0x000000);
-    widget_obj_para.obj_border_opax = LV_OPA_0;
+    widget_obj_para.obj_width = \
+        Common_List_Container_W;
+    widget_obj_para.obj_height = \
+        Common_List_Container_H;
+    widget_obj_para.obj_bg_opax = \
+        LV_OPA_0;
+    widget_obj_para.obj_bg_color = \
+        lv_color_hex(0x000000);
+    widget_obj_para.obj_border_opax = \
+        LV_OPA_0;
     widget_obj_para.obj_border_width = 0;
-    widget_obj_para.obj_border_color = lv_color_hex(0x000000);
+    widget_obj_para.obj_border_color = \
+        lv_color_hex(0x000000);
     widget_obj_para.obj_radius = 0;
     widget_obj_para.obj_is_scrollable = false;
-    *common_list_container = common_widget_obj_create(&widget_obj_para);
-    lv_obj_add_event_cb(*common_list_container, common_list_container_event_cb, \
-        LV_EVENT_ALL, NULL);
+    *common_list_container = \
+        common_widget_obj_create(&widget_obj_para);
+    lv_obj_add_event_cb(*common_list_container, \
+        common_list_container_event_cb, LV_EVENT_ALL, NULL);
 
     return;
 }
@@ -195,7 +216,8 @@ static void common_list_elem_container_click_cb(lv_event_t *e)
     if(common_list_ver_scroll || anim_progress)
         return;
 
-    uint16_t idx = *(uint16_t *)lv_event_get_user_data(e);
+    uint16_t idx = \
+        *(uint16_t *)lv_event_get_user_data(e);
 
     printf("******%s:%d\n", __func__, idx);
 
@@ -212,28 +234,46 @@ static void common_list_elem_container_create(void)
     lv_obj_t *common_list_container = \
         common_list_ctx.common_list_container;
 
-    widget_obj_para.obj_parent = common_list_container;
-    widget_obj_para.obj_width = Common_List_Container_W;
-    widget_obj_para.obj_height = common_list_icon_r*2;
-    widget_obj_para.obj_bg_opax = LV_OPA_0;
-    widget_obj_para.obj_bg_color = lv_color_hex(0x000000);
-    widget_obj_para.obj_border_opax = LV_OPA_0;
+    widget_obj_para.obj_parent = \
+        common_list_container;
+    widget_obj_para.obj_width = \
+        common_list_elem_container_width;
+    widget_obj_para.obj_height = \
+        common_list_elem_container_height;
+    widget_obj_para.obj_bg_opax = \
+        LV_OPA_0;
+    widget_obj_para.obj_bg_color = \
+        lv_color_hex(0x000000);
+    widget_obj_para.obj_border_opax = \
+        LV_OPA_0;
     widget_obj_para.obj_border_width = 0;
-    widget_obj_para.obj_border_color = lv_color_hex(0x000000);
+    widget_obj_para.obj_border_color = \
+        lv_color_hex(0x000000);
     widget_obj_para.obj_radius = 0;
     widget_obj_para.obj_is_scrollable = false;
 
     for(uint16_t idx = 0; idx < common_list_elem_num; idx++)
     {
-        widget_obj_para.obj_x = 0;
-        widget_obj_para.obj_y = common_list_elem_container_sy + \
-            common_list_elem_container_inv*idx + common_list_scroll_offset + \
-            common_list_scroll_dela;
-        common_list_elem_container[idx] = common_widget_obj_create(&widget_obj_para);
-        lv_obj_add_flag(common_list_elem_container[idx], LV_OBJ_FLAG_EVENT_BUBBLE);
+        widget_obj_para.obj_x = \
+            common_list_elem_container_sx;
+        widget_obj_para.obj_y = \
+            common_list_elem_container_sy + \
+                common_list_elem_container_height*idx + \
+                    common_list_scroll_offset + common_list_scroll_dela;
+        common_list_elem_container[idx] = \
+            common_widget_obj_create(&widget_obj_para);
+        lv_obj_add_flag(common_list_elem_container[idx], \
+            LV_OBJ_FLAG_EVENT_BUBBLE);
         lv_obj_add_event_cb(common_list_elem_container[idx], \
             common_list_elem_container_click_cb, LV_EVENT_SHORT_CLICKED, \
                 (void *)&common_list_elem_container_idx[idx]);
+
+        if(widget_obj_para.obj_y >= Common_List_Container_H || \
+            (widget_obj_para.obj_y + common_list_elem_container_height) < 0)
+        {
+            lv_obj_add_flag(common_list_elem_container[idx], \
+                LV_OBJ_FLAG_HIDDEN);
+        }
     }
 
     return;
@@ -251,8 +291,20 @@ static void common_list_elem_container_scroll(void)
     for(uint16_t idx = 0; idx < common_list_elem_num; idx++)
     {
         obj_y = common_list_elem_container_sy + \
-            common_list_elem_container_inv*idx + \
+            common_list_elem_container_height*idx + \
             common_list_scroll_offset + common_list_scroll_dela;
+
+        if(obj_y >= Common_List_Container_H || \
+            (obj_y + common_list_elem_container_height) < 0)
+        {
+            lv_obj_add_flag(common_list_elem_container[idx], \
+                LV_OBJ_FLAG_HIDDEN);
+            continue;
+        }
+            
+        lv_obj_clear_flag(common_list_elem_container[idx], \
+                LV_OBJ_FLAG_HIDDEN);
+
         lv_obj_set_y(common_list_elem_container[idx], obj_y);
     }
 
@@ -277,10 +329,14 @@ static void common_list_elem_icon_create(void)
 
     for(uint16_t idx = 0; idx < common_list_elem_num; idx++)
     {
-        widget_img_para.img_parent = common_list_elem_container[idx];
-        widget_img_para.file_img_dat = common_list_icon_src[idx];
-        common_list_icon[idx] = common_widget_img_create(&widget_img_para, NULL);
-        lv_obj_align(common_list_icon[idx], LV_ALIGN_LEFT_MID, 20, 0);
+        widget_img_para.img_parent = \
+            common_list_elem_container[idx];
+        widget_img_para.file_img_dat = \
+            common_list_icon_src[idx];
+        common_list_icon[idx] = \
+            common_widget_img_create(&widget_img_para, NULL);
+        lv_obj_align(common_list_icon[idx], \
+            LV_ALIGN_LEFT_MID, 20, 0);
     }
 
     return;
@@ -301,10 +357,14 @@ static void common_list_elem_label_create(void)
     widget_label_para.label_x = 0;
     widget_label_para.label_y = 0;
     widget_label_para.label_w = 200;
-    widget_label_para.label_h = 37*2;
-    widget_label_para.long_mode = LV_LABEL_LONG_WRAP;
-    widget_label_para.text_align = LV_TEXT_ALIGN_LEFT;
-    widget_label_para.label_text_color = lv_color_hex(0xffffff);
+    widget_label_para.label_h = \
+        Label_Line_Height;
+    widget_label_para.long_mode = \
+        LV_LABEL_LONG_SCROLL;
+    widget_label_para.text_align = \
+        LV_TEXT_ALIGN_LEFT;
+    widget_label_para.label_text_color = \
+        lv_color_hex(0xffffff);
     widget_label_para.user_text_font = NULL;
 
     for(uint16_t idx = 0; idx < common_list_elem_num; idx++)
@@ -317,8 +377,6 @@ static void common_list_elem_label_create(void)
             common_widget_label_create(&widget_label_para);
         lv_obj_align_to(common_list_label[idx], common_list_icon[idx], \
             LV_ALIGN_OUT_RIGHT_MID, 20, 0);
-        lv_obj_set_style_bg_opa(common_list_label[idx], LV_OPA_50, LV_PART_MAIN);
-        lv_obj_set_style_bg_color(common_list_label[idx], lv_color_hex(0xff0000), LV_PART_MAIN);
     }
 
     return;
@@ -368,20 +426,20 @@ static void common_list_container_pressing_cb(lv_event_t *e)
 
         int16_t scroll_top_val = 0;
         int16_t scroll_bottom_val = \
-            (-1)*(common_list_elem_num - common_list_visual_num) * \
-            common_list_elem_container_inv;
+            (-1)*(common_list_elem_num - common_list_visual_line) * \
+                common_list_elem_container_height;
 
         if(common_list_scroll_offset + common_list_scroll_dela > \
-            scroll_top_val + common_list_elem_container_inv)
+            scroll_top_val + common_list_elem_container_height)
         {
             common_list_scroll_dela = \
-                (scroll_top_val + common_list_elem_container_inv) - \
+                (scroll_top_val + common_list_elem_container_height) - \
                     common_list_scroll_offset;
         }else if(common_list_scroll_offset + common_list_scroll_dela < \
-            scroll_bottom_val - common_list_elem_container_inv)
+            scroll_bottom_val - common_list_elem_container_height)
         {
             common_list_scroll_dela = \
-                (scroll_bottom_val - common_list_elem_container_inv) - \
+                (scroll_bottom_val - common_list_elem_container_height) - \
                     common_list_scroll_offset;
         }
         
@@ -400,59 +458,71 @@ static void common_list_container_release_cb(lv_event_t *e)
     lv_indev_t *indev_act = lv_indev_get_act();
     lv_indev_get_throw(indev_act, &common_list_throw_vert);
 
-    int16_t throw_sum = common_list_calc_throw_sum(common_list_throw_vert.y);
+    int16_t throw_sum = \
+        common_list_calc_throw_sum(common_list_throw_vert.y);
 
-    common_list_scroll_offset += common_list_scroll_dela;
+    common_list_scroll_offset += \
+        common_list_scroll_dela;
     common_list_scroll_dela = 0;
 
     int16_t scroll_top_val = 0;
     int16_t scroll_bottom_val = \
-        (-1)*(common_list_elem_num - common_list_visual_num)* \
-        common_list_elem_container_inv;
+        (-1)*(common_list_elem_num - common_list_visual_line)* \
+        common_list_elem_container_height;
 
     int16_t throw_start = common_list_scroll_offset;
     int16_t throw_end = common_list_scroll_offset + throw_sum;
 
     int16_t throw_adjust = 0;
     uint32_t anim_duration = 0;
+    uint32_t anim_min_duration = 300;
+    uint32_t anim_max_duration = 700;
+
     if(throw_end > scroll_bottom_val && throw_end < scroll_top_val)
     {
-        throw_adjust = throw_end%common_list_elem_container_inv;
-		if(throw_adjust <= (-1)*(common_list_elem_container_inv/2))
-            throw_end -=(common_list_elem_container_inv + throw_adjust);	
+        throw_adjust = \
+            throw_end%common_list_elem_container_height;
+		if(throw_adjust <= (-1)*(common_list_elem_container_height/2))
+            throw_end -= \
+                (common_list_elem_container_height + throw_adjust);	
 		else
             throw_end -= throw_adjust;
 
-        anim_duration = LV_ABS(throw_sum)*2;
-        
+        anim_duration = LV_ABS(throw_sum)*2;    
     }else if(throw_end > scroll_top_val)
     {
         throw_end = scroll_top_val;
 
         if(throw_start != scroll_top_val)
-            anim_duration = LV_ABS(scroll_top_val - throw_start)*2;
+            anim_duration = \
+                LV_ABS(scroll_top_val - throw_start)*2;
         else
-            anim_duration = 300;
+            anim_duration = anim_min_duration;
     }else if(throw_end < scroll_bottom_val)
     {
         throw_end = scroll_bottom_val;
 
         if(throw_start != scroll_top_val)
-            anim_duration = LV_ABS(scroll_bottom_val - throw_start)*2;
+            anim_duration = \
+                LV_ABS(scroll_bottom_val - throw_start)*2;
         else
-            anim_duration = 300;
+            anim_duration = anim_min_duration;
     }
 
-    if(anim_duration < 300) anim_duration = 300;
-    if(anim_duration > 1500) anim_duration = 1500;
+    if(anim_duration < anim_min_duration) \
+        anim_duration = anim_min_duration;
+    if(anim_duration > anim_max_duration) \
+        anim_duration = anim_max_duration;
 
     lv_anim_t throw_anim;
     lv_obj_t *common_list_container = \
         common_list_ctx.common_list_container;
 
     widget_anim_para.anim = &throw_anim;
-    widget_anim_para.anim_obj = common_list_container;
-    widget_anim_para.anim_exec_xcb = common_list_throw_anim_cb; 
+    widget_anim_para.anim_obj = \
+        common_list_container;
+    widget_anim_para.anim_exec_xcb = \
+        common_list_throw_anim_cb; 
     widget_anim_para.anim_duration = anim_duration;
     widget_anim_para.anim_start_val = throw_start;
     widget_anim_para.anim_end_val = throw_end;
@@ -499,8 +569,9 @@ static void menu_create_cb(lv_obj_t *obj)
 {
     if(!obj) return;
 
-    tileview_register_all_menu(obj, ui_act_id_null, ui_act_id_null, \
-        ui_act_id_null, ui_act_id_null, ui_act_id_menu);
+    tileview_register_all_menu(obj, ui_act_id_null, \
+        ui_act_id_null, ui_act_id_null, ui_act_id_null, \
+            ui_act_id_menu);
 
     return;
 }
@@ -534,15 +605,19 @@ static void menu_display_cb(lv_obj_t *obj)
 static void menu_key_cb(lv_obj_t *obj, int key_value, \
     int key_event)
 {
+    if(!obj) return;
+
     return;
 }
 
-register_ui_menu_load_info(menu_load_common_list) = 
+register_ui_menu_load_info(\
+    menu_load_common_list) = 
 {
     .menu_arg = NULL,
     .lock_flag = false,
     .return_flag = true,
-    .menu_id = ui_act_id_menu,
+    .menu_id = \
+        ui_act_id_menu,
     .user_offscreen_time = 0,
     .user_refresh_time_inv = 0,
     .key_func_cb = menu_key_cb,

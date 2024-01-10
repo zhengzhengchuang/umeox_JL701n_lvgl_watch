@@ -248,39 +248,66 @@ const uint8_t lang_str_table[Comm_Lang_Num]\
 #if Comm_Conf_Lang_Hi
     //印地语
     {
-        "टेलिफोन",
+        "फोन",
         "संदेश सूचना",
-        "कुरान प्लेयर",
-        "सप्ताह का समय",
+        "कुरान खेलाड़ी",
+        "सप्ताह काल समय",
         "प्रार्थना",
-        "याद दिलाएं",
-        "अल्लाह के 99 नाम",
+        "स्मार्क जहिना",
+        "अला के 99 प्रतिक्षित नाम",
+        "मुस्लिम कैलेन्डर",
+        "सुप",
+        "हृदय दर",
+        "Name",
+        "चलना",
+        "अलार्म घड़ी",
+        "अधिक",
+        "सेटअप",
+        "चरण गणना",
     },
 #endif
 
 #if Comm_Conf_Lang_Ma
     //马来西亚语
     {
-        "Telefon",
-        "Pemberitahuan Mesej",
+        "telefon",
+        "Pemberitahuan mesej",
         "Pemain Al-Quran",
-        "Waktu sembahyang",
-        "Doa",
-        "Peringatan",
-        "99 Nama Allah",
+        "Waktu akhir minggu",
+        "Berdoa",
+        "Seperti peringatan",
+        "99 Nama Ala Dihormati",
+        "Kalendar Muslim",
+        "tidur",
+        "kadar jantung",
+        "oksigen darah",
+        "gerakan",
+        "jam penggera",
+        "lebih",
+        "tetapkan",
+        "Kiraan langkah",
     },
 #endif
 
 #if Comm_Conf_Lang_Uz
     //乌兹别克斯坦语
     {
-        "Tel",
-        "■ yangiliklar xabari",
-        "Qur'on o'yinchi",
-        "■ hafta vaqti",
-        "Ibodat",
-        "Eslatma kabi",
-        "Allohning 99 ta ismi"
+        "Telefon",
+        "bildirishnoma",
+        "Qur'on o'yinchisi",
+        "Ibodat vaqti",
+        "ibodatlar",
+        "Rahmat eslatma",
+        "Allohning 99 ismlari",
+        "Hijriy kalendar",
+        "uyqu",
+        "yurak urish tezligi",
+        "qon kislorodi",
+        "sport",
+        "Uyg'otuvchi soat",
+        "Ko'proq",
+        "sozlash; o'rnatish",
+        "Qadamlarni sanash",
     },
 #endif
 };

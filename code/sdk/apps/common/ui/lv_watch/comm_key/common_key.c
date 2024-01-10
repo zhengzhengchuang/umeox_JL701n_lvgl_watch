@@ -8,6 +8,21 @@
 /************使能TE定时器id************/
 static uint16_t enable_te_timer_id = 0;
 
+/************页面定时锁定标志************/
+static bool menu_timer_lock_flag = false;
+
+bool get_menu_timer_lock_flag(void)
+{
+    return menu_timer_lock_flag;
+}
+
+void set_menu_timer_lock_flag(bool flag)
+{
+    menu_timer_lock_flag = flag;
+
+    return;
+}
+
 /************使能TE超时回调函数************/
 static void enable_te_timeout_cb(void *priv)
 {
@@ -38,9 +53,14 @@ void common_key_msg_handle(int key_value, int key_event)
             ui_act_id_t act_id = ui_act_id_watchface;
             ui_menu_load_info_t *menu_load_info = \
                 &p_ui_info_cache->exit_menu_load_info;
-            if(menu_load_info->lock_flag)
+            bool timer_lock_flag = \
+                get_menu_timer_lock_flag();
+            if(menu_load_info->lock_flag || \
+                timer_lock_flag)
                 act_id = menu_load_info->menu_id;
             ui_menu_jump_handle(act_id);
+
+            common_menu_lock_timer_del();
 
             /**************亮屏打开TE**************/
             if(!enable_te_timer_id)
@@ -55,15 +75,6 @@ void common_key_msg_handle(int key_value, int key_event)
         /*******亮屏按键操作时，需重置熄屏定时器*******/
         common_offscreen_timer_restart();
 
-        int distance_data = \
-            get_vm_para_cache_with_label(\
-                vm_label_daily_distance);
-        distance_data += 100;
-
-        set_vm_para_cache_with_label(\
-            vm_label_daily_distance, \
-            distance_data);
-#if 0
         /*******页面不锁定，主按键返回表盘*******/
         bool menu_lock_flag = \
             p_ui_info_cache->menu_load_info.lock_flag;
@@ -83,7 +94,6 @@ void common_key_msg_handle(int key_value, int key_event)
             p_ui_info_cache->menu_load_info.key_func_cb;
         if(key_func_cb)
             key_func_cb(obj, key_value, key_event);
-#endif
     }
 
     return;

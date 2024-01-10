@@ -51,7 +51,8 @@ extern_ui_menu_load_info(menu_load_watchface_01);
 
 /*多个菜单共用同个id，需要extern出来*/
 extern_ui_menu_load_info(menu_load_common_list);
-//extern_ui_menu_load_info(menu_load_apple_network);
+extern_ui_menu_load_info(menu_load_common_list1);
+extern_ui_menu_load_info(menu_load_common_list2);
 #ifdef __cplusplus
 }
 #endif

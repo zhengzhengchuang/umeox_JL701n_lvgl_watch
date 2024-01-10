@@ -72,10 +72,12 @@ static void lvgl_task(void *p)
 
     lcd_sleep_ctrl(0);
 
-    lv_disp_get_default()->driver->render_start_cb = render_start_cb;
+    lv_disp_get_default()->driver->render_start_cb = \
+        render_start_cb;
 
     // Set the rounder_cb function    
-    lv_disp_get_default()->driver->rounder_cb = rounder_cb;
+    lv_disp_get_default()->driver->rounder_cb = \
+        rounder_cb;
 
     lv_port_indev_init();
  

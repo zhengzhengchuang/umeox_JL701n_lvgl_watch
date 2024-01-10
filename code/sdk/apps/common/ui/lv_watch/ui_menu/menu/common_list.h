@@ -22,6 +22,7 @@ typedef struct
     lv_obj_t *common_list_label[Common_List_Elem_Num];
     lv_obj_t *common_list_elem_container[Common_List_Elem_Num];
 }common_list_ctx_t;
+
 #ifdef __cplusplus
 } /* extern "C" */
 #endif

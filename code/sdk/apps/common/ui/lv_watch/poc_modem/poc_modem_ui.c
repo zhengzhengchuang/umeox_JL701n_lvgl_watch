@@ -52,15 +52,18 @@ void ui_menu_exit_prepare(ui_act_id_t act_id)
 
     if(!lcd_is_sleep)
         memcpy(&p_ui_info_cache->exit_menu_load_info, \
-                &p_ui_info_cache->menu_load_info, sizeof(ui_menu_load_info_t));
+                &p_ui_info_cache->menu_load_info, \
+                    sizeof(ui_menu_load_info_t));
 
     if(ui_act_id_validity(act_id))
     {
         if(!lcd_is_sleep)
         {
             /**********页面跳转************/
-            ui_act_id_t exit_act_id = p_ui_info_cache->cur_act_id;
-            bool return_flag = p_ui_info_cache->menu_load_info.return_flag;
+            ui_act_id_t exit_act_id = \
+                p_ui_info_cache->cur_act_id;
+            bool return_flag = \
+                p_ui_info_cache->menu_load_info.return_flag;
             if(act_id != exit_act_id && return_flag)
                 p_ui_info_cache->prev_act_id = exit_act_id;
         }else
@@ -93,13 +96,18 @@ void ui_menu_container_create(void)
     int16_t lcd_w = lv_disp_get_hor_res(NULL);
     int16_t lcd_h = lv_disp_get_ver_res(NULL);
 
-    lv_obj_t *ui_menu_container = lv_obj_create(lv_scr_act());
-    lv_obj_remove_style(ui_menu_container, NULL, LV_PART_SCROLLBAR|LV_STATE_DEFAULT);
-    lv_obj_remove_style(ui_menu_container, NULL, LV_PART_SCROLLBAR|LV_STATE_PRESSED);
+    lv_obj_t *ui_menu_container = \
+        lv_obj_create(lv_scr_act());
+    lv_obj_remove_style(ui_menu_container, NULL, \
+        LV_PART_SCROLLBAR|LV_STATE_DEFAULT);
+    lv_obj_remove_style(ui_menu_container, NULL, \
+        LV_PART_SCROLLBAR|LV_STATE_PRESSED);
     lv_obj_set_size(ui_menu_container, lcd_w, lcd_h);
     lv_obj_set_pos(ui_menu_container, 0, 0);
-    lv_obj_set_style_border_width(ui_menu_container, 0, LV_PART_MAIN);
-    lv_obj_set_style_bg_color(ui_menu_container, lv_color_hex(0x000000), LV_PART_MAIN);
+    lv_obj_set_style_border_width(ui_menu_container, \
+        0, LV_PART_MAIN);
+    lv_obj_set_style_bg_color(ui_menu_container, \
+        lv_color_hex(0x000000), LV_PART_MAIN);
     lv_obj_set_style_pad_all(ui_menu_container, 0, LV_PART_MAIN);
     lv_obj_clear_flag(ui_menu_container, LV_OBJ_FLAG_SCROLLABLE);
 
@@ -118,9 +126,11 @@ void ui_menu_jump_handle(ui_act_id_t act_id)
     printf("cur act id = %d\n", load_act_id);
     printf("prev act id = %d\n", p_ui_info_cache->prev_act_id);
 
-    ui_menu_load_info_t *menu_load_info = ui_menu_load_info(load_act_id);
+    ui_menu_load_info_t *menu_load_info = \
+        ui_menu_load_info(load_act_id);
     if(menu_load_info)
-        memcpy(&p_ui_info_cache->menu_load_info, menu_load_info, sizeof(ui_menu_load_info_t));
+        memcpy(&p_ui_info_cache->menu_load_info, \
+            menu_load_info, sizeof(ui_menu_load_info_t));
     else
     {
         printf("%s:menu_load_info is NULL!!!\n", __func__);
@@ -131,7 +141,8 @@ void ui_menu_jump_handle(ui_act_id_t act_id)
     ui_menu_container_create();
 
     if(p_ui_info_cache->menu_load_info.create_func_cb)
-        p_ui_info_cache->menu_load_info.create_func_cb(p_ui_info_cache->ui_menu_container);
+        p_ui_info_cache->menu_load_info.create_func_cb(\
+            p_ui_info_cache->ui_menu_container);
 
     common_refresh_timer_create();
 

@@ -3,7 +3,7 @@
 #include "../poc_modem/poc_modem_vm.h"
 #include "../../../../watch/include/task_manager/rtc/alarm.h"
 
-static bool is_alarm_monitor = true;
+//static bool is_alarm_monitor = true;
 static const uint32_t no_alarm_info = No_Alarm_Info;
 
 uint32_t common_user_alarm_read_info(uint8_t alarm_id)
@@ -54,11 +54,16 @@ void common_user_alarm_add(uint32_t alarm_union)
     alarm_info[*alarm_num].bit_field.alarm_repeat = \
         (alarm_union >> alarm_offset) & 0x7f;
 
-    printf("%s:alarm_id = %d\n", __func__, alarm_info[*alarm_num].bit_field.alarm_id);
-    printf("%s:alarm_hour = %d\n", __func__, alarm_info[*alarm_num].bit_field.alarm_hour);
-    printf("%s:alarm_minute = %d\n", __func__, alarm_info[*alarm_num].bit_field.alarm_minute);
-    printf("%s:alarm_enable = %d\n", __func__, alarm_info[*alarm_num].bit_field.alarm_enable);
-    printf("%s:alarm_repeat = 0x%02x\n", __func__, alarm_info[*alarm_num].bit_field.alarm_repeat);
+    printf("%s:alarm_id = %d\n", __func__, \
+        alarm_info[*alarm_num].bit_field.alarm_id);
+    printf("%s:alarm_hour = %d\n", __func__, \
+        alarm_info[*alarm_num].bit_field.alarm_hour);
+    printf("%s:alarm_minute = %d\n", __func__, \
+        alarm_info[*alarm_num].bit_field.alarm_minute);
+    printf("%s:alarm_enable = %d\n", __func__, \
+        alarm_info[*alarm_num].bit_field.alarm_enable);
+    printf("%s:alarm_repeat = 0x%02x\n", __func__, \
+        alarm_info[*alarm_num].bit_field.alarm_repeat);
 
     *alarm_num += 1;
 
@@ -84,7 +89,8 @@ void common_user_alarm_time_modify(uint32_t alarm_union)
 
     for(i = 0; i < *alarm_num; i++)
 	{
-		if(alarm_id == alarm_info[i].bit_field.alarm_id)
+		if(alarm_id == \
+            alarm_info[i].bit_field.alarm_id)
             break;
 	}
 
@@ -99,11 +105,16 @@ void common_user_alarm_time_modify(uint32_t alarm_union)
     alarm_info[i].bit_field.alarm_minute = \
         (alarm_union >> alarm_offset) & 0x3f;
 
-    printf("%s:alarm_id = %d\n", __func__, alarm_info[i].bit_field.alarm_id);
-    printf("%s:alarm_hour = %d\n", __func__, alarm_info[i].bit_field.alarm_hour);
-    printf("%s:alarm_minute = %d\n", __func__, alarm_info[i].bit_field.alarm_minute);
-    printf("%s:alarm_enable = %d\n", __func__, alarm_info[i].bit_field.alarm_enable);
-    printf("%s:alarm_repeat = 0x%02x\n", __func__, alarm_info[i].bit_field.alarm_repeat);
+    printf("%s:alarm_id = %d\n", __func__, \
+        alarm_info[i].bit_field.alarm_id);
+    printf("%s:alarm_hour = %d\n", __func__, \
+        alarm_info[i].bit_field.alarm_hour);
+    printf("%s:alarm_minute = %d\n", __func__, \
+        alarm_info[i].bit_field.alarm_minute);
+    printf("%s:alarm_enable = %d\n", __func__, \
+        alarm_info[i].bit_field.alarm_enable);
+    printf("%s:alarm_repeat = 0x%02x\n", __func__, \
+        alarm_info[i].bit_field.alarm_repeat);
 
     return;
 }
@@ -138,11 +149,16 @@ void common_user_alarm_repeat_modify(uint32_t alarm_union)
     alarm_info[i].bit_field.alarm_repeat = \
         (alarm_union >> alarm_offset) & 0x7f;
 
-    printf("%s:alarm_id = %d\n", __func__, alarm_info[i].bit_field.alarm_id);
-    printf("%s:alarm_hour = %d\n", __func__, alarm_info[i].bit_field.alarm_hour);
-    printf("%s:alarm_minute = %d\n", __func__, alarm_info[i].bit_field.alarm_minute);
-    printf("%s:alarm_enable = %d\n", __func__, alarm_info[i].bit_field.alarm_enable);
-    printf("%s:alarm_repeat = 0x%02x\n", __func__, alarm_info[i].bit_field.alarm_repeat);
+    printf("%s:alarm_id = %d\n", __func__, \
+        alarm_info[i].bit_field.alarm_id);
+    printf("%s:alarm_hour = %d\n", __func__, \
+        alarm_info[i].bit_field.alarm_hour);
+    printf("%s:alarm_minute = %d\n", __func__, \
+        alarm_info[i].bit_field.alarm_minute);
+    printf("%s:alarm_enable = %d\n", __func__, \
+        alarm_info[i].bit_field.alarm_enable);
+    printf("%s:alarm_repeat = 0x%02x\n", __func__, \
+        alarm_info[i].bit_field.alarm_repeat);
 
     return;
 }
@@ -166,7 +182,8 @@ void common_user_alarm_enable_modify(uint32_t alarm_union)
 
     for(i = 0; i < *alarm_num; i++)
 	{
-		if(alarm_id == alarm_info[i].bit_field.alarm_id)
+		if(alarm_id == \
+            alarm_info[i].bit_field.alarm_id)
             break;
 	}
 
@@ -177,11 +194,16 @@ void common_user_alarm_enable_modify(uint32_t alarm_union)
     alarm_info[i].bit_field.alarm_enable = \
         (alarm_union >> alarm_offset) & 0x1;
 
-    printf("%s:alarm_id = %d\n", __func__, alarm_info[i].bit_field.alarm_id);
-    printf("%s:alarm_hour = %d\n", __func__, alarm_info[i].bit_field.alarm_hour);
-    printf("%s:alarm_minute = %d\n", __func__, alarm_info[i].bit_field.alarm_minute);
-    printf("%s:alarm_enable = %d\n", __func__, alarm_info[i].bit_field.alarm_enable);
-    printf("%s:alarm_repeat = 0x%02x\n", __func__, alarm_info[i].bit_field.alarm_repeat);
+    printf("%s:alarm_id = %d\n", __func__, \
+        alarm_info[i].bit_field.alarm_id);
+    printf("%s:alarm_hour = %d\n", __func__, \
+        alarm_info[i].bit_field.alarm_hour);
+    printf("%s:alarm_minute = %d\n", __func__, \
+        alarm_info[i].bit_field.alarm_minute);
+    printf("%s:alarm_enable = %d\n", __func__, \
+        alarm_info[i].bit_field.alarm_enable);
+    printf("%s:alarm_repeat = 0x%02x\n", __func__, \
+        alarm_info[i].bit_field.alarm_repeat);
 
     return;
 }
@@ -221,7 +243,8 @@ void common_user_alarm_delete_one(uint8_t alarm_id)
 
     for(i = 0; i < *alarm_num; i++)
 	{
-		if(alarm_id == alarm_info[i].bit_field.alarm_id)
+		if(alarm_id == \
+            alarm_info[i].bit_field.alarm_id)
             break;
 	}
 	
@@ -267,16 +290,16 @@ void common_user_alarm_real_time_monitor(void)
 
     ui_get_sys_time(&alarm_sys_time);
 
-    if(alarm_sys_time.sec >= 58)
-        is_alarm_monitor = true;
+    // if(alarm_sys_time.sec >= 58)
+    //     is_alarm_monitor = true;
     
-    if(alarm_sys_time.sec != 0)//闹钟属于分钟处理事情
-        return;
+    // if(alarm_sys_time.sec != 0)//闹钟属于分钟处理事情
+    //     return;
 
-    if(!is_alarm_monitor) 
-        return;
+    // if(!is_alarm_monitor) 
+    //     return;
 
-    is_alarm_monitor = false;
+    //is_alarm_monitor = false;
 
     for(uint8_t i = 0; i < *alarm_num; i++)
     {

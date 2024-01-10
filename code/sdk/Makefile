@@ -962,7 +962,16 @@ c_SRC_FILES := \
 	apps/common/ui/lv_watch/ui_cover/ui_cover.c \
 	apps/common/ui/lv_watch/ui_tileview/ui_tileview.c \
 	apps/common/ui/lv_watch/ui_menu/weather/weather.c \
+	apps/common/ui/lv_watch/ui_menu/device_op/device_op.c \
+	apps/common/ui/lv_watch/ui_menu/sedentary/sedentary.c \
+	apps/common/ui/lv_watch/ui_menu/hr_warn/hr_warn.c \
+	apps/common/ui/lv_watch/ui_menu/off_wrist/off_wrist.c \
+	apps/common/ui/lv_watch/ui_menu/low_battery/low_battery.c \
+	apps/common/ui/lv_watch/ui_menu/ota_update/ota_update.c \
+	apps/common/ui/lv_watch/ui_menu/watchface_transp/watchface_transp.c \
 	apps/common/ui/lv_watch/ui_menu/menu/common_list.c \
+	apps/common/ui/lv_watch/ui_menu/menu/common_list1.c \
+	apps/common/ui/lv_watch/ui_menu/menu/common_list2.c \
 	apps/common/ui/lv_watch/ui_menu/watchface/watchface_00.c \
 	apps/common/ui/lv_watch/ui_menu/watchface/watchface_01.c \
 	apps/common/ui/lv_watch/ui_menu/watchface/watchface_main.c \
