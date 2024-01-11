@@ -20,15 +20,19 @@ void common_menu_lock_timer_del(void)
     set_menu_timer_lock_flag(false);
 
     if(menu_lock_timer_id)
+    {
         sys_timeout_del(menu_lock_timer_id);
-    
-    menu_lock_timer_id = 0;
+        menu_lock_timer_id = 0;
+    }
+        
+    return;
 }
 
 void common_menu_lock_timer_add(void)
 {
     set_menu_timer_lock_flag(true);
 
+    /*三分钟解锁*/
     if(!menu_lock_timer_id)
         menu_lock_timer_id = sys_timeout_add(NULL, \
             common_menu_lock_timer_cb, 3*60*1000);
@@ -41,9 +45,9 @@ static void common_offscreen_timer_cb(void *priv)
     if(cur_offscreen_time == Always_OnScreen)
         return;
         
-    int menu_offscreen_msg[1];
-    menu_offscreen_msg[0] = ui_msg_menu_offscreen;
-    post_ui_msg(menu_offscreen_msg, 1);
+    // int menu_offscreen_msg[1];
+    // menu_offscreen_msg[0] = ui_msg_menu_offscreen;
+    // post_ui_msg(menu_offscreen_msg, 1);
 
     return;
 }
@@ -67,6 +71,7 @@ void common_offscreen_msg_handle(void)
     extern volatile u8 usr_wait_te;
     usr_wait_te = 0;
 
+    /**************灭屏菜单定时锁定机制**************/
     common_menu_lock_timer_add();
 
     return;

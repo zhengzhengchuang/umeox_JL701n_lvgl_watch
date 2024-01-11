@@ -969,6 +969,7 @@ c_SRC_FILES := \
 	apps/common/ui/lv_watch/ui_menu/low_battery/low_battery.c \
 	apps/common/ui/lv_watch/ui_menu/ota_update/ota_update.c \
 	apps/common/ui/lv_watch/ui_menu/watchface_transp/watchface_transp.c \
+	apps/common/ui/lv_watch/ui_menu/scrollbar/scrollbar.c \
 	apps/common/ui/lv_watch/ui_menu/menu/common_list.c \
 	apps/common/ui/lv_watch/ui_menu/menu/common_list1.c \
 	apps/common/ui/lv_watch/ui_menu/menu/common_list2.c \

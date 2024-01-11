@@ -77,7 +77,9 @@ void lv_draw_label_dsc_init(lv_draw_label_dsc_t * dsc)
 LV_ATTRIBUTE_FAST_MEM void lv_draw_label(lv_draw_ctx_t * draw_ctx, const lv_draw_label_dsc_t * dsc,
                                          const lv_area_t * coords, const char * txt, lv_draw_label_hint_t * hint)
 {
-    if(dsc->opa <= LV_OPA_MIN) return;
+    if(dsc->opa <= LV_OPA_MIN) 
+        return;
+
     if(dsc->font == NULL) {
         LV_LOG_WARN("dsc->font == NULL");
         return;

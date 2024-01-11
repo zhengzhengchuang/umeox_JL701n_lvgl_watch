@@ -319,7 +319,8 @@ void common_user_alarm_real_time_monitor(void)
                 }
             }else
             {
-                if(alarm_info[i].bit_field.alarm_repeat & (0x1 << alarm_weekday))
+                if(alarm_info[i].bit_field.alarm_repeat & \
+                    (0x1 << alarm_weekday))
                 {
                     if(alarm_info[i].bit_field.alarm_enable)
                     {

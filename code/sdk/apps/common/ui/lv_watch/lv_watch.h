@@ -26,6 +26,7 @@ extern "C" {
 #include "./comm_func/common_stopwatch.h"
 #include "./comm_func/common_countdown.h"
 #include "./comm_widget/widget_refresh.h"
+#include "./ui_menu/scrollbar/scrollbar.h"
 #include "./ui_menu/split_screen/split_screen.h"
 #include "../../../../include_lib/system/timer.h"
 #include "../../../../include_lib/system/sys_time.h"
