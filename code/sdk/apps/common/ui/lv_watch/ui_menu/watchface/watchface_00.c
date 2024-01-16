@@ -72,6 +72,30 @@ static void menu_display_cb(lv_obj_t *obj)
     widget_img_para.event_cb = NULL;
     common_widget_img_create(&widget_img_para, NULL);
 
+#if 0
+    widget_label_para.label_parent = obj;
+    widget_label_para.label_x = 100;
+    widget_label_para.label_y = 300;
+    widget_label_para.label_w = 150;
+    widget_label_para.label_h = \
+        Label_Line_Height*2;
+    widget_label_para.long_mode = \
+        LV_LABEL_LONG_WRAP;
+    widget_label_para.text_align = \
+        LV_TEXT_ALIGN_LEFT;
+    widget_label_para.label_text = \
+        "你好呀，优美创新";
+    widget_label_para.label_text_color = \
+        lv_color_hex(0xffffff);
+    widget_label_para.user_text_font = NULL;
+    lv_obj_t *test_label = \
+        common_widget_label_create(&widget_label_para);
+    lv_obj_set_style_bg_opa(test_label, LV_OPA_100, \
+        LV_PART_MAIN);
+    lv_obj_set_style_bg_color(test_label, lv_color_hex(0xff0000), \
+        LV_PART_MAIN);
+#endif
+
     uint8_t clk_p_num = sizeof(clk_p_para)/sizeof(common_clock_pointer_para_t);
     common_clock_pointer_create(obj, &clk_p_para, clk_p_num);
 

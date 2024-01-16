@@ -7,7 +7,8 @@
 
 void tileview_info_clear(void)
 {
-    memset(&p_ui_info_cache->ui_tileview_info, 0, sizeof(ui_tileview_info_t));
+    memset(&p_ui_info_cache->ui_tileview_info, \
+        0, sizeof(ui_tileview_info_t));
 
     return;
 }

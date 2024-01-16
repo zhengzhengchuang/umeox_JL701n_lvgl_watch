@@ -155,13 +155,26 @@ static int16_t common_list1_calc_throw_sum(int16_t throw_vert)
 }
 
 /*********************************************************************************
-                                  通用列表1计算纵向抛出动画                         
+                                  通用列表1纵向抛出动画                         
 *********************************************************************************/
 static void common_list1_throw_anim_cb(void *var, int32_t val)
 {
     common_list1_scroll_offset = val;
 
     common_list1_elem_container_scroll();
+
+    common_scrollbar_press_handle(\
+        common_list1_scroll_offset);
+
+    return;
+}
+
+/*********************************************************************************
+                                  通用列表1纵向抛出动画结束                       
+*********************************************************************************/
+static void common_list1_throw_anim_ready_cb(lv_anim_t *anim)
+{
+    common_scrollbar_released_handle();
 
     return;
 }
@@ -362,11 +375,13 @@ static void common_list1_elem_label_create(void)
     widget_label_para.label_h = \
         Label_Line_Height*2;
     widget_label_para.long_mode = \
-        LV_LABEL_LONG_DOT;
+        LV_LABEL_LONG_WRAP;
     widget_label_para.text_align = \
         LV_TEXT_ALIGN_CENTER;
     widget_label_para.label_text_color = \
         lv_color_hex(0xffffff);
+    widget_label_para.label_ver_center = \
+        true;
     widget_label_para.user_text_font = NULL;
 
     for(uint16_t idx = 0; idx < common_list1_elem_num; idx++)
@@ -449,6 +464,10 @@ static void common_list1_container_pressing_cb(lv_event_t *e)
         }
         
         common_list1_elem_container_scroll();
+
+        common_scrollbar_press_handle(\
+            common_list1_scroll_offset \
+                + common_list1_scroll_dela);
     }
 
     return;
@@ -542,6 +561,8 @@ static void common_list1_container_release_cb(lv_event_t *e)
     common_widget_anim_create(&widget_anim_para);
     lv_anim_set_path_cb(widget_anim_para.anim, \
         lv_anim_path_ease_out);
+    lv_anim_set_ready_cb(widget_anim_para.anim, \
+        common_list1_throw_anim_ready_cb);
     lv_anim_start(widget_anim_para.anim);
 
     return;
@@ -575,6 +596,15 @@ static void common_list1_layout_create(void)
 
     common_list1_elem_label_create();
 
+    lv_obj_t *common_list1_container = \
+        common_list1_ctx.common_list1_container;
+    int16_t scroll_bottom_val = \
+        (-1)*(((common_list1_elem_num+1)/2) - \
+            common_list1_visual_line) * \
+                common_list1_elem_container_height;
+    common_scrollbar_create(common_list1_container, \
+        common_list1_scroll_offset, scroll_bottom_val);
+
     return;
 }
 
@@ -591,6 +621,8 @@ static void menu_create_cb(lv_obj_t *obj)
 
 static void menu_destory_cb(lv_obj_t *obj)
 {
+    common_scrollbar_destroy();
+
     return;
 }
 

@@ -50,7 +50,7 @@ apps/watch/ui/lcd/STYLE_WATCH_NEW/ui_upgrade_action.c \
 
 
 
-
+apps/common/ui/lvgl/src/font/lv_font_montserrat_32.c  \
 apps/common/ui/lvgl/src/font/lv_font_montserrat_10.c  \
 apps/common/ui/lvgl/src/font/lv_font_montserrat_12_subpx.c  \
 apps/common/ui/lvgl/src/font/lv_font_montserrat_14.c  \

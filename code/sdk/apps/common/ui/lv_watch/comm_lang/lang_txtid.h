@@ -28,6 +28,17 @@ enum
     lang_txtid_more, //更多
     lang_txtid_settings, //设置
     lang_txtid_pedometer, //计步
+    lang_txtid_menu_view, //菜单视图
+    lang_txtid_sound, //声音
+    lang_txtid_display, //展示
+    lang_txtid_language, //语言
+    lang_txtid_unit, //计量单位
+    lang_txtid_shortcuts, //快捷方式
+    lang_txtid_about, //关于
+    lang_txtid_sound_on, //声音 - 开启
+    lang_txtid_view_list, //列表
+    lang_txtid_view_grid_1, //网格1
+    lang_txtid_view_grid_2, //网格2
 
     lang_txtid_max,
 };

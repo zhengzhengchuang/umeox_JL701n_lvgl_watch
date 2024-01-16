@@ -191,10 +191,10 @@ ui_menu_load_info_t *ui_menu_load_info(ui_act_id_t act_id)
         }
     }else if(act_id == ui_act_id_menu)
     {
-        ui_menu_style_t menu_style = \
-            get_vm_para_cache_with_label(vm_label_menu_style);
+        ui_menu_view_t menu_style = \
+            get_vm_para_cache_with_label(vm_label_menu_view);
 
-        ui_menu_style_t i;
+        ui_menu_view_t i;
         list_for_ui_menu_style(i)
         {
             if(menu_style == i)

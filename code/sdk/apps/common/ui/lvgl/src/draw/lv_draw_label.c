@@ -122,6 +122,8 @@ LV_ATTRIBUTE_FAST_MEM void lv_draw_label(lv_draw_ctx_t * draw_ctx, const lv_draw
 
     int32_t line_height_font = lv_font_get_line_height(font);
     int32_t line_height = line_height_font + dsc->line_space;
+    // printf("font = %p\n", font);
+    // printf("line_height = %d\n", line_height);
 
     /*Init variables for the first line*/
     int32_t line_width = 0;
@@ -154,7 +156,10 @@ LV_ATTRIBUTE_FAST_MEM void lv_draw_label(lv_draw_ctx_t * draw_ctx, const lv_draw
     }
 
     uint32_t line_end = line_start + _lv_txt_get_next_line(&txt[line_start], font, dsc->letter_space, w, NULL, dsc->flag);
+    // if(font == &font_common_32)
+    //     printf("line_end = %d\n", line_end);
 
+    //printf("%s:y1 = %d\n", __func__, draw_ctx->clip_area->y1);
     /*Go the first visible line*/
     while(pos.y + line_height_font < draw_ctx->clip_area->y1) {
         /*Go to next line*/
@@ -177,13 +182,13 @@ LV_ATTRIBUTE_FAST_MEM void lv_draw_label(lv_draw_ctx_t * draw_ctx, const lv_draw
         line_width = lv_txt_get_width(&txt[line_start], line_end - line_start, font, dsc->letter_space, dsc->flag);
 
         pos.x += (lv_area_get_width(coords) - line_width) / 2;
-
     }
     /*Align to the right*/
     else if(align == LV_TEXT_ALIGN_RIGHT) {
         line_width = lv_txt_get_width(&txt[line_start], line_end - line_start, font, dsc->letter_space, dsc->flag);
         pos.x += lv_area_get_width(coords) - line_width;
     }
+
     uint32_t sel_start = dsc->sel_start;
     uint32_t sel_end = dsc->sel_end;
     if(sel_start > sel_end) {

@@ -24,16 +24,16 @@ typedef uint8_t ui_watchface_id_t;
 
 enum
 {
-    ui_menu_style_00 = 0x00,
-    ui_menu_style_01,
-    ui_menu_style_02,
+    ui_menu_view_00 = 0x00,
+    ui_menu_view_01,
+    ui_menu_view_02,
 
-    ui_menu_style_max,
+    ui_menu_view_max,
 };
-typedef uint8_t ui_menu_style_t;
+typedef uint8_t ui_menu_view_t;
 
 #define list_for_ui_menu_style(id) \
-    for(id = ui_menu_style_00; id < ui_menu_style_max; id++)
+    for(id = ui_menu_view_00; id < ui_menu_view_max; id++)
 
 enum
 {
@@ -44,12 +44,15 @@ enum
     ui_act_id_hr_warn,
     ui_act_id_tool_box,
     ui_act_id_sedentary,
+    ui_act_id_menu_view,
     ui_act_id_watchface,
     ui_act_id_off_wrist,
     ui_act_id_device_op, 
     ui_act_id_ota_update,
+    ui_act_id_sound_ctrl,
     ui_act_id_low_battery,
-    ui_act_id_worship_time,   
+    ui_act_id_worship_time,  
+    ui_act_id_settings_list, 
     ui_act_id_watchface_transp,
 
     ui_act_id_max,

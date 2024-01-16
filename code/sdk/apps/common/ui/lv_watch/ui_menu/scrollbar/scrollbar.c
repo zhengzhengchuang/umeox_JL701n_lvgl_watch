@@ -1,8 +1,8 @@
 #include "scrollbar.h"
 
 /****************通用滚动条参数内容****************/
-static common_scrollbar_ctx_t common_scrollbar_ctx = \
-    {0};
+static common_scrollbar_ctx_t \
+    common_scrollbar_ctx = {0};
 
 
 static void del_anim_with_var(void *var)
@@ -15,10 +15,8 @@ static void del_anim_with_var(void *var)
     return;
 }
 
-static void common_scrollbar_hidden_anim_cb(void *var, int32_t val)
+static void scrollbar_hidden_anim_cb(void *var, int32_t val)
 {
-    if(!var) return;
-    
     val = val<LV_OPA_0?LV_OPA_0:val;
     val = val>LV_OPA_100?LV_OPA_100:val;
     
@@ -31,10 +29,14 @@ static void common_scrollbar_hidden_anim_cb(void *var, int32_t val)
     lv_obj_set_style_bg_opa(scrollbar_1_obj, val, \
         LV_PART_MAIN);
 
+    if(val <= LV_OPA_0)
+        lv_obj_add_flag(scrollbar_0_obj, \
+            LV_OBJ_FLAG_HIDDEN);
+
     return;
 }
 
-static void common_scrollbar_hidden_anim_add(lv_obj_t *obj)
+static void scrollbar_hidden_anim_add(lv_obj_t *obj)
 {
     if(!obj) return;
 
@@ -42,7 +44,7 @@ static void common_scrollbar_hidden_anim_add(lv_obj_t *obj)
     widget_anim_para.anim = &hidden_anim;
     widget_anim_para.anim_obj = obj;
     widget_anim_para.anim_exec_xcb = \
-        common_scrollbar_hidden_anim_cb;
+        scrollbar_hidden_anim_cb;
     widget_anim_para.anim_duration = 500;
     widget_anim_para.anim_start_val = \
         LV_OPA_100;
@@ -95,8 +97,10 @@ void common_scrollbar_create(lv_obj_t *obj, \
     lv_obj_align(*scrollbar_0_obj, LV_ALIGN_TOP_RIGHT, \
         -40, 50);
 
-    uint16_t scrollbar_1_w = 12;
-    uint16_t scrollbar_1_h = 12;
+    uint16_t scrollbar_1_w = \
+        scrollbar_0_w;
+    uint16_t scrollbar_1_h = \
+        scrollbar_0_w;
     int16_t *scrollbar_total = \
         &common_scrollbar_ctx.scrollbar_total;
     lv_obj_t **scrollbar_1_obj = \
@@ -125,6 +129,9 @@ void common_scrollbar_create(lv_obj_t *obj, \
     *scrollbar_1_obj = \
         common_widget_obj_create(&widget_obj_para);
 
+    lv_obj_add_flag(scrollbar_0_obj, \
+        LV_OBJ_FLAG_HIDDEN);
+
     bool *scrollbar_add = \
         &common_scrollbar_ctx.scrollbar_add;
     *scrollbar_add = true;
@@ -143,6 +150,12 @@ void common_scrollbar_press_handle(int16_t scroll_offset)
         common_scrollbar_ctx.scrollbar_0_obj;
     lv_obj_t *scrollbar_1_obj = \
         common_scrollbar_ctx.scrollbar_1_obj;
+
+    if(lv_obj_has_flag(scrollbar_0_obj, \
+        LV_OBJ_FLAG_HIDDEN))
+        lv_obj_clear_flag(scrollbar_0_obj, \
+            LV_OBJ_FLAG_HIDDEN);
+
     lv_obj_set_style_bg_opa(scrollbar_0_obj, \
         LV_OPA_100, LV_PART_MAIN);
     lv_obj_set_style_bg_opa(scrollbar_1_obj, \
@@ -150,8 +163,8 @@ void common_scrollbar_press_handle(int16_t scroll_offset)
 
     del_anim_with_var(scrollbar_0_obj);
 
-    int16_t *scrollbar_total = \
-        &common_scrollbar_ctx.scrollbar_total;
+    int16_t scrollbar_total = \
+        common_scrollbar_ctx.scrollbar_total;
     
     int16_t scrollbar_0_h = \
         lv_obj_get_height(scrollbar_0_obj);
@@ -160,7 +173,7 @@ void common_scrollbar_press_handle(int16_t scroll_offset)
 
     int16_t obj_1_y = \
         (scroll_offset*(scrollbar_0_h - scrollbar_1_h))/ \
-            (*scrollbar_total);
+            (scrollbar_total);
 
     obj_1_y = \
         obj_1_y<0?0:obj_1_y;
@@ -182,7 +195,7 @@ void common_scrollbar_released_handle(void)
 
     lv_obj_t *scrollbar_0_obj = \
         common_scrollbar_ctx.scrollbar_0_obj;       
-    common_scrollbar_hidden_anim_add(scrollbar_0_obj);
+    scrollbar_hidden_anim_add(scrollbar_0_obj);
 
     return;
 }

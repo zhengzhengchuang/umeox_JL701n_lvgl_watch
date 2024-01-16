@@ -148,9 +148,10 @@ u8 get_max_sys_vol(void)
 #if 1
 u8 get_tone_vol(void)
 {
-    if (!audio_cfg.tone_vol) {
+    if(!audio_cfg.tone_vol) {
         return (get_max_sys_vol());
     }
+
     if (audio_cfg.tone_vol > get_max_sys_vol()) {
         return (get_max_sys_vol());
     }
@@ -316,6 +317,7 @@ void cfg_file_parse(u8 idx)
         app_var.usb_mic_gain = usb_mic_gain;
         log_info("usb_mic_gain: %d\n", app_var.usb_mic_gain);
 
+
         s8 default_volume = -1;
         s8 music_volume = -1;
 #if SYS_DEFAULT_VOL
@@ -346,7 +348,10 @@ void cfg_file_parse(u8 idx)
         app_var.call_volume = app_var.aec_dac_gain;
         app_var.opid_play_vol_sync = app_var.music_volume * 127 / audio_cfg.max_sys_vol;
 
-        log_info("max vol:%d default vol:%d tone vol:%d vol_sync:%d\n", audio_cfg.max_sys_vol, default_volume, audio_cfg.tone_vol, app_var.opid_play_vol_sync);
+        printf("music_volume:%d, call_volume:%d\n", \
+            app_var.music_volume, app_var.call_volume);
+        printf("max vol:%d default vol:%d tone vol:%d vol_sync:%d\n", \
+            audio_cfg.max_sys_vol, default_volume, audio_cfg.tone_vol, app_var.opid_play_vol_sync);
     }
 
 #if (USE_CONFIG_CHARGE_SETTING) && (TCFG_CHARGE_ENABLE)

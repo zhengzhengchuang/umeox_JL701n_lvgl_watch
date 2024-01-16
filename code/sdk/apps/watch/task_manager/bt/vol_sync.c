@@ -102,7 +102,6 @@ void set_music_device_volume(int volume)
     app_var.opid_play_vol_sync = vol_sync_tab[(volume + 1) / 8];
 
     app_audio_set_volume(APP_AUDIO_STATE_MUSIC, music_volume, 1);
-
 #endif
 }
 

@@ -120,7 +120,8 @@ static void app_audio_volume_change(void)
     local_irq_disable();
     __this->save_vol_cnt = 0;
     if (__this->save_vol_timer == 0) {
-        __this->save_vol_timer = sys_timer_add(NULL, app_audio_volume_save_do, 1000);//中断里不能操作vm 关中断不能操作vm
+        __this->save_vol_timer = sys_timer_add(NULL, \
+            app_audio_volume_save_do, 1000);//中断里不能操作vm 关中断不能操作vm
     }
     local_irq_enable();
 }
@@ -429,16 +430,12 @@ void audio_fade_in_fade_out(u8 left_gain, u8 right_gain, u8 fade)
 #endif/*SYS_VOL_TYPE == VOL_TYPE_AD*/
 }
 
-
-
 extern char *music_dig_logo[];
 
 extern void *sys_digvol_group;
 
-
 void app_audio_set_volume(u8 state, s8 volume, u8 fade)
 {
-
     char *digvol_type = NULL ;
 
 #if (SMART_BOX_EN && RCSP_ADV_EQ_SET_ENABLE)
@@ -494,8 +491,6 @@ void app_audio_set_volume(u8 state, s8 volume, u8 fade)
 #endif
 
 #if APP_AUDIO_STATE_WTONE_BY_MUSIC == 1
-
-
         app_var.wtone_volume = app_var.music_volume;
         if (app_var.wtone_volume < 5) {
             app_var.wtone_volume = 5;
@@ -511,7 +506,9 @@ void app_audio_set_volume(u8 state, s8 volume, u8 fade)
     default:
         return;
     }
-    if (state == __this->state) {
+
+    if(state == __this->state) 
+    {
 #if (AUDIO_OUT_WAY_TYPE & AUDIO_WAY_TYPE_FM)
         fm_emitter_manage_set_vol(volume);
 #else
@@ -541,7 +538,6 @@ void app_audio_set_volume(u8 state, s8 volume, u8 fade)
                 audio_dig_vol_group_vol_set(sys_digvol_group, digvol_type, AUDIO_DIG_VOL_ALL_CH, volume);
             }
         }
-
         else {
             audio_fade_in_fade_out(volume, volume, fade);
         }
@@ -550,18 +546,15 @@ void app_audio_set_volume(u8 state, s8 volume, u8 fade)
 
         audio_fade_in_fade_out(volume, volume, fade);
 #endif //vol_type_diggroup
-
-
 #endif /*#if (AUDIO_OUT_WAY_TYPE & AUDIO_WAY_TYPE_FM)*/
-
     }
+
     app_audio_volume_change();
 }
 
 
 void app_audio_set_volume_each_channel(u8 state, s8 volume_l, s8 volume_r, u8 fade)
 {
-
     char *digvol_type = NULL ;
 #if (SMART_BOX_EN && RCSP_ADV_EQ_SET_ENABLE)
     extern bool smartbox_set_volume(s8 volume);
@@ -731,9 +724,6 @@ s8 app_audio_get_volume(u8 state)
         break;
 #else
         volume = app_var.wtone_volume;
-        /* if (!volume) { */
-        /* volume = app_var.music_volume; */
-        /* } */
         break;
 #endif
     case APP_AUDIO_CURRENT_STATE:
@@ -742,7 +732,7 @@ s8 app_audio_get_volume(u8 state)
     default:
         break;
     }
-    /* printf("app_audio_get_volume %d %d\n", state, volume); */
+
     return volume;
 }
 
@@ -769,9 +759,6 @@ s8 app_audio_get_volume_r(u8 state)
         break;
 #else
         volume = app_var.wtone_volume_r;
-        /* if (!volume) { */
-        /* volume = app_var.music_volume; */
-        /* } */
         break;
 #endif
     case APP_AUDIO_CURRENT_STATE:
@@ -948,8 +935,6 @@ void app_audio_state_switch(u8 state, s16 max_volume)
         __this->max_volume[state] = 15;
     }
 
-
-
 #if (SYS_VOL_TYPE ==VOL_TYPE_DIGGROUP)
     u8 dac_connect_mode =  app_audio_output_mode_get();
     switch (dac_connect_mode) {
@@ -970,7 +955,6 @@ void app_audio_state_switch(u8 state, s16 max_volume)
 
     }
 #endif
-
 
     app_audio_set_volume(__this->state, app_audio_get_volume(__this->state), 1);
 }

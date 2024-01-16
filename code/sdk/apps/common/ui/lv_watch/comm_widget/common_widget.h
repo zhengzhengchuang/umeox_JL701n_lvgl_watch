@@ -141,6 +141,9 @@ typedef struct
     /*标签文本颜色*/
     lv_color_t label_text_color;
 
+    /*标签是否纵向居中*/
+    bool label_ver_center;
+
     /*标签用户文本字体*/
     const lv_font_t *user_text_font; //NULL:默认字体，非NULL:用户自定义字体
 }common_widget_label_para_t;

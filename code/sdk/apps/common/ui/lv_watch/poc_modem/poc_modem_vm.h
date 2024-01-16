@@ -24,7 +24,7 @@ enum
     vm_label_time_zone,
 
     /*******菜单风格*******/
-    vm_label_menu_style,
+    vm_label_menu_view,
 
     /*******小时制*******/
     vm_label_time_format,
@@ -38,6 +38,9 @@ enum
     /*******系统语言*******/
     vm_label_sys_language,
 
+    /*******系统声音开启*******/
+    vm_label_sys_sound_on,
+  
     /*******心率数据*******/
     vm_label_hr,
     vm_label_min_hr,

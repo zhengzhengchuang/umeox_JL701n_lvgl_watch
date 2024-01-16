@@ -138,6 +138,7 @@ lv_obj_t *common_widget_label_create(common_widget_label_para_t *label_para)
     lv_obj_t *common_widget_label = lv_label_create(label_para->label_parent);
     lv_obj_set_pos(common_widget_label, label_para->label_x, label_para->label_y);
     lv_label_set_text(common_widget_label, label_para->label_text);
+    lv_label_set_ver_center(common_widget_label, label_para->label_ver_center);
     lv_label_set_long_mode(common_widget_label, label_para->long_mode);
     lv_obj_set_size(common_widget_label, label_para->label_w, label_para->label_h);
     lv_obj_set_style_text_align(common_widget_label, label_para->text_align, LV_PART_MAIN);

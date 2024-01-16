@@ -74,6 +74,7 @@ typedef struct {
     uint8_t recolor : 1;                /*Enable in-line letter re-coloring*/
     uint8_t expand : 1;                 /*Ignore real width (used by the library with LV_LABEL_LONG_SCROLL)*/
     uint8_t dot_tmp_alloc : 1;         /*1: dot is allocated, 0: dot directly holds up to 4 chars*/
+    uint8_t ver_center :1;
 } lv_label_t;
 
 extern const lv_obj_class_t lv_label_class;
@@ -131,6 +132,8 @@ void lv_label_set_long_mode(lv_obj_t * obj, lv_label_long_mode_t long_mode);
  * @example "This is a #ff0000 red# word"
  */
 void lv_label_set_recolor(lv_obj_t * obj, bool en);
+
+void lv_label_set_ver_center(lv_obj_t * obj, bool en);
 
 /**
  * Set where text selection should start

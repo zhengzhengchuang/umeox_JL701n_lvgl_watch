@@ -7,7 +7,6 @@ extern "C" {
 
 #include "../../lv_watch.h"
 
-
 #ifdef __cplusplus
 } /* extern "C" */
 #endif

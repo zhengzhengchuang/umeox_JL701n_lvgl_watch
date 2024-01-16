@@ -35,7 +35,7 @@ typedef struct{
 
 static x_header_t __g_xbf_hd = {
     .min = 0x000a,
-    .max = 0xfefc,
+    .max = 0xff1f,
     .bpp = 2,
 };
 

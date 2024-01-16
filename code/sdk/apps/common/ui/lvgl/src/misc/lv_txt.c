@@ -135,6 +135,11 @@ void lv_txt_get_size(lv_point_t * size_res, const char * text, const lv_font_t *
         size_res->y = letter_height;
     else
         size_res->y -= line_space;
+
+    // if(font == &font_common_32)
+    //     printf("size_res->y = %d\n", size_res->y);
+
+    return;
 }
 
 /**
@@ -306,8 +311,12 @@ uint32_t _lv_txt_get_next_line(const char * txt, const lv_font_t * font,
     uint32_t i = 0;                                        /*Iterating index into txt*/
 
     while(txt[i] != '\0' && max_width > 0) {
+        // if(font == &font_common_32)
+        //     printf("max_width = %d\n", max_width);
         uint32_t word_w = 0;
         uint32_t advance = lv_txt_get_next_word(&txt[i], font, letter_space, max_width, flag, &word_w, &cmd_state, i == 0);
+        // if(font == &font_common_32)
+        //     printf("advance = %d\n", advance);
         max_width -= word_w;
         line_w += word_w;
 
@@ -337,6 +346,9 @@ uint32_t _lv_txt_get_next_line(const char * txt, const lv_font_t * font,
     if(used_width != NULL) {
         *used_width = line_w;
     }
+
+    // if(font == &font_common_32)
+    //     printf("%s:0x%x\n", __func__, txt[i]);
 
     return i;
 }

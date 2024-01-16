@@ -32,8 +32,8 @@ static const vm_store_para_with_label_t default_label_para[Vm_Store_Para_Num] = 
         .store_para_val = 0x08}, 
 
     /*********默认菜单风格*********/
-    {.label = vm_label_menu_style, \
-        .store_para_val = ui_menu_style_00},
+    {.label = vm_label_menu_view, \
+        .store_para_val = ui_menu_view_00},
 
     /*********默认时间格式:24小时制*********/
     {.label = vm_label_time_format, \
@@ -49,8 +49,12 @@ static const vm_store_para_with_label_t default_label_para[Vm_Store_Para_Num] = 
 
     /*********默认系统语言*********/
     {.label = vm_label_sys_language, \
-        .store_para_val = comm_language_id_chinese},
+        .store_para_val = comm_language_id_english},
 
+    /*********默认系统声音开启、音量*********/
+    {.label = vm_label_sys_sound_on, \
+        .store_para_val = 0},
+ 
     /*********默认心率*********/
     {.label = vm_label_hr, .store_para_val = 0},
     {.label = vm_label_min_hr, .store_para_val = 0},

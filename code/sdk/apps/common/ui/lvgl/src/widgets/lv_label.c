@@ -229,6 +229,19 @@ void lv_label_set_recolor(lv_obj_t * obj, bool en)
     lv_label_refr_text(obj);
 }
 
+void lv_label_set_ver_center(lv_obj_t * obj, bool en)
+{
+    LV_ASSERT_OBJ(obj, MY_CLASS);
+
+    lv_label_t * label = (lv_label_t *)obj;
+
+    if(label->ver_center == en) return;
+
+    label->ver_center = en == false ? 0 : 1;
+
+    return;
+}
+
 void lv_label_set_text_sel_start(lv_obj_t * obj, uint32_t index)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
@@ -796,6 +809,8 @@ static void draw_main(lv_event_t * e)
 
     lv_area_t txt_coords;
     lv_obj_get_content_coords(obj, &txt_coords);
+    // printf("x0=%d, x1=%d, y0=%d, y1=%d\n", \
+    //     txt_coords.x1, txt_coords.x2, txt_coords.y1, txt_coords.y2);
 
     lv_text_flag_t flag = LV_TEXT_FLAG_NONE;
     if(label->recolor != 0) flag |= LV_TEXT_FLAG_RECOLOR;
@@ -807,6 +822,8 @@ static void draw_main(lv_event_t * e)
 
     label_draw_dsc.ofs_x = label->offset.x;
     label_draw_dsc.ofs_y = label->offset.y;
+    // printf("ofs_x = %d, ofs_y = %d\n", \
+    //     label_draw_dsc.ofs_x, label_draw_dsc.ofs_y);
 
     label_draw_dsc.flag = flag;
     lv_obj_init_draw_label_dsc(obj, LV_PART_MAIN, &label_draw_dsc);
@@ -849,6 +866,25 @@ static void draw_main(lv_event_t * e)
         lv_area_move(&txt_coords, 0, -s);
         txt_coords.y2 = obj->coords.y2;
     }
+
+    //user add start
+    int16_t w = txt_coords.x2 - txt_coords.x1 + 1;
+    int16_t h = txt_coords.y2 - txt_coords.y1 + 1;
+    if(label->long_mode == LV_LABEL_LONG_WRAP || \
+            label->long_mode == LV_LABEL_LONG_DOT || \
+                label->long_mode == LV_LABEL_LONG_CLIP)
+    {
+        lv_point_t size; 
+        lv_txt_get_size(&size, label->text, label_draw_dsc.font, \
+            label_draw_dsc.letter_space, label_draw_dsc.line_space,
+                w, flag);
+
+        if(size.y < h && label->ver_center)
+            label_draw_dsc.ofs_y += \
+                (h - size.y)/2;
+    }
+    //user add end
+
     if(label->long_mode == LV_LABEL_LONG_SCROLL || label->long_mode == LV_LABEL_LONG_SCROLL_CIRCULAR) {
         const lv_area_t * clip_area_ori = draw_ctx->clip_area;
         draw_ctx->clip_area = &txt_clip;

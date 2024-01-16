@@ -5,7 +5,7 @@ static void menu_create_cb(lv_obj_t *obj)
     if(!obj) return;
 
     tileview_register_all_menu(obj, ui_act_id_null, \
-        ui_act_id_null, ui_act_id_watchface, ui_act_id_null, \
+        ui_act_id_null, ui_act_id_null, ui_act_id_null, \
             ui_act_id_weather);
 
     return;

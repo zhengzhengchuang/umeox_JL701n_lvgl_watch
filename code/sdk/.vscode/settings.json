@@ -174,7 +174,14 @@
         "off_wrist.h": "c",
         "watchface_transp.h": "c",
         "ota_update.h": "c",
-        "scrollbar.h": "c"
+        "scrollbar.h": "c",
+        "settings.h": "c",
+        "settings_list.h": "c",
+        "sound.h": "c",
+        "sound_ctrl.h": "c",
+        "user_cfg.h": "c",
+        "audio_config.h": "c",
+        "menu_view.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

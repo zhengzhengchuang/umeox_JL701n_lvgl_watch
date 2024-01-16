@@ -152,6 +152,19 @@ static void common_list2_throw_anim_cb(void *var, int32_t val)
 
     common_list2_elem_container_scroll();
 
+    common_scrollbar_press_handle(\
+        common_list2_scroll_offset);
+
+    return;
+}
+
+/*********************************************************************************
+                                  通用列表2纵向抛出动画结束                       
+*********************************************************************************/
+static void common_list2_throw_anim_ready_cb(lv_anim_t *anim)
+{
+    common_scrollbar_released_handle();
+
     return;
 }
 
@@ -393,6 +406,10 @@ static void common_list2_container_pressing_cb(lv_event_t *e)
         }
         
         common_list2_elem_container_scroll();
+
+        common_scrollbar_press_handle(\
+            common_list2_scroll_offset \
+                + common_list2_scroll_dela);
     }
 
     return;
@@ -482,6 +499,8 @@ static void common_list2_container_release_cb(lv_event_t *e)
     common_widget_anim_create(&widget_anim_para);
     lv_anim_set_path_cb(widget_anim_para.anim, \
         lv_anim_path_ease_out);
+    lv_anim_set_ready_cb(widget_anim_para.anim, \
+        common_list2_throw_anim_ready_cb);
     lv_anim_start(widget_anim_para.anim);
 
     return;
@@ -513,6 +532,14 @@ static void common_list2_layout_create(void)
 
     common_list2_elem_icon_create();
 
+    lv_obj_t *common_list2_container = \
+        common_list2_ctx.common_list2_container;
+    int16_t scroll_bottom_val = \
+        (-1)*((common_list2_elem_num+2)/3 - common_list2_visual_line) * \
+            common_list2_elem_container_height;
+    common_scrollbar_create(common_list2_container, \
+        common_list2_scroll_offset, scroll_bottom_val);
+
     return;
 }
 
@@ -529,6 +556,8 @@ static void menu_create_cb(lv_obj_t *obj)
 
 static void menu_destory_cb(lv_obj_t *obj)
 {
+    common_scrollbar_destroy();
+
     return;
 }
 

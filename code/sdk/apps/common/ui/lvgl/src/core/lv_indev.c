@@ -48,6 +48,10 @@ static bool indev_reset_check(_lv_indev_proc_t * proc);
 static lv_indev_t * indev_act;
 static lv_obj_t * indev_obj_act = NULL;
 
+static lv_point_t point_min = {0};
+static lv_point_t point_max = {0};
+static lv_point_t point_start = {0};
+
 /**********************
  *      MACROS
  **********************/
@@ -60,6 +64,35 @@ static lv_obj_t * indev_obj_act = NULL;
 /**********************
  *   GLOBAL FUNCTIONS
  **********************/
+
+static void lv_indev_point_space(lv_point_t *point_act)
+{
+    if(!point_act) 
+        return;
+
+    if(point_act->x > point_max.x)
+       point_max.x = point_act->x;
+
+    if(point_act->y > point_max.y)
+       point_max.y = point_act->y;
+
+    if(point_act->x < point_min.x)
+       point_min.x = point_act->x;
+
+    if(point_act->y < point_min.y)
+       point_min.y = point_act->y;
+
+    return;
+}
+
+static bool lv_indev_click_judge(void)
+{
+    if(point_max.x - point_min.x < 10 && \
+        point_max.y - point_min.y < 10)
+        return true;
+
+    return false;
+}
 
 void lv_indev_read_timer_cb(lv_timer_t * timer)
 {
@@ -848,7 +881,8 @@ static void indev_proc_press(_lv_indev_proc_t * proc)
         
         if(indev_obj_act == NULL) 
         #endif
-        indev_obj_act = lv_indev_search_obj(lv_disp_get_scr_act(disp), &proc->types.pointer.act_point);
+        indev_obj_act = lv_indev_search_obj(lv_disp_get_scr_act(disp), \
+            &proc->types.pointer.act_point);
         new_obj_searched = true;
     }
 
@@ -910,6 +944,13 @@ static void indev_proc_press(_lv_indev_proc_t * proc)
             lv_event_send(indev_obj_act, LV_EVENT_PRESSED, indev_act);
             if(indev_reset_check(proc)) return;
 
+            memcpy(&point_max, &proc->types.pointer.act_point, \
+                sizeof(lv_point_t));
+            memcpy(&point_min, &proc->types.pointer.act_point, \
+                sizeof(lv_point_t));
+            memcpy(&point_start, &proc->types.pointer.act_point, \
+                sizeof(lv_point_t));
+
             if(indev_act->proc.wait_until_release) return;
 
             #if 0
@@ -935,6 +976,8 @@ static void indev_proc_press(_lv_indev_proc_t * proc)
     {
         lv_event_send(indev_obj_act, LV_EVENT_PRESSING, indev_act);
         if(indev_reset_check(proc)) return;
+
+        lv_indev_point_space(&proc->types.pointer.act_point);
 
         if(indev_act->proc.wait_until_release) return;
 
@@ -989,7 +1032,8 @@ static void indev_proc_release(_lv_indev_proc_t * proc)
 {
     if(proc->wait_until_release != 0) 
     {
-        lv_event_send(proc->types.pointer.act_obj, LV_EVENT_PRESS_LOST, indev_act);
+        lv_event_send(proc->types.pointer.act_obj, \
+            LV_EVENT_PRESS_LOST, indev_act);
         if(indev_reset_check(proc)) return;
 
         proc->types.pointer.act_obj  = NULL;
@@ -1014,7 +1058,7 @@ static void indev_proc_release(_lv_indev_proc_t * proc)
         /*Send CLICK if no scrolling*/
         if(scroll_obj == NULL) 
         {
-            if(proc->long_pr_sent == 0) {
+            if(proc->long_pr_sent == 0 && lv_indev_click_judge()) {
                 lv_event_send(indev_obj_act, LV_EVENT_SHORT_CLICKED, indev_act);
                 if(indev_reset_check(proc)) return;
             }

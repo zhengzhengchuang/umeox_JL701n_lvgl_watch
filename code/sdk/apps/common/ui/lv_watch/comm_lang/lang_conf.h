@@ -20,11 +20,11 @@ extern "C" {
 #define Comm_Conf_Lang_In  (1)  //印尼语
 #define Comm_Conf_Lang_Pe  (1)  //波斯语
 #define Comm_Conf_Lang_Ge  (1)  //德语
-#define Comm_Conf_Lang_Th  (0)  //泰语
+#define Comm_Conf_Lang_Th  (0)  //泰语 no use
 #define Comm_Conf_Lang_Ru  (1)  //俄语
-#define Comm_Conf_Lang_Hi  (0)  //印地语
-#define Comm_Conf_Lang_Ma  (1)  //马来西亚语
-#define Comm_Conf_Lang_Uz  (1)  //乌兹别克斯坦语
+#define Comm_Conf_Lang_Hi  (0)  //印地语 no use
+#define Comm_Conf_Lang_Ma  (0)  //马来西亚语
+#define Comm_Conf_Lang_Uz  (0)  //乌兹别克斯坦语
 
 /*********************************************************************************
                                   语言支持枚举                                       

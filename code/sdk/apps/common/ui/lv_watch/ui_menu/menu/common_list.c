@@ -68,7 +68,7 @@ static const int16_t common_list_elem_container_sy = \
 static const int16_t common_list_elem_container_width = \
     Common_List_Container_W;
 
-/****************通用列表2元素容器高****************/
+/****************通用列表元素容器高****************/
 static const int16_t common_list_elem_container_height = \
     (138);
 
@@ -371,13 +371,15 @@ static void common_list_elem_label_create(void)
     widget_label_para.label_y = 0;
     widget_label_para.label_w = 200;
     widget_label_para.label_h = \
-        Label_Line_Height;
+        Label_Line_Height*2;
     widget_label_para.long_mode = \
-        LV_LABEL_LONG_SCROLL;
+        LV_LABEL_LONG_WRAP;
     widget_label_para.text_align = \
         LV_TEXT_ALIGN_LEFT;
     widget_label_para.label_text_color = \
         lv_color_hex(0xffffff);
+    widget_label_para.label_ver_center = \
+        true;
     widget_label_para.user_text_font = NULL;
 
     for(uint16_t idx = 0; idx < common_list_elem_num; idx++)
