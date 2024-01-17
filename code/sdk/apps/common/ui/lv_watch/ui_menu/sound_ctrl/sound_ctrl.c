@@ -46,6 +46,9 @@ static void sound_vol_slider_event_cb(lv_event_t *e)
         lv_event_get_target(e);
     int32_t cur_music_vol = \
         lv_slider_get_value(obj)/Slider_Range_Inc;
+
+    // printf("cur_music_vol = %d\n", \
+    //     cur_music_vol);
     
     app_audio_set_volume(APP_AUDIO_STATE_MUSIC, \
         cur_music_vol, 1);
@@ -86,7 +89,7 @@ static void menu_display_cb(lv_obj_t *obj)
     widget_img_para.user_data = NULL;
     widget_img_para.img_parent = obj;
     widget_img_para.file_img_dat = \
-        sound_ctrl_00_index;
+        comm_icon_09_index;
     widget_img_para.img_click_attr = false;
     lv_obj_t *sound_on_container = \
         common_widget_img_create(&widget_img_para, NULL);

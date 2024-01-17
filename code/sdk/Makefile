@@ -540,6 +540,8 @@ c_SRC_FILES := \
     apps/common/ui/lvgl/src/font/lv_font_fmt_txt.c  \
     apps/common/ui/lvgl/src/font/lv_font_loader.c  \
 	apps/common/ui/lvgl/src/font/font_common_32.c  \
+	apps/common/ui/lvgl/src/font/font_common_num_52.c  \
+	apps/common/ui/lvgl/src/font/font_common_num_64.c  \
     apps/common/ui/lvgl/src/font/lv_font_montserrat_12.c  \
     apps/common/ui/lvgl/src/hal/lv_hal_disp.c  \
     apps/common/ui/lvgl/src/hal/lv_hal_indev.c  \
@@ -979,6 +981,9 @@ c_SRC_FILES := \
 	apps/common/ui/lv_watch/ui_menu/watchface/watchface_01.c \
 	apps/common/ui/lv_watch/ui_menu/watchface/watchface_main.c \
 	apps/common/ui/lv_watch/ui_menu/tool_box/tool_box.c \
+	apps/common/ui/lv_watch/ui_menu/lang_sel/lang_sel.c \
+	apps/common/ui/lv_watch/ui_menu/disp_ctrl/backlight.c \
+	apps/common/ui/lv_watch/ui_menu/disp_ctrl/screen_sleep.c \
 	apps/common/ui/lv_watch/ui_menu/split_screen/split_screen.c \
 	apps/common/ui/lv_watch/ui_menu/worship_time/worship_time.c \
 

@@ -5,6 +5,7 @@
 extern "C" {
 #endif
 
+#include "app_config.h"
 #include "./include/ui_conf.h"
 #include "./include/ui_menu.h"
 #include "./include/ui_act_id.h"
@@ -35,6 +36,7 @@ extern "C" {
 void ui_menu_jump(ui_act_id_t act_id);
 void ui_ctl_lcd_enter_sleep(bool sleep);
 bool ui_act_id_validity(ui_act_id_t act_id);
+void ui_set_sys_backlight(int backlight_val);
 void ui_set_sys_time(struct sys_time *utc_time);
 void ui_get_sys_time(struct sys_time *utc_time);
 comm_enum_week_t ui_get_sys_week(struct sys_time *utc_time);

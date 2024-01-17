@@ -33,6 +33,7 @@ const uint8_t lang_str_table[Comm_Lang_Num]\
         "قائمة",
         "شبكة 1",
         "شبكة 2",
+        "نوم الشاشة",
     },
 #endif
 
@@ -66,6 +67,7 @@ const uint8_t lang_str_table[Comm_Lang_Num]\
         "List",
         "Grid 1",
         "Grid 2",
+        "Screen sleep",
     },
 #endif
 
@@ -99,6 +101,7 @@ const uint8_t lang_str_table[Comm_Lang_Num]\
         "Liste",
         "Réseau 1",
         "Réseau 2",
+        "Veille de l'écran",
     }, 
 #endif
 
@@ -132,6 +135,7 @@ const uint8_t lang_str_table[Comm_Lang_Num]\
         "لسٹ",
         "گرڈ 1",
         "گرڈ 2",
+        "اسکرین سلیپ",
     },
 #endif
 
@@ -165,6 +169,7 @@ const uint8_t lang_str_table[Comm_Lang_Num]\
         "Liste",
         "ızgara 1",
         "ızgara 2",
+        "Ekran uykusu",
     },
 #endif
 
@@ -198,6 +203,7 @@ const uint8_t lang_str_table[Comm_Lang_Num]\
         "列表",
         "网格 1",
         "网格 2",
+        "屏幕休眠",
     },
 #endif
 
@@ -231,6 +237,7 @@ const uint8_t lang_str_table[Comm_Lang_Num]\
         "Daftar",
         "kisi 1",
         "kisi 2",
+        "Layar tidur",
     },
 #endif
 
@@ -264,6 +271,7 @@ const uint8_t lang_str_table[Comm_Lang_Num]\
         "لیست",
         "شبکه 1",
         "شبکه 2",
+        "خواب صفحه نمایش",
     },
 #endif
 
@@ -297,6 +305,7 @@ const uint8_t lang_str_table[Comm_Lang_Num]\
         "Liste",
         "Netz 1",
         "Netz 2",
+        "Bildschirmschlaf",
     }, 
 #endif
 
@@ -352,6 +361,7 @@ const uint8_t lang_str_table[Comm_Lang_Num]\
         "Список",
         "Сетка 1",
         "Сетка 2",
+        "Экран сна",
     },
 #endif
 

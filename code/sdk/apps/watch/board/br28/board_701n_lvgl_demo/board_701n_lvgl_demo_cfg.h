@@ -613,7 +613,7 @@ DAC硬件上的连接方式,可选的配置：
 //2:使用MCPWM模块控制背光(低功耗不能输出)
 #define TCFG_BACKLIGHT_PWM_MODE             0
 #define TCFG_BACKLIGHT_PWM_IO               IO_PORTB_10
-#define TCFG_MIN_BACKLIGHT_VAL              (20)
+#define TCFG_MIN_BACKLIGHT_VAL              (55)
 #define TCFG_MAX_BACKLIGHT_VAL              (100)
 #if (TCFG_BACKLIGHT_PWM_MODE == 1)
 #undef  TCFG_PWMLED_ENABLE

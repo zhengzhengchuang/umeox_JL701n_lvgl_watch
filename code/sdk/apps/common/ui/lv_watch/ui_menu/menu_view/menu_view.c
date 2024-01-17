@@ -46,10 +46,10 @@ static void menu_view_elem_container_cb(lv_event_t *e)
     {
         if(menu_view_cache == i)
             file_img_dat = \
-                menu_view_04_index;
+                comm_icon_06_index;
         else
            file_img_dat = \
-                menu_view_03_index;
+                comm_icon_05_index;
 
         common_widget_img_replace_src(\
             menu_view_elem_container[i], file_img_dat, \
@@ -116,10 +116,10 @@ static void menu_display_cb(lv_obj_t *obj)
             96*i;
         if(i == menu_view_cache)
             widget_img_para.file_img_dat = \
-                menu_view_04_index;
+                comm_icon_06_index;
         else
             widget_img_para.file_img_dat = \
-                menu_view_03_index;
+                comm_icon_05_index;
         widget_img_para.img_click_attr = true;
         widget_img_para.event_cb = \
             menu_view_elem_container_cb;

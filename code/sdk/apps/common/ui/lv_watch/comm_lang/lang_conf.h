@@ -32,7 +32,7 @@ extern "C" {
 enum
 {
 #if Comm_Conf_Lang_Ar
-    comm_language_id_arabic,
+    comm_language_id_arabic = 0x00,
 #endif
 
 #if Comm_Conf_Lang_En

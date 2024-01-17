@@ -80,9 +80,11 @@ static void lcd_adjust_display_brightness(u8 percent)
     u16 brightness;
     u8 para[2] = {0};
 
+    //printf("%s:%d\n", __func__, percent);
+
     brightness = (u16)((percent*(1.0f)/TCFG_MAX_BACKLIGHT_VAL)*(0x1ff) + 0.5f);
 
-    printf("%s:0x%x\n", __func__, brightness);
+    //printf("%s:0x%x\n", __func__, brightness);
 
     para[0] = brightness & 0xff;
     para[1] = (brightness >> 8) & 0x80;

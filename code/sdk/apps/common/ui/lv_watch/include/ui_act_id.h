@@ -43,6 +43,8 @@ enum
     ui_act_id_weather,
     ui_act_id_hr_warn,
     ui_act_id_tool_box,
+    ui_act_id_lang_sel,
+    ui_act_id_backlight,
     ui_act_id_sedentary,
     ui_act_id_menu_view,
     ui_act_id_watchface,
@@ -51,7 +53,8 @@ enum
     ui_act_id_ota_update,
     ui_act_id_sound_ctrl,
     ui_act_id_low_battery,
-    ui_act_id_worship_time,  
+    ui_act_id_screen_sleep,
+    ui_act_id_worship_time,
     ui_act_id_settings_list, 
     ui_act_id_watchface_transp,
 

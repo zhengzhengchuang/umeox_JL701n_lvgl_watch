@@ -19,7 +19,7 @@ static const comm_lang_txtid_t settings_list_text_id[\
 };
 
 /****************设置容器点击索引****************/
-static const uint16_t settings_list_elem_container_idx[\
+static const uint8_t settings_list_elem_container_idx[\
     Settings_List_Elem_Num] =
 {
     0, 1, 2, 3, 4, 5, 6, 
@@ -291,8 +291,8 @@ static void settings_list_elem_container_click_cb(lv_event_t *e)
     if(settings_list_ver_scroll || anim_progress)
         return;
 
-    uint16_t idx = \
-        *(uint16_t *)lv_event_get_user_data(e);
+    uint8_t idx = \
+        *(uint8_t *)lv_event_get_user_data(e);
 
     printf("******%s:%d\n", __func__, idx);
 
@@ -367,7 +367,7 @@ static void settings_list_elem_container_scroll(void)
     {
         obj_y = settings_list_elem_container_sy + \
             settings_list_elem_container_height*idx + \
-            settings_list_scroll_offset + settings_list_scroll_dela;
+                settings_list_scroll_offset + settings_list_scroll_dela;
 
         if(obj_y >= Settings_List_Container_H || \
             (obj_y + settings_list_elem_container_height) < 0)
@@ -420,7 +420,7 @@ static void settings_list_elem_icon_create(void)
 /*********************************************************************************
                                   设置列表元素标签创建                             
 *********************************************************************************/
-static void setting_list_elem_label_create(void)
+static void settings_list_elem_label_create(void)
 {
     lv_obj_t **settings_list_icon = \
         settings_list_ctx.settings_list_icon;
@@ -678,7 +678,7 @@ static void settings_list_layout_create(void)
 
     settings_list_elem_icon_create();
 
-    setting_list_elem_label_create();
+    settings_list_elem_label_create();
 
     setting_list_elem_arrow_create();
 

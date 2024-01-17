@@ -181,7 +181,10 @@
         "sound_ctrl.h": "c",
         "user_cfg.h": "c",
         "audio_config.h": "c",
-        "menu_view.h": "c"
+        "menu_view.h": "c",
+        "lang_sel.h": "c",
+        "backlight.h": "c",
+        "screen_sleep.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

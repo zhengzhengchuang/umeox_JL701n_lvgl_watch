@@ -41,7 +41,7 @@ static const vm_store_para_with_label_t default_label_para[Vm_Store_Para_Num] = 
 
     /*********默认屏幕熄屏时间 10s*********/
     {.label = vm_label_offscreen_time, \
-        .store_para_val = 10*1000},
+        .store_para_val = 30*1000},
 
     /*********默认表盘*********/
     {.label = vm_label_watchface_id, \

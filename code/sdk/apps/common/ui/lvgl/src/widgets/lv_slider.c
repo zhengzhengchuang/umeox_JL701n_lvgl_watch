@@ -216,7 +216,8 @@ static void lv_slider_event(const lv_obj_class_t * class_p, lv_event_t * e)
             const lv_coord_t indic_w = w - bg_left - bg_right;
 
             //printf("========value_to_set = %d\n", *(slider->value_to_set));
-            float cur_value_radio = (*(slider->value_to_set)*(1.0f))/range;
+            float cur_value_radio = ((*(slider->value_to_set) - \
+                slider->bar.min_value)*(1.0f))/range;
             new_value = (int32_t)(indic_w*cur_value_radio + 0.5f);
             new_value += vert_point.x;
             
@@ -229,9 +230,10 @@ static void lv_slider_event(const lv_obj_class_t * class_p, lv_event_t * e)
             const lv_coord_t h = lv_obj_get_height(obj);
             const lv_coord_t indic_h = h - bg_bottom - bg_top;
 
-            //printf("========indic_h = %d\n", indic_h);
-            //printf("**********value_to_set = %d\n", *(slider->value_to_set));
-            float cur_value_radio = (*(slider->value_to_set)*(1.0f))/range;
+            // printf("========indic_h = %d\n", indic_h);
+            // printf("**********value_to_set = %d\n", *(slider->value_to_set));
+            float cur_value_radio = ((*(slider->value_to_set) - \
+                slider->bar.min_value)*(1.0f))/range;
             new_value = (int32_t)(indic_h*cur_value_radio + 0.5f);
             new_value += -vert_point.y;
 

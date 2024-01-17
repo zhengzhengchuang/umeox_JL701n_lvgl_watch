@@ -39,6 +39,7 @@ enum
     lang_txtid_view_list, //列表
     lang_txtid_view_grid_1, //网格1
     lang_txtid_view_grid_2, //网格2
+    lang_txtid_screen_sleep, //屏幕休眠
 
     lang_txtid_max,
 };
