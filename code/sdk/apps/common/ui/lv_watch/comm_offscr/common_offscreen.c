@@ -45,9 +45,9 @@ static void common_offscreen_timer_cb(void *priv)
     if(cur_offscreen_time == Always_OnScreen)
         return;
         
-    int menu_offscreen_msg[1];
-    menu_offscreen_msg[0] = ui_msg_menu_offscreen;
-    post_ui_msg(menu_offscreen_msg, 1);
+    // int menu_offscreen_msg[1];
+    // menu_offscreen_msg[0] = ui_msg_menu_offscreen;
+    // post_ui_msg(menu_offscreen_msg, 1);
 
     return;
 }

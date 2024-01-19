@@ -941,6 +941,7 @@ c_SRC_FILES := \
 	apps/common/ui/lv_watch/comm_parse/common_le_set.c \
 	apps/common/ui/lv_watch/comm_parse/common_le_get.c \
 	apps/common/ui/lv_watch/comm_offscr/common_offscreen.c \
+	apps/common/ui/lv_watch/comm_weather/comm_weather.c \
 	apps/common/ui/lv_watch/comm_refr/common_refresh.c \
 	apps/common/ui/lv_watch/comm_widget/common_time.c \
 	apps/common/ui/lv_watch/comm_widget/common_bo.c \
@@ -962,7 +963,7 @@ c_SRC_FILES := \
 	apps/common/ui/lv_watch/ui_translate/ui_translate.c \
 	apps/common/ui/lv_watch/ui_cover/ui_cover.c \
 	apps/common/ui/lv_watch/ui_tileview/ui_tileview.c \
-	apps/common/ui/lv_watch/ui_menu/weather/weather.c \
+	apps/common/ui/lv_watch/ui_menu/weather/weather_data.c \
 	apps/common/ui/lv_watch/ui_menu/device_op/device_op.c \
 	apps/common/ui/lv_watch/ui_menu/sedentary/sedentary.c \
 	apps/common/ui/lv_watch/ui_menu/hr_warn/hr_warn.c \
@@ -984,6 +985,9 @@ c_SRC_FILES := \
 	apps/common/ui/lv_watch/ui_menu/lang_sel/lang_sel.c \
 	apps/common/ui/lv_watch/ui_menu/disp_ctrl/backlight.c \
 	apps/common/ui/lv_watch/ui_menu/disp_ctrl/screen_sleep.c \
+	apps/common/ui/lv_watch/ui_menu/unit_switch/unit_switch.c \
+	apps/common/ui/lv_watch/ui_menu/about/about.c \
+	apps/common/ui/lv_watch/ui_menu/reset/reset.c \
 	apps/common/ui/lv_watch/ui_menu/split_screen/split_screen.c \
 	apps/common/ui/lv_watch/ui_menu/worship_time/worship_time.c \
 

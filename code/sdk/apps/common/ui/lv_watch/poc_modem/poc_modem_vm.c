@@ -53,7 +53,13 @@ static const vm_store_para_with_label_t default_label_para[Vm_Store_Para_Num] = 
 
     /*********默认系统声音开启、音量*********/
     {.label = vm_label_sys_sound_on, \
-        .store_para_val = 0},
+        .store_para_val = 1},
+
+    /*******计量单位*******/
+    {.label = vm_label_unit_distance, \
+        .store_para_val = unit_distance_kilometre},
+    {.label = vm_label_unit_temperature, \
+        .store_para_val = unit_temperature_C},
  
     /*********默认心率*********/
     {.label = vm_label_hr, .store_para_val = 0},
@@ -73,7 +79,7 @@ static const vm_store_para_with_label_t default_label_para[Vm_Store_Para_Num] = 
 };
 
 /*********************************************************************************
-                             系统用户闹钟的缺省值                                  
+                             闹钟管理的缺省值                                  
 *********************************************************************************/
 static const alarm_manage_para_t default_alarm_para = 
 {
@@ -83,6 +89,84 @@ static const alarm_manage_para_t default_alarm_para =
     .alarm_info[2] = {.info = No_Alarm_Info},
     .alarm_info[3] = {.info = No_Alarm_Info},
     .alarm_info[4] = {.info = No_Alarm_Info},
+};
+
+/*********************************************************************************
+                             天气管理的缺省值                                  
+*********************************************************************************/
+static const weather_manage_para_t default_weather_para = 
+{
+    .data_is_valid = false,
+
+    .weather_data[0] = {
+        .weather_min_temper = \
+            Weather_Invalid_Code,
+        .weather_max_temper = \
+            Weather_Invalid_Code,
+        .weather_real_temper = \
+            Weather_Invalid_Code,
+        .weather_type = weather_type_unknown,
+    },
+    
+    .weather_data[1] = {
+        .weather_min_temper = \
+            Weather_Invalid_Code,
+        .weather_max_temper = \
+            Weather_Invalid_Code,
+        .weather_real_temper = \
+            Weather_Invalid_Code,
+        .weather_type = weather_type_unknown,
+    },
+
+    .weather_data[2] = {
+        .weather_min_temper = \
+            Weather_Invalid_Code,
+        .weather_max_temper = \
+            Weather_Invalid_Code,
+        .weather_real_temper = \
+            Weather_Invalid_Code,
+        .weather_type = weather_type_unknown,
+    },
+
+    .weather_data[3] = {
+        .weather_min_temper = \
+            Weather_Invalid_Code,
+        .weather_max_temper = \
+            Weather_Invalid_Code,
+        .weather_real_temper = \
+            Weather_Invalid_Code,
+        .weather_type = weather_type_unknown,
+    },
+
+    .weather_data[4] = {
+        .weather_min_temper = \
+            Weather_Invalid_Code,
+        .weather_max_temper = \
+            Weather_Invalid_Code,
+        .weather_real_temper = \
+            Weather_Invalid_Code,
+        .weather_type = weather_type_unknown,
+    },
+
+    .weather_data[5] = {
+        .weather_min_temper = \
+            Weather_Invalid_Code,
+        .weather_max_temper = \
+            Weather_Invalid_Code,
+        .weather_real_temper = \
+            Weather_Invalid_Code,
+        .weather_type = weather_type_unknown,
+    },
+
+    .weather_data[6] = {
+        .weather_min_temper = \
+            Weather_Invalid_Code,
+        .weather_max_temper = \
+            Weather_Invalid_Code,
+        .weather_real_temper = \
+            Weather_Invalid_Code,
+        .weather_type = weather_type_unknown,
+    },
 };
 
 int get_vm_para_cache_with_label(uint16_t label)
@@ -132,6 +216,9 @@ void vm_store_para_init(void)
 
         memcpy(&p_vm_para_cache->alarm_manage_para, &default_alarm_para, \
             sizeof(alarm_manage_para_t));
+
+        memcpy(&p_vm_para_cache->weather_manage_para, &default_weather_para, \
+            sizeof(weather_manage_para_t));
 
         memcpy(p_vm_para_cache->vm_store_para, default_label_para, \
             sizeof(vm_store_para_with_label_t)*Vm_Store_Para_Num);

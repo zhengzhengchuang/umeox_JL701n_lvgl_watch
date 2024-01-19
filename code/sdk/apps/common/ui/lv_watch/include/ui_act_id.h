@@ -40,7 +40,8 @@ enum
     ui_act_id_null = 0,
 
     ui_act_id_menu,
-    ui_act_id_weather,
+    ui_act_id_about,
+    ui_act_id_reset,  
     ui_act_id_hr_warn,
     ui_act_id_tool_box,
     ui_act_id_lang_sel,
@@ -52,9 +53,11 @@ enum
     ui_act_id_device_op, 
     ui_act_id_ota_update,
     ui_act_id_sound_ctrl,
+    ui_act_id_unit_switch,
     ui_act_id_low_battery,
     ui_act_id_screen_sleep,
     ui_act_id_worship_time,
+    ui_act_id_weather_data,
     ui_act_id_settings_list, 
     ui_act_id_watchface_transp,
 

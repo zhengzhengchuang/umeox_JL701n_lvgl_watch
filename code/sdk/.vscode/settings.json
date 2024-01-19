@@ -184,7 +184,12 @@
         "menu_view.h": "c",
         "lang_sel.h": "c",
         "backlight.h": "c",
-        "screen_sleep.h": "c"
+        "screen_sleep.h": "c",
+        "about.h": "c",
+        "reset.h": "c",
+        "demo.h": "c",
+        "weather_data.h": "c",
+        "comm_weather.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

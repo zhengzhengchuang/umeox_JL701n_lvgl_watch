@@ -8,7 +8,29 @@ extern "C" {
 #include "../include/ui_menu.h"
 #include "../include/ui_act_id.h"
 #include "../comm_remind/alarm_manage.h"
+#include "../comm_weather/comm_weather.h"
 
+/*********************************************************************************
+                             距离计量单位                              
+*********************************************************************************/
+enum
+{
+    unit_distance_kilometre = 0x00,
+    unit_distance_mile,
+    
+    unit_distance_max,
+};
+
+/*********************************************************************************
+                             温度计量单位                              
+*********************************************************************************/
+enum
+{
+    unit_temperature_C = 0x00,
+    unit_temperature_F,
+
+    unit_temperature_max,
+};
 
 /*********************************************************************************
                              vm存储信息，关机会备份到vm                              
@@ -40,6 +62,10 @@ enum
 
     /*******系统声音开启*******/
     vm_label_sys_sound_on,
+
+    /*******计量单位*******/
+    vm_label_unit_distance,
+    vm_label_unit_temperature,
   
     /*******心率数据*******/
     vm_label_hr,
@@ -74,6 +100,7 @@ typedef struct
     uint16_t vm_store_para_mask;
 
     alarm_manage_para_t alarm_manage_para;
+    weather_manage_para_t weather_manage_para;
     vm_store_para_with_label_t vm_store_para[Vm_Store_Para_Num];  
 }vm_store_para_cache_t;
 extern vm_store_para_cache_t *p_vm_para_cache;

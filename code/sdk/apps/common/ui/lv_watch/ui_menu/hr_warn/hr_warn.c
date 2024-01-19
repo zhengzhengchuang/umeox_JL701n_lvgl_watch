@@ -27,9 +27,9 @@ static void menu_display_cb(lv_obj_t *obj)
 {
     if(!obj) return;
   
-    widget_img_para.img_parent = obj;
     widget_img_para.img_x = 44;
     widget_img_para.img_y = 32;
+    widget_img_para.img_parent = obj;
     widget_img_para.file_img_dat = \
         remind_hr_warn_00_index;
     widget_img_para.img_click_attr = false;
