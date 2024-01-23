@@ -53,7 +53,6 @@ typedef struct
 {	
 	int16_t weather_max_temper;
 	int16_t weather_min_temper;
-    int16_t weather_real_temper;
 	comm_weather_type_t weather_type;
 }comm_weather_data_t;
 
@@ -63,6 +62,7 @@ typedef struct
 typedef struct
 {
     bool data_is_valid;
+    int16_t weather_real_temper;
     comm_weather_data_t weather_data[\
         Weather_Sync_Days];
 }weather_manage_para_t;
@@ -71,9 +71,9 @@ typedef struct
                                   天气数据接口                                       
 *********************************************************************************/
 bool comm_whether_data_is_valid(void);
+int16_t comm_weather_get_real_temper(void);
 int16_t comm_weather_get_min_temper(uint8_t day);
 int16_t comm_weather_get_max_temper(uint8_t day);
-int16_t comm_weather_get_real_temper(uint8_t day);
 comm_weather_type_t comm_weather_get_type(uint8_t day);
 
 #ifdef __cplusplus

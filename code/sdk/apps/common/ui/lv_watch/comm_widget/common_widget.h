@@ -77,10 +77,12 @@ lv_obj_t *common_widget_arc_create(common_widget_arc_para_t *arc_para);
 /*********************************************************************************
                                   图片控件                                       
 *********************************************************************************/
+#define Img_Dsc_Max (120)
 typedef struct
 {
     uint8_t img_dst_cnt;
-    lv_img_dsc_t img_dst_gather[70];
+    lv_img_dsc_t img_dst_gather[\
+        Img_Dsc_Max];
 }user_img_dsc_t;
 
 typedef struct 

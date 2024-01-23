@@ -53,6 +53,12 @@ lv_obj_t *common_widget_img_create(common_widget_img_para_t *img_para, \
     lv_img_dsc_t *img_dst_gather = \
         user_img_dsc.img_dst_gather;
 
+    if(img_dst_cnt >= Img_Dsc_Max)
+    {
+        printf("error!!!!!!!!!!!! Img_Dsc_Max\n");
+        return NULL;
+    }
+
     if(!(img_dst_gather[img_dst_cnt].data))
     {
         open_fd("usr_nor");

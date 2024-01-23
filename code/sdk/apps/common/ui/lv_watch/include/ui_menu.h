@@ -48,6 +48,15 @@ extern ui_menu_load_info_t ui_menu_load_begin[];
 /*多个表盘共用同个id，需要extern出来*/
 extern_ui_menu_load_info(menu_load_watchface_00);
 extern_ui_menu_load_info(menu_load_watchface_01);
+extern_ui_menu_load_info(menu_load_watchface_02);
+extern_ui_menu_load_info(menu_load_watchface_03);
+extern_ui_menu_load_info(menu_load_watchface_04);
+extern_ui_menu_load_info(menu_load_watchface_05);
+extern_ui_menu_load_info(menu_load_watchface_06);
+extern_ui_menu_load_info(menu_load_watchface_07);
+extern_ui_menu_load_info(menu_load_watchface_08);
+extern_ui_menu_load_info(menu_load_watchface_09);
+extern_ui_menu_load_info(menu_load_watchface_10);
 
 /*多个菜单共用同个id，需要extern出来*/
 extern_ui_menu_load_info(menu_load_common_list);

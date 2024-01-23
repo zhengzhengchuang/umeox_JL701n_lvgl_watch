@@ -189,7 +189,27 @@
         "reset.h": "c",
         "demo.h": "c",
         "weather_data.h": "c",
-        "comm_weather.h": "c"
+        "comm_weather.h": "c",
+        "widget_weather.h": "c",
+        "widget_week.h": "c",
+        "widget_bo.h": "c",
+        "widget_calorie.h": "c",
+        "widget_date.h": "c",
+        "widget_distance.h": "c",
+        "widget_hr.h": "c",
+        "widget_step.h": "c",
+        "version.h": "c",
+        "widget_pace.h": "c",
+        "widget_time.h": "c",
+        "widget_clock.h": "c",
+        "watchface_05.h": "c",
+        "watchface_04.h": "c",
+        "watchface_02.h": "c",
+        "watchface_03.h": "c",
+        "watchface_06.h": "c",
+        "watchface_07.h": "c",
+        "watchface_08.h": "c",
+        "watchface_09.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

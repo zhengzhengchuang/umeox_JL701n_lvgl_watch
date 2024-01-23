@@ -943,17 +943,18 @@ c_SRC_FILES := \
 	apps/common/ui/lv_watch/comm_offscr/common_offscreen.c \
 	apps/common/ui/lv_watch/comm_weather/comm_weather.c \
 	apps/common/ui/lv_watch/comm_refr/common_refresh.c \
-	apps/common/ui/lv_watch/comm_widget/common_time.c \
-	apps/common/ui/lv_watch/comm_widget/common_bo.c \
-	apps/common/ui/lv_watch/comm_widget/common_hr.c \
-	apps/common/ui/lv_watch/comm_widget/common_step.c \
-	apps/common/ui/lv_watch/comm_widget/common_pace.c \
-	apps/common/ui/lv_watch/comm_widget/common_calorie.c \
-	apps/common/ui/lv_watch/comm_widget/common_distance.c \
+	apps/common/ui/lv_watch/comm_widget/widget_time.c \
+	apps/common/ui/lv_watch/comm_widget/widget_bo.c \
+	apps/common/ui/lv_watch/comm_widget/widget_hr.c \
+	apps/common/ui/lv_watch/comm_widget/widget_step.c \
+	apps/common/ui/lv_watch/comm_widget/widget_pace.c \
+	apps/common/ui/lv_watch/comm_widget/widget_calorie.c \
+	apps/common/ui/lv_watch/comm_widget/widget_distance.c \
+	apps/common/ui/lv_watch/comm_widget/widget_weather.c \
 	apps/common/ui/lv_watch/comm_widget/common_data.c \
-	apps/common/ui/lv_watch/comm_widget/common_date.c \
-	apps/common/ui/lv_watch/comm_widget/common_week.c \
-	apps/common/ui/lv_watch/comm_widget/common_clock.c \
+	apps/common/ui/lv_watch/comm_widget/widget_date.c \
+	apps/common/ui/lv_watch/comm_widget/widget_week.c \
+	apps/common/ui/lv_watch/comm_widget/widget_clock.c \
 	apps/common/ui/lv_watch/comm_widget/common_widget.c \
 	apps/common/ui/lv_watch/comm_widget/widget_refresh.c \
 	apps/common/ui/lv_watch/comm_func/common_stopwatch.c \
@@ -964,6 +965,7 @@ c_SRC_FILES := \
 	apps/common/ui/lv_watch/ui_cover/ui_cover.c \
 	apps/common/ui/lv_watch/ui_tileview/ui_tileview.c \
 	apps/common/ui/lv_watch/ui_menu/weather/weather_data.c \
+	apps/common/ui/lv_watch/ui_menu/weather/weather_report.c \
 	apps/common/ui/lv_watch/ui_menu/device_op/device_op.c \
 	apps/common/ui/lv_watch/ui_menu/sedentary/sedentary.c \
 	apps/common/ui/lv_watch/ui_menu/hr_warn/hr_warn.c \
@@ -980,6 +982,15 @@ c_SRC_FILES := \
 	apps/common/ui/lv_watch/ui_menu/menu_view/menu_view.c \
 	apps/common/ui/lv_watch/ui_menu/watchface/watchface_00.c \
 	apps/common/ui/lv_watch/ui_menu/watchface/watchface_01.c \
+	apps/common/ui/lv_watch/ui_menu/watchface/watchface_02.c \
+	apps/common/ui/lv_watch/ui_menu/watchface/watchface_03.c \
+	apps/common/ui/lv_watch/ui_menu/watchface/watchface_04.c \
+	apps/common/ui/lv_watch/ui_menu/watchface/watchface_05.c \
+	apps/common/ui/lv_watch/ui_menu/watchface/watchface_06.c \
+	apps/common/ui/lv_watch/ui_menu/watchface/watchface_07.c \
+	apps/common/ui/lv_watch/ui_menu/watchface/watchface_08.c \
+	apps/common/ui/lv_watch/ui_menu/watchface/watchface_09.c \
+	apps/common/ui/lv_watch/ui_menu/watchface/watchface_10.c \
 	apps/common/ui/lv_watch/ui_menu/watchface/watchface_main.c \
 	apps/common/ui/lv_watch/ui_menu/tool_box/tool_box.c \
 	apps/common/ui/lv_watch/ui_menu/lang_sel/lang_sel.c \

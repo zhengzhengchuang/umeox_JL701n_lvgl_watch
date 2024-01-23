@@ -47,9 +47,6 @@ static void sound_vol_slider_event_cb(lv_event_t *e)
     int32_t cur_music_vol = \
         lv_slider_get_value(obj)/Slider_Range_Inc;
 
-    // printf("cur_music_vol = %d\n", \
-    //     cur_music_vol);
-    
     app_audio_set_volume(APP_AUDIO_STATE_MUSIC, \
         cur_music_vol, 1);
  

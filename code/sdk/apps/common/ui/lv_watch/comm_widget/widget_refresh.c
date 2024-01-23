@@ -28,9 +28,9 @@ void widget_refresh_init(void)
 
 void widget_refresh_handle(void)
 {
-    common_date_refresh();
-    common_time_refresh();
-    common_week_refresh();
+    common_date_widget_refresh();
+    common_time_widget_refresh();
+    common_week_widget_refresh();
 
     common_data_refresh();
 

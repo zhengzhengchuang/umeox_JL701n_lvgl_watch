@@ -5,10 +5,10 @@
 static uint16_t refresh_timer_id = 0;
 
 /**************默认刷新间隔**************/
-static const uint32_t default_refresh_timer_inv = 500;
+static const uint32_t default_refresh_timer_inv = 100;
 
 /**************当前刷新间隔**************/
-static uint32_t cur_refresh_timer_inv = 500;
+static uint32_t cur_refresh_timer_inv = 100;
 
 static void common_refresh_timer_cb(void *priv)
 {

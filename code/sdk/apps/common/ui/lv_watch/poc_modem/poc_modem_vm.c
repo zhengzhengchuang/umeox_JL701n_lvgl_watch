@@ -11,6 +11,11 @@ static vm_store_para_cache_t vm_para_cache = {0};
 const ui_menu_load_info_t *watchface_load_info[] = 
 {
     &menu_load_watchface_00, &menu_load_watchface_01, \
+    &menu_load_watchface_02, &menu_load_watchface_03, \
+    &menu_load_watchface_04, &menu_load_watchface_05, \
+    &menu_load_watchface_06, &menu_load_watchface_07, \
+    &menu_load_watchface_08, &menu_load_watchface_09, \
+    &menu_load_watchface_10, \
 };
 const ui_menu_load_info_t *menu_style_load_info[] = 
 {
@@ -45,7 +50,7 @@ static const vm_store_para_with_label_t default_label_para[Vm_Store_Para_Num] = 
 
     /*********默认表盘*********/
     {.label = vm_label_watchface_id, \
-        .store_para_val = ui_watchface_id_00},
+        .store_para_val = ui_watchface_id_02},
 
     /*********默认系统语言*********/
     {.label = vm_label_sys_language, \
@@ -98,24 +103,25 @@ static const weather_manage_para_t default_weather_para =
 {
     .data_is_valid = false,
 
+    .weather_real_temper = \
+        Weather_Invalid_Code,
+
     .weather_data[0] = {
         .weather_min_temper = \
             Weather_Invalid_Code,
         .weather_max_temper = \
             Weather_Invalid_Code,
-        .weather_real_temper = \
-            Weather_Invalid_Code,
-        .weather_type = weather_type_unknown,
+        .weather_type = \
+            weather_type_unknown,
     },
-    
+
     .weather_data[1] = {
         .weather_min_temper = \
             Weather_Invalid_Code,
         .weather_max_temper = \
             Weather_Invalid_Code,
-        .weather_real_temper = \
-            Weather_Invalid_Code,
-        .weather_type = weather_type_unknown,
+        .weather_type = \
+            weather_type_unknown,
     },
 
     .weather_data[2] = {
@@ -123,9 +129,8 @@ static const weather_manage_para_t default_weather_para =
             Weather_Invalid_Code,
         .weather_max_temper = \
             Weather_Invalid_Code,
-        .weather_real_temper = \
-            Weather_Invalid_Code,
-        .weather_type = weather_type_unknown,
+        .weather_type = \
+            weather_type_unknown,
     },
 
     .weather_data[3] = {
@@ -133,9 +138,8 @@ static const weather_manage_para_t default_weather_para =
             Weather_Invalid_Code,
         .weather_max_temper = \
             Weather_Invalid_Code,
-        .weather_real_temper = \
-            Weather_Invalid_Code,
-        .weather_type = weather_type_unknown,
+        .weather_type = \
+            weather_type_unknown,
     },
 
     .weather_data[4] = {
@@ -143,9 +147,8 @@ static const weather_manage_para_t default_weather_para =
             Weather_Invalid_Code,
         .weather_max_temper = \
             Weather_Invalid_Code,
-        .weather_real_temper = \
-            Weather_Invalid_Code,
-        .weather_type = weather_type_unknown,
+        .weather_type = \
+            weather_type_unknown,
     },
 
     .weather_data[5] = {
@@ -153,9 +156,8 @@ static const weather_manage_para_t default_weather_para =
             Weather_Invalid_Code,
         .weather_max_temper = \
             Weather_Invalid_Code,
-        .weather_real_temper = \
-            Weather_Invalid_Code,
-        .weather_type = weather_type_unknown,
+        .weather_type = \
+            weather_type_unknown,
     },
 
     .weather_data[6] = {
@@ -163,9 +165,8 @@ static const weather_manage_para_t default_weather_para =
             Weather_Invalid_Code,
         .weather_max_temper = \
             Weather_Invalid_Code,
-        .weather_real_temper = \
-            Weather_Invalid_Code,
-        .weather_type = weather_type_unknown,
+        .weather_type = \
+            weather_type_unknown,
     },
 };
 
@@ -214,11 +215,11 @@ void vm_store_para_init(void)
         p_vm_para_cache->vm_store_para_mask = \
             Vm_Store_Para_Mask;
 
-        memcpy(&p_vm_para_cache->alarm_manage_para, &default_alarm_para, \
-            sizeof(alarm_manage_para_t));
+        memcpy(&p_vm_para_cache->alarm_manage_para, \
+            &default_alarm_para, sizeof(alarm_manage_para_t));
 
-        memcpy(&p_vm_para_cache->weather_manage_para, &default_weather_para, \
-            sizeof(weather_manage_para_t));
+        memcpy(&p_vm_para_cache->weather_manage_para, \
+            &default_weather_para, sizeof(weather_manage_para_t));
 
         memcpy(p_vm_para_cache->vm_store_para, default_label_para, \
             sizeof(vm_store_para_with_label_t)*Vm_Store_Para_Num);

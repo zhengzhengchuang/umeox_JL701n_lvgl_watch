@@ -1,16 +1,10 @@
-#include "common_hr.h"
-#include "common_bo.h"
-#include "common_step.h"
-#include "common_pace.h"
-#include "common_data.h"
 #include "../lv_watch.h"
-#include "common_calorie.h"
-#include "common_distance.h"
+
 
 /*********************************************************************************
                                   数据参数                                       
 *********************************************************************************/
-comm_data_para_t comm_data_para = {0};
+widget_data_para_t widget_data_para = {0};
 
 
 void common_data_widget_init(void)
@@ -20,6 +14,7 @@ void common_data_widget_init(void)
     common_step_widget_init();
     common_pace_widget_init();
     common_calorie_widget_init();
+    common_weather_widget_init();
     common_distance_widget_init();
     
     return;
@@ -27,51 +22,64 @@ void common_data_widget_init(void)
 
 void common_data_refresh(void)
 {
-    common_hr_refresh();
-    common_bo_refresh();
-    common_step_refresh();
-    common_pace_refresh();
-    common_calorie_refresh();
-    common_distance_refresh();
+    common_hr_widget_refresh();
+    common_bo_widget_refresh();
+    common_step_widget_refresh();
+    common_pace_widget_refresh();
+    common_calorie_widget_refresh();
+    common_weather_widget_refresh();
+    common_distance_widget_refresh();
     
     return;
 }
 
-void common_data_widget_create(comm_data_para_t *data_para, \
-    common_data_type_t type, void *data_val)
+int16_t common_data_widget_create(widget_data_para_t *data_para, \
+    widget_data_type_t type, void *data_val)
 {
-    if(!data_para || !data_val)
-        return;
+    int16_t data_end_x = 0;
 
-    if(type == Comm_Data_Type_Hr || \
-        type == Comm_Data_Type_Min_Hr || \
-            type == Comm_Data_Type_Max_Hr)
+    if(!data_para || !data_val)
+        return data_end_x;
+
+    if(type >= widget_data_type_hr && \ 
+        type <= widget_data_type_max_hr)
     {
-        common_hr_widget_create(data_para, \
-            type, data_val);
-    }else if(type == Comm_Data_Type_Bo || \
-        type == Comm_Data_Type_Min_Bo || \
-            type == Comm_Data_Type_Max_Bo)
+        data_end_x = \
+            common_hr_widget_create(data_para, \
+                type, data_val);
+    }else if(type >= widget_data_type_bo && \ 
+        type <= widget_data_type_max_bo)
     {
-        common_bo_widget_create(data_para, \
-            type, data_val);
-    }else if(type == Comm_Data_Type_Step)
+        data_end_x = \
+            common_bo_widget_create(data_para, \
+                type, data_val);
+    }else if(type == widget_data_type_step)
     {
-        common_step_widget_create(data_para, \
-            type, data_val);
-    }else if(type == Comm_Data_Type_Calorie)
+        data_end_x = \
+            common_step_widget_create(data_para, \
+                type, data_val);
+    }else if(type == widget_data_type_calorie)
     {
-        common_calorie_widget_create(data_para, \
-            type, data_val);
-    }else if(type == Comm_Data_Type_Pace)
+        data_end_x = \
+            common_calorie_widget_create(data_para, \
+                type, data_val);
+    }else if(type == widget_data_type_pace)
     {
-        common_pace_widget_create(data_para, \
-            type, data_val);
-    }else if(type == Comm_Data_Type_Distance)
+        data_end_x = \
+            common_pace_widget_create(data_para, \
+                type, data_val);
+    }else if(type == Widget_Data_type_distance)
     {
-        common_distance_widget_create(data_para, \
-            type, data_val);
+        data_end_x = \
+            common_distance_widget_create(data_para, \
+                type, data_val);
+    }else if(type >= widget_data_type_weather && \
+        type <= widget_data_type_max6_weather)
+    {
+        data_end_x = \
+            common_weather_widget_create(data_para, \
+                type, data_val);
     }
 
-    return;
+    return data_end_x;
 }

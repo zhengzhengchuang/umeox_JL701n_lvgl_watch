@@ -14,7 +14,16 @@ enum
 {
     ui_watchface_id_00 = 0x00,
     ui_watchface_id_01,
-
+    ui_watchface_id_02,
+    ui_watchface_id_03,
+    ui_watchface_id_04,
+    ui_watchface_id_05,
+    ui_watchface_id_06,
+    ui_watchface_id_07,
+    ui_watchface_id_08,
+    ui_watchface_id_09,
+    ui_watchface_id_10,
+  
     ui_watchface_id_max,
 };
 typedef uint8_t ui_watchface_id_t;
@@ -59,6 +68,7 @@ enum
     ui_act_id_worship_time,
     ui_act_id_weather_data,
     ui_act_id_settings_list, 
+    ui_act_id_weather_report,
     ui_act_id_watchface_transp,
 
     ui_act_id_max,

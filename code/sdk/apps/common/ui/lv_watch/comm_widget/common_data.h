@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 #include "../include/ui_menu.h"
+#include "../comm_weather/comm_weather.h"
 
 /*********************************************************************************
                                   心率  示例:102bmp                                
@@ -48,40 +49,62 @@ extern "C" {
 #define Distance_Obj_Max (5)
 #define Distance_Group_Max (3)
 
+/*********************************************************************************
+                                  天气  示例:-88°C  -888°F                           
+*********************************************************************************/
+#define Weather_Obj_Max (5)
+#define Weather_Group_Max (2*(Weather_Sync_Days+1) + 2)//8组最大最小温度+2组实时温度
+
 
 /*********************************************************************************
                                   通用数据类型枚举                                       
 *********************************************************************************/
 enum
 {
-    Comm_Data_Type___ = 0x00,
+    widget_data_type___ = 0x00,
 
-    Comm_Data_Type_Hr,             /*数据类型：心率值*/
-    Comm_Data_Type_Min_Hr,         /*数据类型：最小心率*/
-    Comm_Data_Type_Max_Hr,         /*数据类型：最大心率*/
+    widget_data_type_hr,             /*数据类型：心率值*/
+    widget_data_type_min_hr,         /*数据类型：最小心率*/
+    widget_data_type_max_hr,         /*数据类型：最大心率*/
 
-    Comm_Data_Type_Bo,             /*数据类型：血氧*/
-    Comm_Data_Type_Min_Bo,         /*数据类型：最小血氧*/
-    Comm_Data_Type_Max_Bo,         /*数据类型：最大血氧*/
+    widget_data_type_bo,             /*数据类型：血氧*/
+    widget_data_type_min_bo,         /*数据类型：最小血氧*/
+    widget_data_type_max_bo,         /*数据类型：最大血氧*/
 
-    Comm_Data_Type_Step,           /*数据类型：步数*/
-    Comm_Data_Type_Calorie,        /*数据类型：卡路里(千卡)*/
-    Comm_Data_Type_Pace,           /*数据类型：配速*/
-    Comm_Data_Type_Distance,       /*数据类型：距离*/
+    widget_data_type_step,           /*数据类型：步数*/
+    widget_data_type_calorie,        /*数据类型：卡路里(千卡)*/
+    widget_data_type_pace,           /*数据类型：配速*/
+    Widget_Data_type_distance,       /*数据类型：距离*/
+
+    widget_data_type_weather,        /*数据类型：实时天气*/
+    widget_data_type_min0_weather,  /*数据类型：第一天最小温度*/
+    widget_data_type_max0_weather,  /*数据类型：第一天最大温度*/
+    widget_data_type_min1_weather,  /*数据类型：第二天最小温度*/
+    widget_data_type_max1_weather,  /*数据类型：第二天最大温度*/
+    widget_data_type_min2_weather,  /*数据类型：第三天最小温度*/
+    widget_data_type_max2_weather,  /*数据类型：第三天最大温度*/
+    widget_data_type_min3_weather,  /*数据类型：第四天最小温度*/
+    widget_data_type_max3_weather,  /*数据类型：第四天最大温度*/
+    widget_data_type_min4_weather,  /*数据类型：第五天最小温度*/
+    widget_data_type_max4_weather,  /*数据类型：第五天最大温度*/
+    widget_data_type_min5_weather,  /*数据类型：第六天最小温度*/
+    widget_data_type_max5_weather,  /*数据类型：第六天最大温度*/
+    widget_data_type_min6_weather,  /*数据类型：第七天最小温度*/
+    widget_data_type_max6_weather,  /*数据类型：第七天最大温度*/
 };
-typedef uint8_t common_data_type_t;
+typedef uint8_t widget_data_type_t;
 
 /*********************************************************************************
                                   通用数据对齐枚举                                       
 *********************************************************************************/
 enum
 {
-    Comm_Data_Align____ = 0x00,
-    Comm_Data_Align_Left,
-    Comm_Data_Align_Right,
-    Comm_Data_Align_Center,
+    widget_data_align____ = 0x00,
+    widget_data_align_left,
+    widget_data_align_right,
+    widget_data_align_center,
 };
-typedef uint8_t common_data_align_t;
+typedef uint8_t widget_data_align_t;
 
 /*********************************************************************************
                                   通用数据参数集合                                      
@@ -93,14 +116,14 @@ typedef struct
     int16_t num_inv;
     lv_obj_t *data_parent;
     uint32_t num_addr_index;
-    common_data_align_t data_align;
-}comm_data_para_t;
-extern comm_data_para_t comm_data_para;
+    widget_data_align_t data_align;
+}widget_data_para_t;
+extern widget_data_para_t widget_data_para;
 
 void common_data_refresh(void);
 void common_data_widget_init(void);
-void common_data_widget_create(comm_data_para_t *data_para, \
-    common_data_type_t type, void *data_val);
+int16_t common_data_widget_create(widget_data_para_t *data_para, \
+    widget_data_type_t type, void *data_val);
 #ifdef __cplusplus
 } /* extern "C" */
 #endif

@@ -36,6 +36,27 @@ static int16_t comm_weather_convert_f_temper(int16_t c_temper)
 }
 
 /*********************************************************************************
+                                  获取天气实时温度                                       
+*********************************************************************************/
+int16_t comm_weather_get_real_temper(void)
+{
+    int16_t weather_real_temper = \
+        p_vm_para_cache->weather_manage_para.weather_real_temper;
+
+    int cur_unit_temperature = \
+        get_vm_para_cache_with_label(\
+            vm_label_unit_temperature);
+
+    if(cur_unit_temperature == \
+        unit_temperature_F)
+        weather_real_temper = \
+            comm_weather_convert_f_temper(\
+                weather_real_temper);
+
+     return weather_real_temper;   
+}
+
+/*********************************************************************************
                                   获取天气最小温度                                       
 *********************************************************************************/
 int16_t comm_weather_get_min_temper(uint8_t day)
@@ -83,31 +104,6 @@ int16_t comm_weather_get_max_temper(uint8_t day)
                 weather_max_temper);
 
      return weather_max_temper;   
-}
-
-/*********************************************************************************
-                                  获取天气实时温度                                       
-*********************************************************************************/
-int16_t comm_weather_get_real_temper(uint8_t day)
-{
-    if(day >= Weather_Sync_Days)
-        return Weather_Invalid_Code;
-
-    int16_t weather_real_temper = \
-        p_vm_para_cache->weather_manage_para.weather_data[\
-            day].weather_real_temper;
-
-    int cur_unit_temperature = \
-        get_vm_para_cache_with_label(\
-            vm_label_unit_temperature);
-
-    if(cur_unit_temperature == \
-        unit_temperature_F)
-        weather_real_temper = \
-            comm_weather_convert_f_temper(\
-                weather_real_temper);
-
-     return weather_real_temper;   
 }
 
 /*********************************************************************************

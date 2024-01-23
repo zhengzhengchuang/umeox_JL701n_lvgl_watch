@@ -7,6 +7,8 @@ extern "C" {
 
 #include "../../lv_watch.h"
 
+void wf_tileview_register_all_menu(\
+    lv_obj_t *obj);
 #ifdef __cplusplus
 } /* extern "C" */
 #endif
