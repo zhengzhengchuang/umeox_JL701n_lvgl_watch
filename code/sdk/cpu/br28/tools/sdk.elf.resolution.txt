@@ -11283,6 +11283,15 @@ objs/apps/common/ui/lv_watch/comm_func/common_countdown.c.o
 -r=objs/apps/common/ui/lv_watch/comm_func/common_countdown.c.o,common_user_countdown_create,pl
 -r=objs/apps/common/ui/lv_watch/comm_func/common_countdown.c.o,post_remind_msg,l
 -r=objs/apps/common/ui/lv_watch/comm_func/common_countdown.c.o,p_ui_info_cache,l
+objs/apps/common/ui/lv_watch/comm_call/comm_contacts.c.o
+-r=objs/apps/common/ui/lv_watch/comm_call/comm_contacts.c.o,comm_contacts_item_num,pl
+-r=objs/apps/common/ui/lv_watch/comm_call/comm_contacts.c.o,comm_contacts_name_with_idx,pl
+-r=objs/apps/common/ui/lv_watch/comm_call/comm_contacts.c.o,comm_contacts_number_with_idx,pl
+-r=objs/apps/common/ui/lv_watch/comm_call/comm_contacts.c.o,comm_contacts_name_with_number,pl
+-r=objs/apps/common/ui/lv_watch/comm_call/comm_contacts.c.o,strcmp,l
+-r=objs/apps/common/ui/lv_watch/comm_call/comm_contacts.c.o,comm_contacts_content_clear,pl
+-r=objs/apps/common/ui/lv_watch/comm_call/comm_contacts.c.o,comm_contacts_content_save,pl
+-r=objs/apps/common/ui/lv_watch/comm_call/comm_contacts.c.o,p_vm_para_cache,l
 objs/apps/common/ui/lv_watch/comm_remind/remind_task.c.o
 -r=objs/apps/common/ui/lv_watch/comm_remind/remind_task.c.o,remind_msg_handle,pl
 -r=objs/apps/common/ui/lv_watch/comm_remind/remind_task.c.o,common_user_alarm_real_time_monitor,l

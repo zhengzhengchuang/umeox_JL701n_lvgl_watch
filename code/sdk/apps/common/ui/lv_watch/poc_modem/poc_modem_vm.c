@@ -50,7 +50,7 @@ static const vm_store_para_with_label_t default_label_para[Vm_Store_Para_Num] = 
 
     /*********默认表盘*********/
     {.label = vm_label_watchface_id, \
-        .store_para_val = ui_watchface_id_02},
+        .store_para_val = ui_watchface_id_01},
 
     /*********默认系统语言*********/
     {.label = vm_label_sys_language, \
@@ -170,6 +170,50 @@ static const weather_manage_para_t default_weather_para =
     },
 };
 
+/*********************************************************************************
+                             联系人管理的缺省值                                  
+*********************************************************************************/
+static const contacts_manage_para_t default_contacts_para = 
+{
+    .contacts_item = \
+        Comm_Contacts_Max_Num,
+
+    .contacts_ctx[0] = {
+        .contacts_name_str = \
+            {"张三"},
+        .contacts_number_str = \
+            {"12345678990"},
+    },
+
+    .contacts_ctx[1] = {
+        .contacts_name_str = \
+            {"李四"},
+        .contacts_number_str = \
+            {"23456789901"},
+    },
+
+    .contacts_ctx[2] = {
+        .contacts_name_str = \
+            {"赵五"},
+        .contacts_number_str = \
+            {"34567899012"},
+    },
+
+    .contacts_ctx[3] = {
+        .contacts_name_str = \
+            {"岳云鹏"},
+        .contacts_number_str = \
+            {"45678990123"},
+    },
+
+    .contacts_ctx[4] = {
+        .contacts_name_str = \
+            {"贾玲"},
+        .contacts_number_str = \
+            {"56789901234"},
+    },
+};
+
 int get_vm_para_cache_with_label(uint16_t label)
 {
     for(uint16_t i = 0; i < Vm_Store_Para_Num; i++)
@@ -205,7 +249,8 @@ void vm_store_para_init(void)
 
     int ret = 0;
     uint8_t repeat_cnt = 3;
-    ret = syscfg_read(CFG_USER_PARA_INFO, (uint8_t *)&vm_para_cache, sizeof(vm_store_para_cache_t));
+    ret = syscfg_read(CFG_USER_PARA_INFO, \
+        (uint8_t *)&vm_para_cache, sizeof(vm_store_para_cache_t));
 #if Vm_Debug_En
     if(1)
 #else
@@ -220,6 +265,9 @@ void vm_store_para_init(void)
 
         memcpy(&p_vm_para_cache->weather_manage_para, \
             &default_weather_para, sizeof(weather_manage_para_t));
+
+        memcpy(&p_vm_para_cache->contacts_manage_para, \
+            &default_contacts_para, sizeof(contacts_manage_para_t));
 
         memcpy(p_vm_para_cache->vm_store_para, default_label_para, \
             sizeof(vm_store_para_with_label_t)*Vm_Store_Para_Num);

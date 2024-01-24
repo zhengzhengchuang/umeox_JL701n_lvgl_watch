@@ -28,7 +28,7 @@ typedef struct phonebook {
     char name[20];
     char number[20];
     char date[20];
-    u8  type;
+    u8 type;
     u32 mask;
 } phonebook;
 

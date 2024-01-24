@@ -5,18 +5,20 @@
 extern "C" {
 #endif
 
+#include "fs.h"
 #include "app_config.h"
-
 #include "./include/ui_conf.h"
 #include "./include/ui_menu.h"
 #include "./include/version.h"
 #include "./include/ui_act_id.h"
+#include "./comm_call/call_log.h"
 #include "./comm_lang/lang_conf.h"
 #include "./comm_key/common_key.h"
 #include "./comm_lang/lang_txtid.h"
 #include "./comm_widget/widget_bo.h"
 #include "./comm_widget/widget_hr.h"
 #include "./poc_modem/poc_modem_ui.h"
+#include "./comm_call/comm_contacts.h"
 #include "./ui_tileview/ui_tileview.h"
 #include "./comm_widget/common_symb.h"
 #include "./comm_widget/widget_step.h"
@@ -37,6 +39,7 @@ extern "C" {
 #include "./comm_widget/widget_refresh.h"
 #include "./ui_menu/scrollbar/scrollbar.h"
 #include "./comm_widget/widget_distance.h"
+
 #include "./ui_menu/split_screen/split_screen.h"
 #include "../../../../include_lib/system/timer.h"
 #include "../../../../include_lib/system/sys_time.h"

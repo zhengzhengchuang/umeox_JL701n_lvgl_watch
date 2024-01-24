@@ -457,7 +457,7 @@ static int bt_connction_status_event_handler(struct bt_event *bt)
         if (__this->smartbox_watch_upgrade_flag) {
             break;
         }
-        UI_WINDOW_PREEMPTION_POSH(ID_WINDOW_PHONE, NULL, NULL, UI_WINDOW_PREEMPTION_TYPE_PHONE);
+        //UI_WINDOW_PREEMPTION_POSH(ID_WINDOW_PHONE, NULL, NULL, UI_WINDOW_PREEMPTION_TYPE_PHONE);
         log_info(" ui_moto_run 1");
 #if TCFG_UI_ENABLE_MOTO
         UI_MOTO_RUN(1);
@@ -538,7 +538,7 @@ static int bt_connction_status_event_handler(struct bt_event *bt)
 #if TCFG_UI_ENABLE_PHONEBOOK
         update_call_log_message();
 #endif /* #if TCFG_UI_ENABLE_PHONEBOOK */
-        UI_WINDOW_PREEMPTION_POP(ID_WINDOW_PHONE);
+        //UI_WINDOW_PREEMPTION_POP(ID_WINDOW_PHONE);
         break;
     case BT_STATUS_PHONE_NUMBER:
         log_info("BT_STATUS_PHONE_NUMBER\n");

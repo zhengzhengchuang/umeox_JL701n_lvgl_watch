@@ -209,7 +209,10 @@
         "watchface_06.h": "c",
         "watchface_07.h": "c",
         "watchface_08.h": "c",
-        "watchface_09.h": "c"
+        "watchface_09.h": "c",
+        "comm_contacts.h": "c",
+        "comm_call.h": "c",
+        "call_log.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

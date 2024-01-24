@@ -140,6 +140,7 @@
 #define		CFG_MUSIC_MODE				190
 
 #define     CFG_USER_PARA_INFO			191
+#define     CFG_USER_CALL_INFO			192
 #if 0
 #define     VM_WATCH_EX_BEGIN            191//拓展表盘信息
 #define     VM_WATCH_EX0                      VM_WATCH_EX_BEGIN//拓展表盘信息

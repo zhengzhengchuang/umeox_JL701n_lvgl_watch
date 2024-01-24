@@ -972,7 +972,8 @@ void phone_num_play_timer(void *priv)
         tone_file_list_play(len_lst, 1);
     } else {
         /*电话号码还没有获取到，定时查询*/
-        bt_user_priv_var.phone_timer_id = sys_timeout_add(NULL, phone_num_play_timer, 200);
+        bt_user_priv_var.phone_timer_id = \
+            sys_timeout_add(NULL, phone_num_play_timer, 200);
     }
 }
 
@@ -988,7 +989,8 @@ static void phone_num_play_start(void)
     /* check if support inband ringtone */
     if (!bt_user_priv_var.inband_ringtone) {
         bt_user_priv_var.phone_num_flag = 0;
-        bt_user_priv_var.phone_timer_id = sys_timeout_add(NULL, phone_num_play_timer, 500);
+        bt_user_priv_var.phone_timer_id = \
+            sys_timeout_add(NULL, phone_num_play_timer, 500);
     }
 }
 
@@ -1552,7 +1554,8 @@ void bt_status_phone_income(struct bt_event *bt)
      *(1)1t2有一台通话的时候，另一台如果来电不要提示
      *(2)1t2两台同时来电，现来的题示，后来的不播
      */
-    if ((check_esco_state_via_addr(tmp_bd_addr) != BD_ESCO_BUSY_OTHER) && (bt_user_priv_var.phone_ring_flag == 0)) {
+    if ((check_esco_state_via_addr(tmp_bd_addr) != BD_ESCO_BUSY_OTHER) && \
+        (bt_user_priv_var.phone_ring_flag == 0)) {
 #if BT_INBAND_RINGTONE
         extern u8 get_device_inband_ringtone_flag(void);
         bt_user_priv_var.inband_ringtone = get_device_inband_ringtone_flag();
@@ -1679,7 +1682,8 @@ void bt_status_phone_hangup(struct bt_event *bt)
     __this->call_back_flag &= ~BIT(0);
     if ((__this->call_back_flag == 0) && __this->call_flag) {
         if (bt_switch_back_timer == 0) {
-            bt_switch_back_timer = sys_timeout_add(NULL, bt_switch_back, 500);
+            bt_switch_back_timer = \
+                sys_timeout_add(NULL, bt_switch_back, 500);
         }
     }
     if (get_call_status() == BT_CALL_HANGUP) {

@@ -431,7 +431,6 @@ int open_file_handler(u8 type, int show_temp)
 
 void close_file_handler(u8 type)
 {
-
 #if TCFG_NOR_VM
 
     if (type == 0) {
@@ -558,6 +557,7 @@ static void book_list_save_in_exflash(u8 type, const u8 *name, const u8 *number,
     if (number) {
         snprintf(message.number, sizeof(message.number), "%s", number);
     }
+    
     pbap_file_handler = fopen(CALL_LOGS_PATH, "w+");
     if (!pbap_file_handler) {
         return;
