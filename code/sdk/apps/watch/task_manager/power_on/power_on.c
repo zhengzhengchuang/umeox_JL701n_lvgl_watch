@@ -110,8 +110,6 @@ static void  lcd_ui_power_on()
 
 static int power_on_init(void)
 {
-    // task_exit("ui");
-    // lvgl_test_init();
 #if 0
     UI_SHOW_WINDOW(PAGE_3);
     return 0;
@@ -198,7 +196,9 @@ void app_poweron_task()
     }
 #endif
 
-    int err =  tone_play_with_callback_by_name((char *)tone_table[IDEX_TONE_POWER_ON], 1, tone_play_end_callback, (void *)IDEX_TONE_POWER_ON);
+    int err =  tone_play_with_callback_by_name(\
+        (char *)tone_table[IDEX_TONE_POWER_ON], 1, \
+            tone_play_end_callback, (void *)IDEX_TONE_POWER_ON);
     if (err) { //提示音没有,播放失败，直接init流程
         power_on_init();
     }

@@ -212,7 +212,25 @@
         "watchface_09.h": "c",
         "comm_contacts.h": "c",
         "comm_call.h": "c",
-        "call_log.h": "c"
+        "call_log.h": "c",
+        "device.h": "c",
+        "atomic.h": "c",
+        "dev_reg.h": "c",
+        "ui_vm.h": "c",
+        "message_vm_cfg.h": "c",
+        "nor_vm_cfg.h": "c",
+        "nor_vm_main.h": "c",
+        "nor_vm_contacts.h": "c",
+        "nor_vm_weather.h": "c",
+        "dev_manager.h": "c",
+        "nor_vm_call_log.h": "c",
+        "nor_vm_message.h": "c",
+        "nor_vm_alarm.h": "c",
+        "watchface_10.h": "c",
+        "call_disc.h": "c",
+        "contacts.h": "c",
+        "le_smartbox_multi_trans.h": "c",
+        "le_smartbox_multi_common.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

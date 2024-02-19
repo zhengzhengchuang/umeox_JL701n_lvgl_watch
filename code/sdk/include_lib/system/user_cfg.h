@@ -13,7 +13,7 @@ typedef struct __BT_CONFIG {
     u8 rf_power;                       //发射功率
     u8 dac_analog_gain;                //通话DAC模拟增益
     u8 mic_analog_gain;                //通话MIC增益
-    u16 tws_device_indicate;         /*设置对箱搜索标识，inquiry时候用,搜索到相应的标识才允许连接*/
+    u16 tws_device_indicate;           /*设置对箱搜索标识，inquiry时候用,搜索到相应的标识才允许连接*/
     u8 tws_local_addr[6];
     u8 ble_name[LOCAL_NAME_LEN];       //ble蓝牙名
     u8 ble_mac_addr[6];                //ble蓝牙MAC地址

@@ -1,7 +1,7 @@
 #ifndef __NANDFLASH_FTL_H__
 #define __NANDFLASH_FTL_H__
 
-#define FTL_NAND_PAGE_SIZE 					2048
+#define FTL_NAND_PAGE_SIZE 				2048
 #define FTL_NAND_BLOCK_SIZE    			0x20000
 enum {
     FTL_OK = 0,

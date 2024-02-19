@@ -23,6 +23,7 @@ enum
     ui_watchface_id_08,
     ui_watchface_id_09,
     ui_watchface_id_10,
+    ui_watchface_id_11,
   
     ui_watchface_id_max,
 };
@@ -48,29 +49,50 @@ enum
 {
     ui_act_id_null = 0,
 
+    /*****表盘相关页面*****/
+    ui_act_id_watchface,
+
+    /*****菜单相关页面*****/
     ui_act_id_menu,
+
+    /*****设置相关页面*****/
+    
     ui_act_id_about,
-    ui_act_id_reset,  
-    ui_act_id_hr_warn,
-    ui_act_id_tool_box,
+    ui_act_id_reset, 
     ui_act_id_lang_sel,
     ui_act_id_backlight,
-    ui_act_id_sedentary,
     ui_act_id_menu_view,
-    ui_act_id_watchface,
-    ui_act_id_off_wrist,
-    ui_act_id_device_op, 
-    ui_act_id_ota_update,
     ui_act_id_sound_ctrl,
     ui_act_id_unit_switch,
-    ui_act_id_low_battery,
     ui_act_id_screen_sleep,
-    ui_act_id_worship_time,
-    ui_act_id_weather_data,
-    ui_act_id_settings_list, 
-    ui_act_id_weather_report,
-    ui_act_id_watchface_transp,
+    ui_act_id_settings_list,
 
+    /*****通话相关页面*****/
+    ui_act_id_call_main,
+    ui_act_id_call_disc,
+    ui_act_id_contacts,
+    ui_act_id_call_log,
+    ui_act_id_call_dial,
+
+    /*****提醒相关页面*****/
+    ui_act_id_hr_warn,
+    ui_act_id_sedentary,
+    ui_act_id_off_wrist,
+    ui_act_id_device_op,
+    ui_act_id_ota_update,
+    ui_act_id_low_battery,
+    ui_act_id_watchface_transp,
+    
+    /*****快捷相关页面*****/
+    ui_act_id_tool_box,
+    
+    /*****礼拜相关页面*****/
+    ui_act_id_worship_time,
+    
+    /*****天气相关页面*****/
+    ui_act_id_weather_data,
+    ui_act_id_weather_report,
+    
     ui_act_id_max,
 };
 typedef uint16_t ui_act_id_t;

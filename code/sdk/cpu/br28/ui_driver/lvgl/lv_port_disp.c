@@ -69,13 +69,6 @@ void lv_port_disp_init(void *lcd)
     int colums;
     int lines;
     lvgl_disp_init(lcd, &buf_2_1, &buf_2_2, &lcd_w, &lcd_h, &colums, &lines);
-
-    // lines = 40;
-    // lvgl_temp_buf = malloc(colums*lines*3+3);
-    // buf_2_1 = malloc(colums*lines*2);
-    // buf_2_2 = malloc(colums*lines*2);
-    ///r_printf(">>>>>>>>>>>>>>LCD>>>>>>>%x %x %d %d",buf_2_1, buf_2_2, colums , lines);
-
 #else
     disp_init(lcd);
 #endif
@@ -125,12 +118,6 @@ void lv_port_disp_init(void *lcd)
     /* y_printf("buf_2_1:0x%x, 0x%x \n", buf_2_1, buf_2_2); */
     lv_disp_draw_buf_init(&draw_buf_dsc_2, buf_2_1, buf_2_2, MY_DISP_HOR_RES * MY_DISP_VLOCK_H);   /*Initialize the display buffer*/
 #endif
-    /* Example for 3) also set disp_drv.full_refresh = 1 below*/
-    /* static lv_disp_draw_buf_t draw_buf_dsc_3; */
-    /* static lv_color_t buf_3_1[MY_DISP_HOR_RES * MY_DISP_VER_RES];            [>A screen sized buffer<] */
-    /* static lv_color_t buf_3_2[MY_DISP_HOR_RES * MY_DISP_VER_RES];            [>An other screen sized buffer<] */
-    /* lv_disp_draw_buf_init(&draw_buf_dsc_3, buf_3_1, buf_3_2, MY_DISP_VER_RES * LV_VER_RES_MAX);   [>Initialize the display buffer<] */
-
     /*-----------------------------------
      * Register the display in LVGL
      *----------------------------------*/

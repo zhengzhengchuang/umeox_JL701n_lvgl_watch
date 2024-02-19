@@ -37,8 +37,8 @@ static void weather_report_container_create(lv_obj_t *obj)
 *********************************************************************************/
 static void weather_report_1_elem_create(void)
 {
-    comm_weather_type_t weather_0_type = \
-        comm_weather_get_type(0);
+    weather_type_t weather_0_type = \
+        vm_weather_data_weather_type(0);
         
     widget_label_para.label_w = \
         (LCD_WIDTH - 30);
@@ -56,7 +56,7 @@ static void weather_report_1_elem_create(void)
     widget_label_para.label_parent = \
         weather_report_container;
     widget_label_para.label_text = \
-        get_lang_txt_with_id(lang_txtid_thunderstorm + \
+        get_lang_txt_with_id(lang_txtid_sunny + \
             weather_0_type);
     lv_obj_t *weather_type_label = \
         common_widget_label_create(&widget_label_para);
@@ -97,7 +97,7 @@ static void weather_report_1_elem_create(void)
         NULL);
 
     int16_t weather_min0_temper = \
-        comm_weather_get_min_temper(0);
+        vm_weather_data_min_temper(0);
     widget_data_para.data_x = \
         weather_other_00_x - (67);
     widget_data_para.data_y = 295;
@@ -113,7 +113,7 @@ static void weather_report_1_elem_create(void)
             &weather_min0_temper);
 
     int16_t weather_max0_temper = \
-        comm_weather_get_max_temper(0);
+        vm_weather_data_max_temper(0);
     widget_data_para.data_x = \
         weather_other_01_x - (67);
     common_data_widget_create(&widget_data_para, \
@@ -132,7 +132,7 @@ static void weather_report_2_7_elem_create(void)
         LCD_WIDTH;
     int16_t elem_container_h = 97;
     int16_t elem_container_sy = 354;
-    comm_weather_type_t weather_x_type;
+    weather_type_t weather_x_type;
 
     struct sys_time utc_time;
     ui_get_sys_time(&utc_time);
@@ -185,7 +185,7 @@ static void weather_report_2_7_elem_create(void)
             common_widget_obj_create(&widget_obj_para);
 
         weather_x_type = \
-            comm_weather_get_type(i);
+            vm_weather_data_weather_type(i);
         widget_img_para.img_parent = \
             elem_container;
         widget_img_para.file_img_dat = \
@@ -208,7 +208,7 @@ static void weather_report_2_7_elem_create(void)
             116, 4);
         
         int16_t weather_min_tempera = \
-            comm_weather_get_min_temper(i);
+            vm_weather_data_min_temper(i);
         widget_data_para.data_x = 116;
         widget_data_para.data_y = 60;
         widget_data_para.num_inv = 0;
@@ -231,7 +231,7 @@ static void weather_report_2_7_elem_create(void)
         common_widget_img_create(&widget_img_para, NULL);
 
         int16_t weather_max_tempera = \
-            comm_weather_get_max_temper(i);
+            vm_weather_data_max_temper(i);
         widget_data_para.data_x = \
             data_end_x + 30;
         data_end_x = \

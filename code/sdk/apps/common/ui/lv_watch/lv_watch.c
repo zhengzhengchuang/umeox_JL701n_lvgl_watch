@@ -118,7 +118,8 @@ void ui_ctl_lcd_enter_sleep(bool sleep)
 {
     lcd_sleep_ctrl(sleep);
  
-    struct lcd_interface *lcd = lcd_get_hdl();
+    struct lcd_interface *lcd = \
+        lcd_get_hdl();
     if(lcd->power_ctrl)
         lcd->power_ctrl(!sleep);
 

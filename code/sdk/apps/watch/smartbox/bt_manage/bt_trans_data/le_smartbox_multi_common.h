@@ -36,8 +36,6 @@ u8 mul_dev_get_handle_role(u16 handle);
 #if 0
 void bt_multi_trans_exit(void);
 void bt_multi_client_exit(void);
-
-
 #else
 // void smbox_multi_ble_app_disconnect(void);
 void smbox_bt_ble_adv_enable(u8 enable);

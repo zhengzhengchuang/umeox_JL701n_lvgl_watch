@@ -954,7 +954,7 @@ int upay_ble_adv_data_set(void)
 
 void bt_ble_init_do(void)
 {
-
+    //printf("%s\n", __func__);
 }
 
 int bt_ble_adv_ioctl(u32 cmd, u32 priv, u8 mode)

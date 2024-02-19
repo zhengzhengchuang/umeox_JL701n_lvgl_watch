@@ -5,8 +5,7 @@
 extern "C" {
 #endif
 
-#include "comm_call.h"
-#include "../include/ui_menu.h"
+#include "../../lv_watch.h"
 
 #ifdef __cplusplus
 } /* extern "C" */

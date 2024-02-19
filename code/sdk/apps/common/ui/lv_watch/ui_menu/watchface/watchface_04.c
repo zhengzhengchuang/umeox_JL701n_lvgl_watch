@@ -29,7 +29,7 @@ static const common_clock_pointer_para_t \
     {
         .clk_p_width = 50,
         .clk_p_height = 234,
-        .clk_p_center = 171,
+        .clk_p_center = 172,
         .clk_p_type = \
             clk_pointer_type_second,
         .clk_p_file_dat = \

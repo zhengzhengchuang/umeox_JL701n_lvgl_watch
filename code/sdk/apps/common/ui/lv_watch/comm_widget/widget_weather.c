@@ -81,7 +81,7 @@ void common_weather_widget_refresh(void)
         if(weather_data_type[i] == widget_data_type_weather)
         {
             __data = \
-                comm_weather_get_real_temper();
+                vm_weather_data_real_temper();
         }else if(weather_data_type[i] >= widget_data_type_min0_weather && \
             weather_data_type[i] <= widget_data_type_max6_weather)
         {
@@ -90,10 +90,10 @@ void common_weather_widget_refresh(void)
             
             if(!(idx % 2))
                 __data = \
-                    comm_weather_get_min_temper(idx/2);
+                    vm_weather_data_min_temper(idx/2);
             else
                 __data = \
-                    comm_weather_get_max_temper(idx/2);
+                    vm_weather_data_max_temper(idx/2);
         }
    
         widget_data_para_t *p_data_para = \

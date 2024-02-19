@@ -1019,6 +1019,7 @@ static int bt_close_bredr_do(int priv)
     sys_auto_sniff_controle(0, NULL);
     btctrler_task_close_bredr();
     set_stack_exiting(1);
+
     return 0;
 }
 
@@ -1068,14 +1069,19 @@ static void bt_timeout_close_bredr(void *priv)
 static int bt_init_bredr_do(int priv)
 {
     u16 do_cnt = priv;
-    if (do_cnt != bt_bredr_cnt) {
+    if (do_cnt != bt_bredr_cnt) 
+    {
         printf("%s, cnt:%d,%d \n", __func__, do_cnt, bt_bredr_cnt);
         return 0;
     }
-    if (__this->bt_close_bredr == 0) {
+
+    if (__this->bt_close_bredr == 0) 
+    {
         bt_wait_phone_connect_control(1);
+
 #if BT_BREDR_INTI_TIMEOUT_MS
-        if (bt_bredr_to_id) {
+        if (bt_bredr_to_id) 
+        {
             sys_timeout_del(bt_bredr_to_id);
             bt_bredr_to_id = 0;
             bt_bredr_to_id = sys_timeout_add(bt_bredr_cnt, bt_timeout_close_bredr, BT_BREDR_INTI_TIMEOUT_MS);
@@ -1083,6 +1089,7 @@ static int bt_init_bredr_do(int priv)
 #endif /* #if BT_BREDR_INTI_TIMEOUT_MS */
         return 0;
     }
+
     __this->bt_close_bredr = 0;
     set_stack_exiting(0);
     btctrler_task_init_bredr();
@@ -1093,7 +1100,8 @@ static int bt_init_bredr_do(int priv)
         sys_timeout_del(bt_bredr_to_id);
         bt_bredr_to_id = 0;
     }
-    bt_bredr_to_id = sys_timeout_add(bt_bredr_cnt, bt_timeout_close_bredr, BT_BREDR_INTI_TIMEOUT_MS);
+    bt_bredr_to_id = sys_timeout_add(bt_bredr_cnt, \
+        bt_timeout_close_bredr, BT_BREDR_INTI_TIMEOUT_MS);
 #endif /* #if BT_BREDR_INTI_TIMEOUT_MS */
     return 0;
 }
@@ -1198,16 +1206,17 @@ void bt_close_bredr_timeout_stop()
 
 void bt_close_bredr()
 {
-    bt_bredr_cnt ++;
+    bt_bredr_cnt++;
     /* printf("%s close=%d",__func__,__this->bt_close_bredr); */
     if (!strcmp(os_current_task(), "app_core")) {
         bt_close_bredr_do(bt_bredr_cnt);
-    } else {
+    } else 
+    {
         int msg[3] = {0};
         msg[0] = (int)bt_close_bredr_do;
         msg[1] = 1;
         msg[2] = (int)bt_bredr_cnt;
-        do {
+        do{
             int os_err = os_taskq_post_type("app_core", Q_CALLBACK, 3, msg);
             if (os_err == OS_ERR_NONE) {
                 break;
@@ -1216,7 +1225,7 @@ void bt_close_bredr()
                 return ;
             }
             os_time_dly(1);
-        } while (1);
+        }while (1);
     }
 }
 

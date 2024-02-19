@@ -411,235 +411,294 @@ u8 fix_rx_mac_addr[6] = {0xC0, 0xFF, 0x68, 0x7D, 0x16, 0x00};
 /*----------------------------------------------------------------------------*/
 static int bt_connction_status_event_handler(struct bt_event *bt)
 {
-
-    log_debug("-----------------------bt_connction_status_event_handler %d", bt->event);
+    printf("%s:%d\n", __func__, bt->event);
 
     if (bt_status_event_filter(bt) == false) {
         return false;
     }
-    //运动相关的
-    //static u8 sport_phone_memory = 0;
-    // struct watch_execise __execise_hd;
-    // watch_execise_handle_get(&__execise_hd);
-    // u8 sport_status = __execise_hd.execise_ctrl_status_get();
-    switch (bt->event) {
-    case BT_STATUS_EXIT_OK:
-        log_info("BT_STATUS_EXIT_OK\n");
-        break;
-    case BT_STATUS_INIT_OK:
-        log_info("BT_STATUS_INIT_OK\n");
-        bt_status_init_ok(bt);
-        break;
-    case BT_STATUS_START_CONNECTED:
-        log_info(" BT_STATUS_START_CONNECTED\n");
+
+    switch (bt->event) 
+    {
+        case BT_STATUS_EXIT_OK:
+            log_info("BT_STATUS_EXIT_OK\n");
+            break;
+
+        case BT_STATUS_INIT_OK:
+            log_info("BT_STATUS_INIT_OK\n");
+            bt_status_init_ok(bt);
+            break;
+
+        case BT_STATUS_START_CONNECTED:
+            log_info(" BT_STATUS_START_CONNECTED\n");
 #if TCFG_USER_EMITTER_ENABLE
-        user_send_cmd_prepare(USER_CTRL_INQUIRY_CANCEL, 0, NULL);
+            user_send_cmd_prepare(USER_CTRL_INQUIRY_CANCEL, 0, NULL);
 #endif
-        break;
-    case BT_STATUS_ENCRY_COMPLETE:
-        log_info(" BT_STATUS_ENCRY_COMPLETE\n");
-        break;
-    case BT_STATUS_SECOND_CONNECTED:
-        log_info(" BT_STATUS_SECOND_CONNECTED\n");
-        clear_current_poweron_memory_search_index(0);
-    case BT_STATUS_FIRST_CONNECTED:
-        log_info("BT_STATUS_CONNECTED\n");
-        bt_status_connect(bt);
-        break;
-    case BT_STATUS_FIRST_DISCONNECT:
-    case BT_STATUS_SECOND_DISCONNECT:
-        log_info(" BT_STATUS_SECOND_DISCONNECT\n");
-        bt_status_disconnect(bt);
-        break;
-    case BT_STATUS_PHONE_INCOME:
-        log_info("BT_STATUS_PHONE_INCOME\n");
-        //当手机app与手表传输过程中不能响应通话事件
-        if (__this->smartbox_watch_upgrade_flag) {
             break;
-        }
-        //UI_WINDOW_PREEMPTION_POSH(ID_WINDOW_PHONE, NULL, NULL, UI_WINDOW_PREEMPTION_TYPE_PHONE);
-        log_info(" ui_moto_run 1");
-#if TCFG_UI_ENABLE_MOTO
-        UI_MOTO_RUN(1);
-#endif
-        bt_status_phone_income(bt);
-#if TCFG_UI_ENABLE_PHONEBOOK
-        set_call_log_date(NULL);
-        set_call_log_type(2);
-#endif /* #if TCFG_UI_ENABLE_PHONEBOOK */
-        break;
-    case BT_STATUS_PHONE_OUT:
-        log_info("BT_STATUS_PHONE_OUT\n");
-        //当手机app与手表传输过程中不能响应通话事件
-        if (__this->smartbox_watch_upgrade_flag) {
+
+        case BT_STATUS_ENCRY_COMPLETE:
+            log_info(" BT_STATUS_ENCRY_COMPLETE\n");
             break;
-        }
-        log_info(" ui_moto_run 0");
-#if TCFG_UI_ENABLE_MOTO
-        UI_MOTO_RUN(0);
-#endif
-        bt_status_phone_out(bt);
-        if (get_bt_esco_by_watch() == FALSE) { // 增加手机去电mic使用手机端，同时会禁掉微信来电走手表这个功能
-            /* 延时200ms发送断开esco的命令，测试发现立马发送断开命令，手机会再次发送esco请求 */
-            /* 此处定时1s，在1s内发起的esco链路都会被断开 */
-            bt_esco_by_watch_time = sys_timeout_add(NULL, bt_esco_conn_time, 1000);
+
+        case BT_STATUS_SECOND_CONNECTED:
+            log_info(" BT_STATUS_SECOND_CONNECTED\n");
+            clear_current_poweron_memory_search_index(0);
+        case BT_STATUS_FIRST_CONNECTED:
+            log_info("BT_STATUS_CONNECTED\n");
+            bt_status_connect(bt);
             break;
-        }
-        UI_WINDOW_PREEMPTION_POSH(ID_WINDOW_PHONE, NULL, NULL, UI_WINDOW_PREEMPTION_TYPE_PHONE);
-#if TCFG_UI_ENABLE_PHONEBOOK
-        set_call_log_date(NULL);
-#endif /* #if TCFG_UI_ENABLE_PHONEBOOK */
-        break;
-    case BT_STATUS_PHONE_ACTIVE:
-        log_info("BT_STATUS_PHONE_ACTIVE\n");
-        //当手机app与手表传输过程中不能响应通话事件
-        if (__this->smartbox_watch_upgrade_flag) {
+
+        case BT_STATUS_FIRST_DISCONNECT:
+        case BT_STATUS_SECOND_DISCONNECT:
+            log_info(" BT_STATUS_SECOND_DISCONNECT\n");
+            bt_status_disconnect(bt);
             break;
-        }
-#if TCFG_UI_ENABLE_MOTO
-        UI_MOTO_RUN(0);
-#endif
-        bt_status_phone_active(bt);
-        if (get_bt_esco_by_watch() == FALSE) {
-            /* 延时200ms发送断开esco的命令，测试发现立马发送断开命令，手机会再次发送esco请求 */
-            /* 此处定时1.5s，在1.5s内发起的esco链路都会被断开 */ /*  针对iphone se修改增加定时 */
-            aec_sco_dly_disconnection();
-            bt_esco_by_watch_time = sys_timeout_add(NULL, bt_esco_conn_time, 1500);
-#if TCFG_UI_ENABLE
-            if (UI_GET_WINDOW_ID() == ID_WINDOW_PHONE) {//判断手表在来电界面，退出界面
-                UI_WINDOW_PREEMPTION_POP(ID_WINDOW_PHONE);
-            }
-#endif /* #if TCFG_UI_ENABLE */
-            break;
-        }
-        UI_MSG_POST("phone_active:status=%4", 1);
-        break;
-    case BT_STATUS_PHONE_HANGUP:
-        log_info(" BT_STATUS_PHONE_HANGUP\n");
-        //当手机app与手表传输过程中不能响应通话事件
-        if (__this->smartbox_watch_upgrade_flag) {
-            // 添加这个判断是防止升级过程中出现挂断多次电话的情况
-            if (app_get_curr_task() != APP_SMARTBOX_ACTION_TASK) {
-                __this->smartbox_watch_upgrade_flag = 0;
-            }
-            break;
-        }
-#if TCFG_UI_ENABLE_MOTO
-        UI_MOTO_RUN(0);
-#endif
-        bt_status_phone_hangup(bt);
-        __set_bt_esco_by_watch(0);
-#if TCFG_UI_ENABLE
-        if (UI_GET_WINDOW_ID() != ID_WINDOW_PHONE) {//判断手表在来电界面，退出界面
-            break;
-        }
-        ui_hide_main(ID_WINDOW_PHONE);
-#endif /* #if TCFG_UI_ENABLE */
-#if TCFG_UI_ENABLE_PHONEBOOK
-        update_call_log_message();
-#endif /* #if TCFG_UI_ENABLE_PHONEBOOK */
-        //UI_WINDOW_PREEMPTION_POP(ID_WINDOW_PHONE);
-        break;
-    case BT_STATUS_PHONE_NUMBER:
-        log_info("BT_STATUS_PHONE_NUMBER\n");
-#if USER_SUPPORT_PROFILE_PBAP_LIST
-        user_send_cmd_prepare(USER_CTRL_PBAP_READ_LIST, 0, NULL);
-#endif
-        bt_status_phone_number(bt);
-#if TCFG_UI_ENABLE_MOTO
-        if (get_call_status() == BT_CALL_INCOMING) {
-            log_info(" ui_moto_run 1");
-            UI_MOTO_RUN(1);
-        }
-#endif
-#if TCFG_UI_ENABLE_PHONEBOOK
-        u8 call_name[20] = {0};
-        if (phonebook_get_name_by_number(bt->value, call_name)) {
-            set_call_log_name(call_name);
-        }
-        set_call_log_number((u8 *)bt->value);
-#endif /* #if TCFG_UI_ENABLE_PHONEBOOK */
-        break;
-    case BT_STATUS_PHONE_NANE:
-        log_info("BT_STATUS_PHONE_NANE\n");
-        bt_status_phone_name(bt);
-        break;
-    case BT_STATUS_INBAND_RINGTONE:
-        log_info("BT_STATUS_INBAND_RINGTONE\n");
-        bt_status_inband_ringtone(bt);
-        break;
-    case BT_STATUS_BEGIN_AUTO_CON:
-        log_info("BT_STATUS_BEGIN_AUTO_CON\n");
-        break;
-    case BT_STATUS_A2DP_MEDIA_START:
-        log_info(" BT_STATUS_A2DP_MEDIA_START\n");
-        bt_status_a2dp_media_start(bt);
-        break;
-    case BT_STATUS_A2DP_MEDIA_STOP:
-        log_info(" BT_STATUS_A2DP_MEDIA_STOP");
-        bt_status_a2dp_media_stop(bt);
-        break;
-    case BT_STATUS_SCO_STATUS_CHANGE:
-        log_info(" BT_STATUS_SCO_STATUS_CHANGE");
-        log_info(" ui_moto_run 0");
-#if TCFG_UI_ENABLE_MOTO
-        UI_MOTO_RUN(0);
-#endif
-        if (bt->value != 0xff) {
-            if (bt_esco_ban_conn()) {
+
+        case BT_STATUS_PHONE_INCOME:
+            log_info("BT_STATUS_PHONE_INCOME\n");
+            //当手机app与手表传输过程中不能响应通话事件
+            if (__this->smartbox_watch_upgrade_flag) {
                 break;
-            } else if (get_bt_esco_by_watch() == FALSE) {
-                /* 用于判断部分手机来电铃声会发起esco请求 */
-#if !BT_INBAND_RINGTONE
-                if (get_call_status() != BT_CALL_ACTIVE) {
-                    aec_sco_dly_disconnection();
-                    break;
-                }
-#endif
             }
-        }
-        bt_status_sco_change(bt);
-        break;
-    case BT_STATUS_CALL_VOL_CHANGE:
-        log_info(" BT_STATUS_CALL_VOL_CHANGE ");
-        bt_status_call_vol_change(bt);
-        break;
-    case BT_STATUS_SNIFF_STATE_UPDATE:
-        log_info(" BT_STATUS_SNIFF_STATE_UPDATE \n");    //0退出SNIFF
-        bt_status_sniff_state_update(bt);
-        break;
-    case BT_STATUS_LAST_CALL_TYPE_CHANGE:
-        log_info("BT_STATUS_LAST_CALL_TYPE_CHANGE\n");
-        bt_status_last_call_type_change(bt);
-        break;
-    case BT_STATUS_CONN_A2DP_CH:
-        bt_status_conn_a2dp_ch(bt);
-        break;
-    case BT_STATUS_CONN_HFP_CH:
-        bt_status_conn_hfp_ch(bt);
-        break;
-    case BT_STATUS_PHONE_MANUFACTURER:
-        log_info("BT_STATUS_PHONE_MANUFACTURER\n");
-        bt_status_phone_menufactuer(bt);
-        break;
-    case BT_STATUS_VOICE_RECOGNITION:
-        log_info(" BT_STATUS_VOICE_RECOGNITION \n");
-        bt_status_voice_recognition(bt);
-        break;
-    case BT_STATUS_AVRCP_INCOME_OPID:
-        log_info("  BT_STATUS_AVRCP_INCOME_OPID \n");
-        bt_status_avrcp_income_opid(bt);
-        break;
-    case  BT_STATUS_RECONN_OR_CONN:
-        log_info("  BT_STATUS_RECONN_OR_CONN \n");
-#if USER_SUPPORT_PROFILE_PBAP_LIST
-        user_send_cmd_prepare(USER_CTRL_PBAP_CONNECT, 0, NULL);
+
+            // UI_WINDOW_PREEMPTION_POSH(ID_WINDOW_PHONE, NULL, \
+            //     NULL, UI_WINDOW_PREEMPTION_TYPE_PHONE);
+            
+            //log_info(" ui_moto_run 1");
+#if TCFG_UI_ENABLE_MOTO
+            UI_MOTO_RUN(1);
 #endif
-        break;
-    default:
-        log_info(" BT STATUS DEFAULT\n");
-        break;
+
+            bt_status_phone_income(bt);
+
+#if TCFG_UI_ENABLE_PHONEBOOK
+            set_call_log_date(NULL);
+            set_call_log_type(2);
+#endif /* #if TCFG_UI_ENABLE_PHONEBOOK */
+            break;
+
+        case BT_STATUS_PHONE_OUT:
+            log_info("BT_STATUS_PHONE_OUT\n");
+            //当手机app与手表传输过程中不能响应通话事件
+            if (__this->smartbox_watch_upgrade_flag) {
+                break;
+            }
+
+            //log_info(" ui_moto_run 0");
+
+#if TCFG_UI_ENABLE_MOTO
+            UI_MOTO_RUN(0);
+#endif
+            bt_status_phone_out(bt);
+            
+            if (get_bt_esco_by_watch() == FALSE) { // 增加手机去电mic使用手机端，同时会禁掉微信来电走手表这个功能
+                /* 延时200ms发送断开esco的命令，测试发现立马发送断开命令，手机会再次发送esco请求 */
+                /* 此处定时1s，在1s内发起的esco链路都会被断开 */
+                bt_esco_by_watch_time = sys_timeout_add(NULL, bt_esco_conn_time, 1000);
+                break;
+            }
+
+            // UI_WINDOW_PREEMPTION_POSH(ID_WINDOW_PHONE, NULL, \ 
+            //     NULL, UI_WINDOW_PREEMPTION_TYPE_PHONE);
+#if TCFG_UI_ENABLE_PHONEBOOK
+            set_call_log_date(NULL);
+#endif /* #if TCFG_UI_ENABLE_PHONEBOOK */
+            break;
+            
+        case BT_STATUS_PHONE_ACTIVE:
+            log_info("BT_STATUS_PHONE_ACTIVE\n");
+            //当手机app与手表传输过程中不能响应通话事件
+            if (__this->smartbox_watch_upgrade_flag) {
+                break;
+            }
+
+#if TCFG_UI_ENABLE_MOTO
+            UI_MOTO_RUN(0);
+#endif
+
+            bt_status_phone_active(bt);
+
+            if(get_bt_esco_by_watch() == FALSE) 
+            {
+                /* 延时200ms发送断开esco的命令，测试发现立马发送断开命令，手机会再次发送esco请求 */
+                /* 此处定时1.5s，在1.5s内发起的esco链路都会被断开 */ /*  针对iphone se修改增加定时 */
+                aec_sco_dly_disconnection();
+                bt_esco_by_watch_time = sys_timeout_add(NULL, bt_esco_conn_time, 1500);
+#if TCFG_UI_ENABLE
+                if (UI_GET_WINDOW_ID() == ID_WINDOW_PHONE) {//判断手表在来电界面，退出界面
+                    UI_WINDOW_PREEMPTION_POP(ID_WINDOW_PHONE);
+                }
+#endif /* #if TCFG_UI_ENABLE */
+                break;
+            }
+
+            //UI_MSG_POST("phone_active:status=%4", 1);
+
+            break;
+
+        case BT_STATUS_PHONE_HANGUP:
+            log_info(" BT_STATUS_PHONE_HANGUP\n");
+            //当手机app与手表传输过程中不能响应通话事件
+            if (__this->smartbox_watch_upgrade_flag) {
+                // 添加这个判断是防止升级过程中出现挂断多次电话的情况
+                if (app_get_curr_task() != APP_SMARTBOX_ACTION_TASK) {
+                    __this->smartbox_watch_upgrade_flag = 0;
+                }
+                break;
+            }
+
+#if TCFG_UI_ENABLE_MOTO
+            UI_MOTO_RUN(0);
+#endif
+
+            bt_status_phone_hangup(bt);
+
+            __set_bt_esco_by_watch(0);
+
+#if TCFG_UI_ENABLE
+            if (UI_GET_WINDOW_ID() != ID_WINDOW_PHONE) 
+            {//判断手表在来电界面，退出界面
+                break;
+            }
+
+            ui_hide_main(ID_WINDOW_PHONE);
+#endif /* #if TCFG_UI_ENABLE */
+
+#if TCFG_UI_ENABLE_PHONEBOOK
+            update_call_log_message();
+#endif /* #if TCFG_UI_ENABLE_PHONEBOOK */
+
+            //UI_WINDOW_PREEMPTION_POP(ID_WINDOW_PHONE);
+
+            break;
+
+        case BT_STATUS_PHONE_NUMBER:
+            log_info("BT_STATUS_PHONE_NUMBER\n");
+#if USER_SUPPORT_PROFILE_PBAP_LIST
+            user_send_cmd_prepare(USER_CTRL_PBAP_READ_LIST, 0, NULL);
+#endif
+            bt_status_phone_number(bt);
+#if TCFG_UI_ENABLE_MOTO
+            if(get_call_status() == BT_CALL_INCOMING) 
+            {
+                log_info(" ui_moto_run 1");
+                UI_MOTO_RUN(1);
+            }
+#endif
+
+#if TCFG_UI_ENABLE_PHONEBOOK
+            u8 call_name[20] = {0};
+            if(phonebook_get_name_by_number(bt->value, call_name)) 
+            {
+                set_call_log_name(call_name);
+            }
+            
+            set_call_log_number((u8 *)bt->value);
+#endif /* #if TCFG_UI_ENABLE_PHONEBOOK */
+
+            break;
+
+        case BT_STATUS_PHONE_NANE:
+            log_info("BT_STATUS_PHONE_NANE\n");
+            bt_status_phone_name(bt);
+            break;
+
+        case BT_STATUS_INBAND_RINGTONE:
+            log_info("BT_STATUS_INBAND_RINGTONE\n");
+            bt_status_inband_ringtone(bt);
+            break;
+
+        case BT_STATUS_BEGIN_AUTO_CON:
+            log_info("BT_STATUS_BEGIN_AUTO_CON\n");
+            break;
+
+        case BT_STATUS_A2DP_MEDIA_START:
+            log_info(" BT_STATUS_A2DP_MEDIA_START\n");
+            bt_status_a2dp_media_start(bt);
+            break;
+
+        case BT_STATUS_A2DP_MEDIA_STOP:
+            log_info(" BT_STATUS_A2DP_MEDIA_STOP");
+            bt_status_a2dp_media_stop(bt);
+            break;
+
+    case BT_STATUS_SCO_STATUS_CHANGE:
+            log_info(" BT_STATUS_SCO_STATUS_CHANGE");
+            log_info(" ui_moto_run 0");
+
+#if TCFG_UI_ENABLE_MOTO
+            UI_MOTO_RUN(0);
+#endif
+            if(bt->value != 0xff) 
+            {
+                if(bt_esco_ban_conn()) 
+                {
+                    break;
+                }else if (get_bt_esco_by_watch() == FALSE) 
+                {
+                    /* 用于判断部分手机来电铃声会发起esco请求 */
+#if !BT_INBAND_RINGTONE
+                    if(get_call_status() != BT_CALL_ACTIVE) 
+                    {
+                        aec_sco_dly_disconnection();
+                        break;
+                    }
+#endif
+                }
+            }
+
+            bt_status_sco_change(bt);
+            break;
+
+        case BT_STATUS_CALL_VOL_CHANGE:
+            log_info(" BT_STATUS_CALL_VOL_CHANGE ");
+            bt_status_call_vol_change(bt);
+            break;
+
+        case BT_STATUS_SNIFF_STATE_UPDATE:
+            log_info(" BT_STATUS_SNIFF_STATE_UPDATE \n");    //0退出SNIFF
+            bt_status_sniff_state_update(bt);
+            break;
+
+        case BT_STATUS_LAST_CALL_TYPE_CHANGE:
+            log_info("BT_STATUS_LAST_CALL_TYPE_CHANGE\n");
+            bt_status_last_call_type_change(bt);
+            break;
+
+        case BT_STATUS_CONN_A2DP_CH:
+            bt_status_conn_a2dp_ch(bt);
+            break;
+
+        case BT_STATUS_CONN_HFP_CH:
+            bt_status_conn_hfp_ch(bt);
+            break;
+
+        case BT_STATUS_PHONE_MANUFACTURER:
+            log_info("BT_STATUS_PHONE_MANUFACTURER\n");
+            bt_status_phone_menufactuer(bt);
+            break;
+
+        case BT_STATUS_VOICE_RECOGNITION:
+            log_info(" BT_STATUS_VOICE_RECOGNITION \n");
+            bt_status_voice_recognition(bt);
+            break;
+
+        case BT_STATUS_AVRCP_INCOME_OPID:
+            log_info("  BT_STATUS_AVRCP_INCOME_OPID \n");
+            bt_status_avrcp_income_opid(bt);
+            break;
+
+        case  BT_STATUS_RECONN_OR_CONN:
+            log_info("  BT_STATUS_RECONN_OR_CONN \n");
+#if USER_SUPPORT_PROFILE_PBAP_LIST
+            user_send_cmd_prepare(USER_CTRL_PBAP_CONNECT, 0, NULL);
+#endif
+            break;
+
+        default:
+            log_info(" BT STATUS DEFAULT\n");
+            break;
     }
+
     return 0;
 }
 
@@ -783,95 +842,98 @@ int bt_update_event_handler(struct sys_event *event)
 static int bt_hci_event_handler(struct bt_event *bt)
 {
     //对应原来的蓝牙连接上断开处理函数  ,bt->value=reason
-    log_debug("------------------------bt_hci_event_handler reason %x %x", bt->event, bt->value);
+    printf("%s %x %x\n", __func__, bt->event, bt->value);
 
-    UI_MSG_POST("bt_status:hci_event=%4", bt->event);
+    //UI_MSG_POST("bt_status:hci_event=%4", bt->event);
+
     if (bt_hci_event_filter(bt) == 0) {
         return 0;
     }
 
-    switch (bt->event) {
-    case HCI_EVENT_INQUIRY_COMPLETE:
-        log_info(" HCI_EVENT_INQUIRY_COMPLETE \n");
-        bt_hci_event_inquiry(bt);
-        break;
-    case HCI_EVENT_IO_CAPABILITY_REQUEST:
-        log_info(" HCI_EVENT_IO_CAPABILITY_REQUEST \n");
-        clock_add_set(BT_CONN_CLK);
-        break;
-    case HCI_EVENT_USER_CONFIRMATION_REQUEST:
-        log_info(" HCI_EVENT_USER_CONFIRMATION_REQUEST \n");
-        ///<可通过按键来确认是否配对 1：配对   0：取消
-        bt_send_pair(1);
-        clock_remove_set(BT_CONN_CLK);
-        break;
-    case HCI_EVENT_USER_PASSKEY_REQUEST:
-        log_info(" HCI_EVENT_USER_PASSKEY_REQUEST \n");
-        ///<可以开始输入6位passkey
-        break;
-    case HCI_EVENT_USER_PRESSKEY_NOTIFICATION:
-        log_info(" HCI_EVENT_USER_PRESSKEY_NOTIFICATION %x\n", bt->value);
-        ///<可用于显示输入passkey位置 value 0:start  1:enrer  2:earse   3:clear  4:complete
-        break;
-    case HCI_EVENT_PIN_CODE_REQUEST :
-        log_info("HCI_EVENT_PIN_CODE_REQUEST  \n");
-        bt_send_pair(1);
-        break;
-    case HCI_EVENT_VENDOR_NO_RECONN_ADDR :
-        log_info("HCI_EVENT_VENDOR_NO_RECONN_ADDR \n");
-        bt_hci_event_disconnect(bt) ;
-        break;
-    case HCI_EVENT_DISCONNECTION_COMPLETE :
-        log_info("HCI_EVENT_DISCONNECTION_COMPLETE \n");
-        if (bt->value == ERROR_CODE_PAIRING_NOT_ALLOWED) { //用于判断华为手表的断开情况
-            UI_MSG_POST("bt_status:hci_value=%4", bt->value);
-        }
-        bt_hci_event_disconnect(bt) ;
-        clock_remove_set(BT_CONN_CLK);
-        break;
-    case BTSTACK_EVENT_HCI_CONNECTIONS_DELETE:
-    case HCI_EVENT_CONNECTION_COMPLETE:
-        log_info(" HCI_EVENT_CONNECTION_COMPLETE \n");
-        UI_MSG_POST("bt_status:hci_value=%4", bt->value);
-        switch (bt->value) {
-        case ERROR_CODE_SUCCESS :
-            log_info("ERROR_CODE_SUCCESS  \n");
-            bt_hci_event_connection(bt);
+    switch (bt->event) 
+    {
+        case HCI_EVENT_INQUIRY_COMPLETE:
+            log_info(" HCI_EVENT_INQUIRY_COMPLETE \n");
+            bt_hci_event_inquiry(bt);
             break;
-        case ERROR_CODE_PIN_OR_KEY_MISSING:
-            log_info(" ERROR_CODE_PIN_OR_KEY_MISSING \n");
-            bt_hci_event_linkkey_missing(bt);
-        case ERROR_CODE_SYNCHRONOUS_CONNECTION_LIMIT_TO_A_DEVICE_EXCEEDED :
-        case ERROR_CODE_CONNECTION_REJECTED_DUE_TO_LIMITED_RESOURCES:
-        case ERROR_CODE_CONNECTION_REJECTED_DUE_TO_UNACCEPTABLE_BD_ADDR:
-        case ERROR_CODE_CONNECTION_ACCEPT_TIMEOUT_EXCEEDED  :
-        case ERROR_CODE_REMOTE_USER_TERMINATED_CONNECTION   :
-        case ERROR_CODE_CONNECTION_TERMINATED_BY_LOCAL_HOST :
-        case ERROR_CODE_AUTHENTICATION_FAILURE :
+        case HCI_EVENT_IO_CAPABILITY_REQUEST:
+            log_info(" HCI_EVENT_IO_CAPABILITY_REQUEST \n");
+            clock_add_set(BT_CONN_CLK);
+            break;
+        case HCI_EVENT_USER_CONFIRMATION_REQUEST:
+            log_info(" HCI_EVENT_USER_CONFIRMATION_REQUEST \n");
+            ///<可通过按键来确认是否配对 1：配对   0：取消
+            bt_send_pair(1);
+            clock_remove_set(BT_CONN_CLK);
+            break;
+        case HCI_EVENT_USER_PASSKEY_REQUEST:
+            log_info(" HCI_EVENT_USER_PASSKEY_REQUEST \n");
+            ///<可以开始输入6位passkey
+            break;
+        case HCI_EVENT_USER_PRESSKEY_NOTIFICATION:
+            log_info(" HCI_EVENT_USER_PRESSKEY_NOTIFICATION %x\n", bt->value);
+            ///<可用于显示输入passkey位置 value 0:start  1:enrer  2:earse   3:clear  4:complete
+            break;
+        case HCI_EVENT_PIN_CODE_REQUEST :
+            log_info("HCI_EVENT_PIN_CODE_REQUEST  \n");
+            bt_send_pair(1);
+            break;
+        case HCI_EVENT_VENDOR_NO_RECONN_ADDR :
+            log_info("HCI_EVENT_VENDOR_NO_RECONN_ADDR \n");
             bt_hci_event_disconnect(bt) ;
             break;
-        case CUSTOM_BB_AUTO_CANCEL_PAGE:
-            bt_wait_phone_connect_control(1);
+        case HCI_EVENT_DISCONNECTION_COMPLETE :
+            log_info("HCI_EVENT_DISCONNECTION_COMPLETE \n");
+            if (bt->value == ERROR_CODE_PAIRING_NOT_ALLOWED) { //用于判断华为手表的断开情况
+                UI_MSG_POST("bt_status:hci_value=%4", bt->value);
+            }
+            bt_hci_event_disconnect(bt) ;
+            clock_remove_set(BT_CONN_CLK);
             break;
-        case ERROR_CODE_PAGE_TIMEOUT:
-            log_info(" ERROR_CODE_PAGE_TIMEOUT \n");
-            bt_hci_event_page_timeout(bt);
-            break;
-        case ERROR_CODE_CONNECTION_TIMEOUT:
-            log_info(" ERROR_CODE_CONNECTION_TIMEOUT \n");
-            bt_hci_event_connection_timeout(bt);
-            break;
-        case ERROR_CODE_ACL_CONNECTION_ALREADY_EXISTS  :
-            log_info("ERROR_CODE_ACL_CONNECTION_ALREADY_EXISTS   \n");
-            bt_hci_event_connection_exist(bt);
+        case BTSTACK_EVENT_HCI_CONNECTIONS_DELETE:
+        case HCI_EVENT_CONNECTION_COMPLETE:
+            log_info(" HCI_EVENT_CONNECTION_COMPLETE \n");
+            UI_MSG_POST("bt_status:hci_value=%4", bt->value);
+            switch (bt->value) {
+            case ERROR_CODE_SUCCESS :
+                log_info("ERROR_CODE_SUCCESS  \n");
+                bt_hci_event_connection(bt);
+                break;
+            case ERROR_CODE_PIN_OR_KEY_MISSING:
+                log_info(" ERROR_CODE_PIN_OR_KEY_MISSING \n");
+                bt_hci_event_linkkey_missing(bt);
+            case ERROR_CODE_SYNCHRONOUS_CONNECTION_LIMIT_TO_A_DEVICE_EXCEEDED :
+            case ERROR_CODE_CONNECTION_REJECTED_DUE_TO_LIMITED_RESOURCES:
+            case ERROR_CODE_CONNECTION_REJECTED_DUE_TO_UNACCEPTABLE_BD_ADDR:
+            case ERROR_CODE_CONNECTION_ACCEPT_TIMEOUT_EXCEEDED  :
+            case ERROR_CODE_REMOTE_USER_TERMINATED_CONNECTION   :
+            case ERROR_CODE_CONNECTION_TERMINATED_BY_LOCAL_HOST :
+            case ERROR_CODE_AUTHENTICATION_FAILURE :
+                bt_hci_event_disconnect(bt) ;
+                break;
+            case CUSTOM_BB_AUTO_CANCEL_PAGE:
+                bt_wait_phone_connect_control(1);
+                break;
+            case ERROR_CODE_PAGE_TIMEOUT:
+                log_info(" ERROR_CODE_PAGE_TIMEOUT \n");
+                bt_hci_event_page_timeout(bt);
+                break;
+            case ERROR_CODE_CONNECTION_TIMEOUT:
+                log_info(" ERROR_CODE_CONNECTION_TIMEOUT \n");
+                bt_hci_event_connection_timeout(bt);
+                break;
+            case ERROR_CODE_ACL_CONNECTION_ALREADY_EXISTS  :
+                log_info("ERROR_CODE_ACL_CONNECTION_ALREADY_EXISTS   \n");
+                bt_hci_event_connection_exist(bt);
+                break;
+            default:
+                break;
+            }
             break;
         default:
             break;
-        }
-        break;
-    default:
-        break;
     }
+    
     return 0;
 }
 
@@ -1293,8 +1355,8 @@ void app_bt_task()
         test_timer = sys_timer_add(NULL, bt_test_timer, 10000);
     }
 
-
-    while (1) {
+    while (1) 
+    {
         app_task_get_msg(msg, ARRAY_SIZE(msg), 1);
 
         switch (msg[0]) {

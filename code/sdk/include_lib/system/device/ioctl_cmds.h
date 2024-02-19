@@ -1,9 +1,6 @@
 #ifndef IOCTL_INF_H
 #define IOCTL_INF_H
 
-
-
-
 #define IOCTL_SET_IRQ_NUM 				1
 #define IOCTL_SET_PRIORITY 				2
 #define IOCTL_SET_DATA_WIDTH 			3

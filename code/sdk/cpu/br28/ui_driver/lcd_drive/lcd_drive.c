@@ -1117,9 +1117,11 @@ int lcd_drv_init(void *p)
     memcpy(lcd_dat, cfg->private_data, sizeof(struct lcd_platform_data));
 
     ASSERT(lcd_dat, "Error! spi io not config");
+    
     printf("spi pin rest:%d, cs:%d, dc:%d, en:%d, spi:%d\n", \
-              lcd_dat->pin_reset, lcd_dat->pin_cs, lcd_dat->pin_dc, lcd_dat->pin_en, lcd_dat->spi_cfg);
-
+        lcd_dat->pin_reset, lcd_dat->pin_cs, lcd_dat->pin_dc, \
+            lcd_dat->pin_en, lcd_dat->spi_cfg);
+    
     //可通过屏幕logo或者屏幕id匹配屏驱，任选一种匹配方式
     if (!__lcd) {
         __lcd = lcd_drv_get_hdl(TCFG_LCD_MATCH_MODE, LCD_LOGO);

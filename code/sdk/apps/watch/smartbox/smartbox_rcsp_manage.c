@@ -189,75 +189,93 @@ extern void bt_init_bredr();
 extern void bredr_conn_last_dev();
 extern u8 is_bredr_close(void);
 extern u8 is_bredr_inquiry_state(void);
-
 #endif
 
 static void rcsp_user_event_ble_handler(ble_state_e ble_status, u8 flag)
 {
-    switch (ble_status) {
-    case BLE_ST_INIT_OK:
+    printf("%s:%d, %d\n", __func__, ble_status, flag);
 
+    switch(ble_status) 
+    {
+        case BLE_ST_INIT_OK:
 #if TCFG_USER_BLE_CTRL_BREDR_EN
+            bt_close_bredr();
+#endif
+            break;
 
-        bt_close_bredr();
+        case BLE_ST_IDLE:
+ #if RCSP_UPDATE_EN
+            if(get_jl_update_flag()) 
+            JL_rcsp_event_to_user(DEVICE_EVENT_FROM_RCSP, \
+                MSG_JL_UPDATE_START, NULL, 0);
 #endif
-        break;
-    case BLE_ST_IDLE:
-#if RCSP_UPDATE_EN
-        if (get_jl_update_flag()) {
-            JL_rcsp_event_to_user(DEVICE_EVENT_FROM_RCSP, MSG_JL_UPDATE_START, NULL, 0);
-        }
-#endif
-        break;
-    case BLE_ST_CONNECT:
-        if (flag) {
-            smartbox_user_state_event(BT_3TH_EVENT_COMMON_BLE_STATUS, BLE_ST_CONNECT);
             break;
-        }
-        smartbox_rcsp_connect();
+
+        case BLE_ST_CONNECT:
+            if(flag) 
+            {
+                smartbox_user_state_event(BT_3TH_EVENT_COMMON_BLE_STATUS, BLE_ST_CONNECT);
+                break;
+            }
+
+            smartbox_rcsp_connect();
+
 #if (RCSP_ADV_FIND_DEVICE_ENABLE)
-        printf("smartbox_find_device_reset\n");
-        smartbox_find_device_reset();
+            printf("smartbox_find_device_reset\n");
+            smartbox_find_device_reset();
 #endif
+
 #if (MUTIl_CHARGING_BOX_EN)
-        ble_app_disconnect();
+            ble_app_disconnect();
 #endif
+
 #if (TCFG_USER_BLE_CTRL_BREDR_EN)
+
 #if TCFG_BLE_BRIDGE_EDR_ENALBE
-        if (is_bredr_close() == 1) {
-            bt_init_bredr();
-        } else if (is_bredr_inquiry_state() == 1) {
-            user_send_cmd_prepare(USER_CTRL_INQUIRY_CANCEL, 0, NULL);
-        } else {
-            user_send_cmd_prepare(USER_CTRL_WRITE_CONN_ENABLE, 0, NULL);
-        }
+            if(is_bredr_close() == 1) 
+            {
+                bt_init_bredr();
+            } else if(is_bredr_inquiry_state() == 1) 
+            {
+                user_send_cmd_prepare(USER_CTRL_INQUIRY_CANCEL, 0, NULL);
+            }else 
+            {
+                user_send_cmd_prepare(USER_CTRL_WRITE_CONN_ENABLE, 0, NULL);
+            }
 #else
-        bredr_conn_last_dev();
+            bredr_conn_last_dev();
 #endif
+
 #endif
-        break;
-    case BLE_ST_DISCONN:
-        if (flag) {
-            smartbox_user_state_event(BT_3TH_EVENT_COMMON_BLE_STATUS, BLE_ST_DISCONN);
             break;
-        }
-        smartbox_rcsp_disconnect();
+
+            case BLE_ST_DISCONN:
+                if(flag) 
+                {
+                    smartbox_user_state_event(BT_3TH_EVENT_COMMON_BLE_STATUS, BLE_ST_DISCONN);
+                    break;
+                }
+
+                smartbox_rcsp_disconnect();
+
 #if JL_SMART_BOX_EXTRA_FLASH_OPT
-        if (!get_defalut_bt_channel_sel() || get_curr_platform()) {
-            // 当选择spp是不执行这句话
-            smartbox_extra_flash_opt_stop();
-        }
+                if(!get_defalut_bt_channel_sel() || get_curr_platform()) {
+                    // 当选择spp是不执行这句话
+                    smartbox_extra_flash_opt_stop();
+                }
 #endif
+
 #if RCSP_UPDATE_EN
-        if (get_jl_update_flag()) {
-            bt_ble_adv_enable(0);
-        }
+                if(get_jl_update_flag()) {
+                    bt_ble_adv_enable(0);
+                }
 #endif
+
         /* #if	 (TCFG_USER_BLE_CTRL_BREDR_EN) */
 
         /* bt_close_bredr(); */
         /* #endif */
-        break;
+                break;
     }
 }
 
@@ -315,13 +333,14 @@ static void smartbox_user_state_handler(u8 *param, u8 param_len)
 {
     u8 opcode = param[0];
     u8 state = param[1];
-    switch (opcode) {
-    case BT_3TH_EVENT_COMMON_BLE_STATUS:
-        rcsp_user_event_ble_handler((ble_state_e)state, 0);
-        break;
-    case BT_3TH_EVENT_COMMON_SPP_STATUS:
-        rcsp_user_event_spp_handler(state, 0);
-        break;
+    switch (opcode) 
+    {
+        case BT_3TH_EVENT_COMMON_BLE_STATUS:
+            rcsp_user_event_ble_handler((ble_state_e)state, 0);
+            break;
+        case BT_3TH_EVENT_COMMON_SPP_STATUS:
+            rcsp_user_event_spp_handler(state, 0);
+            break;
     }
 }
 

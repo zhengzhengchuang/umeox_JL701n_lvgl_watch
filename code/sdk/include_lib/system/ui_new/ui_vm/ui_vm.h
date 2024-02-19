@@ -1,6 +1,7 @@
 #ifndef __UI_F_VM_H__
 #define __UI_F_VM_H__
 
+#include "includes.h"
 
 #define F_TYPE_BASE                 (1)
 
@@ -19,11 +20,7 @@
 #define F_TYPE_MAX                  (F_TYPE_BLOOD_OXYGEN_SINGLE)
 #define F_TYPE_COUNT                (F_TYPE_MAX +1- F_TYPE_BASE)
 
-
 #define F_TYPE_MASK    62//(已经固定)
-
-
-
 
 extern int flash_common_init(void **handle, const u8 *name, u16 type, u16 max, int start, int end);
 extern int flash_common_reset(void **handle, const u8 *name, u16 type, u16 max, int start, int end);
@@ -37,7 +34,6 @@ extern int flash_common_delete_by_index(void *handle, int index);
 extern int flash_common_get_file_size_by_index(void *handle, int index);
 extern int flash_common_get_file_size_by_id(void *handle, int id);
 extern int flash_common_file_defrag(void *handle, int len);
-
 
 extern int flash_common_open_id(void *handle, int id, int len);
 

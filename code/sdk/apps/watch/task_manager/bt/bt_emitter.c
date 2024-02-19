@@ -335,7 +335,9 @@ void emitter_or_receiver_switch(u8 flag)
     if (bt_user_priv_var.emitter_or_receiver == flag) {
         return ;
     }
-    while (hci_standard_connect_check() == 0x80) {
+    
+    while (hci_standard_connect_check() == 0x80) 
+    {
         //wait profile connect ok;
         if (get_curr_channel_state()) {
             break;
@@ -346,12 +348,14 @@ void emitter_or_receiver_switch(u8 flag)
     ////断开链接
     if (get_curr_channel_state() != 0) {
         user_send_cmd_prepare(USER_CTRL_POWER_OFF, 0, NULL);
-    } else {
+    } else 
+    {
         if (hci_standard_connect_check()) {
             user_send_cmd_prepare(USER_CTRL_PAGE_CANCEL, 0, NULL);
             user_send_cmd_prepare(USER_CTRL_CONNECTION_CANCEL, 0, NULL);
         }
     }
+
     /* if there are some connected channel ,then disconnect*/
     while (hci_standard_connect_check() != 0) {
         //wait disconnect;
@@ -361,13 +365,18 @@ void emitter_or_receiver_switch(u8 flag)
     buffer_control_flag = bt_user_priv_var.emitter_or_receiver;
     /* g_printf("===wait to switch to mode %d\n", flag); */
     bt_user_priv_var.emitter_or_receiver = flag;
-    if (flag == BT_EMITTER_EN) {   ///蓝牙发射器
+
+    if (flag == BT_EMITTER_EN) 
+    {   
+        ///蓝牙发射器
         if (buffer_control_flag) {
             bredr_bulk_change(0);
         }
+
         ////关闭可发现可链接
         user_send_cmd_prepare(USER_CTRL_WRITE_SCAN_DISABLE, 0, NULL);
         user_send_cmd_prepare(USER_CTRL_WRITE_CONN_DISABLE, 0, NULL);
+
         ////切换样机状态
         __set_emitter_enable_flag(1);
         a2dp_source_init(NULL, 0, 1);
@@ -389,7 +398,9 @@ void emitter_or_receiver_switch(u8 flag)
         }
 #endif //#if 0
 #endif
-    } else if (flag == BT_RECEIVER_EN) {  ///蓝牙接收
+
+    } else if (flag == BT_RECEIVER_EN) 
+    {  ///蓝牙接收
         if (buffer_control_flag) {
             bredr_bulk_change(1);
         }

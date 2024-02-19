@@ -436,7 +436,6 @@ int motion_module_sleep_file_read(sleep_data *__sleep)
     return 0;
 
 }
-
 #else
 //不使用杰理存储方式
 /* int motion_module_sleep_file_write(void) */

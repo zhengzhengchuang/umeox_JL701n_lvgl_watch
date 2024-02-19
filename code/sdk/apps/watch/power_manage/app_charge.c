@@ -213,7 +213,8 @@ void charge_full_deal(void)
     recharge_detect_start();
 #endif
 
-    if (get_charge_poweron_en() == 0) {
+    if(get_charge_poweron_en() == 0) 
+    {
         /* power_set_soft_poweroff(); */
 #if TCFG_USER_TWS_ENABLE
 

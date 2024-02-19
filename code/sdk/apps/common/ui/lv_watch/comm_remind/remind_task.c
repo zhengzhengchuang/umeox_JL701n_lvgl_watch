@@ -29,7 +29,8 @@ static void remind_task(void *p)
         remind_timer_id = sys_timer_add(NULL, \
             remind_timerout_cb, 1000);
 
-    while(1){
+    while(1)
+    {
         rev_ret = os_taskq_pend(NULL, rev_msg, ARRAY_SIZE(rev_msg)); 
 
         if(rev_ret == OS_TASKQ)
@@ -78,7 +79,8 @@ void remind_msg_handle(int *rev_msg, u8 len)
 
 void remind_task_init(void)
 {
-    int err = task_create(remind_task, NULL, REMIND_TASK_NAME);
+    int err = task_create(remind_task, \
+        NULL, REMIND_TASK_NAME);
     if(err) 
         r_printf("remind task create err:%d \n", err);
 

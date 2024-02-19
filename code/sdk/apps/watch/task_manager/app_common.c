@@ -342,10 +342,12 @@ int app_common_key_msg_deal(struct sys_event *event)
         }
 #if SMBOX_MULTI_BLE_EN
         app_change_key_is_press = 1;           //处于切换app的模式
-        if (select_app1_or_app2) {
+        if(select_app1_or_app2) 
+        {
             ble_profile_again_init(0);//关闭app1的adv
             ble_app_disconnect();//断开app1的连接
-        } else {
+        }else 
+        {
             smbox_multi_ble_module_enable(0);//断开app2的连接、关闭广播
         }
 
@@ -354,7 +356,10 @@ int app_common_key_msg_deal(struct sys_event *event)
 
         /* //重新注册函数 */
         //!!!!!!!需要注意是adv状态还是连接状态--只要是连接切换就需要在断链之后才会切换
-        if (!smartbox_get_con_handle() && !mul_dev_get_conn_handle(0, SMBOX_MULTI_ROLE_SERVER) && !mul_dev_get_conn_handle(0, SMBOX_MULTI_ROLE_CLIENT)) {
+        if (!smartbox_get_con_handle() && \
+                !mul_dev_get_conn_handle(0, SMBOX_MULTI_ROLE_SERVER) && \
+                    !mul_dev_get_conn_handle(0, SMBOX_MULTI_ROLE_CLIENT)) 
+        {
             log_info("To_switch_app:%d\n", select_app1_or_app2);
             if (select_app1_or_app2) {
                 ble_profile_again_init(1);
@@ -364,7 +369,8 @@ int app_common_key_msg_deal(struct sys_event *event)
         }
 #endif
 
-        if ((sport_status != 4) & (sport_status != 0)) {
+        if ((sport_status != 4) & (sport_status != 0)) 
+        {
             if (ID_WINDOW_SPORT_CTRL == UI_GET_WINDOW_ID()) {
                 UI_HIDE_CURR_WINDOW();
                 UI_SHOW_WINDOW(ID_WINDOW_SPORT_INFO);
@@ -380,7 +386,8 @@ int app_common_key_msg_deal(struct sys_event *event)
         }
         if (ID_WINDOW_BT == UI_GET_WINDOW_ID()) {
             ui_show_menu_page();
-        } else {
+        } else 
+        {
             if (ui_page_get_auto_sw_effect() == 0) {
                 UI_HIDE_CURR_WINDOW();
                 UI_SHOW_WINDOW(ID_WINDOW_BT);

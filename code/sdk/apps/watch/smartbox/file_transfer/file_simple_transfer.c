@@ -11,8 +11,6 @@
 #include "ui_vm/ui_vm.h"
 #endif
 
-
-
 #if (SMART_BOX_EN && TCFG_DEV_MANAGER_ENABLE && JL_SMART_BOX_SIMPLE_TRANSFER)
 
 #define FILE_SIMPLE_TRANSFER_VERSION	0

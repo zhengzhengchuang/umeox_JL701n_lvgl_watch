@@ -3,18 +3,17 @@
 #include "../poc_modem/poc_modem_vm.h"
 #include "../../../../watch/include/task_manager/rtc/alarm.h"
 
-//static bool is_alarm_monitor = true;
 static const uint32_t no_alarm_info = No_Alarm_Info;
 
 uint32_t common_user_alarm_read_info(uint8_t alarm_id)
 {
-    uint8_t *alarm_num = \
-        &p_vm_para_cache->alarm_manage_para.alarm_num;
+    uint8_t alarm_num = \
+        p_vm_para_cache->alarm_manage_para.alarm_num;
 
     alarm_info_union_t *alarm_info = \
         p_vm_para_cache->alarm_manage_para.alarm_info;
 
-    if(alarm_id >= *alarm_num)
+    if(alarm_id >= alarm_num)
         return no_alarm_info;
 
     return alarm_info[alarm_id].info;
@@ -30,7 +29,7 @@ void common_user_alarm_add(uint32_t alarm_union)
     alarm_info_union_t *alarm_info = \
         p_vm_para_cache->alarm_manage_para.alarm_info;
 
-    if(*alarm_num >= ALARM_MAX_NUM)
+    if(*alarm_num >= Alarm_Max_Num)
         return;
 
     alarm_info[*alarm_num].info = no_alarm_info;
@@ -76,25 +75,25 @@ void common_user_alarm_time_modify(uint32_t alarm_union)
     uint8_t alarm_id = 0;
     uint8_t alarm_offset = 0;
 
-    uint8_t *alarm_num = \
-        &p_vm_para_cache->alarm_manage_para.alarm_num;
+    uint8_t alarm_num = \
+        p_vm_para_cache->alarm_manage_para.alarm_num;
 
     alarm_info_union_t *alarm_info = \
         p_vm_para_cache->alarm_manage_para.alarm_info;
 
-    if(*alarm_num > ALARM_MAX_NUM)
+    if(alarm_num > Alarm_Max_Num)
         return;
 
     alarm_id = alarm_union & 0xf;
 
-    for(i = 0; i < *alarm_num; i++)
+    for(i = 0; i < alarm_num; i++)
 	{
 		if(alarm_id == \
             alarm_info[i].bit_field.alarm_id)
             break;
 	}
 
-    if(i >= *alarm_num)
+    if(i >= alarm_num)
         return;
 
     alarm_offset += 4;
@@ -125,24 +124,24 @@ void common_user_alarm_repeat_modify(uint32_t alarm_union)
     uint8_t alarm_id = 0;
     uint8_t alarm_offset = 0;
 
-    uint8_t *alarm_num = \
-        &p_vm_para_cache->alarm_manage_para.alarm_num;
+    uint8_t alarm_num = \
+        p_vm_para_cache->alarm_manage_para.alarm_num;
 
     alarm_info_union_t *alarm_info = \
         p_vm_para_cache->alarm_manage_para.alarm_info;
 
-    if(*alarm_num > ALARM_MAX_NUM)
+    if(alarm_num > Alarm_Max_Num)
         return;
 
     alarm_id = alarm_union & 0xf;
 
-    for(i = 0; i < *alarm_num; i++)
+    for(i = 0; i < alarm_num; i++)
 	{
 		if(alarm_id == alarm_info[i].bit_field.alarm_id)
             break;
 	}
 
-    if(i >= *alarm_num)
+    if(i >= alarm_num)
         return;
 
     alarm_offset += 16;
@@ -169,25 +168,25 @@ void common_user_alarm_enable_modify(uint32_t alarm_union)
     uint8_t alarm_id = 0;
     uint8_t alarm_offset = 0;
 
-    uint8_t *alarm_num = \
-        &p_vm_para_cache->alarm_manage_para.alarm_num;
+    uint8_t alarm_num = \
+        p_vm_para_cache->alarm_manage_para.alarm_num;
 
     alarm_info_union_t *alarm_info = \
         p_vm_para_cache->alarm_manage_para.alarm_info;
 
-    if(*alarm_num > ALARM_MAX_NUM)
+    if(alarm_num > Alarm_Max_Num)
         return;
 
     alarm_id = alarm_union & 0xf;
 
-    for(i = 0; i < *alarm_num; i++)
+    for(i = 0; i < alarm_num; i++)
 	{
 		if(alarm_id == \
             alarm_info[i].bit_field.alarm_id)
             break;
 	}
 
-    if(i >= *alarm_num)
+    if(i >= alarm_num)
         return;
 
     alarm_offset += 15;
@@ -279,29 +278,18 @@ void common_user_alarm_real_time_monitor(void)
     u8 alarm_weekday = 0;
     struct sys_time alarm_sys_time;
 
-    uint8_t *alarm_num = \
-        &p_vm_para_cache->alarm_manage_para.alarm_num;
+    uint8_t alarm_num = \
+        p_vm_para_cache->alarm_manage_para.alarm_num;
 
     alarm_info_union_t *alarm_info = \
         p_vm_para_cache->alarm_manage_para.alarm_info;
 
-    if(*alarm_num == 0)
+    if(alarm_num == 0)
         return;
 
     ui_get_sys_time(&alarm_sys_time);
 
-    // if(alarm_sys_time.sec >= 58)
-    //     is_alarm_monitor = true;
-    
-    // if(alarm_sys_time.sec != 0)//闹钟属于分钟处理事情
-    //     return;
-
-    // if(!is_alarm_monitor) 
-    //     return;
-
-    //is_alarm_monitor = false;
-
-    for(uint8_t i = 0; i < *alarm_num; i++)
+    for(uint8_t i = 0; i < alarm_num; i++)
     {
         if(alarm_sys_time.hour == alarm_info[i].bit_field.alarm_hour && \
             alarm_sys_time.min == alarm_info[i].bit_field.alarm_minute)

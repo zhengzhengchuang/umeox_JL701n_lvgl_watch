@@ -1,14 +1,15 @@
-#include "app_config.h"
-#include "includes.h"
 #include "typedef.h"
+#include "includes.h"
+#include "app_config.h"
 #include "message_vm_cfg.h"
 
-
+#if 1
 #if TCFG_NOR_VM
 #include "ui_vm/ui_vm.h"
 #endif
 
-
+#if 0
+//#if TCFG_NOR_VM
 struct flash_vm_info {
     u8 type;
     u8  max;
@@ -37,8 +38,6 @@ struct flash_vm_info {
 #define F_TYPE_STEP_OFFSET 			F_TYPE_CALL_LOG_OFFSET+F_TYPE_CALL_LOG_LEN
 
 
-
-#if TCFG_NOR_VM
 static const  struct flash_vm_info info[F_TYPE_COUNT + 1] = {
     {F_TYPE_PHONEBOOK,   1,   F_TYPE_PHONEBOOK_OFFSET,		F_TYPE_PHONEBOOK_LEN },
     {F_TYPE_SPORTRECORD, 2,   F_TYPE_SPORTRECORD_OFFSET,	F_TYPE_SPORTRECORD_LEN},
@@ -59,10 +58,11 @@ static void *file[F_TYPE_COUNT];
 void *get_flash_vm_hd(u8 type)
 {
 #if TCFG_NOR_VM
-    if (type > F_TYPE_MAX) {
-        return NULL;
-    }
-    return file[type - F_TYPE_BASE];
+    // if (type > F_TYPE_MAX) {
+    //     return NULL;
+    // }
+    // return file[type - F_TYPE_BASE];
+    return NULL;
 #else
     return NULL;
 #endif
@@ -71,19 +71,20 @@ void *get_flash_vm_hd(u8 type)
 u8 get_flash_vm_number_max(u8 type)
 {
 #if TCFG_NOR_VM
-    const struct flash_vm_info *p;
-    if (type > F_TYPE_MAX) {
-        return 0;
-    }
-    for (p = info; p->type != 0 ; p++) {
-        if (p->type == type) {
-            return p->max;
-        }
-    }
+    // const struct flash_vm_info *p;
+    // if (type > F_TYPE_MAX) {
+    //     return 0;
+    // }
+    // for (p = info; p->type != 0 ; p++) {
+    //     if (p->type == type) {
+    //         return p->max;
+    //     }
+    // }
 #endif
     return 0;
 }
 
+#if 0
 void flash_message_cfg_init()
 {
 #if TCFG_NOR_VM
@@ -193,8 +194,6 @@ int flash_weather_write(u8 *data, u16 len)
 #endif
     return 0;
 }
-
-#if 1
 
 static struct phonebook call_log_mess = {
     .name = "unknow",
@@ -512,7 +511,7 @@ static phonebook *book_list_read_by_index_in_exflash(u8 type, u32 index)//ä»Ž1å¼
     if (!type) {
         fseek(handler->file, index * PHONE_BOOK_LEN, SEEK_SET);
         fread(handler->file, phonebook, PHONE_BOOK_LEN);
-    } else {
+    }else{
         fseek(handler->file, index * CALL_LOGS_LEN, SEEK_SET);
         /* printf("pos = %d index = %d  set = %d \n",fpos(handler->file),index,index*CALL_LOGS_LEN); */
         fread(handler->file, phonebook, CALL_LOGS_LEN);
@@ -531,7 +530,6 @@ static phonebook *book_list_read_by_index_in_exflash(u8 type, u32 index)//ä»Ž1å¼
     /* printf(">>>>>> %s %d\n",__FUNCTION__,__LINE__); */
     /* printf("name = %s number=%s data=%s %d\n",phonebook->name,phonebook->number,phonebook->date,index); */
     return phonebook;
-
 }
 
 static void book_list_save_in_exflash(u8 type, const u8 *name, const u8 *number, const u8 *date)
@@ -785,5 +783,5 @@ void book_list_save(u8 type, const u8 *name, const u8 *number, const u8 *date)
     book_list_save_in_exflash(type, name, number, date);
 #endif
 }
-
+#endif
 #endif

@@ -4,9 +4,7 @@
 extern void *get_flash_vm_hd(u8 type);
 extern u8 get_flash_vm_number_max(u8 type);
 
-
-
-
+#if 0
 #define PHONEBOOK_SAVE_INSIDE_FLASH     0
 
 #if (TCFG_NOR_FS && WATCH_FILE_TO_FLASH)
@@ -36,8 +34,6 @@ typedef struct phonebook {
 #define CALL_LOGS_LEN             (sizeof(struct phonebook))
 #define PBAP_MAX_NUM              (10)
 #define MAX_CALL_LOG_NUM          (30)
-
-
 
 extern int flash_message_init(const char *name, int max);
 
@@ -73,7 +69,7 @@ extern void set_call_log_type(u8 type);
 extern void set_call_log_name(u8 *name);
 extern void set_call_log_number(u8 *number);
 extern void set_call_log_date(u8 *date);
-extern void set_call_log_message(u8 type, const u8 *name, const u8 *number, const u8 *date);
-
-
+extern void set_call_log_message(u8 type, const u8 *name, \
+    const u8 *number, const u8 *date);
+#endif
 #endif

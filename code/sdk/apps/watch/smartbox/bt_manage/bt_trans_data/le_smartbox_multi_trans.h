@@ -14,7 +14,8 @@
 
 #if SMBOX_MUTIL_ROLE_IS_SERVER
 
-static const uint8_t profile_data[] = {
+static const uint8_t profile_data[] = 
+{
     //////////////////////////////////////////////////////
     //
     // 0x0001 PRIMARY_SERVICE  1800

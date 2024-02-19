@@ -12,7 +12,8 @@
 /*----------------------------------------------------------------------------*/
 
 
-const struct __dev_reg dev_reg[] = {
+const struct __dev_reg dev_reg[] = 
+{
 #if SDFILE_STORAGE && TCFG_CODE_FLASH_ENABLE
     //内置flash
     {
@@ -134,6 +135,7 @@ const struct __dev_reg dev_reg[] = {
         /*fs_type*/			"rec_fs",
     },
 #endif
+#if 0
     {
         /*logo*/			"nor_ui",
         /*name*/			"nor_ui",
@@ -141,6 +143,7 @@ const struct __dev_reg dev_reg[] = {
         /*root_path*/		"storage/nor_ui/C/",
         /*fs_type*/			"nor_sdfile",
     },
+#endif
 #if TCFG_VIR_UDISK_ENABLE
     // 虚拟U盘
     {
@@ -180,5 +183,3 @@ const struct __dev_reg dev_reg[] = {
         /*fs_type*/			NULL,
     },
 };
-
-

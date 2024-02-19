@@ -55,25 +55,18 @@ enum
     lang_txtid_factory_reset_tip,//恢复出厂设置将清除手表数据。
     lang_txtid_today,//今天
     lang_txtid_tomorrow,//明天
-    lang_txtid_thunderstorm,//雷雨
-    lang_txtid_drizzle,//细雨
+    lang_txtid_sunny,//晴
+    lang_txtid_snow,//雪
+    lang_txtid_thunderstorm,//雷阵雨
+    lang_txtid_wind,//风
+    lang_txtid_misthaze,//雾霾
+    lang_txtid_sandstorm,//沙尘暴
+    lang_txtid_cloudy,//多云
+    lang_txtid_rain_snow,//雨夹雪
+    lang_txtid_shower,//阵雨
+    lang_txtid_overcast,//阴天
+    lang_txtid_pouring,//大雨
     lang_txtid_light_rain,//小雨
-    lang_txtid_moderate_rain,//中雨
-    lang_txtid_heavy_intensity_rain,//强降雨
-    lang_txtid_extreme_rain,//极端雨
-    lang_txtid_freezing_rain,//冻雨
-    lang_txtid_shower_rain,//阵雨
-    lang_txtid_light_snow,//小雪
-    lang_txtid_heavy_snow,//大雪
-    lang_txtid_rain_and_snow,//雨雪
-    lang_txtid_haze,//阴霾
-    lang_txtid_dust,//灰尘
-    lang_txtid_squall,//旋风
-    lang_txtid_clear_sky,//晴天
-    lang_txtid_few_clouds,//少云
-    lang_txtid_scattered_clouds,//散云
-    lang_txtid_overcast_clouds,//多云
-    lang_txtid_cloudy,//阴天
     lang_txtid_no_data,//无数据
     lang_txtid_sunday,//周日
     lang_txtid_monday,//周一
@@ -82,6 +75,10 @@ enum
     lang_txtid_thursday,//周四
     lang_txtid_friday,//周五
     lang_txtid_saturday,//周六
+    lang_txtid_call_log,//通话记录
+    lang_txtid_contacts,//联系人
+    lang_txtid_call_disc_tips,//电话未连接，请在连接电话后重试。
+    lang_txtid_no_record,//无记录
     
     lang_txtid_max,
 };

@@ -229,12 +229,14 @@ void phonebook_packet_handler(u8 type, const u8 *name, const u8 *number, const u
 /*----------------------------------------------------------------------------*/
 void bt_set_led_status(u8 status)
 {
-    static u8 bt_status = STATUS_BT_INIT_OK;
+    static u8 bt_status = \
+        STATUS_BT_INIT_OK;
 
     u8 app = app_get_curr_task();
     if (status) {
         bt_status = status;
     }
+
     if (app == APP_BT_TASK) { //蓝牙模式或者state_machine
         pwm_led_mode_set(PWM_LED_ALL_OFF);
         ui_update_status(bt_status);
@@ -259,29 +261,36 @@ void bt_wait_phone_connect_control(u8 enable)
     return;
 #endif
 
-    if (enable && app_var.goto_poweroff_flag && (__this->exiting)) {
+    if(enable && app_var.goto_poweroff_flag && (__this->exiting)) {
         return;
     }
 
-    if (enable) {
-        log_debug("is_1t2_connection:%d \t total_conn_dev:%d\n", is_1t2_connection(), get_total_connect_dev());
-        if (is_1t2_connection()) {
+    if (enable) 
+    {
+        log_debug("is_1t2_connection:%d \t total_conn_dev:%d\n", 
+            is_1t2_connection(), get_total_connect_dev());
+        if(is_1t2_connection()) 
+        {
             /*达到最大连接数，可发现(0)可连接(0)*/
             user_send_cmd_prepare(USER_CTRL_WRITE_SCAN_DISABLE, 0, NULL);
             user_send_cmd_prepare(USER_CTRL_WRITE_CONN_DISABLE, 0, NULL);
-        } else {
-            if (get_total_connect_dev() == 1) {
+        }else 
+        {
+            if (get_total_connect_dev() == 1) 
+            {
                 /*支持连接2台，只连接一台的情况下，可发现(0)可连接(1)*/
                 user_send_cmd_prepare(USER_CTRL_WRITE_SCAN_DISABLE, 0, NULL);
                 user_send_cmd_prepare(USER_CTRL_WRITE_CONN_ENABLE, 0, NULL);
-            } else {
+            } else 
+            {
                 /*可发现(1)可连接(1)*/
                 BT_STATE_SET_PAGE_SCAN_ENABLE();
                 user_send_cmd_prepare(USER_CTRL_WRITE_SCAN_ENABLE, 0, NULL);
                 user_send_cmd_prepare(USER_CTRL_WRITE_CONN_ENABLE, 0, NULL);
             }
         }
-    } else {
+    } else 
+    {
         user_send_cmd_prepare(USER_CTRL_WRITE_SCAN_DISABLE, 0, NULL);
         user_send_cmd_prepare(USER_CTRL_WRITE_CONN_DISABLE, 0, NULL);
     }
@@ -308,7 +317,8 @@ int bt_wait_connect_and_phone_connect_switch(void *p)
         sys_timeout_del(bt_user_priv_var.auto_connection_timer);
         bt_user_priv_var.auto_connection_timer = 0;
     }
-    log_debug("connect_switch: %d, %d\n", (int)p, bt_user_priv_var.auto_connection_counter);
+    log_debug("connect_switch: %d, %d\n", \
+        (int)p, bt_user_priv_var.auto_connection_counter);
 
     if (bt_user_priv_var.auto_connection_counter <= 0) {
         bt_user_priv_var.auto_connection_timer = 0;
@@ -322,7 +332,8 @@ int bt_wait_connect_and_phone_connect_switch(void *p)
         if (0) {//(get_current_poweron_memory_search_index(NULL)) {
             bt_init_ok_search_index();
             return bt_wait_connect_and_phone_connect_switch(0);
-        } else {
+        } else 
+        {
             //超时断开回连结束后，经低功耗晶振设回默认值
             extern const struct low_power_param power_param;
             extern void low_power_reset_osc_type(u8 type);
@@ -422,7 +433,8 @@ void bt_send_pair(u8 en)
 /*----------------------------------------------------------------------------*/
 void bt_init_ok_search_index(void)
 {
-    if (!bt_user_priv_var.auto_connection_counter && get_current_poweron_memory_search_index(bt_user_priv_var.auto_connection_addr)) {
+    if (!bt_user_priv_var.auto_connection_counter && \
+        get_current_poweron_memory_search_index(bt_user_priv_var.auto_connection_addr)) {
         /* log_info("bt_wait_connect_and_phone_connect_switch\n"); */
         clear_current_poweron_memory_search_index(1);
         bt_user_priv_var.auto_connection_counter = POWERON_AUTO_CONN_TIME * 1000; //8000ms
@@ -1128,6 +1140,7 @@ void  bt_status_init_ok(struct bt_event *bt)
         __this->auto_exit_limit_time = POWERON_AUTO_CONN_TIME * 1000;
         /* tone_dec_wait_stop(3000); */
     }
+    
 #if TCFG_USER_BLE_ENABLE
     if (BT_MODE_IS(BT_BQB)) {
         ble_bqb_test_thread_init();
@@ -1137,7 +1150,14 @@ void  bt_status_init_ok(struct bt_event *bt)
         ble_standard_dut_test_init();
 #else
         printf("***********%s\n", __func__);
+
         bt_ble_init();
+        
+#if (SMBOX_MULTI_BLE_EN)
+    extern void smbox_multi_ble_profile_init(u8 enable);
+    smbox_multi_ble_profile_init(1);
+#endif
+
 #endif
     }
 #endif
@@ -1160,7 +1180,6 @@ void  bt_status_init_ok(struct bt_event *bt)
     /* bredr_bulk_change(1); */
     return;
 #endif
-
 
     bt_init_ok_search_index();
     bt_set_led_status(STATUS_BT_INIT_OK);
@@ -1214,6 +1233,7 @@ void bt_status_init_ok_background(struct bt_event *bt)
 /*----------------------------------------------------------------------------*/
 void bt_status_connect(struct bt_event *bt)
 {
+    printf("*******%s\n", __func__);
 
     sys_auto_sniff_controle(1, NULL);
     sys_auto_shut_down_disable();
@@ -1228,8 +1248,10 @@ void bt_status_connect(struct bt_event *bt)
 
     static u8 mac_addr[6];
     memcpy(mac_addr, bt->args, 6);
-    UI_MSG_POST("bt_connect_info:mac=%4", mac_addr);
-
+    for(uint8_t i = 0; i < 6; i++)
+        printf("%s:mac_addr[%d] = %x\n", \
+            __func__, i, mac_addr[i]);
+ 
 #if TCFG_USER_EMITTER_ENABLE
 #if TCFG_UI_ENABLE && TCFG_SPI_LCD_ENABLE
     if (bt->value) {
@@ -1266,9 +1288,9 @@ void bt_status_connect(struct bt_event *bt)
     }
 #endif
 
-
 #if (TCFG_BD_NUM == 2)
-    if ((get_total_connect_dev() == 1) && bt->value) {   //当前有一台连接上了,并且连接的是sink设备
+    if((get_total_connect_dev() == 1) && bt->value) 
+    {   //当前有一台连接上了,并且连接的是sink设备
         user_send_cmd_prepare(USER_CTRL_WRITE_SCAN_ENABLE, 0, NULL);
         user_send_cmd_prepare(USER_CTRL_WRITE_CONN_ENABLE, 0, NULL);
     }
@@ -1401,19 +1423,21 @@ void bt_status_connect_background(struct bt_event *bt)
 /*----------------------------------------------------------------------------*/
 void bt_status_disconnect(struct bt_event *bt)
 {
+    printf("*******%s\n", __func__);
 
     sys_auto_sniff_controle(0, NULL);
     __this->call_flag = 0;
-    /* log_info("BT_STATUS_DISCONNECT\n"); */
+    
 #if (SMART_BOX_EN)
     smartbox_update_bt_emitter_connect_state(0, __this->last_connecting_addr);
 #endif
-    /* UI_MSG_POST("bt_status:n=%4", 0); */
+    
 #if AUDIO_OUTPUT_INCLUDE_BT
     bt_emitter_stu_set(NULL, 0);
 #endif
 
     bt_set_led_status(STATUS_BT_DISCONN);
+
 #if(TCFG_BD_NUM == 2)               //对耳在bt_tws同步播放提示音
     if (!app_var.goto_poweroff_flag) { /*关机不播断开提示音*/
         if (!__this->ignore_discon_tone) {
@@ -1451,8 +1475,10 @@ void bt_status_disconnect(struct bt_event *bt)
     }
     __this->tws_local_back_role = 0;
 #else
-    if (get_total_connect_dev() == 0) {    //已经没有设备连接
-        if (!app_var.goto_poweroff_flag) { /*关机时不改UI*/
+    if (get_total_connect_dev() == 0) 
+    {    //已经没有设备连接
+        if (!app_var.goto_poweroff_flag) 
+        { /*关机时不改UI*/
             bt_set_led_status(STATUS_BT_DISCONN);
         }
         sys_auto_shut_down_enable();
@@ -1541,6 +1567,8 @@ static void jl_call_kws_handler(int event)
 /*----------------------------------------------------------------------------*/
 void bt_status_phone_income(struct bt_event *bt)
 {
+    printf("*********%s\n", __func__);
+
     __this->esco_dump_packet = ESCO_DUMP_PACKET_CALL;
     ui_update_status(STATUS_PHONE_INCOME);
     u8 tmp_bd_addr[6];
@@ -1598,6 +1626,8 @@ void bt_status_phone_income(struct bt_event *bt)
 /*----------------------------------------------------------------------------*/
 void bt_status_phone_out(struct bt_event *bt)
 {
+    printf("*********%s\n", __func__);
+
     if (bt_switch_back_timer) {
         sys_timeout_del(bt_switch_back_timer);
         bt_switch_back_timer = 0;
@@ -1618,6 +1648,8 @@ void bt_status_phone_out(struct bt_event *bt)
 /*----------------------------------------------------------------------------*/
 void bt_status_phone_active(struct bt_event *bt)
 {
+    printf("*********%s\n", __func__);
+
     bt_phone_active_start_time = timer_get_ms();
     ui_update_status(STATUS_PHONE_ACTIV);
     jl_call_kws_handler(BT_STATUS_PHONE_ACTIVE);
@@ -1940,6 +1972,7 @@ void bt_status_sco_change(struct bt_event *bt)
 /*----------------------------------------------------------------------------*/
 void bt_status_call_vol_change(struct bt_event *bt)
 {
+    printf("********%s:%d\n", __func__, bt->value);
 
     u8 volume = bt->value;  //app_audio_get_max_volume() * bt->value / 15;
     u8 call_status = get_call_status();
@@ -2098,8 +2131,10 @@ void bt_status_voice_recognition(struct bt_event *bt)
     /* put_buf(bt, sizeof(struct bt_event)); */
     app_var.siri_stu = bt->value;
     if (__this->call_flag && ((app_var.siri_stu == 0) || (app_var.siri_stu == 3))) {
-        if (bt_switch_back_timer == 0) {
-            bt_switch_back_timer = sys_timeout_add(NULL, bt_switch_back, 500);
+        if (bt_switch_back_timer == 0) 
+        {
+            bt_switch_back_timer = \
+                sys_timeout_add(NULL, bt_switch_back, 500);
         }
     }
 }

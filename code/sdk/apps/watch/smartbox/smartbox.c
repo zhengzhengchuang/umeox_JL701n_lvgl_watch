@@ -79,7 +79,8 @@ static void smartbox_process_timer()
 
 void smartbox_timer_contrl(u8 status)
 {
-    if (status) {
+    if (status) 
+    {
         if (smartbox_timer == 0) {
             smartbox_timer = sys_s_hi_timer_add(NULL, smartbox_process_timer, 2000);
         }
@@ -138,7 +139,8 @@ void smartbox_init(void)
     ASSERT(ptr, "no ram for rcsp !!\n");
     JL_protocol_init(ptr, size);
 
-    struct smartbox *smart = (struct smartbox *)zalloc(sizeof(struct smartbox));
+    struct smartbox *smart = \
+        (struct smartbox *)zalloc(sizeof(struct smartbox));
     ASSERT(smart, "no ram for smartbox !!\n");
     smartbox_config(smart);
     __this = smart;
@@ -149,7 +151,8 @@ void smartbox_init(void)
     ///从vm获取相关配置
     smart_setting_init();
 
-    int err = task_create(smartbox_process, (void *)smart, SMARTBOX_TASK_NAME);
+    int err = task_create(smartbox_process, \
+        (void *)smart, SMARTBOX_TASK_NAME);
     if (err) {
         printf("smartbox creat fail %x\n", err);
     }

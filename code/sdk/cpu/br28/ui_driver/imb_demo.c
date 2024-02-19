@@ -4985,8 +4985,6 @@ void lcd_disp_init(void *arg, void **buf1, void **buf2, int *lenp)
     if(__this->lcd->backlight_ctrl)
         __this->lcd->backlight_ctrl(lcd_backlight);
 
-    //while (1);//test
-
     if(__this->lcd->get_screen_info) 
         __this->lcd->get_screen_info(&info);
 
@@ -8819,7 +8817,8 @@ void close_fd(void)
 //  3.预先拷贝到PSRAM
 
 //  分区句柄，分区所在的物理地址，bin文件在分区的偏移，图片在bin文件中的地址长度，
-void lv_open_res(void *fd, int phyaddr, int offset, struct file_index_t res, lv_img_dsc_t*img_dst)
+void lv_open_res(void *fd, int phyaddr, int offset, \
+    struct file_index_t res, lv_img_dsc_t*img_dst)
 {
     if(!fd)
         return;
@@ -8862,7 +8861,6 @@ void lv_open_res(void *fd, int phyaddr, int offset, struct file_index_t res, lv_
         img_dst->data_size
     );
 #endif
-
     if(img_dst->header.reserved == 0x1 && 1)
     {    //把资源copy到RAM
         img_dst->data = malloc(res.len);

@@ -7,9 +7,7 @@ extern "C" {
 
 #include "../include/ui_menu.h"
 #include "../include/ui_act_id.h"
-#include "../comm_call/comm_contacts.h"
 #include "../comm_remind/alarm_manage.h"
-#include "../comm_weather/comm_weather.h"
 
 /*********************************************************************************
                              距离计量单位                              
@@ -101,8 +99,6 @@ typedef struct
     uint16_t vm_store_para_mask;
 
     alarm_manage_para_t alarm_manage_para;
-    weather_manage_para_t weather_manage_para;
-    contacts_manage_para_t contacts_manage_para;
     vm_store_para_with_label_t vm_store_para[Vm_Store_Para_Num];  
 }vm_store_para_cache_t;
 extern vm_store_para_cache_t *p_vm_para_cache;

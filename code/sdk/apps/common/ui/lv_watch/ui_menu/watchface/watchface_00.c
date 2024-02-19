@@ -34,17 +34,17 @@ static void menu_display_cb(lv_obj_t *obj)
     widget_img_para.event_cb = NULL;
     common_widget_img_create(&widget_img_para, NULL);
 
-    widget_time_para.time_x = 134;
-    widget_time_para.time_y = 133;
+    widget_time_para.time_x = 132;
+    widget_time_para.time_y = 131;
     widget_time_para.num_inv = 0;
     widget_time_para.time_parent = \
         obj;
     widget_time_para.num_addr_index = \
-        watchface_00_50x72_00_index;
+        watchface_00_52x78_00_index;
     common_time_widget_create(\
         &widget_time_para, widget_time_mode_hh);
 
-    widget_time_para.time_y = 265;
+    widget_time_para.time_y = 261;
     common_time_widget_create(\
         &widget_time_para, widget_time_mode_mm);
 
@@ -57,11 +57,20 @@ static void menu_display_cb(lv_obj_t *obj)
     common_date_widget_create(\
         &widget_date_para, widget_date_mode_mm_dd);
 
+    comm_language_id_t lang_id = \
+        get_comm_sys_language();
     comm_week_para.week_x = 192;
-    comm_week_para.week_y = 225;
+    comm_week_para.week_y = 217;
     comm_week_para.week_parent = obj;
-    comm_week_para.week_addr_index = \
-       watchface_00_week_en_00_index; 
+    if(lang_id == comm_language_id_french)
+        comm_week_para.week_addr_index = \
+            watchface_00_week_fr_00_index; 
+    else if(lang_id == comm_language_id_arabic)
+        comm_week_para.week_addr_index = \
+            watchface_00_week_ar_00_index; 
+    else
+        comm_week_para.week_addr_index = \
+            watchface_00_week_en_00_index;
     common_week_widget_create(&comm_week_para);
 
     return;

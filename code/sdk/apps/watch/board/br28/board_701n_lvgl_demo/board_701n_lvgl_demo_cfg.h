@@ -106,7 +106,7 @@
 //*********************************************************************************//
 #define TCFG_NOR_FS                  		ENABLE_THIS_MOUDLE
 #define TCFG_NOR_FAT                  		DISABLE_THIS_MOUDLE
-#define TCFG_NOR_VM                  		0//ENABLE_THIS_MOUDLE
+#define TCFG_NOR_VM                  		ENABLE_THIS_MOUDLE
 #define TCFG_NOR_REC                  		DISABLE_THIS_MOUDLE
 #define TCFG_NORFLASH_SFC_DEV_ENABLE 		ENABLE_THIS_MOUDLE
 #define TCFG_NORFLASH_DEV_ENABLE		    DISABLE_THIS_MOUDLE
@@ -1009,7 +1009,8 @@ DAC硬件上的连接方式,可选的配置：
 #define SMBOX_MULTI_BLE_EN                  0 //蓝牙BLE多连:1主1从
 #define SMBOX_MULTI_BLE_SLAVE_NUMS          1 //range(0~1)
 #define SMBOX_MULTI_BLE_MASTER_NUMS         1 //range(0~2)
-#define CONFIG_BT_GATT_CONNECTION_NUM       SMBOX_MULTI_BLE_SLAVE_NUMS + SMBOX_MULTI_BLE_MASTER_NUMS
+#define CONFIG_BT_GATT_CONNECTION_NUM       \
+    (SMBOX_MULTI_BLE_SLAVE_NUMS + SMBOX_MULTI_BLE_MASTER_NUMS)
 
 #define RCSP_UPDATE_EN		         1     //是否支持rcsp升级
 #define OTA_TWS_SAME_TIME_ENABLE     0     //是否支持TWS同步升级

@@ -10,13 +10,18 @@ extern "C" {
 
 #define Always_OnScreen (0x0fffffff)
 
+enum
+{
+    menu_align_left,
+    menu_align_right,
+};
+typedef uint8_t menu_align_t;
 
 typedef void (*ui_menu_create_func_cb)(lv_obj_t *);
 typedef void (*ui_menu_refresh_func_cb)(lv_obj_t *);
 typedef void (*ui_menu_destory_func_cb)(lv_obj_t *);
 typedef void (*ui_menu_display_func_cb)(lv_obj_t *);
 typedef void (*ui_menu_key_func_cb)(lv_obj_t *, int, int);
-
 
 typedef struct 
 {  
@@ -57,6 +62,7 @@ extern_ui_menu_load_info(menu_load_watchface_07);
 extern_ui_menu_load_info(menu_load_watchface_08);
 extern_ui_menu_load_info(menu_load_watchface_09);
 extern_ui_menu_load_info(menu_load_watchface_10);
+extern_ui_menu_load_info(menu_load_watchface_11);
 
 /*多个菜单共用同个id，需要extern出来*/
 extern_ui_menu_load_info(menu_load_common_list);

@@ -47,6 +47,7 @@ int __dev_manager_add(char *logo, u8 need_mount)
 	if (logo == NULL) {
 		return DEV_MANAGER_ADD_ERR_PARM;
 	}
+
 	int i;
 	printf("%s add start\n", logo);
 	struct __dev_reg *p = NULL;
@@ -59,32 +60,40 @@ int __dev_manager_add(char *logo, u8 need_mount)
 		}
 	}
 
-	if (p) {
+	if (p) 
+	{
 		///挂载文件系统
 		if (dev_manager_list_check_by_logo(logo)) {
 			printf("dev online aready, err!!!\n");
 			return DEV_MANAGER_ADD_IN_LIST_AREADY;
 		}
-		struct __dev *dev = (struct __dev *)zalloc(sizeof(struct __dev));
+
+		struct __dev *dev = \
+			(struct __dev *)zalloc(sizeof(struct __dev));
 		if(dev == NULL){
 			return DEV_MANAGER_ADD_ERR_NOMEM;
 		}
 		os_mutex_pend(&__this->mutex, 0);
 		if(need_mount){
-			dev->fmnt = mount(p->name, p->storage_path, p->fs_type, 3, NULL);
+			dev->fmnt = mount(p->name, p->storage_path, \
+				p->fs_type, 3, NULL);
 		}
 		dev->parm = p;
 		dev->valid = (dev->fmnt ? 1 : 0);
 		dev->active_stamp = __dev_manager_get_time_stamp();//timer_get_ms();
 		list_add_tail(&dev->entry, &__this->list);
 		os_mutex_post(&__this->mutex);
-		printf("%s, %s add ok, dev->fmnt = %x,  %d\n", __FUNCTION__, logo, (int)dev->fmnt, dev->active_stamp);
+		printf("%s, %s add ok, dev->fmnt = %x,  %d\n", \
+			__FUNCTION__, logo, (int)dev->fmnt, dev->active_stamp);
 		if(dev->fmnt == NULL){
 			return DEV_MANAGER_ADD_ERR_MOUNT_FAIL;
 		}
 		return DEV_MANAGER_ADD_OK;
 	}
-	printf("dev_manager_add can not find logo %s\n",logo);
+
+	printf("%s can not find logo %s\n", \
+		__func__, logo);
+
 	return DEV_MANAGER_ADD_ERR_NOT_FOUND;
 }
 
@@ -95,8 +104,10 @@ static int __dev_manager_del(char *logo)
 	}
 	struct __dev *dev, *n;
 	os_mutex_pend(&__this->mutex, 0);
-	list_for_each_entry_safe(dev, n, &__this->list, entry) {
-		if (!strcmp(dev->parm->logo, logo)) {
+	list_for_each_entry_safe(dev, n, &__this->list, entry) 
+	{
+		if (!strcmp(dev->parm->logo, logo)) 
+		{
 			///卸载文件系统
 			if(dev->fmnt){
 				unmount(dev->parm->storage_path);
@@ -181,7 +192,8 @@ struct __dev *dev_manager_check(struct __dev *dev)
 		return NULL;
 	}
 	struct __dev *p;
-	list_for_each_entry(p, &__this->list, entry) {
+	list_for_each_entry(p, &__this->list, entry) 
+	{
 		if(!(p->fmnt)){
 			continue;
 		}
@@ -189,6 +201,7 @@ struct __dev *dev_manager_check(struct __dev *dev)
 			return p;
 		}
 	}
+
 	return NULL;
 }
 //*----------------------------------------------------------------------------*/
@@ -204,7 +217,8 @@ struct __dev *dev_manager_check_by_logo(char *logo)
 		return NULL;
 	}
 	struct __dev *dev;
-	list_for_each_entry(dev, &__this->list, entry) {
+	list_for_each_entry(dev, &__this->list, entry) 
+	{
 		if(!(dev->fmnt)){
 			continue;
 		}
@@ -212,6 +226,7 @@ struct __dev *dev_manager_check_by_logo(char *logo)
 			return dev;
 		}
 	}
+
 	return NULL;
 }
 //*----------------------------------------------------------------------------*/
@@ -228,7 +243,8 @@ u32 dev_manager_get_total(u8 valid)
 	u32 total = 0;
 	struct __dev *dev;
 	os_mutex_pend(&__this->mutex, 0);
-	list_for_each_entry(dev, &__this->list, entry) {
+	list_for_each_entry(dev, &__this->list, entry) 
+	{
 		if(!(dev->fmnt)){
 			continue;
 		}
@@ -1051,6 +1067,7 @@ static void dev_manager_task(void *p)
 
 #if TCFG_NOR_FS
 	dev_manager_add("res_nor");
+	dev_manager_set_valid_by_logo("res_nor", 0);///将设备设置为无效设备
 #endif
 
 #if TCFG_VIR_UDISK_ENABLE
@@ -1079,11 +1096,14 @@ static void dev_manager_task(void *p)
 
 	os_sem_post(&__this->sem);
 
-	while (1) {
+	while (1) 
+	{
 		res = os_taskq_pend("taskq", msg, ARRAY_SIZE(msg));
-		switch (res) {
+		switch (res) 
+		{
 			case OS_TASKQ:
-				switch (msg[0]) {
+				switch (msg[0]) 
+				{
 					case Q_EVENT:
 						break;
 					case Q_MSG:
@@ -1120,7 +1140,8 @@ void dev_manager_init(void)
 
 	os_sem_create(&__this->sem, 0);
 
-	int err = task_create(dev_manager_task, NULL, DEV_MANAGER_TASK_NAME);
+	int err = task_create(dev_manager_task, \
+		NULL, DEV_MANAGER_TASK_NAME);
 	if (err != OS_NO_ERR) {
 		ASSERT(0, "task_create fail!!! %x\n", err);
 	}

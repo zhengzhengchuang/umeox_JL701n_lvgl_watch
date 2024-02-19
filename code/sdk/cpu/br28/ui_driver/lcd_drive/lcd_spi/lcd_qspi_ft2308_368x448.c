@@ -61,7 +61,9 @@
 /*
 ** 初始化代码
 */
-static const u8 lcd_qspi_ft2308_cmdlist[] ALIGNED(4) = {
+static const u8 lcd_qspi_ft2308_cmdlist[] ALIGNED(4) = 
+{
+#if 0
     _BEGIN_, 0xB2, 0x83, 0x12, _END_,
     //_BEGIN_, 0x51, 0xFF, 0x00, _END_,
     _BEGIN_, 0x2A, 0x00, 0x00, 0x01, 0x70, _END_,
@@ -72,6 +74,23 @@ static const u8 lcd_qspi_ft2308_cmdlist[] ALIGNED(4) = {
     _BEGIN_, 0x11, 0x00, _END_,
     _BEGIN_, REGFLAG_DELAY, 120, _END_,
     _BEGIN_, 0x29, 0x00, _END_,
+#endif
+
+#if 1
+    _BEGIN_, 0xFF, 0x00, 0x23, 0x08, 0x01, _END_,
+    _BEGIN_, 0xFF, 0x80, 0x23, 0x08, _END_,
+
+    _BEGIN_, 0xB2, 0x83, 0x12, _END_,
+    //_BEGIN_, 0x51, 0x00, 0xff, 0x00, _END_,
+    _BEGIN_, 0x2A, 0x00, 0x00, 0x00, 0x01, 0x70, _END_,
+    _BEGIN_, 0x2B, 0x00, 0x00, 0x00, 0x01, 0xC0, _END_,
+    _BEGIN_, 0x35, 0x00, 0x00, _END_,
+    _BEGIN_, 0x3A, 0x55, _END_,
+    
+    _BEGIN_, 0x11, 0x00, 0x00, _END_,
+    _BEGIN_, REGFLAG_DELAY, 120, _END_,
+    _BEGIN_, 0x29, 0x00, 0x00, _END_,
+#endif
 };
 
 
@@ -80,9 +99,8 @@ static void lcd_adjust_display_brightness(u8 percent)
     u16 brightness;
     u8 para[2] = {0};
 
-    //printf("%s:%d\n", __func__, percent);
-
-    brightness = (u16)((percent*(1.0f)/TCFG_MAX_BACKLIGHT_VAL)*(0x1ff) + 0.5f);
+    brightness = (u16)((percent*(1.0f)/TCFG_MAX_BACKLIGHT_VAL) * \
+        (0x1ff) + 0.5f);
 
     //printf("%s:0x%x\n", __func__, brightness);
 
@@ -90,10 +108,6 @@ static void lcd_adjust_display_brightness(u8 percent)
     para[1] = (brightness >> 8) & 0x80;
 
     lcd_write_cmd(0x51, para, 2);
-
-
-    /* lcd_write_cmd(0x4a, para, 2); //Brightness Value of AOD Mode, 无效果 */
-    /* lcd_write_cmd(0x63, para, 2); //Brightness Value of HBM Mode, 无效果 */
 }
 
 /*
@@ -104,12 +118,11 @@ static void lcd_adjust_display_brightness(u8 percent)
 static int lcd_spi_ft2308_backlight_ctrl(u8 percent)
 {
     if(percent)
-    {
-        if(percent < TCFG_MIN_BACKLIGHT_VAL)
-            percent = TCFG_MIN_BACKLIGHT_VAL;
-
-        if(percent > TCFG_MAX_BACKLIGHT_VAL)
-            percent = TCFG_MAX_BACKLIGHT_VAL;    
+    { 
+        percent = percent < TCFG_MIN_BACKLIGHT_VAL? \
+            TCFG_MIN_BACKLIGHT_VAL:percent;
+        percent = percent > TCFG_MAX_BACKLIGHT_VAL? \
+            TCFG_MAX_BACKLIGHT_VAL:percent;
     }
 
     lcd_adjust_display_brightness(percent);
@@ -204,7 +217,8 @@ REGISTER_LCD_DEVICE(ft2308) = {
     .column_addr_align = 2,
 
     .lcd_cmd = (void *) &lcd_qspi_ft2308_cmdlist,
-    .cmd_cnt = sizeof(lcd_qspi_ft2308_cmdlist) / sizeof(lcd_qspi_ft2308_cmdlist[0]),
+    .cmd_cnt = sizeof(lcd_qspi_ft2308_cmdlist) / \
+        sizeof(lcd_qspi_ft2308_cmdlist[0]),
     .param   = (void *) &lcd_spi_ft2308_param,
 
     .reset = NULL,	// 没有特殊的复位操作，用内部普通复位函数即可

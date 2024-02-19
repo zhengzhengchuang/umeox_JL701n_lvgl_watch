@@ -181,7 +181,7 @@ void cfg_file_parse(u8 idx)
     memset(tmp, 0x00, sizeof(tmp));
 
     /*************************************************************************/
-    /*                      CFG READ IN cfg_tools.bin                        */
+    /*                      CFG READ IN cfg_tool.bin                        */
     /*************************************************************************/
 
     //-----------------------------CFG_COMBINE_VOL----------------------------------//
@@ -395,7 +395,8 @@ void cfg_file_parse(u8 idx)
 #else
     app_var.warning_tone_v = LOW_POWER_WARN_VAL;
     app_var.poweroff_tone_v = LOW_POWER_OFF_VAL;
-    log_info("warning_tone_v:%d poweroff_tone_v:%d\n", app_var.warning_tone_v, app_var.poweroff_tone_v);
+    log_info("warning_tone_v:%d poweroff_tone_v:%d\n", \
+        app_var.warning_tone_v, app_var.poweroff_tone_v);
 #endif
 
 #if USE_CONFIG_AUTO_OFF_SETTING
@@ -418,9 +419,11 @@ void cfg_file_parse(u8 idx)
     if (ret < 0) {
         log_info("read music play mode err\n");
     }
-    if (app_var.cycle_mode >= FCYCLE_MAX || app_var.cycle_mode == 0) {
+    printf("cycle_mode = %d\n", \
+        app_var.cycle_mode);
+    if (app_var.cycle_mode >= FCYCLE_MAX || \
+        app_var.cycle_mode == 0) 
         app_var.cycle_mode = FCYCLE_ALL;
-    }
 #endif
 
     /*************************************************************************/
@@ -429,7 +432,7 @@ void cfg_file_parse(u8 idx)
 #if TCFG_APP_BT_EN
     u8 mac_buf[6];
     u8 mac_buf_tmp[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
-    u8 mac_buf_tmp2[6] = {0, 0, 0, 0, 0, 0};
+    u8 mac_buf_tmp2[6] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 #if TCFG_USER_TWS_ENABLE
     int len = syscfg_read(CFG_TWS_LOCAL_ADDR, bt_cfg.tws_local_addr, 6);
     if (len != 6) {
@@ -445,14 +448,17 @@ void cfg_file_parse(u8 idx)
     if (ret != 6 || !memcmp(mac_buf, mac_buf_tmp, 6))
 #endif
 #endif
-        do {
-            ret = syscfg_read(CFG_BT_MAC_ADDR, mac_buf, 6);
-            if ((ret != 6) || !memcmp(mac_buf, mac_buf_tmp, 6) || !memcmp(mac_buf, mac_buf_tmp2, 6)) {
-                get_random_number(mac_buf, 6);
-                syscfg_write(CFG_BT_MAC_ADDR, mac_buf, 6);
-                log_info(">>>init tws addr!!!\n");
-            }
-        } while (0);
+    do 
+    {
+        ret = syscfg_read(CFG_BT_MAC_ADDR, mac_buf, 6);
+        if ((ret != 6) || !memcmp(mac_buf, mac_buf_tmp, 6) || \
+            !memcmp(mac_buf, mac_buf_tmp2, 6)) 
+        {
+            get_random_number(mac_buf, 6);
+            syscfg_write(CFG_BT_MAC_ADDR, mac_buf, 6);
+            log_info(">>>init tws addr!!!\n");
+        }
+    }while (0);
 
 
 #if CONFIG_TWS_USE_COMMMON_ADDR

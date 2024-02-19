@@ -77,13 +77,15 @@ static u8 check_charge_state(void)
 
     __this->charge_online_flag = 0;
 
-    for (i = 0; i < det_max_time; i++) {
+    for (i = 0; i < det_max_time; i++) 
+    {
         if (LVCMP_DET_GET() || LDO5V_DET_GET()) {
             __this->charge_online_flag = 1;
             break;
         }
         udelay(1000);
     }
+
     return __this->charge_online_flag;
 }
 
@@ -269,11 +271,13 @@ static void ldo5v_detect(void *priv)
         return;
     }
 
-    if (LVCMP_DET_GET()) {	//ldoin > vbat
+    if (LVCMP_DET_GET()) 
+    {	//ldoin > vbat
         /* putchar('X'); */
         if (ldo5v_on_cnt < __this->data->ldo5v_on_filter) {
             ldo5v_on_cnt++;
-        } else {
+        } else 
+        {
             /* printf("ldo5V_IN\n"); */
             set_charge_online_flag(1);
             ldo5v_off_cnt = 0;
@@ -290,7 +294,8 @@ static void ldo5v_detect(void *priv)
                 charge_event_to_user(CHARGE_EVENT_LDO5V_IN);
             }
         }
-    } else if (LDO5V_DET_GET() == 0) {	//ldoin<拔出电压（0.6）
+    } else if (LDO5V_DET_GET() == 0) 
+    {	//ldoin<拔出电压（0.6）
         /* putchar('Q'); */
         if (ldo5v_off_cnt < (__this->data->ldo5v_off_filter + 20)) {
             ldo5v_off_cnt++;
@@ -355,7 +360,8 @@ void charge_wakeup_isr(void)
     }
     /* printf(" %s \n", __func__); */
     if (__this->charge_timer == 0) {
-        __this->charge_timer = usr_timer_add(0, charge_full_detect, 2, 1);
+        __this->charge_timer = \
+            usr_timer_add(0, charge_full_detect, 2, 1);
     }
 }
 
@@ -402,7 +408,8 @@ static void charge_config(void)
     u8 offset = 0;
     u8 charge_full_v_val = 0;
     //判断是用高压档还是低压档
-    if (__this->data->charge_full_V < CHARGE_FULL_V_4237) {
+    if(__this->data->charge_full_V < CHARGE_FULL_V_4237) 
+    {
         CHG_HV_MODE(0);
         charge_trim_val = get_vbat_trim();//4.20V对应的trim出来的实际档位
         if (charge_trim_val == 0xf) {
@@ -410,13 +417,15 @@ static void charge_config(void)
             charge_trim_val = CHARGE_FULL_V_4199;
         }
         log_info("low charge_trim_val = %d\n", charge_trim_val);
-        if (__this->data->charge_full_V >= CHARGE_FULL_V_4199) {
+        if (__this->data->charge_full_V >= CHARGE_FULL_V_4199) 
+        {
             offset = __this->data->charge_full_V - CHARGE_FULL_V_4199;
             charge_full_v_val = charge_trim_val + offset;
             if (charge_full_v_val > 0xf) {
                 charge_full_v_val = 0xf;
             }
-        } else {
+        } else 
+        {
             offset = CHARGE_FULL_V_4199 - __this->data->charge_full_V;
             if (charge_trim_val >= offset) {
                 charge_full_v_val = charge_trim_val - offset;
@@ -424,7 +433,8 @@ static void charge_config(void)
                 charge_full_v_val = 0;
             }
         }
-    } else {
+    }else 
+    {
         CHG_HV_MODE(1);
         charge_trim_val = get_vbat_trim_435();//4.35V对应的trim出来的实际档位
         if (charge_trim_val == 0xf) {
@@ -432,13 +442,15 @@ static void charge_config(void)
             charge_trim_val = CHARGE_FULL_V_4354 - 16;
         }
         log_info("high charge_trim_val = %d\n", charge_trim_val);
-        if (__this->data->charge_full_V >= CHARGE_FULL_V_4354) {
+        if (__this->data->charge_full_V >= CHARGE_FULL_V_4354) 
+        {
             offset = __this->data->charge_full_V - CHARGE_FULL_V_4354;
             charge_full_v_val = charge_trim_val + offset;
             if (charge_full_v_val > 0xf) {
                 charge_full_v_val = 0xf;
             }
-        } else {
+        } else 
+        {
             offset = CHARGE_FULL_V_4354 - __this->data->charge_full_V;
             if (charge_trim_val >= offset) {
                 charge_full_v_val = charge_trim_val - offset;
@@ -477,9 +489,10 @@ int charge_init(const struct dev_node *node, void *arg)
 
     charge_config();
 
-    if (check_charge_state()) {
+    if(check_charge_state()) {
         if (__this->ldo5v_timer == 0) {
-            __this->ldo5v_timer = usr_timer_add(0, ldo5v_detect, 2, 1);
+            __this->ldo5v_timer = \
+                usr_timer_add(0, ldo5v_detect, 2, 1);
         }
     } else {
         charge_flag = BIT_LDO5V_OFF;

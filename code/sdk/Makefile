@@ -941,7 +941,6 @@ c_SRC_FILES := \
 	apps/common/ui/lv_watch/comm_parse/common_le_set.c \
 	apps/common/ui/lv_watch/comm_parse/common_le_get.c \
 	apps/common/ui/lv_watch/comm_offscr/common_offscreen.c \
-	apps/common/ui/lv_watch/comm_weather/comm_weather.c \
 	apps/common/ui/lv_watch/comm_refr/common_refresh.c \
 	apps/common/ui/lv_watch/comm_widget/widget_time.c \
 	apps/common/ui/lv_watch/comm_widget/widget_bo.c \
@@ -959,7 +958,6 @@ c_SRC_FILES := \
 	apps/common/ui/lv_watch/comm_widget/widget_refresh.c \
 	apps/common/ui/lv_watch/comm_func/common_stopwatch.c \
 	apps/common/ui/lv_watch/comm_func/common_countdown.c \
-	apps/common/ui/lv_watch/comm_call/comm_contacts.c \
 	apps/common/ui/lv_watch/comm_remind/remind_task.c \
 	apps/common/ui/lv_watch/comm_remind/alarm_manage.c \
 	apps/common/ui/lv_watch/ui_translate/ui_translate.c \
@@ -992,6 +990,7 @@ c_SRC_FILES := \
 	apps/common/ui/lv_watch/ui_menu/watchface/watchface_08.c \
 	apps/common/ui/lv_watch/ui_menu/watchface/watchface_09.c \
 	apps/common/ui/lv_watch/ui_menu/watchface/watchface_10.c \
+	apps/common/ui/lv_watch/ui_menu/watchface/watchface_11.c \
 	apps/common/ui/lv_watch/ui_menu/watchface/watchface_main.c \
 	apps/common/ui/lv_watch/ui_menu/tool_box/tool_box.c \
 	apps/common/ui/lv_watch/ui_menu/lang_sel/lang_sel.c \
@@ -1002,6 +1001,16 @@ c_SRC_FILES := \
 	apps/common/ui/lv_watch/ui_menu/reset/reset.c \
 	apps/common/ui/lv_watch/ui_menu/split_screen/split_screen.c \
 	apps/common/ui/lv_watch/ui_menu/worship_time/worship_time.c \
+	apps/common/ui/lv_watch/ui_menu/call/call_main.c \
+	apps/common/ui/lv_watch/ui_menu/call/call_disc.c \
+	apps/common/ui/lv_watch/ui_menu/call/contacts.c \
+	apps/common/ui/lv_watch/ui_menu/call/call_log.c \
+	apps/common/ui/lv_watch/ui_menu/call/call_dial.c \
+	apps/common/ui/lv_watch/comm_nor_vm/nor_vm_main.c \
+	apps/common/ui/lv_watch/comm_nor_vm/nor_vm_contacts.c \
+	apps/common/ui/lv_watch/comm_nor_vm/nor_vm_weather.c \
+	apps/common/ui/lv_watch/comm_nor_vm/nor_vm_call_log.c \
+	apps/common/ui/lv_watch/comm_nor_vm/nor_vm_message.c \
 
 # 需要编译的 .S 文件
 S_SRC_FILES := \

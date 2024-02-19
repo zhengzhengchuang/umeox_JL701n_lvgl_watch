@@ -108,7 +108,7 @@ static void app_init()
     do_platform_initcall();
 
     board_init();
-
+    
     do_initcall();
 
     do_module_initcall();

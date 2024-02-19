@@ -23,8 +23,8 @@ extern "C" {
 #define Comm_Conf_Lang_Th  (0)  //泰语 no use
 #define Comm_Conf_Lang_Ru  (1)  //俄语
 #define Comm_Conf_Lang_Hi  (0)  //印地语 no use
-#define Comm_Conf_Lang_Ma  (0)  //马来西亚语
-#define Comm_Conf_Lang_Uz  (0)  //乌兹别克斯坦语
+#define Comm_Conf_Lang_Ma  (1)  //马来西亚语
+#define Comm_Conf_Lang_Uz  (1)  //乌兹别克斯坦语
 
 /*********************************************************************************
                                   语言支持枚举                                       
@@ -96,6 +96,7 @@ typedef uint8_t comm_language_id_t;
 *********************************************************************************/
 #define Comm_Lang_Num (comm_language_id_max)
 
+bool lang_txt_is_arabic(void);
 comm_language_id_t get_comm_sys_language(void);
 void set_comm_sys_language(comm_language_id_t lang_id);
 const void *get_lang_txt_with_id(comm_lang_txtid_t txtid);

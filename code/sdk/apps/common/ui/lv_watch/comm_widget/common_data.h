@@ -6,7 +6,7 @@ extern "C" {
 #endif
 
 #include "../include/ui_menu.h"
-#include "../comm_weather/comm_weather.h"
+#include "../comm_nor_vm/nor_vm_weather.h"
 
 /*********************************************************************************
                                   心率  示例:102bmp                                

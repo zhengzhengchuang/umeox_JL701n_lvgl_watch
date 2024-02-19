@@ -43,7 +43,6 @@
 #endif
 #endif
 
-
 #define LOG_TAG_CONST       BOARD
 #define LOG_TAG             "[BOARD]"
 #define LOG_ERROR_ENABLE
@@ -592,8 +591,7 @@ NORFLASH_DEV_PLATFORM_DATA_END()
 // #define NORFLASH_USER_IMAGES_SIZE                         (3 * 1024 * 1024)
 // #define NORFLASH_USER_FAT_SIZE                           CONFIG_EXTERN_FLASH_SIZE/2//      (1792*1024)//1.75M
 
-
-const u32 g_res_nor_unencry_start_addr = 0x000000;//FLASH_SIZE_4M+FLASH_SIZE_2M;//CONFIG_EXTERN_FLASH_SIZE - CONFIG_EXTERN_FLASH_SIZE/2; // 不加密区域起始地址
+const u32 g_res_nor_unencry_start_addr = 0;//FLASH_SIZE_4M+FLASH_SIZE_2M;//CONFIG_EXTERN_FLASH_SIZE - CONFIG_EXTERN_FLASH_SIZE/2; // 不加密区域起始地址
 #if TCFG_NORFLASH_SFC_DEV_ENABLE
 SFC_SPI_PLATFORM_DATA_BEGIN(sfc_spi_data)
     .spi_hw_index    = 1,
@@ -602,19 +600,20 @@ SFC_SPI_PLATFORM_DATA_BEGIN(sfc_spi_data)
     .sfc_encry       = TCFG_SFC_ENCRY_ENABLE, //是否加密
     .sfc_clk_div     = 0, //时钟分频: sfc_fre = sys_clk / div;
     .unencry_start_addr = g_res_nor_unencry_start_addr,//不加密区域
-    .unencry_size  = FLASH_SIZE_16M,//FLASH_SIZE_8M+FLASH_SIZE_2M,//CONFIG_EXTERN_FLASH_SIZE/2,
+    .unencry_size  = CONFIG_EXTERN_FLASH_SIZE,//FLASH_SIZE_8M+FLASH_SIZE_2M,//CONFIG_EXTERN_FLASH_SIZE/2,
 SFC_SPI_PLATFORM_DATA_END()
 
 NORFLASH_SFC_DEV_PLATFORM_DATA_BEGIN(norflash_sfc_dev_data)
     .sfc_spi_pdata     = &sfc_spi_data,
-    .start_addr     = 0x000000,
-    .size           = 0x000000,//FLASH_SIZE_4M+FLASH_SIZE_2M,//CONFIG_EXTERN_FLASH_SIZE/2,// - CONFIG_EXTERN_USER_VM_FLASH_SIZE,
+    .start_addr     = 0,
+    .size           = 0,//FLASH_SIZE_4M+FLASH_SIZE_2M,//CONFIG_EXTERN_FLASH_SIZE/2,// - CONFIG_EXTERN_USER_VM_FLASH_SIZE,
 NORFLASH_SFC_DEV_PLATFORM_DATA_END()
 
 NORFLASH_SFC_DEV_PLATFORM_DATA_BEGIN(norflash_usr_dev_data)
-    .sfc_spi_pdata     = &sfc_spi_data,
-    .start_addr     = 0x000000,//FLASH_SIZE_4M+FLASH_SIZE_2M,//CONFIG_EXTERN_FLASH_SIZE/2,
-    .size           = FLASH_SIZE_16M,//FLASH_SIZE_8M+FLASH_SIZE_2M,//CONFIG_EXTERN_FLASH_SIZE - CONFIG_EXTERN_FLASH_SIZE/2,
+    .sfc_spi_pdata = &sfc_spi_data,
+    .start_addr = 0x000000,//FLASH_SIZE_4M+FLASH_SIZE_2M,//CONFIG_EXTERN_FLASH_SIZE/2,
+    .size = CONFIG_EXTERN_FLASH_SIZE - \
+        CONFIG_EXTERN_USER_VM_FLASH_SIZE,//FLASH_SIZE_8M+FLASH_SIZE_2M,//CONFIG_EXTERN_FLASH_SIZE - CONFIG_EXTERN_FLASH_SIZE/2,
 NORFLASH_SFC_DEV_PLATFORM_DATA_END()
 
 // NORFLASH_SFC_DEV_PLATFORM_DATA_BEGIN(norflash_norfs_fat_dev_data)
@@ -632,15 +631,15 @@ NORFLASH_SFC_DEV_PLATFORM_DATA_END()
 
 // 10M-128K-自定段
 
-
 #if TCFG_NOR_VM
 NORFLASH_SFC_DEV_PLATFORM_DATA_BEGIN(norflash_norfs_vm_dev_data)
     .sfc_spi_pdata     = &sfc_spi_data,
-    .start_addr     = CONFIG_EXTERN_FLASH_SIZE - CONFIG_EXTERN_USER_VM_FLASH_SIZE,
+    .start_addr     = CONFIG_EXTERN_FLASH_SIZE - \
+        CONFIG_EXTERN_USER_VM_FLASH_SIZE,
     .size           = CONFIG_EXTERN_USER_VM_FLASH_SIZE,
 NORFLASH_SFC_DEV_PLATFORM_DATA_END()
+#endif
 
-#endif//TCFG_NOR_VM
 #endif /* #if TCFG_NORFLASH_SFC_DEV_ENABLE */
 
 
@@ -661,7 +660,7 @@ NORFLASH_SFC_DEV_PLATFORM_DATA_BEGIN(norflash_norfs_inside_vm_dev_data)
     .start_addr     = TCFG_VIRFAT_INSERT_FLASH_BASE + TCFG_VIRFAT_INSERT_FLASH_SIZE,
     .size           = CONFIG_EXTERN_USER_VM_FLASH_SIZE,
 NORFLASH_SFC_DEV_PLATFORM_DATA_END()
-#endif//TCFG_NOR_VM
+#endif
 
 #endif//TCFG_VIRFAT_INSERT_FLASH_ENABLE
 
@@ -852,11 +851,9 @@ REGISTER_DEVICES(device_table) = {
 	{ "virfat_flash", 	&virfat_flash_dev_ops, 	(void *)"res_nor"},
     //res_nor 是物理设备入口
 #if TCFG_NORFLASH_SFC_DEV_ENABLE
-    //使用外挂flash  跑ui
 	{ "res_nor",   &norflash_sfc_fs_dev_ops, (void *)&norflash_sfc_dev_data},
 	// { "update_noenc",   &norflash_sfc_fs_dev_ops, (void *)&norflash_norfs_unenc_dev_data}, // “update_noenc”的设备在初始化时，不会对该区域检查是否与其他区域重叠
 #endif /*TCFG_NORFLASH_SFC_DEV_ENABLE*/
-
 #if TCFG_VIRFAT_INSERT_FLASH_ENABLE
     //使用内置flash  跑ui
     { "res_nor",   &inside_norflash_fs_dev_ops, (void *)&norflash_norfs_inside_dev_data},
@@ -864,7 +861,7 @@ REGISTER_DEVICES(device_table) = {
 #endif
 
 #if TCFG_SD0_ENABLE
-	{ "sd0", 	&sd_dev_ops, 	(void *) &sd0_data},
+	{"sd0", 	&sd_dev_ops, 	(void *)&sd0_data},
 #endif
 
 #if TCFG_LINEIN_ENABLE
@@ -873,9 +870,11 @@ REGISTER_DEVICES(device_table) = {
 #if TCFG_OTG_MODE
     { "otg",     &usb_dev_ops, (void *) &otg_data},
 #endif
+
 #if TCFG_UDISK_ENABLE
     { "udisk0",   &mass_storage_ops , NULL},
 #endif
+
 #if TCFG_RTC_ENABLE
     { "rtc",   &rtc_dev_ops , (void *)&rtc_data},
 #endif
@@ -900,10 +899,8 @@ REGISTER_DEVICES(device_table) = {
     {"nandflash_ftl",   &nandflash_ftl_ops , "nand_flash"},
 #endif
 
-
 #if TCFG_NORFLASH_SFC_DEV_ENABLE
 #if TCFG_NOR_VM
-    //使用外挂flash
     {"ui_vm",   &norflash_sfc_fs_dev_ops , (void *)&norflash_norfs_vm_dev_data},
 #endif
 #endif//TCFG_NORFLASH_SFC_DEV_ENABLE
@@ -1239,8 +1236,8 @@ void board_init()
     bl6133_int_en();
 #endif
 #if TCFG_TP_CHSC6X_ENABLE
-    extern void chsc6x_init(void);
-    chsc6x_init();
+    // extern void chsc6x_init(void);
+    // chsc6x_init();
 #endif
 #endif
 
@@ -1261,8 +1258,7 @@ void board_init()
 #endif
 
 	dev_manager_init();
-    dev_manager_set_valid_by_logo("res_nor", 0);///将设备设置为无效设备
-
+    
 	board_devices_init();
 
 #if TCFG_CHARGE_ENABLE
@@ -1504,6 +1500,8 @@ static void port_wakeup_callback(u8 index, u8 gpio)
 static void aport_wakeup_callback(u8 index, u8 gpio, u8 edge)
 {
     log_info("%s:%d,%d",__FUNCTION__,index,gpio);
+    printf("%d, %d, %d\n", IO_CHGFL_DET, IO_VBTCH_DET, \
+        IO_LDOIN_DET);
 #if TCFG_CHARGE_ENABLE
     switch (gpio) {
         case IO_CHGFL_DET://charge port
