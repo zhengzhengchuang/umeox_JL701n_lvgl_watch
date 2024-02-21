@@ -230,7 +230,10 @@
         "call_disc.h": "c",
         "contacts.h": "c",
         "le_smartbox_multi_trans.h": "c",
-        "le_smartbox_multi_common.h": "c"
+        "le_smartbox_multi_common.h": "c",
+        "tws_api.h": "c",
+        "ble_user.h": "c",
+        "avctp_user.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

@@ -1441,7 +1441,7 @@ void smbox_client_cbk_packet_handler(uint8_t packet_type, uint16_t channel, \
                                 break;
                             }
 
-                            app_change_key_is_press = 0;
+                            //app_change_key_is_press = 0;
                             u16 tmp_handle = hci_subevent_le_connection_complete_get_connection_handle(packet);
                             log_info("HCI_SUBEVENT_LE_CONNECTION_COMPLETE: %0x\n", tmp_handle);
                             s8 tmp_dev_cid = mul_get_idle_dev_index(SMBOX_MULTI_ROLE_CLIENT);

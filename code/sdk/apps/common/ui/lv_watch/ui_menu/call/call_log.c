@@ -153,10 +153,6 @@ static void has_call_log_menu_create(lv_obj_t *obj, \
             false;
     widget_img_para.event_cb = NULL;
 
-    widget_label_para.label_w = \
-        (220);
-    widget_label_para.label_h = \
-        Label_Line_Height;
     widget_label_para.long_mode = \
         LV_LABEL_LONG_SCROLL;
     if(menu_align == menu_align_right)
@@ -170,6 +166,9 @@ static void has_call_log_menu_create(lv_obj_t *obj, \
     widget_label_para.label_ver_center = \
         false;
     widget_label_para.user_text_font = NULL;
+
+    uint8_t am_or_pm = 0;
+    static char call_log_time_str[6];
 
     for(uint8_t i = 0; i < num; i++)
     {
@@ -200,12 +199,46 @@ static void has_call_log_menu_create(lv_obj_t *obj, \
             lv_obj_align(call_log_icon, LV_ALIGN_LEFT_MID, \
                 24, 0);
 
+        uint8_t call_log_hour;
+        uint8_t call_log_minute;
+        memset(call_log_time_str, 0, \
+            sizeof(call_log_time_str));
+        int time_format = \
+            get_vm_para_cache_with_label(vm_label_time_format);
+        if(time_format == comm_time_format_24)
+        {
+            call_log_hour = \
+                vm_call_log_ctx.call_log_time.hour;     
+        }else
+        {
+            call_log_hour = \
+                vm_call_log_ctx.call_log_time.hour;
+
+            if(call_log_hour >= 12)
+                am_or_pm = 1;
+            else
+                am_or_pm = 0;
+
+            if(call_log_hour > 12)
+                call_log_hour -= 12;
+            else if(call_log_hour == 0)
+                call_log_hour = 12;
+  
+        }
+        call_log_minute = \
+                vm_call_log_ctx.call_log_time.min;  
+        sprintf(call_log_time_str, "%02d:%02d", \
+            call_log_hour, call_log_minute);
+
+        widget_label_para.label_w = 80;
+        widget_label_para.label_h = \
+            Label_Line_Height;
         widget_label_para.label_text_color = \
             lv_color_hex(0xffffff);
         widget_label_para.label_parent = \
             elem_container;
         widget_label_para.label_text = \
-            vm_call_log_ctx.call_log_time_str;
+            call_log_time_str;
         lv_obj_t *call_log_time_label = \
             common_widget_label_create(&widget_label_para);
         if(menu_align == menu_align_right)
@@ -215,6 +248,22 @@ static void has_call_log_menu_create(lv_obj_t *obj, \
             lv_obj_align_to(call_log_time_label, call_log_icon, \
                 LV_ALIGN_OUT_RIGHT_TOP, 15, 4);
 
+        widget_img_para.img_parent = \
+            elem_container;
+        widget_img_para.file_img_dat = \
+            am_or_pm + call_19_index;
+        lv_obj_t *ampm_icon = \
+             common_widget_img_create(&widget_img_para, \
+                NULL);
+        if(menu_align == menu_align_right)
+            lv_obj_align_to(ampm_icon, call_log_time_label, \
+                LV_ALIGN_OUT_LEFT_BOTTOM, 0, -5);
+        else
+            lv_obj_align_to(ampm_icon, call_log_time_label, \
+                LV_ALIGN_OUT_RIGHT_BOTTOM, 0, -5);
+        if(time_format == comm_time_format_24)
+            lv_obj_add_flag(ampm_icon, LV_OBJ_FLAG_HIDDEN);
+        
         char *call_log_str;
         if(strlen(vm_call_log_ctx.call_log_name_str))
             call_log_str = \
@@ -223,6 +272,9 @@ static void has_call_log_menu_create(lv_obj_t *obj, \
             call_log_str = \
                 vm_call_log_ctx.call_log_number_str;
 
+        widget_label_para.label_w = 220;
+        widget_label_para.label_h = \
+            Label_Line_Height;
         widget_label_para.label_text_color = \
             lv_color_hex(0x666666);
         widget_label_para.label_text = \

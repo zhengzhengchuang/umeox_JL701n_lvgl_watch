@@ -5,6 +5,7 @@
 extern "C" {
 #endif
 
+#include "sys_time.h"
 #include "../include/ui_menu.h"
 #include "../include/comm_call.h"
 
@@ -16,7 +17,7 @@ extern "C" {
 /*********************************************************************************
                                   通话记录时间字符串长度 13:50                                 
 *********************************************************************************/
-#define Call_log_Time_Str_Len (6) 
+//#define Call_log_Time_Str_Len (6) 
 
 /*********************************************************************************
                                   通话记录状态枚举                                 
@@ -44,8 +45,8 @@ typedef struct
         Call_Name_Max_Len];
     char call_log_number_str[\
         Call_Number_Max_Len];
-    char call_log_time_str[\
-        Call_log_Time_Str_Len];
+    
+    struct sys_time call_log_time;
 }vm_call_log_ctx_t;
 
 /*********************************************************************************

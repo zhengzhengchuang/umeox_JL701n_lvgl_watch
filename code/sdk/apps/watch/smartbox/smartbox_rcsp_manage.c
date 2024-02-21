@@ -180,7 +180,10 @@ static void smartbox_user_state_event(u8 opcode, u8 state)
     u8 data[2] = {0};
     data[0] = opcode;
     data[1] = state;
-    JL_rcsp_event_to_user(DEVICE_EVENT_FROM_RCSP, MSG_JL_USER_SPP_BLE_STATE, data, sizeof(data));
+    JL_rcsp_event_to_user(DEVICE_EVENT_FROM_RCSP, \
+        MSG_JL_USER_SPP_BLE_STATE, data, sizeof(data));
+
+    return;
 }
 
 #if TCFG_USER_BLE_CTRL_BREDR_EN

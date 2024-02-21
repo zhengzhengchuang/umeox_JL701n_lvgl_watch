@@ -43,8 +43,13 @@
 #include "btstack/btstack_event.h"
 #include "le_smartbox_multi_common.h"
 
+#include "user_cfg.h"
+extern BT_CONFIG bt_cfg;
+
 #define SMBOX_MUTIL_ROLE_IS_SERVER      1
 #include "le_smartbox_multi_trans.h"
+
+#include "../../../../common/ui/lv_watch/comm_parse/common_rev.h"
 
 #if ((TCFG_BLE_DEMO_SELECT == DEF_BLE_DEMO_RCSP_DEMO) && SMBOX_MULTI_BLE_SLAVE_NUMS && SMBOX_MULTI_BLE_EN)
 
@@ -478,7 +483,7 @@ void smbox_trans_cbk_packet_handler(uint8_t packet_type, uint16_t channel, \
     u8 status;
     const char *attribute_name;
 
-    printf("%s\n", __func__);
+    //printf("%s\n", __func__);
 
     switch (packet_type) 
     {
@@ -768,7 +773,8 @@ void smbox_trans_cbk_packet_handler(uint8_t packet_type, uint16_t channel, \
 // - if buffer == NULL, don't copy data, just return size of value
 // - if buffer != NULL, copy data and return number bytes copied
 // @param offset defines start of attribute value
-static uint16_t multi_att_read_callback(hci_con_handle_t connection_handle, uint16_t att_handle, uint16_t offset, uint8_t *buffer, uint16_t buffer_size)
+static uint16_t multi_att_read_callback(hci_con_handle_t connection_handle, \
+    uint16_t att_handle, uint16_t offset, uint8_t *buffer, uint16_t buffer_size)
 {
 
     uint16_t  att_value_len = 0;
@@ -780,11 +786,12 @@ static uint16_t multi_att_read_callback(hci_con_handle_t connection_handle, uint
     switch (handle) 
     {
         case ATT_CHARACTERISTIC_2a00_01_VALUE_HANDLE:
-            att_value_len = gap_device_name_len;
 
-            if ((offset >= att_value_len) || (offset + buffer_size) > att_value_len) {
+            att_value_len = strlen(gap_device_name);
+
+            if((offset >= att_value_len) || \
+                (offset + buffer_size) > att_value_len) 
                 break;
-            }
 
             if(buffer) 
             {
@@ -792,8 +799,9 @@ static uint16_t multi_att_read_callback(hci_con_handle_t connection_handle, uint
                 att_value_len = buffer_size;
                 log_info("\n------read gap_name: %s \n", gap_device_name);
             }
-            break;
+                break;
 
+#if 0
         case ATT_CHARACTERISTIC_ae10_01_VALUE_HANDLE:
             att_value_len = sizeof(test_read_write_buf);
             if ((offset >= att_value_len) || (offset + buffer_size) > att_value_len) {
@@ -816,7 +824,7 @@ static uint16_t multi_att_read_callback(hci_con_handle_t connection_handle, uint
             }
             att_value_len = 2;
             break;
-
+#endif
         default:
             break;
     }
@@ -838,8 +846,88 @@ static uint16_t multi_att_read_callback(hci_con_handle_t connection_handle, uint
  */
 
 /* LISTING_START(attWrite): ATT Write */
-static int multi_att_write_callback(hci_con_handle_t connection_handle, uint16_t att_handle, uint16_t transaction_mode, uint16_t offset, uint8_t *buffer, uint16_t buffer_size)
+static int multi_att_write_callback(hci_con_handle_t connection_handle, \
+    uint16_t att_handle, uint16_t transaction_mode, uint16_t offset, uint8_t *buffer, \
+        uint16_t buffer_size)
 {
+    int result = 0;
+    u16 tmp16;
+
+    u16 handle = att_handle;
+
+    log_info("write_callback,conn_handle =%04x, handle=%04x,buffer=%08x\n", \
+        connection_handle, handle, (u32)buffer);
+
+    switch (handle) 
+    {
+        case ATT_CHARACTERISTIC_2a00_01_VALUE_HANDLE:
+            break;
+
+#if TCFG_PAY_ALIOS_ENABLE
+        case ATT_CHARACTERISTIC_4a02_01_CLIENT_CONFIGURATION_HANDLE:
+            log_info("\n------write ccc 4a20:%04x, %02x\n", handle, buffer[0]);
+            set_ble_work_state(BLE_ST_NOTIFY_IDICATE);
+            att_set_ccc_config(handle, buffer[0]);
+            /* check_connetion_updata_deal(); */
+            break;
+#endif
+
+        //case ATT_CHARACTERISTIC_ae02_01_CLIENT_CONFIGURATION_HANDLE:
+        case ATT_CHARACTERISTIC_A6ED0102_D344_460A_8075_B9E8EC90D71B_01_CLIENT_CONFIGURATION_HANDLE:
+            set_ble_work_state(cur_dev_cid, BLE_ST_NOTIFY_IDICATE);
+            check_connetion_updata_deal(cur_dev_cid);
+            log_info("\n------write ccc:%04x,%02x\n", handle, buffer[0]);
+            multi_att_set_ccc_config(connection_handle, handle, buffer[0]);
+
+#if TEST_SEND_DATA_RATE
+            test_data_start = 1;//start
+            if (buffer[0]) {
+                test_data_send_packet();
+            }
+#endif
+            //被使能通知后,尝试开新设备广播
+            smbox_ble_enable_new_dev_adv();
+            break;
+     
+        case ATT_CHARACTERISTIC_2a05_01_CLIENT_CONFIGURATION_HANDLE:
+            //att_set_ccc_config(handle, buffer[0]);
+            multi_att_set_ccc_config(connection_handle, handle, buffer[0]);
+            break;
+
+        //case ATT_CHARACTERISTIC_ae01_01_VALUE_HANDLE:
+        case ATT_CHARACTERISTIC_A6ED0103_D344_460A_8075_B9E8EC90D71B_01_VALUE_HANDLE:
+            /* if (!JL_rcsp_get_auth_flag()) { */
+            /*     JL_rcsp_auth_recieve(buffer, buffer_size); */
+            /*     break; */
+            /* } */
+            // printf("*****%s\n", __func__);
+            // printf("*****%p\n", app_recieve_callback);
+
+            // if(app_recieve_callback)
+            //     app_recieve_callback(NULL, buffer, buffer_size);
+            umeox_common_le_rev_cb(NULL, buffer, buffer_size);
+
+
+            //JL_rcsp_auth_recieve(data, len);
+            break;
+
+#if TCFG_PAY_ALIOS_ENABLE
+        case ATT_CHARACTERISTIC_4a02_01_VALUE_HANDLE:
+            log_info("upay_ble_recv(%d):", buffer_size);
+            log_info_hexdump(buffer, buffer_size);
+            if(upay_recv_callback) 
+            {
+                upay_recv_callback(buffer, buffer_size);
+            }
+            /* upay_ble_send_data("9876543210",10);// */
+            break;
+#endif  //TCFG_PAY_ALIOS_ENABLE
+
+        default:
+            break;
+    }
+    
+#if 0
     int result = 0;
     u16 tmp16;
 
@@ -959,6 +1047,7 @@ static int multi_att_write_callback(hci_con_handle_t connection_handle, uint16_t
         default:
             break;
     }
+#endif
 
     return 0;
 }
@@ -988,24 +1077,83 @@ static int app_send_user_data(u16 conn_handle, u16 handle, u8 *data, u16 len, u8
     return ret;
 }
 
+// static void rcsp_adv_fill_mac_addr(u8 *mac_addr_buf)
+// {
+//     swapX(jl_ble_get_mac_addr(), mac_addr_buf, 6);
+// }
+
 //------------------------------------------------------
 static int make_set_adv_data(void)
 {
     u8 offset = 0;
     u8 *buf = adv_data;
+#if 0
+    buf[offset++] = 0x1E;
+    buf[offset++] = 0xFF;
 
+    buf[offset++] = 0xD6; // JL ID
+    buf[offset++] = 0x05;
+
+    #if 1
+    u16 vid = \
+        get_vid_pid_ver_from_cfg_file(GET_VID_FROM_EX_CFG);
+    buf[offset++] = vid & 0xFF;
+    buf[offset++] = vid >> 8;
+
+    u16 pid = \
+        get_vid_pid_ver_from_cfg_file(GET_PID_FROM_EX_CFG);
+    buf[offset++] = pid & 0xFF;
+    buf[offset++] = pid >> 8;
+#else
+    buf[offset++] = 0x02;	// VID
+    buf[offset++] = 0x00;
+
+    buf[offset++] = 0x0F;	// PID
+    buf[offset++] = 0x00;
+#endif
+
+    //buf[offset++] = 0x50 | VER_FLAG_BLE_CTRL_BREDR;	// 手表类型
+
+    rcsp_adv_fill_mac_addr(buf + offset);
+    offset += 6;
+
+    // if (RCSP_SPP == get_defalut_bt_channel_sel()) {
+    //     log_info("sel rcsp_spp\n");
+    //     buf[offset++] = BIT(7);
+    // }
+
+    if (offset > ADV_RSP_PACKET_MAX) {
+        puts("***adv_data overflow!!!!!!\n");
+        return -1;
+    }
+
+    offset = 31;//fixed
+    log_info("adv_data(%d):", offset);
+    log_info_hexdump(buf, offset);
+    adv_data_len = offset;
+    ble_op_set_adv_data(offset, buf);/*fixed 31bytes*/   
+#else
     /* offset += make_eir_packet_val(&buf[offset], offset, HCI_EIR_DATATYPE_FLAGS, 0x18, 1); */
     /* offset += make_eir_packet_val(&buf[offset], offset, HCI_EIR_DATATYPE_FLAGS, 0x1A, 1); */
     offset += make_eir_packet_val(&buf[offset], \
         offset, HCI_EIR_DATATYPE_FLAGS, 0x06, 1);
-    offset += make_eir_packet_val(&buf[offset], \
-        offset, HCI_EIR_DATATYPE_COMPLETE_16BIT_SERVICE_UUIDS, 0xAF30, 2);
 
-    /* char *gap_name = bt_get_local_name(); */
     u8 name_len = strlen(gap_device_name);
     u8 vaild_len = ADV_RSP_PACKET_MAX - (offset + 2);
-    if (name_len < vaild_len) {
-        offset += make_eir_packet_data(&buf[offset], offset, HCI_EIR_DATATYPE_COMPLETE_LOCAL_NAME, (void *)gap_device_name, name_len);
+    if(name_len < vaild_len) 
+    {
+        offset += make_eir_packet_data(&buf[offset], offset, \
+            HCI_EIR_DATATYPE_COMPLETE_LOCAL_NAME, \
+                (void *)gap_device_name, name_len);
+    }
+
+    u8 data_len = 6;
+    vaild_len = ADV_RSP_PACKET_MAX - (offset + 2);
+    if(data_len < vaild_len)
+    {
+        offset += make_eir_packet_data(&buf[offset], offset, \
+            HCI_EIR_DATATYPE_MANUFACTURER_SPECIFIC_DATA, \
+                (void *)bt_cfg.ble_mac_addr, 6);
     }
 
     if (offset > ADV_RSP_PACKET_MAX) {
@@ -1016,6 +1164,8 @@ static int make_set_adv_data(void)
     log_info_hexdump(buf, offset);
     adv_data_len = offset;
     ble_op_set_adv_data(offset, buf);
+#endif
+
     return 0;
 }
 
@@ -1023,7 +1173,7 @@ static int make_set_rsp_data(void)
 {
     u8 offset = 0;
     u8 *buf = scan_rsp_data;
-
+#if 0
 #if RCSP_BTMATE_EN
     u8  tag_len = sizeof(user_tag_string);
     offset += make_eir_packet_data(&buf[offset], offset, HCI_EIR_DATATYPE_MANUFACTURER_SPECIFIC_DATA, (void *)user_tag_string, tag_len);
@@ -1040,27 +1190,31 @@ static int make_set_rsp_data(void)
         puts("***rsp_data overflow!!!!!!\n");
         return -1;
     }
+#endif
 
     log_info("rsp_data(%d):", offset);
     log_info_hexdump(buf, offset);
     scan_rsp_data_len = offset;
     ble_op_set_rsp_data(offset, buf);
+
     return 0;
 }
 
 //广播参数设置
 static void advertisements_setup_init()
 {
+    int ret = 0;
     uint8_t adv_type = ADV_IND;
     uint8_t adv_channel = ADV_CHANNEL_ALL;
-    int   ret = 0;
-
-    ble_op_set_adv_param(ADV_INTERVAL_MIN, adv_type, adv_channel);
+    
+    ble_op_set_adv_param(ADV_INTERVAL_MIN, \
+        adv_type, adv_channel);
 
     ret |= make_set_adv_data();
     ret |= make_set_rsp_data();
 
-    if (ret) {
+    if(ret) 
+    {
         puts("advertisements_setup_init fail !!!!!!\n");
         return;
     }
@@ -1158,6 +1312,7 @@ static int smbox_multi_set_adv_enable(void *priv, u32 en)
     if(cur_state == next_state) {
         return APP_BLE_NO_ERROR;
     }
+
     log_info("adv_en:%d\n", en);
     set_ble_work_state(cur_dev_cid, next_state);
 
@@ -1187,22 +1342,26 @@ static int trans_disconnect_conn(void *priv)
 {
     u8 cid = (u8) priv;
 
-    if(cid >= SUPPORT_MAX_SERVER) {
+    if(cid >= SUPPORT_MAX_SERVER) 
+    {
         return APP_BLE_OPERATION_ERROR;
     }
 
     if(server_con_handle[cid]) 
     {
-        if (BLE_ST_SEND_DISCONN != get_ble_work_state(cid)) 
+        if(BLE_ST_SEND_DISCONN != get_ble_work_state(cid)) 
         {
             log_info(">>>ble(%d) send disconnect\n", cid);
             set_ble_work_state(cid, BLE_ST_SEND_DISCONN);
             ble_op_disconnect(server_con_handle[cid]);
-        } else {
+        }else 
+        {
             log_info(">>>ble(%d) wait disconnect...\n", cid);
         }
+
         return APP_BLE_NO_ERROR;
-    } else {
+    }else 
+    {
         return APP_BLE_OPERATION_ERROR;
     }
 }
@@ -1225,7 +1384,10 @@ static int app_send_user_data_do(void *priv, u8 *data, u16 len)
         putchar('L');
     }
 #endif
-    return app_send_user_data(server_con_handle[cur_dev_cid], ATT_CHARACTERISTIC_ae02_01_VALUE_HANDLE, data, len, ATT_OP_AUTO_READ_CCC);
+    //return app_send_user_data(server_con_handle[cur_dev_cid], ATT_CHARACTERISTIC_ae02_01_VALUE_HANDLE, data, len, ATT_OP_AUTO_READ_CCC);
+    return app_send_user_data(server_con_handle[cur_dev_cid], \
+        ATT_CHARACTERISTIC_A6ED0102_D344_460A_8075_B9E8EC90D71B_01_VALUE_HANDLE, \
+            data, len, ATT_OP_AUTO_READ_CCC);
 }
 
 static int app_send_user_data_check(u16 len)
@@ -1309,7 +1471,7 @@ void ble_trans_module_enable(u8 en)
 
 void server_profile_init(void)
 {
-    log_info("%s\n", __FUNCTION__);
+    printf("111111111%s\n", __func__);
 
     /* setup ATT server */
     att_server_init(profile_data, multi_att_read_callback, multi_att_write_callback);
@@ -1348,7 +1510,6 @@ void ble_smbox_multi_trans_disconnect(void)
 
 
 //static const char ble_ext_name[] = "(BLE)";
-
 void smbox_bt_multi_trans_init(void)
 {
     log_info("%s\n", __FUNCTION__);
@@ -1364,15 +1525,14 @@ void smbox_bt_multi_trans_init(void)
         gap_device_name_len = \
             BT_NAME_LEN_MAX - ext_name_len;
 
-    lib_make_ble_address(tmp_ble_addr, (void *)bt_get_mac_addr());
+    lib_make_ble_address(tmp_ble_addr, \
+        (void *)bt_get_mac_addr());
     tmp_ble_addr[0] = tmp_ble_addr[0] + 1;
     le_controller_set_mac((void *)tmp_ble_addr);
     log_info("ble address:");
     put_buf(tmp_ble_addr, 6);
-
-    const u8 *p_addr = bt_get_mac_addr();
-    for(uint8_t i = 0; i < 6; i++)
-        printf("p_addr[%d] = %x\n", i, p_addr[i]);
+    memcpy(bt_cfg.ble_mac_addr, \
+        tmp_ble_addr, 6);
 
     //增加后缀，区分名字
     memcpy(gap_device_name, name_p, gap_device_name_len);
@@ -1386,6 +1546,7 @@ void smbox_bt_multi_trans_init(void)
     memset(&server_con_handle, 0, SUPPORT_MAX_SERVER << 1);
 
     set_ble_work_state(cur_dev_cid, BLE_ST_INIT_OK);
+
     ble_trans_module_enable(1);
 
 #if TEST_SEND_DATA_RATE

@@ -841,7 +841,8 @@ int smartbox_make_set_adv_data(void)
 {
     u8 offset = 0;
     u8 *buf = adv_data;
-
+    
+#if 0
     buf[offset++] = 0x1E;
     buf[offset++] = 0xFF;
 
@@ -878,19 +879,58 @@ int smartbox_make_set_adv_data(void)
         puts("***adv_data overflow!!!!!!\n");
         return -1;
     }
+
     offset = 31;//fixed
     log_info("adv_data(%d):", offset);
     log_info_hexdump(buf, offset);
     adv_data_len = offset;
     ble_op_set_adv_data(offset, buf);/*fixed 31bytes*/
+#endif
+
+    offset += make_eir_packet_val(&buf[offset], \
+        offset, HCI_EIR_DATATYPE_FLAGS, 0x06, 1);
+
+#if 0
+    u8 *edr_name = (u8 *)bt_get_local_name();
+    u8 name_len = strlen(edr_name);
+    u8 vaild_len_0 = ADV_RSP_PACKET_MAX - (offset + 2);
+    if(name_len < vaild_len_0) 
+    {
+        offset += make_eir_packet_data(&buf[offset], offset, \
+            HCI_EIR_DATATYPE_COMPLETE_LOCAL_NAME, \
+                (void *)edr_name, name_len);
+    }
+#endif
+
+    u8 data_len = 6;
+    u8 vaild_len_1 = ADV_RSP_PACKET_MAX - \
+        (offset + 2);
+    if(data_len < vaild_len_1)
+    {
+        offset += make_eir_packet_data(&buf[offset], offset, \
+            HCI_EIR_DATATYPE_MANUFACTURER_SPECIFIC_DATA, \
+                (void *)jl_ble_get_mac_addr(), 6);
+    }
+
+    if (offset > ADV_RSP_PACKET_MAX) 
+    {
+        puts("***adv_data overflow!!!!!!\n");
+        return -1;
+    }
+
+    log_info("adv_data(%d):", offset);
+    log_info_hexdump(buf, offset);
+    adv_data_len = offset;
+    ble_op_set_adv_data(offset, buf);
+
     return 0;
 }
 
 int smartbox_make_set_rsp_data(void)
 {
     u8 offset = 0;
-    u8 *edr_name = (u8 *)bt_get_local_name();
     u8 *buf = scan_rsp_data;
+    u8 *edr_name = (u8 *)bt_get_local_name();
 
 #if DOUBLE_BT_SAME_MAC
     offset += make_eir_packet_val(&buf[offset], offset, HCI_EIR_DATATYPE_FLAGS, 0x0A, 1);
@@ -906,7 +946,8 @@ int smartbox_make_set_rsp_data(void)
     }
 
     if (name_len) {
-        offset += make_eir_packet_data(&buf[offset], offset, HCI_EIR_DATATYPE_COMPLETE_LOCAL_NAME, (void *)edr_name, name_len);
+        offset += make_eir_packet_data(&buf[offset], offset, \
+            HCI_EIR_DATATYPE_COMPLETE_LOCAL_NAME, (void *)edr_name, name_len);
     }
 
     scan_rsp_data_len = offset;

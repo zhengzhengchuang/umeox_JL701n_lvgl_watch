@@ -56,6 +56,7 @@ extern void big_endian_store_32(uint8_t *buffer, uint16_t pos, uint32_t value);
 //common api
 extern void bt_ble_init(void);
 extern void bt_ble_exit(void);
+u8 bt_get_connect_status(void);
 extern void bt_ble_adv_enable(u8 enable);
 extern void ble_app_disconnect(void);
 extern void ble_module_enable(u8 en);

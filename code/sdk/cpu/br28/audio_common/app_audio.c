@@ -445,66 +445,68 @@ void app_audio_set_volume(u8 state, s8 volume, u8 fade)
     }
 #endif/*SMART_BOX_EN*/
 
-    if (state == APP_AUDIO_CURRENT_STATE) {
+    if(state == APP_AUDIO_CURRENT_STATE) 
+    {
         state = __this->state;
     }
 
-    switch (state) {
-    case APP_AUDIO_STATE_IDLE:
-    case APP_AUDIO_STATE_MUSIC:
-    case APP_AUDIO_STATE_LINEIN:
+    switch(state) 
+    {
+        case APP_AUDIO_STATE_IDLE:
+        case APP_AUDIO_STATE_MUSIC:
+        case APP_AUDIO_STATE_LINEIN:
 #if SYS_DIGVOL_GROUP_EN
-        digvol_type = "music_type";
+            digvol_type = "music_type";
 #endif/*SYS_DIGVOL_GROUP_EN*/
-        app_var.music_volume = volume;
-        if (app_var.music_volume > get_max_sys_vol()) {
-            app_var.music_volume = get_max_sys_vol();
-        }
-        volume = app_var.music_volume;
-        break;
-    case APP_AUDIO_STATE_CALL:
+            app_var.music_volume = volume;
+            if(app_var.music_volume > get_max_sys_vol()) 
+                app_var.music_volume = get_max_sys_vol();
+            volume = app_var.music_volume;
+            break;
+
+        case APP_AUDIO_STATE_CALL:
 #if SYS_DIGVOL_GROUP_EN
-        digvol_type = "call_esco";
+            digvol_type = "call_esco";
 #endif/*SYS_DIGVOL_GROUP_EN*/
-        app_var.call_volume = volume;
-        if (app_var.call_volume > 15) {
-            app_var.call_volume = 15;
-        }
+            app_var.call_volume = volume;
+            if(app_var.call_volume > get_max_sys_vol())
+                app_var.call_volume = get_max_sys_vol();
 
 #if TCFG_CALL_USE_DIGITAL_VOLUME
-        audio_dac_vol_set(TYPE_DAC_DGAIN, \
-                          BIT(0) | BIT(1), \
-                          16384L * (s32)app_var.call_volume / (s32)__this->max_volume[APP_AUDIO_STATE_CALL], \
-                          1);
-        return;
+            audio_dac_vol_set(TYPE_DAC_DGAIN, \
+                            BIT(0) | BIT(1), \
+                            16384L * (s32)app_var.call_volume / (s32)__this->max_volume[APP_AUDIO_STATE_CALL], \
+                            1);
+            return;
 #endif/*TCFG_CALL_USE_DIGITAL_VOLUME*/
-        break;
-    case APP_AUDIO_STATE_WTONE:
+            break;
+
+        case APP_AUDIO_STATE_WTONE:
 #if SYS_DIGVOL_GROUP_EN
-        digvol_type = "tone_tone";
+            digvol_type = "tone_tone";
 #endif/*SYS_DIGVOL_GROUP_EN*/
 
 #if TONE_MODE_DEFAULE_VOLUME != 0
-        app_var.wtone_volume = TONE_MODE_DEFAULE_VOLUME;
-        volume = app_var.wtone_volume;
-        break;
+            app_var.wtone_volume = TONE_MODE_DEFAULE_VOLUME;
+            volume = app_var.wtone_volume;
+            break;
 #endif
 
 #if APP_AUDIO_STATE_WTONE_BY_MUSIC == 1
-        app_var.wtone_volume = app_var.music_volume;
-        if (app_var.wtone_volume < 5) {
-            app_var.wtone_volume = 5;
-        }
+            app_var.wtone_volume = app_var.music_volume;
+            if(app_var.wtone_volume < 5)
+                app_var.wtone_volume = 5;
+
 #else
-        app_var.wtone_volume = volume;
+            app_var.wtone_volume = volume;
 #endif
-        if (app_var.wtone_volume > get_max_sys_vol()) {
-            app_var.wtone_volume = get_max_sys_vol();
-        }
-        volume = app_var.wtone_volume;
-        break;
-    default:
-        return;
+            if(app_var.wtone_volume > get_max_sys_vol())
+                app_var.wtone_volume = get_max_sys_vol();
+            volume = app_var.wtone_volume;
+            break;
+
+        default:
+            return;
     }
 
     if(state == __this->state) 
@@ -513,32 +515,42 @@ void app_audio_set_volume(u8 state, s8 volume, u8 fade)
         fm_emitter_manage_set_vol(volume);
 #else
 #if defined (VOL_TYPE_DIGGROUP) && defined (SYS_DIGVOL_GROUP_EN)
-        if (state == APP_AUDIO_STATE_LINEIN) {
+        if (state == APP_AUDIO_STATE_LINEIN) 
+        {
             //printf("linein analog vol:%d\n",volume);
             audio_fade_in_fade_out(volume, volume, fade);
             return;
         }
-        if (SYS_VOL_TYPE == VOL_TYPE_DIGGROUP && SYS_DIGVOL_GROUP_EN) {
-            if (sys_digvol_group == NULL) {
+
+        if(SYS_VOL_TYPE == VOL_TYPE_DIGGROUP && SYS_DIGVOL_GROUP_EN) 
+        {
+            if(sys_digvol_group == NULL) 
+            {
                 /* printf("the sys_digvol_group is NULL\n-------------------------------------------------------------"); */
                 return;
             }
-            if (strcmp(digvol_type, "music_type") == 0) {
-                for (int i = 0; music_dig_logo[i] != "NULL"; i++) {
+
+            if(strcmp(digvol_type, "music_type") == 0) 
+            {
+                for(int i = 0; music_dig_logo[i] != "NULL"; i++) 
+                {
                     /* printf("%s\n", music_dig_logo[i]); */
-                    if (audio_dig_vol_group_hdl_get(sys_digvol_group, music_dig_logo[i]) == NULL) {
+                    if(audio_dig_vol_group_hdl_get(sys_digvol_group, music_dig_logo[i]) == NULL) 
+                    {
                         continue;
                     }
                     audio_dig_vol_group_vol_set(sys_digvol_group, music_dig_logo[i], AUDIO_DIG_VOL_ALL_CH, volume);
                 }
-            } else {
-                if (audio_dig_vol_group_hdl_get(sys_digvol_group, digvol_type) == NULL) {
+            }else 
+            {
+                if(audio_dig_vol_group_hdl_get(sys_digvol_group, digvol_type) == NULL)
+                {
                     return;
                 }
                 audio_dig_vol_group_vol_set(sys_digvol_group, digvol_type, AUDIO_DIG_VOL_ALL_CH, volume);
             }
-        }
-        else {
+        }else 
+        {
             audio_fade_in_fade_out(volume, volume, fade);
         }
 

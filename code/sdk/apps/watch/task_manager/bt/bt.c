@@ -856,32 +856,39 @@ static int bt_hci_event_handler(struct bt_event *bt)
             log_info(" HCI_EVENT_INQUIRY_COMPLETE \n");
             bt_hci_event_inquiry(bt);
             break;
+
         case HCI_EVENT_IO_CAPABILITY_REQUEST:
             log_info(" HCI_EVENT_IO_CAPABILITY_REQUEST \n");
             clock_add_set(BT_CONN_CLK);
             break;
+
         case HCI_EVENT_USER_CONFIRMATION_REQUEST:
             log_info(" HCI_EVENT_USER_CONFIRMATION_REQUEST \n");
             ///<可通过按键来确认是否配对 1：配对   0：取消
             bt_send_pair(1);
             clock_remove_set(BT_CONN_CLK);
             break;
+
         case HCI_EVENT_USER_PASSKEY_REQUEST:
             log_info(" HCI_EVENT_USER_PASSKEY_REQUEST \n");
             ///<可以开始输入6位passkey
             break;
+
         case HCI_EVENT_USER_PRESSKEY_NOTIFICATION:
             log_info(" HCI_EVENT_USER_PRESSKEY_NOTIFICATION %x\n", bt->value);
             ///<可用于显示输入passkey位置 value 0:start  1:enrer  2:earse   3:clear  4:complete
             break;
+
         case HCI_EVENT_PIN_CODE_REQUEST :
             log_info("HCI_EVENT_PIN_CODE_REQUEST  \n");
             bt_send_pair(1);
             break;
+
         case HCI_EVENT_VENDOR_NO_RECONN_ADDR :
             log_info("HCI_EVENT_VENDOR_NO_RECONN_ADDR \n");
             bt_hci_event_disconnect(bt) ;
             break;
+
         case HCI_EVENT_DISCONNECTION_COMPLETE :
             log_info("HCI_EVENT_DISCONNECTION_COMPLETE \n");
             if (bt->value == ERROR_CODE_PAIRING_NOT_ALLOWED) { //用于判断华为手表的断开情况
@@ -890,44 +897,46 @@ static int bt_hci_event_handler(struct bt_event *bt)
             bt_hci_event_disconnect(bt) ;
             clock_remove_set(BT_CONN_CLK);
             break;
+
         case BTSTACK_EVENT_HCI_CONNECTIONS_DELETE:
         case HCI_EVENT_CONNECTION_COMPLETE:
             log_info(" HCI_EVENT_CONNECTION_COMPLETE \n");
-            UI_MSG_POST("bt_status:hci_value=%4", bt->value);
-            switch (bt->value) {
-            case ERROR_CODE_SUCCESS :
-                log_info("ERROR_CODE_SUCCESS  \n");
-                bt_hci_event_connection(bt);
-                break;
-            case ERROR_CODE_PIN_OR_KEY_MISSING:
-                log_info(" ERROR_CODE_PIN_OR_KEY_MISSING \n");
-                bt_hci_event_linkkey_missing(bt);
-            case ERROR_CODE_SYNCHRONOUS_CONNECTION_LIMIT_TO_A_DEVICE_EXCEEDED :
-            case ERROR_CODE_CONNECTION_REJECTED_DUE_TO_LIMITED_RESOURCES:
-            case ERROR_CODE_CONNECTION_REJECTED_DUE_TO_UNACCEPTABLE_BD_ADDR:
-            case ERROR_CODE_CONNECTION_ACCEPT_TIMEOUT_EXCEEDED  :
-            case ERROR_CODE_REMOTE_USER_TERMINATED_CONNECTION   :
-            case ERROR_CODE_CONNECTION_TERMINATED_BY_LOCAL_HOST :
-            case ERROR_CODE_AUTHENTICATION_FAILURE :
-                bt_hci_event_disconnect(bt) ;
-                break;
-            case CUSTOM_BB_AUTO_CANCEL_PAGE:
-                bt_wait_phone_connect_control(1);
-                break;
-            case ERROR_CODE_PAGE_TIMEOUT:
-                log_info(" ERROR_CODE_PAGE_TIMEOUT \n");
-                bt_hci_event_page_timeout(bt);
-                break;
-            case ERROR_CODE_CONNECTION_TIMEOUT:
-                log_info(" ERROR_CODE_CONNECTION_TIMEOUT \n");
-                bt_hci_event_connection_timeout(bt);
-                break;
-            case ERROR_CODE_ACL_CONNECTION_ALREADY_EXISTS  :
-                log_info("ERROR_CODE_ACL_CONNECTION_ALREADY_EXISTS   \n");
-                bt_hci_event_connection_exist(bt);
-                break;
-            default:
-                break;
+            //UI_MSG_POST("bt_status:hci_value=%4", bt->value);
+            switch (bt->value) 
+            {
+                case ERROR_CODE_SUCCESS :
+                    log_info("ERROR_CODE_SUCCESS  \n");
+                    bt_hci_event_connection(bt);
+                    break;
+                case ERROR_CODE_PIN_OR_KEY_MISSING:
+                    log_info(" ERROR_CODE_PIN_OR_KEY_MISSING \n");
+                    bt_hci_event_linkkey_missing(bt);
+                case ERROR_CODE_SYNCHRONOUS_CONNECTION_LIMIT_TO_A_DEVICE_EXCEEDED :
+                case ERROR_CODE_CONNECTION_REJECTED_DUE_TO_LIMITED_RESOURCES:
+                case ERROR_CODE_CONNECTION_REJECTED_DUE_TO_UNACCEPTABLE_BD_ADDR:
+                case ERROR_CODE_CONNECTION_ACCEPT_TIMEOUT_EXCEEDED  :
+                case ERROR_CODE_REMOTE_USER_TERMINATED_CONNECTION   :
+                case ERROR_CODE_CONNECTION_TERMINATED_BY_LOCAL_HOST :
+                case ERROR_CODE_AUTHENTICATION_FAILURE :
+                    bt_hci_event_disconnect(bt) ;
+                    break;
+                case CUSTOM_BB_AUTO_CANCEL_PAGE:
+                    bt_wait_phone_connect_control(1);
+                    break;
+                case ERROR_CODE_PAGE_TIMEOUT:
+                    log_info(" ERROR_CODE_PAGE_TIMEOUT \n");
+                    bt_hci_event_page_timeout(bt);
+                    break;
+                case ERROR_CODE_CONNECTION_TIMEOUT:
+                    log_info(" ERROR_CODE_CONNECTION_TIMEOUT \n");
+                    bt_hci_event_connection_timeout(bt);
+                    break;
+                case ERROR_CODE_ACL_CONNECTION_ALREADY_EXISTS  :
+                    log_info("ERROR_CODE_ACL_CONNECTION_ALREADY_EXISTS   \n");
+                    bt_hci_event_connection_exist(bt);
+                    break;
+                default:
+                    break;
             }
             break;
         default:

@@ -104,6 +104,7 @@ typedef struct __LRC_CONFIG {
 
 void cfg_file_parse(u8 idx);
 const u8 *bt_get_mac_addr();
+const u8 *jl_ble_get_mac_addr();
 void bt_get_tws_local_addr(u8 *addr);
 
 STATUS *get_led_config(void);

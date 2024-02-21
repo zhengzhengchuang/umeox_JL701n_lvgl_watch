@@ -130,6 +130,8 @@ void chsc6x_read_touch_info()
 
             touch_down = false;	           
         }   
+
+        printf("%s:x = %d, y = %d\n", __func__, touch_x, touch_y);
     }else
     {
         touch_down = false;

@@ -4,12 +4,16 @@ static void call_log_event_cb(lv_event_t *e)
 {
     if(!e) return;
 
+    ui_menu_jump(ui_act_id_call_log);
+
     return;
 }
 
 static void contacts_event_cb(lv_event_t *e)
 {
     if(!e) return;
+
+    ui_menu_jump(ui_act_id_contacts);
 
     return;
 }

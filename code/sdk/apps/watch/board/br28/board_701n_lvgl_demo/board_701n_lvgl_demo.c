@@ -1236,8 +1236,8 @@ void board_init()
     bl6133_int_en();
 #endif
 #if TCFG_TP_CHSC6X_ENABLE
-    // extern void chsc6x_init(void);
-    // chsc6x_init();
+    extern void chsc6x_init(void);
+    chsc6x_init();
 #endif
 #endif
 

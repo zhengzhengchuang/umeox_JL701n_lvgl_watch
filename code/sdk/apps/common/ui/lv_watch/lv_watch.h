@@ -17,6 +17,7 @@ extern "C" {
 #include "./comm_lang/lang_txtid.h"
 #include "./comm_widget/widget_bo.h"
 #include "./comm_widget/widget_hr.h"
+#include "./comm_nor_vm/nor_vm_cfg.h"
 #include "./poc_modem/poc_modem_ui.h"
 #include "./ui_tileview/ui_tileview.h"
 #include "./comm_widget/common_symb.h"
@@ -58,6 +59,9 @@ const uint8_t *ui_get_dev_ble_mac(void);
 const char *ui_get_dev_bt_name(void);
 const char *ui_get_dev_ble_name(void);
 
+/**********ui层获取双模蓝牙连接状态**************/
+uint8_t ui_get_ble_bt_connect_status(void);
+
 /**********ui层控制屏幕休眠**************/
 void ui_ctl_lcd_enter_sleep(bool sleep);
 
@@ -71,9 +75,39 @@ void ui_set_sys_backlight(int backlight_val);
 void ui_set_sys_time(struct sys_time *utc_time);
 void ui_get_sys_time(struct sys_time *utc_time);
 
-
 /**********ui层获取星期**************/
 comm_enum_week_t ui_get_sys_week(struct sys_time *utc_time);
+
+/**********通过电话号码拨出电话**************/
+void ui_ctrl_call_out_by_number(char *call_number, uint8_t number_len);
+
+/*********************************************************************************
+                                获取通话号码
+                    (如果联系人列表有，返回名字，否则返回号码)                                    
+*********************************************************************************/
+char *ui_get_call_number_name(void);
+
+/*********************************************************************************
+                                控制通话接听                                   
+*********************************************************************************/
+void ui_ctrl_call_answer(void);
+
+/*********************************************************************************
+                                控制通话挂断                                   
+*********************************************************************************/
+void ui_ctrl_call_hang_up(void);
+
+/*********************************************************************************
+                                通话记录状态及信息保存                                   
+*********************************************************************************/
+void record_call_out_or_in(uint8_t out_or_in);
+void record_call_is_answer(bool is_answer);
+void update_call_log_message_flash(void);
+
+/*********************************************************************************
+                                通话中获取音量                                   
+*********************************************************************************/
+uint8_t ui_get_calling_volumn(void);
 
 #ifdef __cplusplus
 }

@@ -24,7 +24,7 @@ typedef enum {
     BLE_ST_SEND_STACK_EXIT = 0x60,  //发送退出协议栈命令，等待完成
     BLE_ST_STACK_EXIT_COMPLETE,     //协议栈退出成功
 
-} ble_state_e;
+}ble_state_e;
 
 enum {
     APP_BLE_NO_ERROR = 0,

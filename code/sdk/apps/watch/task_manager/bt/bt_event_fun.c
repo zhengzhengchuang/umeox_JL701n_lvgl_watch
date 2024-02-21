@@ -44,6 +44,8 @@
 #include "key_event_deal.h"
 #include "clock_cfg.h"
 #include "gSensor/gSensor_manage.h"
+
+#include "../../../common/ui/lv_watch/lv_watch.h"
 /* #include "soundcard/soundcard.h" */
 
 #include "audio_config.h"
@@ -227,19 +229,28 @@ void phonebook_packet_handler(u8 type, const u8 *name, const u8 *number, const u
    @note
 */
 /*----------------------------------------------------------------------------*/
-void bt_set_led_status(u8 status)
-{
-    static u8 bt_status = \
+static u8 bt_status = \
         STATUS_BT_INIT_OK;
 
-    u8 app = app_get_curr_task();
-    if (status) {
-        bt_status = status;
-    }
+u8 bt_get_connect_status(void)
+{
+    if(bt_status == STATUS_BT_CONN)
+        return 1;
 
-    if (app == APP_BT_TASK) { //蓝牙模式或者state_machine
+    return 0;
+}
+
+void bt_set_led_status(u8 status)
+{
+    u8 app = app_get_curr_task();
+    if(status)
+        bt_status = status;
+
+    if (app == APP_BT_TASK) 
+    { 
+        //蓝牙模式或者state_machine
         pwm_led_mode_set(PWM_LED_ALL_OFF);
-        ui_update_status(bt_status);
+        //ui_update_status(bt_status);
     }
 }
 
@@ -320,7 +331,8 @@ int bt_wait_connect_and_phone_connect_switch(void *p)
     log_debug("connect_switch: %d, %d\n", \
         (int)p, bt_user_priv_var.auto_connection_counter);
 
-    if (bt_user_priv_var.auto_connection_counter <= 0) {
+    if (bt_user_priv_var.auto_connection_counter <= 0) 
+    {
         bt_user_priv_var.auto_connection_timer = 0;
         bt_user_priv_var.auto_connection_counter = 0;
 
@@ -898,7 +910,8 @@ void sys_auto_shut_down_enable(void)
 
         u8 app = app_get_curr_task();
         if (app == APP_BT_TASK) {
-            app_var.auto_shut_down_timer = sys_timeout_add(NULL, sys_enter_soft_poweroff, (app_var.auto_off_time * 1000));
+            app_var.auto_shut_down_timer = sys_timeout_add(NULL, \
+                sys_enter_soft_poweroff, (app_var.auto_off_time * 1000));
         } else {
             /* log_debug("cur_app:%s, return", app->name); */
         }
@@ -1135,7 +1148,8 @@ void  bt_status_init_ok(struct bt_event *bt)
 #endif
     __this->init_ok = 1;
 
-    if (__this->init_ok_time == 0) {
+    if (__this->init_ok_time == 0) 
+    {
         __this->init_ok_time = timer_get_ms();
         __this->auto_exit_limit_time = POWERON_AUTO_CONN_TIME * 1000;
         /* tone_dec_wait_stop(3000); */
@@ -1144,18 +1158,20 @@ void  bt_status_init_ok(struct bt_event *bt)
 #if TCFG_USER_BLE_ENABLE
     if (BT_MODE_IS(BT_BQB)) {
         ble_bqb_test_thread_init();
-    } else {
+    } else 
+    {
 #if TCFG_NORMAL_SET_DUT_MODE
         extern void ble_standard_dut_test_init(void);
         ble_standard_dut_test_init();
 #else
         printf("***********%s\n", __func__);
 
-        bt_ble_init();
         
 #if (SMBOX_MULTI_BLE_EN)
-    extern void smbox_multi_ble_profile_init(u8 enable);
-    smbox_multi_ble_profile_init(1);
+        extern void smbox_multi_ble_profile_init(u8 enable);
+        smbox_multi_ble_profile_init(1);
+#else
+        bt_ble_init();
 #endif
 
 #endif
@@ -1439,7 +1455,9 @@ void bt_status_disconnect(struct bt_event *bt)
     bt_set_led_status(STATUS_BT_DISCONN);
 
 #if(TCFG_BD_NUM == 2)               //对耳在bt_tws同步播放提示音
-    if (!app_var.goto_poweroff_flag) { /*关机不播断开提示音*/
+    if (!app_var.goto_poweroff_flag) 
+    { 
+        /*关机不播断开提示音*/
         if (!__this->ignore_discon_tone) {
             tone_play_by_path(tone_table[IDEX_TONE_BT_DISCONN], 1);
         }
@@ -1475,8 +1493,9 @@ void bt_status_disconnect(struct bt_event *bt)
     }
     __this->tws_local_back_role = 0;
 #else
-    if (get_total_connect_dev() == 0) 
-    {    //已经没有设备连接
+    if(get_total_connect_dev() == 0) 
+    {    
+        //已经没有设备连接
         if (!app_var.goto_poweroff_flag) 
         { /*关机时不改UI*/
             bt_set_led_status(STATUS_BT_DISCONN);
@@ -1569,6 +1588,8 @@ void bt_status_phone_income(struct bt_event *bt)
 {
     printf("*********%s\n", __func__);
 
+    record_call_out_or_in(2);
+
     __this->esco_dump_packet = ESCO_DUMP_PACKET_CALL;
     ui_update_status(STATUS_PHONE_INCOME);
     u8 tmp_bd_addr[6];
@@ -1628,6 +1649,8 @@ void bt_status_phone_out(struct bt_event *bt)
 {
     printf("*********%s\n", __func__);
 
+    record_call_out_or_in(1);
+
     if (bt_switch_back_timer) {
         sys_timeout_del(bt_switch_back_timer);
         bt_switch_back_timer = 0;
@@ -1649,6 +1672,8 @@ void bt_status_phone_out(struct bt_event *bt)
 void bt_status_phone_active(struct bt_event *bt)
 {
     printf("*********%s\n", __func__);
+
+    record_call_is_answer(true);
 
     bt_phone_active_start_time = timer_get_ms();
     ui_update_status(STATUS_PHONE_ACTIV);
@@ -1697,6 +1722,10 @@ u32 bt_get_phone_active_start_time_ms(void)
 /*----------------------------------------------------------------------------*/
 void bt_status_phone_hangup(struct bt_event *bt)
 {
+    printf("**********%s\n", __func__);
+
+    update_call_log_message_flash();
+
     __this->esco_dump_packet = ESCO_DUMP_PACKET_CALL;
     /* log_info("phone_handup\n"); */
     jl_call_kws_handler(BT_STATUS_PHONE_HANGUP);
@@ -1736,23 +1765,34 @@ void bt_status_phone_number(struct bt_event *bt)
     u8 *phone_number = NULL;
     phone_number = (u8 *)bt->value;
     //put_buf(phone_number, strlen((const char *)phone_number));
-    if (bt_user_priv_var.phone_num_flag == 1) {
-        return ;
-    }
+
+    if(bt_user_priv_var.phone_num_flag == 1)
+        return;
+
     bt_user_priv_var.income_phone_len = 0;
-    memset(bt_user_priv_var.income_phone_num, '\0', sizeof(bt_user_priv_var.income_phone_num));
-    for (int i = 0; i < strlen((const char *)phone_number); i++) {
-        if (phone_number[i] >= '0' && phone_number[i] <= '9') {
+    memset(bt_user_priv_var.income_phone_num, 0, \
+        sizeof(bt_user_priv_var.income_phone_num));
+
+    for(int i = 0; i < strlen((const char *)phone_number); i++) 
+    {
+        if (phone_number[i] >= '0' && phone_number[i] <= '9') 
+        {
             //过滤，只有数字才能报号
-            bt_user_priv_var.income_phone_num[bt_user_priv_var.income_phone_len++] = phone_number[i];
-            if (bt_user_priv_var.income_phone_len >= sizeof(bt_user_priv_var.income_phone_num)) {
+            bt_user_priv_var.income_phone_num[\
+                bt_user_priv_var.income_phone_len++] = phone_number[i];
+            if(bt_user_priv_var.income_phone_len >= \
+                sizeof(bt_user_priv_var.income_phone_num)) 
+            {
                 return;    /*buffer 空间不够，后面不要了*/
             }
         }
     }
-    if (bt_user_priv_var.income_phone_len > 0) {
+
+    if(bt_user_priv_var.income_phone_len > 0) 
+    {
         bt_user_priv_var.phone_num_flag = 1;
-    } else {
+    }else 
+    {
         log_debug("PHONE_NUMBER len err\n");
     }
 }
@@ -1977,9 +2017,12 @@ void bt_status_call_vol_change(struct bt_event *bt)
     u8 volume = bt->value;  //app_audio_get_max_volume() * bt->value / 15;
     u8 call_status = get_call_status();
     bt_user_priv_var.phone_vol = bt->value;
-    if ((call_status == BT_CALL_ACTIVE) || (call_status == BT_CALL_OUTGOING) || app_var.siri_stu) {
+    if((call_status == BT_CALL_ACTIVE) || \
+        (call_status == BT_CALL_OUTGOING) || app_var.siri_stu) 
+    {
         app_audio_set_volume(APP_AUDIO_STATE_CALL, volume, 1);
-    } else if (call_status != BT_CALL_HANGUP) {
+    }else if(call_status != BT_CALL_HANGUP) 
+    {
         /*只保存，不设置到dac*/
         app_var.call_volume = volume;
     }
@@ -2017,6 +2060,8 @@ void bt_status_sniff_state_update(struct bt_event *bt)
 /*----------------------------------------------------------------------------*/
 void bt_status_last_call_type_change(struct bt_event *bt)
 {
+    printf("%s:%d\n", __func__, bt->value);
+
     __this->call_back_flag |= BIT(0);
     bt_user_priv_var.last_call_type = bt->value;
 }
@@ -2106,7 +2151,8 @@ void bt_status_phone_menufactuer(struct bt_event *bt)
 {
     extern const u8 hid_conn_depend_on_dev_company;
     app_var.remote_dev_company = bt->value;
-    if (hid_conn_depend_on_dev_company) {
+    if (hid_conn_depend_on_dev_company) 
+    {
         if (bt->value) {
             //user_send_cmd_prepare(USER_CTRL_HID_CONN, 0, NULL);
         } else {
@@ -2241,7 +2287,8 @@ u8 bt_hci_event_filter(struct bt_event *bt)
 void bt_hci_event_inquiry(struct bt_event *bt)
 {
 #if TCFG_USER_EMITTER_ENABLE
-    if (bt_user_priv_var.emitter_or_receiver == BT_EMITTER_EN) {
+    if (bt_user_priv_var.emitter_or_receiver == BT_EMITTER_EN) 
+    {
         extern void emitter_search_stop(u8 result);
         emitter_search_stop(bt->value);
     }
@@ -2265,7 +2312,8 @@ void bt_hci_event_connection(struct bt_event *bt)
     tws_try_connect_disable();
 #endif
 #else
-    if (bt_user_priv_var.auto_connection_timer) {
+    if (bt_user_priv_var.auto_connection_timer) 
+    {
         sys_timeout_del(bt_user_priv_var.auto_connection_timer);
         bt_user_priv_var.auto_connection_timer = 0;
     }

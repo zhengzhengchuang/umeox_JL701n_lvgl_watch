@@ -255,7 +255,7 @@ void multi_cbk_packet_handler(uint8_t packet_type, uint16_t channel, \
 {
     u8 role = 0xff;
 
-    printf("%s\n", __func__);
+    //printf("%s\n", __func__);
 
     switch(packet_type) 
     {

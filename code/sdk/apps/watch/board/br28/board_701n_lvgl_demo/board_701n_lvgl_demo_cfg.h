@@ -905,7 +905,7 @@ DAC硬件上的连接方式,可选的配置：
 #define TCFG_BT_SUPPORT_AAC                 0   //AAC格式支持
 #define TCFG_USER_EMITTER_ENABLE            1   //emitter功能使能
 #define TCFG_BT_SNIFF_ENABLE                0   //bt sniff 功能使能
-#define TCFG_USER_BLE_CTRL_BREDR_EN			1	//BLE控制经典蓝牙开关使能
+#define TCFG_USER_BLE_CTRL_BREDR_EN			0	//BLE控制经典蓝牙开关使能
 
 #define TCFG_BLE_ADV_DYNAMIC_SWITCH			1	//BLE广播动态调整。超时后降低广播频率
 

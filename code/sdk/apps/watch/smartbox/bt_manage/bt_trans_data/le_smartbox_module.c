@@ -206,21 +206,26 @@ static int get_buffer_vaild_len(void *priv);
 static void send_request_connect_parameter(u8 table_index)
 {
     struct conn_update_param_t *param = NULL; //static ram
-    switch (conn_update_param_index) {
-    case 0:
-        param = (void *)&connection_param_table[table_index];
-        break;
-    case 1:
-        param = (void *)&connection_param_table_update[table_index];
-        break;
-    default:
-        break;
+
+    switch(conn_update_param_index) 
+    {
+        case 0:
+            param = (void *)&connection_param_table[table_index];
+            break;
+        case 1:
+            param = (void *)&connection_param_table_update[table_index];
+            break;
+        default:
+            break;
     }
 
-    log_info("update_request:-%d-%d-%d-%d-\n", param->interval_min, param->interval_max, param->latency, param->timeout);
-    if (con_handle) {
+    log_info("update_request:-%d-%d-%d-%d-\n", \
+        param->interval_min, param->interval_max, param->latency, param->timeout);
+
+    if(con_handle)
         ble_user_cmd_prepare(BLE_CMD_REQ_CONN_PARAM_UPDATE, 2, con_handle, param);
-    }
+    
+    return;
 }
 
 static void check_connetion_updata_deal(void)
@@ -252,10 +257,14 @@ static void connection_update_complete_success(u8 *packet)
 {
     int con_handle, conn_interval, conn_latency, conn_timeout;
 
-    con_handle = hci_subevent_le_connection_update_complete_get_connection_handle(packet);
-    conn_interval = hci_subevent_le_connection_update_complete_get_conn_interval(packet);
-    conn_latency = hci_subevent_le_connection_update_complete_get_conn_latency(packet);
-    conn_timeout = hci_subevent_le_connection_update_complete_get_supervision_timeout(packet);
+    con_handle = \
+        hci_subevent_le_connection_update_complete_get_connection_handle(packet);
+    conn_interval = \
+        hci_subevent_le_connection_update_complete_get_conn_interval(packet);
+    conn_latency = \
+        hci_subevent_le_connection_update_complete_get_conn_latency(packet);
+    conn_timeout = \
+        hci_subevent_le_connection_update_complete_get_supervision_timeout(packet);
 
     log_info("conn_interval = %d\n", conn_interval);
     log_info("conn_latency = %d\n", conn_latency);
@@ -289,74 +298,82 @@ ble_state_e smartbox_get_ble_work_state(void)
 
 static void cbk_sm_packet_handler(uint8_t packet_type, uint16_t channel, uint8_t *packet, uint16_t size)
 {
-    sm_just_event_t *event = (void *)packet;
     u32 tmp32;
-    switch (packet_type) {
-    case HCI_EVENT_PACKET:
-        switch (hci_event_packet_get_type(packet)) {
-        case SM_EVENT_JUST_WORKS_REQUEST:
-            sm_just_works_confirm(sm_event_just_works_request_get_handle(packet));
-            log_info("Just Works Confirmed.\n");
-            break;
-        case SM_EVENT_PASSKEY_DISPLAY_NUMBER:
-            log_info_hexdump(packet, size);
-            memcpy(&tmp32, event->data, 4);
-            log_info("Passkey display: %06u.\n", tmp32);
-            break;
+    sm_just_event_t *event = (void *)packet;
+    
 
-        case SM_EVENT_PAIR_PROCESS:
-            log_info("======PAIR_PROCESS: %02x\n", event->data[0]);
-            put_buf(event->data, 4);
-            if (event->data[0] == SM_EVENT_PAIR_SUB_RECONNECT_START) {
-                pair_reconnect_flag = 1;
+    switch (packet_type) 
+    {
+        case HCI_EVENT_PACKET:
+            switch (hci_event_packet_get_type(packet)) 
+            {
+                case SM_EVENT_JUST_WORKS_REQUEST:
+                    sm_just_works_confirm(sm_event_just_works_request_get_handle(packet));
+                    log_info("Just Works Confirmed.\n");
+                    break;
+
+                case SM_EVENT_PASSKEY_DISPLAY_NUMBER:
+                    log_info_hexdump(packet, size);
+                    memcpy(&tmp32, event->data, 4);
+                    log_info("Passkey display: %06u.\n", tmp32);
+                    break;
+
+                case SM_EVENT_PAIR_PROCESS:
+                    log_info("======PAIR_PROCESS: %02x\n", event->data[0]);
+                    put_buf(event->data, 4);
+                    if (event->data[0] == SM_EVENT_PAIR_SUB_RECONNECT_START) 
+                    {
+                        pair_reconnect_flag = 1;
+                    }
+
+                    switch (event->data[0]) 
+                    {
+                        case SM_EVENT_PAIR_SUB_RECONNECT_START:
+                            pair_reconnect_flag = 1;
+                            log_info("reconnect start\n");
+                            break;
+
+                        case SM_EVENT_PAIR_SUB_PIN_KEY_MISS:
+                            log_info("err:pin or keymiss\n");
+                            break;
+
+                        case SM_EVENT_PAIR_SUB_PAIR_FAIL:
+                            log_info("err:pair fail,reason=%02x,is_peer? %d\n", event->data[1], event->data[2]);
+                            break;
+
+                        case SM_EVENT_PAIR_SUB_PAIR_TIMEOUT:
+                            log_info("err:pair timeout\n");
+                            break;
+
+                        case SM_EVENT_PAIR_SUB_ADD_LIST_SUCCESS:
+                            log_info("first pair,add list success\n");
+                            break;
+
+                        case SM_EVENT_PAIR_SUB_ADD_LIST_FAILED:
+                            log_info("err:add list fail\n");
+                            break;
+
+                        case SM_EVENT_PAIR_SUB_SEND_DISCONN:
+                            log_info("err:local send disconnect,reason= %02x\n", event->data[1]);
+                            break;
+
+                        default:
+                            break;
+                    }
+
+                        break;
             }
-            switch (event->data[0]) {
-            case SM_EVENT_PAIR_SUB_RECONNECT_START:
-                pair_reconnect_flag = 1;
-                log_info("reconnect start\n");
-                break;
-
-            case SM_EVENT_PAIR_SUB_PIN_KEY_MISS:
-                log_info("err:pin or keymiss\n");
-                break;
-
-            case SM_EVENT_PAIR_SUB_PAIR_FAIL:
-                log_info("err:pair fail,reason=%02x,is_peer? %d\n", event->data[1], event->data[2]);
-                break;
-
-            case SM_EVENT_PAIR_SUB_PAIR_TIMEOUT:
-                log_info("err:pair timeout\n");
-                break;
-
-            case SM_EVENT_PAIR_SUB_ADD_LIST_SUCCESS:
-                log_info("first pair,add list success\n");
-                break;
-
-            case SM_EVENT_PAIR_SUB_ADD_LIST_FAILED:
-                log_info("err:add list fail\n");
-                break;
-
-            case SM_EVENT_PAIR_SUB_SEND_DISCONN:
-                log_info("err:local send disconnect,reason= %02x\n", event->data[1]);
-                break;
-
-            default:
-                break;
-            }
-
             break;
-        }
-        break;
     }
 }
 
 static void can_send_now_wakeup(void)
 {
     putchar('E');
-    if (ble_resume_send_wakeup) {
+    if (ble_resume_send_wakeup) 
+    {
         ble_resume_send_wakeup();
     }
-
 }
 
 _WEAK_
@@ -410,7 +427,8 @@ static void smart_att_check_remote_result(u16 con_handle, remote_type_e remote_t
 
 
 /* LISTING_START(packetHandler): Packet Handler */
-static void cbk_packet_handler(uint8_t packet_type, uint16_t channel, uint8_t *packet, uint16_t size)
+static void cbk_packet_handler(uint8_t packet_type, uint16_t channel, \
+    uint8_t *packet, uint16_t size)
 {
     int mtu;
     u32 tmp;
@@ -423,6 +441,7 @@ static void cbk_packet_handler(uint8_t packet_type, uint16_t channel, uint8_t *p
             {
                 /* case DAEMON_EVENT_HCI_PACKET_SENT: */
                     /* break; */
+
                 case ATT_EVENT_HANDLE_VALUE_INDICATION_COMPLETE:
                     log_info("ATT_EVENT_HANDLE_VALUE_INDICATION_COMPLETE\n");
 
@@ -435,7 +454,8 @@ static void cbk_packet_handler(uint8_t packet_type, uint16_t channel, uint8_t *p
                     {
                         case HCI_SUBEVENT_LE_CONNECTION_COMPLETE: 
                         {
-                            if (!hci_subevent_le_enhanced_connection_complete_get_role(packet)) {
+                            if(!hci_subevent_le_enhanced_connection_complete_get_role(packet)) 
+                            {
                                 //is master
                                 break;
                             }
@@ -500,38 +520,37 @@ static void cbk_packet_handler(uint8_t packet_type, uint16_t channel, uint8_t *p
 
                 case HCI_EVENT_DISCONNECTION_COMPLETE:
                     if(con_handle != little_endian_read_16(packet, 3)) 
-                    {
                         break;
-                    }
 
                     log_info("HCI_EVENT_DISCONNECTION_COMPLETE: %0x\n", packet[5]);
 
                     con_handle = 0;
 
-    #if (TCFG_BLE_ADV_DYNAMIC_SWITCH && TCFG_UI_ENABLE)
+#if (TCFG_BLE_ADV_DYNAMIC_SWITCH && TCFG_UI_ENABLE)
                     void le_adv_interval_reset(void);
                     le_adv_interval_reset();
-    #endif
+#endif
 
-    #if TCFG_PAY_ALIOS_ENABLE && UPAY_ONE_PROFILE
+#if TCFG_PAY_ALIOS_ENABLE && UPAY_ONE_PROFILE
                     upay_ble_new_adv_enable(0);
-    #endif
+#endif
 
-    #if RCSP_ADV_MUSIC_INFO_ENABLE
+#if RCSP_ADV_MUSIC_INFO_ENABLE
                     extern void stop_get_music_timer(u8 en);
                     stop_get_music_timer(1);
-    #endif
+#endif
+
                     /* #if (0 == BT_CONNECTION_VERIFY) */
                     /*             JL_rcsp_auth_reset(); */
                     /* #endif */
-                    ble_user_cmd_prepare(BLE_CMD_ATT_SEND_INIT, 4, con_handle, 0, 0, 0);
+
+                    ble_user_cmd_prepare(BLE_CMD_ATT_SEND_INIT, \
+                        4, con_handle, 0, 0, 0);
                     set_ble_work_state(BLE_ST_DISCONN);
                     set_app_connect_type(TYPE_NULL);
     #if RCSP_UPDATE_EN
                     if(get_jl_update_flag()) 
-                    {
                         break;
-                    }
     #endif
                     if(!ble_update_get_ready_jump_flag()) 
                     {
@@ -574,14 +593,11 @@ static void cbk_packet_handler(uint8_t packet_type, uint16_t channel, uint8_t *p
                     }
                     
                     connection_update_cnt = 0;
-
                     break;
 
                 case ATT_EVENT_MTU_EXCHANGE_COMPLETE:
                     if(con_handle != little_endian_read_16(packet, 2)) 
-                    {
                         break;
-                    }
 
                     mtu = att_event_mtu_exchange_complete_get_MTU(packet) - 3;
                     log_info("%s:ATT MTU = %u\n", __func__, mtu);
@@ -594,9 +610,7 @@ static void cbk_packet_handler(uint8_t packet_type, uint16_t channel, uint8_t *p
 
                 case L2CAP_EVENT_CONNECTION_PARAMETER_UPDATE_RESPONSE:
                     if(con_handle != little_endian_read_16(packet, 2)) 
-                    {
                         break;
-                    }
 
                     tmp = little_endian_read_16(packet, 4);
                     log_info("-update_rsp: %02x\n", tmp);
@@ -614,9 +628,7 @@ static void cbk_packet_handler(uint8_t packet_type, uint16_t channel, uint8_t *p
 
                 case HCI_EVENT_ENCRYPTION_CHANGE:
                     if(con_handle != little_endian_read_16(packet, 3)) 
-                    {
                         break;
-                    }
 
                     log_info("HCI_EVENT_ENCRYPTION_CHANGE= %d\n", packet[2]);
 
@@ -710,7 +722,6 @@ static void cbk_packet_handler(uint8_t packet_type, uint16_t channel, uint8_t *p
                 }
                 break;
     #endif
-
             }
             break;
     }
@@ -749,7 +760,8 @@ void ancs_update_status(u8 status)
  */
 
 
-static uint16_t att_read_callback(hci_con_handle_t connection_handle, uint16_t att_handle, uint16_t offset, uint8_t *buffer, uint16_t buffer_size)
+static uint16_t att_read_callback(hci_con_handle_t connection_handle, \
+    uint16_t att_handle, uint16_t offset, uint8_t *buffer, uint16_t buffer_size)
 {
 
     uint16_t  att_value_len = 0;
@@ -759,54 +771,56 @@ static uint16_t att_read_callback(hci_con_handle_t connection_handle, uint16_t a
 
     log_info("read_callback, handle= 0x%04x,buffer= %08x\n", handle, (u32)buffer);
 
-    switch (handle) {
-    case ATT_CHARACTERISTIC_2a00_01_VALUE_HANDLE:
-        att_value_len = strlen(gap_device_name);
+    switch (handle) 
+    {
+        case ATT_CHARACTERISTIC_2a00_01_VALUE_HANDLE:
+            att_value_len = strlen(gap_device_name);
 
-        if ((offset >= att_value_len) || (offset + buffer_size) > att_value_len) {
+            if((offset >= att_value_len) || \
+                (offset + buffer_size) > att_value_len) 
+                break;
+
+            if(buffer) 
+            {
+                memcpy(buffer, &gap_device_name[offset], buffer_size);
+                att_value_len = buffer_size;
+                log_info("\n------read gap_name: %s \n", gap_device_name);
+            }
             break;
-        }
-
-        if (buffer) {
-            memcpy(buffer, &gap_device_name[offset], buffer_size);
-            att_value_len = buffer_size;
-            log_info("\n------read gap_name: %s \n", gap_device_name);
-        }
-
-        break;
 #if TCFG_PAY_ALIOS_ENABLE
-    case ATT_CHARACTERISTIC_4a02_01_UNKOWN_DESCRIPTION_HANDLE:
-        att_value_len = 6;
+        case ATT_CHARACTERISTIC_4a02_01_UNKOWN_DESCRIPTION_HANDLE:
+            att_value_len = 6;
 
-        if (buffer) {
-            u8 tmp_data[6];
-            le_controller_get_mac(tmp_data) ;
-            swapX(tmp_data, &buffer[0], 6) ;
-        }
-        break ;
+            if(buffer) 
+            {
+                u8 tmp_data[6];
+                le_controller_get_mac(tmp_data);
+                swapX(tmp_data, &buffer[0], 6);
+            }
+            break;
 #endif
 
 #if TCFG_PAY_ALIOS_ENABLE
-    case ATT_CHARACTERISTIC_4a02_01_CLIENT_CONFIGURATION_HANDLE:
+        case ATT_CHARACTERISTIC_4a02_01_CLIENT_CONFIGURATION_HANDLE:
 #endif
-    case ATT_CHARACTERISTIC_2a05_01_CLIENT_CONFIGURATION_HANDLE:
-    //case ATT_CHARACTERISTIC_ae02_01_CLIENT_CONFIGURATION_HANDLE:
-    case ATT_CHARACTERISTIC_A6ED0102_D344_460A_8075_B9E8EC90D71B_01_CLIENT_CONFIGURATION_HANDLE:
-        if (buffer) {
-            buffer[0] = att_get_ccc_config(handle);
-            buffer[1] = 0;
-        }
-        att_value_len = 2;
-        break;
+        case ATT_CHARACTERISTIC_2a05_01_CLIENT_CONFIGURATION_HANDLE:
+        //case ATT_CHARACTERISTIC_ae02_01_CLIENT_CONFIGURATION_HANDLE:
+        case ATT_CHARACTERISTIC_A6ED0102_D344_460A_8075_B9E8EC90D71B_01_CLIENT_CONFIGURATION_HANDLE:
+            if(buffer) 
+            {
+                buffer[0] = att_get_ccc_config(handle);
+                buffer[1] = 0;
+            }
+            att_value_len = 2;
+            break;
 
-    default:
-        break;
+        default:
+            break;
     }
 
     log_info("att_value_len= %d\n", att_value_len);
 
     return att_value_len;
-
 }
 
 
@@ -820,7 +834,9 @@ static uint16_t att_read_callback(hci_con_handle_t connection_handle, uint16_t a
  */
 
 /* LISTING_START(attWrite): ATT Write */
-static int att_write_callback(hci_con_handle_t connection_handle, uint16_t att_handle, uint16_t transaction_mode, uint16_t offset, uint8_t *buffer, uint16_t buffer_size)
+static int att_write_callback(hci_con_handle_t connection_handle, \
+    uint16_t att_handle, uint16_t transaction_mode, uint16_t offset, \
+        uint8_t *buffer, uint16_t buffer_size)
 {
     int result = 0;
     u16 tmp16;
@@ -830,6 +846,7 @@ static int att_write_callback(hci_con_handle_t connection_handle, uint16_t att_h
     switch (handle) 
     {
         case ATT_CHARACTERISTIC_2a00_01_VALUE_HANDLE:
+#if 0
             tmp16 = BT_NAME_LEN_MAX;
             if((offset >= tmp16) || (offset + buffer_size) > tmp16) 
             {
@@ -843,6 +860,7 @@ static int att_write_callback(hci_con_handle_t connection_handle, uint16_t att_h
 
             memcpy(&gap_device_name[offset], buffer, buffer_size);
             log_info("\n------write gap_name:");
+#endif
             break;
 
 #if TCFG_PAY_ALIOS_ENABLE
@@ -934,6 +952,7 @@ static int app_send_user_data(u16 handle, u8 *data, u16 len, u8 handle_type)
     if (ret) {
         log_info("app_send_fail:%d !!!!!!\n", ret);
     }
+
     return (int)ret;
 }
 
@@ -1056,6 +1075,7 @@ void ble_profile_init(void)
 {
     log_info("ble profile init\n");
 
+#if 1
     le_device_db_init();
 
 #if TCFG_BLE_BRIDGE_EDR_ENALBE
@@ -1063,7 +1083,9 @@ void ble_profile_init(void)
         SM_AUTHREQ_SECURE_CONNECTION | SM_AUTHREQ_BONDING, 7, \
             SMART_TCFG_BLE_SECURITY_EN);
 #else
-    ble_sm_setup_init(IO_CAPABILITY_NO_INPUT_NO_OUTPUT, SM_AUTHREQ_MITM_PROTECTION | SM_AUTHREQ_BONDING, 7, SMART_TCFG_BLE_SECURITY_EN);
+    ble_sm_setup_init(IO_CAPABILITY_NO_INPUT_NO_OUTPUT, \
+        SM_AUTHREQ_MITM_PROTECTION | SM_AUTHREQ_BONDING, 7, \
+            SMART_TCFG_BLE_SECURITY_EN);
 #endif
 
     /* setup ATT server */
@@ -1106,6 +1128,7 @@ void ble_profile_init(void)
     ams_client_register_callback(&cbk_packet_handler);
     ams_entity_attribute_config(AMS_IDPlayer_ENABLE | AMS_IDQueue_ENABLE | AMS_IDTrack_ENABLE);
     /* ams_entity_attribute_config(AMS_IDTrack_ENABLE); */
+#endif
 #endif
 }
 
@@ -1208,7 +1231,7 @@ contrl_adv:
         next_state = BLE_ST_IDLE;
     }
 
-    cur_state =  get_ble_work_state();
+    cur_state = get_ble_work_state();
 
     printf("get_ble_work_state  %d\n", cur_state);
 
@@ -1256,16 +1279,19 @@ static int ble_disconnect(void *priv)
 {
     if(con_handle) 
     {
-        if (BLE_ST_SEND_DISCONN != get_ble_work_state()) 
+        if(BLE_ST_SEND_DISCONN != get_ble_work_state()) 
         {
             log_info(">>>ble send disconnect\n");
             set_ble_work_state(BLE_ST_SEND_DISCONN);
             ble_user_cmd_prepare(BLE_CMD_DISCONNECT, 1, con_handle);
-        } else {
+        }else 
+        {
             log_info(">>>ble wait disconnect...\n");
         }
+
         return APP_BLE_NO_ERROR;
-    } else {
+    }else 
+    {
         return APP_BLE_OPERATION_ERROR;
     }
 }
@@ -1280,17 +1306,19 @@ static int get_buffer_vaild_len(void *priv)
 
 static int app_send_user_data_do(void *priv, u8 *data, u16 len)
 {
-
 #if TCFG_BLE_BRIDGE_EDR_ENALBE
-    if (check_rcsp_auth_flag) {
+    if(check_rcsp_auth_flag) 
+    {
         /*触发检测是否认证通过,通过后回连edr*/
-        if (JL_rcsp_get_auth_flag()) 
+        if(JL_rcsp_get_auth_flag()) 
         {
             check_rcsp_auth_flag = 0;
             log_info("auth_flag is ok\n");
-            if (is_bredr_close() == 1) {
+            if(is_bredr_close() == 1) 
+            {
                 bredr_conn_last_dev();
-            } else if (is_bredr_inquiry_state() == 1) {
+            }else if(is_bredr_inquiry_state() == 1) 
+            {
                 user_send_cmd_prepare(USER_CTRL_INQUIRY_CANCEL, 0, NULL);
 #if TCFG_USER_EMITTER_ENABLE
                 log_info(">>>connect last source edr...\n");
@@ -1299,7 +1327,8 @@ static int app_send_user_data_do(void *priv, u8 *data, u16 len)
                 log_info(">>>connect last edr...\n");
                 connect_last_device_from_vm();
 #endif
-            } else {
+            }else 
+            {
 #if TCFG_USER_EMITTER_ENABLE
                 log_info(">>>connect last edr...\n");
                 connect_last_source_device_from_vm();
@@ -1376,8 +1405,8 @@ void ble_module_enable(u8 en)
     }
 }
 
-
-const struct ble_server_operation_t ble_operation = {
+const struct ble_server_operation_t ble_operation = 
+{
     .adv_enable = set_adv_enable,
     .disconnect = ble_disconnect,
     .get_buffer_vaild = get_buffer_vaild_len,

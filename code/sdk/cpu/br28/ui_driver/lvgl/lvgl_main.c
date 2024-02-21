@@ -58,7 +58,7 @@ static void lvgl_task(void *p)
 
     vm_store_para_init();
     ui_act_id_t start_act_id = \
-        ui_act_id_call_dial;
+        ui_act_id_call_log;
     ui_info_cache_init(start_act_id);
     
     lv_port_disp_init(p);

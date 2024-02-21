@@ -82,6 +82,15 @@ const u8 *bt_get_mac_addr()
     return bt_cfg.mac_addr;
 }
 
+const u8 *jl_ble_get_mac_addr()
+{
+#if !SMBOX_MULTI_BLE_EN
+    return bt_cfg.mac_addr;    
+#else
+    return bt_cfg.ble_mac_addr;
+#endif
+}
+
 void bt_update_mac_addr(u8 *addr)
 {
     memcpy(bt_cfg.mac_addr, addr, 6);

@@ -125,7 +125,8 @@ static void bt_resume_deal(void)
         return;
     }
     bt_set_led_status(0);
-    if (get_total_connect_dev() == 0) {
+    if(get_total_connect_dev() == 0) 
+    {
         sys_auto_shut_down_enable();
     }
 }

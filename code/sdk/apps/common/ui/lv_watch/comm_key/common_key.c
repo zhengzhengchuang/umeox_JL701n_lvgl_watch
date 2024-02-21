@@ -80,6 +80,12 @@ void common_key_msg_handle(int key_value, int key_event)
         /*******亮屏按键操作时，需重置熄屏定时器*******/
         common_offscreen_timer_restart();
 
+        char call_number_buf[6] = "10086";
+        uint8_t call_number_len = 5;
+        ui_ctrl_call_out_by_number(call_number_buf, \
+            call_number_len);
+        printf("***********%s\n", __func__);
+
         /*******页面不锁定，主按键返回表盘*******/
         bool menu_lock_flag = \
             p_ui_info_cache->menu_load_info.lock_flag;

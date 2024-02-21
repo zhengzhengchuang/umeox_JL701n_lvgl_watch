@@ -43,7 +43,7 @@ static const vm_store_para_with_label_t default_label_para[Vm_Store_Para_Num] = 
 
     /*********默认时间格式:24小时制*********/
     {.label = vm_label_time_format, \
-        .store_para_val = 0x00},
+        .store_para_val = comm_time_format_12},
 
     /*********默认屏幕熄屏时间 30s*********/
     {.label = vm_label_offscreen_time, \
@@ -55,7 +55,7 @@ static const vm_store_para_with_label_t default_label_para[Vm_Store_Para_Num] = 
 
     /*********默认系统语言*********/
     {.label = vm_label_sys_language, \
-        .store_para_val = comm_language_id_arabic},
+        .store_para_val = comm_language_id_chinese},
 
     /*********默认系统声音开启、音量*********/
     {.label = vm_label_sys_sound_on, \
