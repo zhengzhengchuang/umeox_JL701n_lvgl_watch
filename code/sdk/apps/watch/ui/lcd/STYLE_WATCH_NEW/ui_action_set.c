@@ -2528,7 +2528,8 @@ static int vslider_voice_onchange(void *_ctrl, enum element_change_event event, 
     struct ui_vslider *vslider = (struct ui_vslider *)_ctrl;
     u8 voice_mute_sel;
 
-    switch (event) {
+    switch (event) 
+    {
     case ON_CHANGE_INIT:
         voice_mute_sel = get_ui_sys_param(SysVoiceMute);
         if (voice_mute_sel == 1) {

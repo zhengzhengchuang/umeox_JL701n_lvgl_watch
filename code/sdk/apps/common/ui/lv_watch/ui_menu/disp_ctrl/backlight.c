@@ -9,25 +9,25 @@ static void backlight_slider_event_cb(lv_event_t *e)
 
     lv_obj_t *obj = \
         lv_event_get_target(e);
-    int32_t cur_backlight_val = \
+    int32_t backlight_cur_val = \
         lv_slider_get_value(obj)/ \
             Slider_Range_Inc;
 
-    int min_backlight_val = \
-        TCFG_MIN_BACKLIGHT_VAL;
-    int max_backlight_val = \
-        TCFG_MAX_BACKLIGHT_VAL;
-    
-    if(cur_backlight_val < min_backlight_val)
-        cur_backlight_val = min_backlight_val;
-
-    if(cur_backlight_val > max_backlight_val)
-        cur_backlight_val = max_backlight_val;
+    int backlight_min_val = \
+        TCFG_BACKLIGHT_MIN_VAL;
+    int backlight_max_val = \
+        TCFG_BACKLIGHT_MAX_VAL;
+    backlight_cur_val = \
+        backlight_cur_val < backlight_min_val?\
+            backlight_min_val:backlight_cur_val;
+    backlight_cur_val = \
+        backlight_cur_val > backlight_max_val?\
+            backlight_max_val:backlight_cur_val;
 
     set_vm_para_cache_with_label(\
-        vm_label_backlight, cur_backlight_val);
+        vm_label_backlight, backlight_cur_val);
     
-    ui_set_sys_backlight(cur_backlight_val);
+    ui_set_sys_backlight(backlight_cur_val);
   
     return;
 }
@@ -36,8 +36,11 @@ static void menu_create_cb(lv_obj_t *obj)
 {
     if(!obj) return;
 
+    ui_act_id_t prev_act_id = \
+        read_menu_return_level_id();
+
     tileview_register_all_menu(obj, ui_act_id_null, \
-        ui_act_id_null, ui_act_id_null, ui_act_id_screen_sleep, \
+        ui_act_id_null, prev_act_id, ui_act_id_screen_sleep, \
             ui_act_id_backlight);
 
     return;
@@ -59,15 +62,15 @@ static void menu_display_cb(lv_obj_t *obj)
 {
     if(!obj) return;
 
-    int cur_backlight_val = \
+    int backlight_cur_val = \
         get_vm_para_cache_with_label(\
             vm_label_backlight)*\
                 Slider_Range_Inc;
-    int min_backlight_val = \
-        TCFG_MIN_BACKLIGHT_VAL*\
+    int backlight_min_val = \
+        TCFG_BACKLIGHT_MIN_VAL*\
             Slider_Range_Inc;
-    int max_backlight_val = \
-        TCFG_MAX_BACKLIGHT_VAL*\
+    int backlight_max_val = \
+        TCFG_BACKLIGHT_MAX_VAL*\
             Slider_Range_Inc;
 
     widget_slider_para.slider_parent = obj;
@@ -76,11 +79,11 @@ static void menu_display_cb(lv_obj_t *obj)
     widget_slider_para.slider_width = 82;
     widget_slider_para.slider_height = 284;
     widget_slider_para.slider_min_value = \ 
-        min_backlight_val;
+        backlight_min_val;
     widget_slider_para.slider_max_value = \
-        max_backlight_val;
+        backlight_max_val;
     widget_slider_para.slider_cur_value = \
-        cur_backlight_val;
+        backlight_cur_val;
     widget_slider_para.slider_main_color = \
         lv_color_hex(0xB28146);
     widget_slider_para.slider_indic_color = \

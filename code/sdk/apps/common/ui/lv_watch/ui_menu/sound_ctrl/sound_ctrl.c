@@ -1,5 +1,6 @@
-#include "audio_config.h"
 #include "sound_ctrl.h"
+#include "audio_config.h"
+
 
 /*滑块范围增大*/
 #define Slider_Range_Inc (5)
@@ -26,14 +27,11 @@ static void sound_on_switch_event_cb(lv_event_t *e)
             switch_dsc_idx);
 
     if(!sound_on_flag)
-    {
         lv_obj_add_flag(music_vol_slider, \
             LV_OBJ_FLAG_HIDDEN);
-    }else
-    {
+    else
         lv_obj_clear_flag(music_vol_slider, \
             LV_OBJ_FLAG_HIDDEN);
-    }
         
     return;
 }
@@ -45,7 +43,12 @@ static void sound_vol_slider_event_cb(lv_event_t *e)
     lv_obj_t *obj = \
         lv_event_get_target(e);
     int32_t cur_music_vol = \
-        lv_slider_get_value(obj)/Slider_Range_Inc;
+        lv_slider_get_value(obj)/ \
+            Slider_Range_Inc;
+    cur_music_vol = cur_music_vol < 0? \
+        0:cur_music_vol;
+    cur_music_vol = cur_music_vol > get_max_sys_vol()? \
+        get_max_sys_vol():cur_music_vol;
 
     app_audio_set_volume(APP_AUDIO_STATE_MUSIC, \
         cur_music_vol, 1);
@@ -57,8 +60,11 @@ static void menu_create_cb(lv_obj_t *obj)
 {
     if(!obj) return;
 
+    ui_act_id_t prev_act_id = \
+        read_menu_return_level_id();
+
     tileview_register_all_menu(obj, ui_act_id_null, \
-        ui_act_id_null, ui_act_id_null, ui_act_id_null, \
+        ui_act_id_null, prev_act_id, ui_act_id_null, \
             ui_act_id_sound_ctrl);
 
     return;
@@ -80,8 +86,14 @@ static void menu_display_cb(lv_obj_t *obj)
 {
     if(!obj) return;
 
+    menu_align_t menu_align = \
+        menu_align_left;
+    if(lang_txt_is_arabic())
+        menu_align = \
+            menu_align_right;
+
     widget_img_para.img_x = 24;
-    widget_img_para.img_y = 32;   
+    widget_img_para.img_y = 42;   
     widget_img_para.event_cb = NULL;
     widget_img_para.user_data = NULL;
     widget_img_para.img_parent = obj;
@@ -101,8 +113,12 @@ static void menu_display_cb(lv_obj_t *obj)
         Label_Line_Height;
     widget_label_para.long_mode = \
         LV_LABEL_LONG_SCROLL;
-    widget_label_para.text_align = \
-        LV_TEXT_ALIGN_LEFT;
+    if(menu_align == menu_align_right)
+        widget_label_para.text_align = \
+            LV_TEXT_ALIGN_RIGHT;
+    else
+        widget_label_para.text_align = \
+            LV_TEXT_ALIGN_LEFT;
     widget_label_para.label_text_color = \
         lv_color_hex(0xffffff);
     widget_label_para.label_ver_center = \
@@ -112,17 +128,18 @@ static void menu_display_cb(lv_obj_t *obj)
         get_lang_txt_with_id(lang_txtid_sound_on);
     lv_obj_t *sound_on_label = \
         common_widget_label_create(&widget_label_para);
-    lv_obj_align(sound_on_label, LV_ALIGN_LEFT_MID, \
-        10, 0);
+    if(menu_align == menu_align_right)
+        lv_obj_align(sound_on_label, LV_ALIGN_RIGHT_MID, \
+            -10, 0);
+    else
+        lv_obj_align(sound_on_label, LV_ALIGN_LEFT_MID, \
+            10, 0);
 
     int sound_on_flag = \
         get_vm_para_cache_with_label(\
             vm_label_sys_sound_on);
     if(sound_on_flag)
-        sound_on_flag = !!sound_on_flag;
-    
-    widget_img_para.img_x = 218;
-    widget_img_para.img_y = 26;
+        sound_on_flag = !!sound_on_flag;  
     widget_img_para.event_cb = \
         sound_on_switch_event_cb;
     widget_img_para.user_data = NULL;
@@ -134,18 +151,21 @@ static void menu_display_cb(lv_obj_t *obj)
     lv_obj_t *sound_on_switch = \
         common_widget_img_create(&widget_img_para, \
             &switch_dsc_idx);
-    lv_obj_set_ext_click_area(sound_on_switch, \
-        10);
+    if(menu_align == menu_align_right)
+        lv_obj_align(sound_on_switch, LV_ALIGN_LEFT_MID, \
+            10, 0);
+    else
+        lv_obj_align(sound_on_switch, LV_ALIGN_RIGHT_MID, \
+            -10, 0);
+    lv_obj_set_ext_click_area(sound_on_switch, 10);
 
     int32_t cur_music_vol = \
         app_audio_get_volume(\
             APP_AUDIO_STATE_MUSIC)*Slider_Range_Inc;
     int32_t max_music_vol = \
         get_max_sys_vol()*Slider_Range_Inc;
-
-    widget_slider_para.slider_parent = obj;
-    widget_slider_para.slider_x = 148;
-    widget_slider_para.slider_y = 140;
+    widget_slider_para.slider_parent = \
+        obj;
     widget_slider_para.slider_width = 82;
     widget_slider_para.slider_height = 284;
     widget_slider_para.slider_min_value = 0;
@@ -166,11 +186,12 @@ static void menu_display_cb(lv_obj_t *obj)
     widget_slider_para.user_data = NULL;
     music_vol_slider = \
         common_widget_slider_create(&widget_slider_para);
+    lv_obj_align(music_vol_slider, LV_ALIGN_TOP_MID, \
+        0, 150);
     if(!sound_on_flag)
         lv_obj_add_flag(music_vol_slider, \
             LV_OBJ_FLAG_HIDDEN);
-
-    
+ 
     widget_img_para.event_cb = NULL;
     widget_img_para.user_data = NULL;
     widget_img_para.img_parent = \

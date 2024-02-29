@@ -131,7 +131,7 @@ void chsc6x_read_touch_info()
             touch_down = false;	           
         }   
 
-        printf("%s:x = %d, y = %d\n", __func__, touch_x, touch_y);
+        //printf("%s:x = %d, y = %d\n", __func__, touch_x, touch_y);
     }else
     {
         touch_down = false;
@@ -235,6 +235,8 @@ void chsc6x_init(void)
     unsigned char fw_update_ret_flag = 0; 
 
     chsc6x_iic_init(tp_iic_hdl());
+
+    chsc6x_tp_reset();
 
     printf("%s:%d\n", __func__, tp_iic_hdl());
 

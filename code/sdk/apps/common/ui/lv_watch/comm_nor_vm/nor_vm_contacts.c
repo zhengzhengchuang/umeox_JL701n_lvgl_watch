@@ -158,8 +158,13 @@ void vm_contacts_ctx_falsh_save(uint8_t idx, vm_contacts_ctx_t *p)
     if(idx < contacts_num)
         vm_contacts_ctx_clear();
 
-    flash_common_write_file(nor_vm_file, \
-        0, contacts_ctx_len, (uint8_t *)p);
+    int file_id = \
+        flash_common_open_id(nor_vm_file, 0, \
+            contacts_ctx_len);
+    if(!file_id) return;
+
+    flash_common_write_packet(nor_vm_file, file_id, \
+        contacts_ctx_len, (uint8_t *)p);
 
     return;
 }

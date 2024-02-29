@@ -99,7 +99,7 @@ static void lcd_adjust_display_brightness(u8 percent)
     u16 brightness;
     u8 para[2] = {0};
 
-    brightness = (u16)((percent*(1.0f)/TCFG_MAX_BACKLIGHT_VAL) * \
+    brightness = (u16)((percent*(1.0f)/TCFG_BACKLIGHT_MAX_VAL) * \
         (0x1ff) + 0.5f);
 
     //printf("%s:0x%x\n", __func__, brightness);
@@ -119,10 +119,10 @@ static int lcd_spi_ft2308_backlight_ctrl(u8 percent)
 {
     if(percent)
     { 
-        percent = percent < TCFG_MIN_BACKLIGHT_VAL? \
-            TCFG_MIN_BACKLIGHT_VAL:percent;
-        percent = percent > TCFG_MAX_BACKLIGHT_VAL? \
-            TCFG_MAX_BACKLIGHT_VAL:percent;
+        percent = percent < TCFG_BACKLIGHT_MIN_VAL? \
+            TCFG_BACKLIGHT_MIN_VAL:percent;
+        percent = percent > TCFG_BACKLIGHT_MAX_VAL? \
+            TCFG_BACKLIGHT_MAX_VAL:percent;
     }
 
     lcd_adjust_display_brightness(percent);

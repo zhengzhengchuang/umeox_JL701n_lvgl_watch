@@ -7,8 +7,11 @@ extern "C" {
 
 #include "../../lv_watch.h"
 
+/****************整体y偏移****************/
+#define Settings_List_y_Offset (20)
+
 /****************元素总数****************/
-#define Settings_List_Elem_Num      (7)
+#define Settings_List_Elem_Num      (6)
 
 /****************设置列表标题宽、高****************/
 #define Settings_List_Title_W (LCD_WIDTH)
@@ -17,7 +20,8 @@ extern "C" {
 /****************设置列表容器宽、高****************/
 #define Settings_List_Container_W   (LCD_WIDTH)
 #define Settings_List_Container_H   \
-    (LCD_HEIGHT - Settings_List_Title_H)
+    (LCD_HEIGHT - Settings_List_Title_H - \
+        Settings_List_y_Offset)
 
 /****************设置列表参数内容****************/
 typedef struct 

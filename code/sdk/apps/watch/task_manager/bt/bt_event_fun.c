@@ -250,7 +250,7 @@ void bt_set_led_status(u8 status)
     { 
         //蓝牙模式或者state_machine
         pwm_led_mode_set(PWM_LED_ALL_OFF);
-        //ui_update_status(bt_status);
+        ui_update_status(bt_status);
     }
 }
 
@@ -1589,7 +1589,7 @@ void bt_status_phone_income(struct bt_event *bt)
     printf("*********%s\n", __func__);
 
     record_call_out_or_in(2);
-
+  
     __this->esco_dump_packet = ESCO_DUMP_PACKET_CALL;
     ui_update_status(STATUS_PHONE_INCOME);
     u8 tmp_bd_addr[6];
@@ -1650,11 +1650,13 @@ void bt_status_phone_out(struct bt_event *bt)
     printf("*********%s\n", __func__);
 
     record_call_out_or_in(1);
-
-    if (bt_switch_back_timer) {
+   
+    if (bt_switch_back_timer) 
+    {
         sys_timeout_del(bt_switch_back_timer);
         bt_switch_back_timer = 0;
     }
+
     lmp_private_esco_suspend_resume(4);
     __this->esco_dump_packet = ESCO_DUMP_PACKET_CALL;
     ui_update_status(STATUS_PHONE_OUT);
@@ -1674,15 +1676,18 @@ void bt_status_phone_active(struct bt_event *bt)
     printf("*********%s\n", __func__);
 
     record_call_is_answer(true);
-
+  
     bt_phone_active_start_time = timer_get_ms();
     ui_update_status(STATUS_PHONE_ACTIV);
     jl_call_kws_handler(BT_STATUS_PHONE_ACTIVE);
-    if (bt_user_priv_var.phone_call_dec_begin) {
+    if (bt_user_priv_var.phone_call_dec_begin) 
+    {
         /* log_debug("call_active,dump_packet clear\n"); */
         __this->esco_dump_packet = ESCO_DUMP_PACKET_DEFAULT;
     }
-    if (bt_user_priv_var.phone_ring_flag) {
+
+    if (bt_user_priv_var.phone_ring_flag) 
+    {
         bt_user_priv_var.phone_ring_flag = 0;
         tone_play_stop();
         if (bt_user_priv_var.phone_timer_id) {
@@ -1690,6 +1695,7 @@ void bt_status_phone_active(struct bt_event *bt)
             bt_user_priv_var.phone_timer_id = 0;
         }
     }
+
     lmp_private_esco_suspend_resume(4);
     bt_user_priv_var.phone_income_flag = 0;
     bt_user_priv_var.phone_num_flag = 0;
@@ -1706,6 +1712,8 @@ void bt_status_phone_active(struct bt_event *bt)
 #else
     app_audio_set_volume(APP_AUDIO_STATE_CALL, app_var.call_volume, 1);
 #endif
+
+    ui_call_answer_menu_jump();
 }
 
 u32 bt_get_phone_active_start_time_ms(void)
@@ -1724,12 +1732,11 @@ void bt_status_phone_hangup(struct bt_event *bt)
 {
     printf("**********%s\n", __func__);
 
-    update_call_log_message_flash();
-
     __this->esco_dump_packet = ESCO_DUMP_PACKET_CALL;
     /* log_info("phone_handup\n"); */
     jl_call_kws_handler(BT_STATUS_PHONE_HANGUP);
-    if (bt_user_priv_var.phone_ring_flag) {
+    if (bt_user_priv_var.phone_ring_flag) 
+    {
         bt_user_priv_var.phone_ring_flag = 0;
         tone_play_stop();
         if (bt_user_priv_var.phone_timer_id) {
@@ -1737,20 +1744,29 @@ void bt_status_phone_hangup(struct bt_event *bt)
             bt_user_priv_var.phone_timer_id = 0;
         }
     }
+
     bt_user_priv_var.phone_num_flag = 0;
     bt_user_priv_var.phone_con_sync_num_ring = 0;
     bt_user_priv_var.phone_con_sync_ring = 0;
     __this->call_back_flag &= ~BIT(0);
-    if ((__this->call_back_flag == 0) && __this->call_flag) {
-        if (bt_switch_back_timer == 0) {
+    if((__this->call_back_flag == 0) && __this->call_flag) 
+    {
+        if(bt_switch_back_timer == 0) 
+        {
             bt_switch_back_timer = \
                 sys_timeout_add(NULL, bt_switch_back, 500);
         }
     }
-    if (get_call_status() == BT_CALL_HANGUP) {
+
+    if(get_call_status() == BT_CALL_HANGUP) 
+    {
         //call handup
         bt_user_priv_var.set_call_vol_flag  = 0;
     }
+
+    update_call_log_message_flash();
+    ui_call_hang_up_menu_jump(); 
+    record_call_status_clear(); 
 }
 
 /*----------------------------------------------------------------------------*/
@@ -1764,7 +1780,6 @@ void bt_status_phone_number(struct bt_event *bt)
 {
     u8 *phone_number = NULL;
     phone_number = (u8 *)bt->value;
-    //put_buf(phone_number, strlen((const char *)phone_number));
 
     if(bt_user_priv_var.phone_num_flag == 1)
         return;
@@ -1791,6 +1806,8 @@ void bt_status_phone_number(struct bt_event *bt)
     if(bt_user_priv_var.income_phone_len > 0) 
     {
         bt_user_priv_var.phone_num_flag = 1;
+
+        ui_call_out_or_in_menu_jump();
     }else 
     {
         log_debug("PHONE_NUMBER len err\n");

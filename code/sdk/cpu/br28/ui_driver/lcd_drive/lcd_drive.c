@@ -1676,7 +1676,7 @@ static void tp_drv_power_on()
 int lcd_sleep_ctrl(u8 enter)
 {
     //struct lcd_sleep_headler *p;
-    if ((!!enter) == lcd_sleep_in) {
+    if((!!enter) == lcd_sleep_in) {
         return -1;
     }
 

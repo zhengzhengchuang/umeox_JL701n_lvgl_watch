@@ -31,7 +31,9 @@ static const vm_store_para_with_label_t default_label_para[Vm_Store_Para_Num] = 
 {
     /*********默认屏幕背光亮度 80%*********/
     {.label = vm_label_backlight, \
-        .store_para_val = 80}, 
+        .store_para_val = \
+            TCFG_BACKLIGHT_MIN_VAL + \
+                TCFG_BACKLIGHT_STEPS_VAL*3}, 
 
     /*********时区默认 深圳：东八区*********/
     {.label = vm_label_time_zone, \
@@ -55,18 +57,26 @@ static const vm_store_para_with_label_t default_label_para[Vm_Store_Para_Num] = 
 
     /*********默认系统语言*********/
     {.label = vm_label_sys_language, \
-        .store_para_val = comm_language_id_chinese},
+        .store_para_val = comm_language_id_arabic},
 
     /*********默认系统声音开启、音量*********/
     {.label = vm_label_sys_sound_on, \
         .store_para_val = 1},
+
+    /*******勿扰状态*******/
+    {.label = vm_label_dnd_state, \
+        .store_para_val = dnd_state_disable},
+
+    /*******耳机状态*******/
+    {.label = vm_label_earphone_state, \
+        .store_para_val = earphone_state_disc},
 
     /*******计量单位*******/
     {.label = vm_label_unit_distance, \
         .store_para_val = unit_distance_kilometre},
     {.label = vm_label_unit_temperature, \
         .store_para_val = unit_temperature_C},
- 
+
     /*********默认心率*********/
     {.label = vm_label_hr, .store_para_val = 0},
     {.label = vm_label_min_hr, .store_para_val = 0},

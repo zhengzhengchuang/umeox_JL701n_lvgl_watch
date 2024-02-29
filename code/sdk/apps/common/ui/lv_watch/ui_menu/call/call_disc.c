@@ -4,6 +4,10 @@ static void call_disc_confirm_button_cb(lv_event_t *e)
 {
     if(!e) return;
 
+    ui_act_id_t prev_act_id = \
+        read_menu_return_level_id();
+    ui_menu_jump(prev_act_id);
+
     return;
 }
 
@@ -11,8 +15,11 @@ static void menu_create_cb(lv_obj_t *obj)
 {
     if(!obj) return;
 
+    ui_act_id_t prev_act_id = \
+        read_menu_return_level_id();
+
     tileview_register_all_menu(obj, ui_act_id_null, \
-        ui_act_id_null, ui_act_id_null, ui_act_id_null, \
+        ui_act_id_null, prev_act_id, ui_act_id_null, \
             ui_act_id_call_disc);
 
     return;
@@ -96,7 +103,7 @@ register_ui_menu_load_info(\
 {
     .menu_arg = NULL,
     .lock_flag = false,
-    .return_flag = true,
+    .return_flag = false,
     .menu_id = \
         ui_act_id_call_disc,
     .user_offscreen_time = 0,

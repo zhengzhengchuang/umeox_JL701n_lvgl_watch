@@ -3,6 +3,142 @@
 
 static bool lcd_is_sleep = false;
 
+void ui_mode_handle(ui_act_id_t act_id)
+{
+    ui_mode_t *ui_mode = \
+        &(p_ui_info_cache->ui_mode);
+
+    if(act_id == ui_act_id_watchface)
+        *ui_mode = ui_mode_watchface;
+    else if(act_id == ui_act_id_menu)
+        *ui_mode = ui_mode_menu_list;
+    else if(act_id == ui_act_id_tool_box)
+        *ui_mode = ui_mode_tool_box;
+
+    return;
+}
+
+void clear_menu_return_level(void)
+{
+    ui_act_id_t *prev_act_id = \
+        p_ui_info_cache->prev_act_id;
+    uint8_t *menu_return_level = \
+        &(p_ui_info_cache->menu_return_level);
+
+    if(*menu_return_level == 0)
+        return;
+
+    *menu_return_level = 0;
+    for(uint8_t i = 0; i < Menu_Return_Level; i++)
+        prev_act_id[i] = ui_act_id_null;
+    
+    printf("%s\n", __func__);
+
+    return;
+}
+
+ui_act_id_t read_menu_return_level_id(void)
+{
+    ui_act_id_t *prev_act_id = \
+        p_ui_info_cache->prev_act_id;
+    uint8_t menu_return_level = \
+        p_ui_info_cache->menu_return_level;
+    
+    ui_act_id_t new_prev_act_id = \
+        ui_act_id_null;
+
+    if(menu_return_level == 0)
+        return new_prev_act_id;
+
+    ui_act_id_t cur_act_id = \
+        p_ui_info_cache->cur_act_id;
+
+    int8_t i;
+    for(i = (menu_return_level - 1); \
+        i >= 0; i--)
+    {   
+        if(prev_act_id[i] == cur_act_id)
+            continue;
+        else
+            new_prev_act_id = \
+                prev_act_id[i];
+
+        break;
+    }
+
+    printf("new_prev_act_id = %d\n", \
+        new_prev_act_id);
+
+    return new_prev_act_id;  
+}
+
+void push_menu_return_level(ui_act_id_t act_id)
+{
+    ui_act_id_t *prev_act_id = \
+        p_ui_info_cache->prev_act_id;
+    uint8_t *menu_return_level = \
+        &(p_ui_info_cache->menu_return_level);
+
+    if(*menu_return_level >= \
+        Menu_Return_Level)
+        return;
+
+    if(menu_return_level_exist_handle(act_id))
+        return;
+
+    prev_act_id[*menu_return_level] = \
+        act_id;
+    (*menu_return_level) += 1;
+
+    for(uint8_t i = 0; i < *menu_return_level; i++)
+        printf("%s:act_id %d\n", __func__, \
+            prev_act_id[i]);
+    printf("%s:level deep %d\n", __func__, \
+        *menu_return_level);
+
+    return;
+}
+
+bool menu_return_level_exist_handle(ui_act_id_t act_id)
+{
+    ui_act_id_t *prev_act_id = \
+        p_ui_info_cache->prev_act_id;
+    uint8_t *menu_return_level = \
+        &(p_ui_info_cache->menu_return_level);
+
+    bool act_id_exist = false;
+
+    if(*menu_return_level == 0)
+        return act_id_exist;
+
+    int8_t i;
+    for(i = (*menu_return_level - 1); \
+        i >= 0; i--)
+    {
+        if(prev_act_id[i] == act_id)
+        {
+            act_id_exist = true;
+            break;
+        }    
+    }
+
+    if(act_id_exist)
+    {
+        for(int8_t j = (i + 1); j < *menu_return_level; j++)
+            prev_act_id[j] = ui_act_id_null;
+
+        *menu_return_level = i + 1;
+    }
+
+    for(i = 0; i < *menu_return_level; i++)
+        printf("%s:act_id %d\n", __func__, \
+            prev_act_id[i]);
+    printf("%s:level deep %d\n", __func__, \
+        *menu_return_level);
+
+    return act_id_exist;
+}
+
 void ui_menu_jump_post_msg(ui_act_id_t act_id)
 {   
     int msg_buf[2] = {0};
@@ -57,26 +193,16 @@ void ui_menu_exit_prepare(ui_act_id_t act_id)
 
     if(ui_act_id_validity(act_id))
     {
-        if(!lcd_is_sleep)
-        {
-            /**********页面跳转************/
-            ui_act_id_t exit_act_id = \
-                p_ui_info_cache->cur_act_id;
-            bool return_flag = \
-                p_ui_info_cache->menu_load_info.return_flag;
-            if(act_id != exit_act_id && return_flag)
-                p_ui_info_cache->prev_act_id = exit_act_id;
-        }else
-        { 
-            /**********亮屏加载************/
-            if(act_id == ui_act_id_watchface)
-                p_ui_info_cache->prev_act_id = ui_act_id_null;
-        } 
+        //回到主表盘,清空返回级数列表
+        if(act_id == ui_act_id_watchface)
+            clear_menu_return_level();
 
         lcd_is_sleep = false;
     }else
+    {
         lcd_is_sleep = true;
-
+    }
+        
     memset(&p_ui_info_cache->menu_load_info, 0, \
         sizeof(ui_menu_load_info_t));
 
@@ -120,18 +246,26 @@ void ui_menu_container_create(void)
 
 void ui_menu_jump_handle(ui_act_id_t act_id)
 {
-    ui_menu_exit_prepare(act_id);
-    ui_act_id_t load_act_id = ui_menu_jump_prepare(act_id);
+    ui_mode_handle(act_id);
 
-    printf("cur act id = %d\n", load_act_id);
-    printf("prev act id = %d\n", p_ui_info_cache->prev_act_id);
+    ui_menu_exit_prepare(act_id);
+    ui_act_id_t load_act_id = \
+        ui_menu_jump_prepare(act_id);
 
     ui_menu_load_info_t *menu_load_info = \
         ui_menu_load_info(load_act_id);
     if(menu_load_info)
+    {
         memcpy(&p_ui_info_cache->menu_load_info, \
             menu_load_info, sizeof(ui_menu_load_info_t));
-    else
+
+        ui_mode_t ui_mode = \
+            p_ui_info_cache->ui_mode;
+        bool return_flag = \
+            p_ui_info_cache->menu_load_info.return_flag;
+        if(return_flag && ui_mode != ui_mode_watchface)
+            push_menu_return_level(act_id);
+    }else
     {
         printf("%s:menu_load_info is NULL!!!\n", __func__);
 
@@ -174,7 +308,7 @@ ui_menu_load_info_t *ui_menu_load_info(ui_act_id_t act_id)
         return NULL;
 
 
-    /*对于多页面使用同个id，需要单独拎出来做处理，如：表盘*/
+    /*对于多页面使用同个id，需要单独拎出来做处理，如：表盘、多风格菜单*/
     if(act_id == ui_act_id_watchface)
     {
         ui_watchface_id_t cur_watchface_id = \

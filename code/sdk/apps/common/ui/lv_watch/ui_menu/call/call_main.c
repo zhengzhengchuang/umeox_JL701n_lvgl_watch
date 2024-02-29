@@ -22,6 +22,8 @@ static void call_dial_event_cb(lv_event_t *e)
 {
     if(!e) return;
 
+    ui_menu_jump(ui_act_id_call_dial);
+
     return;
 }
 
@@ -29,8 +31,11 @@ static void menu_create_cb(lv_obj_t *obj)
 {
     if(!obj) return;
 
+    ui_act_id_t prev_act_id = \
+        read_menu_return_level_id();
+
     tileview_register_all_menu(obj, ui_act_id_null, \
-        ui_act_id_null, ui_act_id_null, ui_act_id_null, \
+        ui_act_id_null, prev_act_id, ui_act_id_null, \
             ui_act_id_call_main);
 
     return;

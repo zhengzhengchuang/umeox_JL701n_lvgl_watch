@@ -119,12 +119,15 @@ static void call_log_elem_click_cb(lv_event_t *e)
     uint8_t idx = \
         *(uint8_t *)lv_event_get_user_data(e);
 
+    memset(&vm_call_log_ctx, 0, \
+        sizeof(vm_call_log_ctx_t));
     bool ret = vm_call_log_ctx_by_idx(idx, \
-            &vm_call_log_ctx);
+        &vm_call_log_ctx);
     if(!ret) return;
 
-    printf("%s\n", \
-        vm_call_log_ctx.call_log_number_str);
+    ui_ctrl_call_out_by_number(\
+        vm_call_log_ctx.call_log_number_str, \
+            strlen(vm_call_log_ctx.call_log_number_str));
 
     return;
 }
@@ -296,8 +299,11 @@ static void menu_create_cb(lv_obj_t *obj)
 {
     if(!obj) return;
 
+    ui_act_id_t prev_act_id = \
+        read_menu_return_level_id();
+
     tileview_register_all_menu(obj, ui_act_id_null, \
-        ui_act_id_null, ui_act_id_null, ui_act_id_null, \
+        ui_act_id_null, prev_act_id, ui_act_id_null, \
             ui_act_id_call_log);
 
     return;

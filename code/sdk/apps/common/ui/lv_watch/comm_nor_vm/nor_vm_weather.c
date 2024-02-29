@@ -277,8 +277,65 @@ void vm_weather_ctx_falsh_save(uint8_t idx, vm_weather_ctx_t *p)
     if(idx < weather_num)
         vm_weather_ctx_clear();
 
-    flash_common_write_file(nor_vm_file, \
-        0, weather_ctx_len, (uint8_t *)p);
+    int file_id = \
+        flash_common_open_id(nor_vm_file, 0, \
+            weather_ctx_len);
+    if(!file_id) return;
+
+    flash_common_write_packet(nor_vm_file, file_id, \
+        weather_ctx_len, (uint8_t *)p);
 
     return;
 }
+
+#if 0
+static const vm_weather_ctx_t vm_weather_ctx_test[\
+    Weather_Sync_Days] = 
+{
+    [0] = {
+        .check_code = Nor_Vm_Check_Code, .weather_type = weather_type_sunny, \
+        .weather_real_temper = 25, .weather_min_temper = 20, .weather_max_temper = 28, 
+    },
+
+    [1] = {
+        .check_code = Nor_Vm_Check_Code, .weather_type = weather_type_snow, \
+        .weather_real_temper = 26, .weather_min_temper = 21, .weather_max_temper = -29, 
+    },
+
+    [2] = {
+        .check_code = Nor_Vm_Check_Code, .weather_type = weather_type_thunderstorm, \
+        .weather_real_temper = 27, .weather_min_temper = 22, .weather_max_temper = 30, 
+    },
+
+    [3] = {
+        .check_code = Nor_Vm_Check_Code, .weather_type = weather_type_wind, \
+        .weather_real_temper = 28, .weather_min_temper = 23, .weather_max_temper = 31, 
+    },
+
+    [4] = {
+        .check_code = Nor_Vm_Check_Code, .weather_type = weather_type_sunny, \
+        .weather_real_temper = 29, .weather_min_temper = 24, .weather_max_temper = 32, 
+    },
+
+    [5] = {
+        .check_code = Nor_Vm_Check_Code, .weather_type = weather_type_misthaze, \
+        .weather_real_temper = 30, .weather_min_temper = 25, .weather_max_temper = 33, 
+    },
+
+    [6] = {
+        .check_code = Nor_Vm_Check_Code, .weather_type = weather_type_sandstorm, \
+        .weather_real_temper = 31, .weather_min_temper = 26, .weather_max_temper = 34, 
+    },
+};
+
+void vm_weather_ctx_falsh_test(void)
+{
+    for(uint8_t i = 0; i < Weather_Sync_Days; i++)
+    {
+        vm_weather_ctx_falsh_save(i, \
+            &vm_weather_ctx_test[i]);
+    }
+
+    return;
+}
+#endif

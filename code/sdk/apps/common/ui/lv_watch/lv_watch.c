@@ -15,6 +15,8 @@ void ui_menu_jump(ui_act_id_t act_id)
     if(!ui_act_id_validity(act_id))
         return;
 
+    ui_ctl_lcd_enter_sleep(false);
+
     ui_menu_jump_post_msg(act_id);
 
     return;
@@ -103,7 +105,7 @@ const char *ui_get_dev_ble_name(void)
 
 /*********************************************************************************
                                 ui层获取ble、bt连接状态  
-                        0:都未连接 1：ble连接 2：bt连接 3：都连接                                 
+                        0:都未连接 1：仅ble连接 2：仅bt连接 3：都连接                                 
 *********************************************************************************/
 uint8_t ui_get_ble_bt_connect_status(void)
 {
@@ -140,11 +142,15 @@ void ui_set_sys_backlight(int backlight_val)
 }
 
 /*********************************************************************************
-                                ui层控制屏幕进入休眠                                    
+                    ui层控制屏幕进入休眠(0:退出休眠 1:进入休眠)                                   
 *********************************************************************************/
 extern int lcd_sleep_ctrl(u8 enter);
 void ui_ctl_lcd_enter_sleep(bool sleep)
 {
+    if(lcd_sleep_status() == \
+        sleep)
+        return;
+
     lcd_sleep_ctrl(sleep);
  
     struct lcd_interface *lcd = \
@@ -176,7 +182,11 @@ void ui_ctrl_call_out_by_number(char *call_number, uint8_t number_len)
         ui_get_ble_bt_connect_status();
     if(ble_bt_connect == 0 || \
         ble_bt_connect == 1)
-            return;
+    {
+        ui_menu_jump(ui_act_id_call_disc);
+        
+        return;
+    }
 
     user_send_cmd_prepare(USER_CTRL_DIAL_NUMBER, \
         number_len, (uint8_t *)call_number);
@@ -184,22 +194,26 @@ void ui_ctrl_call_out_by_number(char *call_number, uint8_t number_len)
     return;
 }
 
+
 /*********************************************************************************
-                                获取通话号码
+                                获取来电号码
                     (如果联系人列表有，返回名字，否则返回号码)                                    
 *********************************************************************************/
 char *ui_get_call_number_name(void)
 {
+    static char *call_name;
+    static uint8_t *call_number;
+
     uint8_t number_len = \
         bt_user_priv_var.income_phone_len;
 
     if(!number_len)
         return NULL;
 
-    uint8_t *call_number = \
+    call_number = \
         bt_user_priv_var.income_phone_num;
 
-    char *call_name = \
+    call_name = \
         vm_contacts_name_by_number((char *)call_number);
 
     if(call_name) 
@@ -230,6 +244,7 @@ void ui_ctrl_call_hang_up(void)
     return;
 }
 
+
 /*********************************************************************************
                                 通话记录状态及信息保存                                   
 *********************************************************************************/
@@ -247,6 +262,12 @@ void record_call_is_answer(bool is_answer)
     call_is_answer = is_answer;
 
     return;
+}
+
+void record_call_status_clear(void)
+{
+    record_call_out_or_in(0);
+    record_call_is_answer(false);
 }
 
 void update_call_log_message_flash(void)
@@ -306,9 +327,6 @@ void update_call_log_message_flash(void)
 
     printf("******call_log falsh success\n");
     
-    record_call_out_or_in(0);
-    record_call_is_answer(false);
-
     return;
 }
 
@@ -318,4 +336,144 @@ void update_call_log_message_flash(void)
 uint8_t ui_get_calling_volumn(void)
 {
     return app_var.call_volume;
+}
+
+/*********************************************************************************
+                                拨出、拨入页面跳转                                
+*********************************************************************************/
+void ui_call_out_or_in_menu_jump(void)
+{
+    //判断当前是否符合弹出的条件
+    //.......
+
+    if(call_out_or_in == 1)
+        ui_menu_jump(ui_act_id_call_out); 
+    else if(call_out_or_in == 2)
+        ui_menu_jump(ui_act_id_call_in);   
+
+    return;
+}
+
+/*********************************************************************************
+                                挂断后页面跳转                                  
+*********************************************************************************/
+void ui_call_hang_up_menu_jump(void)
+{
+    ui_act_id_t prev_act_id = \
+        read_menu_return_level_id();
+
+    call_online_duration_timer_delete();
+
+    if(call_is_answer == false)
+        ui_menu_jump(prev_act_id);    
+    else
+        ui_menu_jump(ui_act_id_call_end);
+    
+    return;
+}
+
+/*********************************************************************************
+                                接通后页面跳转                                  
+*********************************************************************************/
+void ui_call_answer_menu_jump(void)
+{
+    ui_menu_jump(ui_act_id_call_online);
+
+    return;
+}
+
+/*********************************************************************************
+                                通话在线时长操作                                  
+*********************************************************************************/
+static uint16_t call_online_timer_id = 0;
+static uint32_t call_online_duration = 0;
+static void call_online_duration_timer_cb(void *priv)
+{
+    if(call_online_duration < 0xffffffff)
+        call_online_duration += 1;
+
+    printf("%s:%d\n", __func__, call_online_duration);
+
+    return;
+}
+
+uint32_t ui_get_call_online_duration(void)
+{
+    return call_online_duration;
+}
+
+uint16_t get_call_online_timer_id(void)
+{
+    return call_online_timer_id;
+}
+
+void call_online_duration_timer_create(void)
+{
+    if(call_online_timer_id)
+    {
+        sys_hi_timer_del(\
+            call_online_timer_id);
+        call_online_timer_id = 0;
+    }
+
+    call_online_duration = 0;
+
+    call_online_timer_id = \
+        sys_hi_timer_add(NULL, \
+            call_online_duration_timer_cb, 1000);
+
+    return;
+}
+
+void call_online_duration_timer_delete(void)
+{
+    if(call_online_timer_id)
+    {
+        sys_hi_timer_del(\
+            call_online_timer_id);
+        call_online_timer_id = 0;
+    }
+
+    return;
+}
+
+/*********************************************************************************
+                                ui控制查找手机                                  
+*********************************************************************************/
+void ui_ctrl_ble_dev_find_phone(void)
+{
+    printf("%s\n", __func__);
+
+    return;
+}
+
+/*********************************************************************************
+                                ui控制手机相机相关操作                                 
+*********************************************************************************/
+void ui_ctrl_phone_enter_camera(void)
+{
+    printf("%s\n", __func__);
+
+    return;
+}
+
+void ui_ctrl_phone_exit_camera(void)
+{
+    printf("%s\n", __func__);
+
+    return;
+}
+
+void ui_ctrl_phone_take_photos(void)
+{
+    printf("%s\n", __func__);
+
+    return;
+}
+
+void ui_ctrl_phone_dly_take_photos(void)
+{
+    printf("%s\n", __func__);
+
+    return;
 }

@@ -536,7 +536,7 @@ static int bt_connction_status_event_handler(struct bt_event *bt)
             break;
 
         case BT_STATUS_PHONE_HANGUP:
-            log_info(" BT_STATUS_PHONE_HANGUP\n");
+            log_info("*******BT_STATUS_PHONE_HANGUP\n");
             //当手机app与手表传输过程中不能响应通话事件
             if (__this->smartbox_watch_upgrade_flag) {
                 // 添加这个判断是防止升级过程中出现挂断多次电话的情况

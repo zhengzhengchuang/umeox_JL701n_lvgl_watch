@@ -35,12 +35,12 @@ typedef struct{
 
 static x_header_t __g_xbf_hd = {
     .min = 0x0022,
-    .max = 0x007e,
+    .max = 0x2109,
     .bpp = 2,
 };
 
 
-//static uint8_t __g_font_buf[710];//如bin文件存在SPI FLASH可使用此buff
+//static uint8_t __g_font_buf[852];//如bin文件存在SPI FLASH可使用此buff
 
 
 static uint8_t *__user_font_getdata(int offset, int size){
@@ -89,7 +89,7 @@ static bool __user_font_get_glyph_dsc(const lv_font_t * font, lv_font_glyph_dsc_
 }
 
 
-//Alibaba PuHuiTi B,,-1
+//Alibaba PuHuiTi R,,-1
 //字模高度：71
 //XBF字体,外部bin文件
 const lv_font_t font_common_num_52 = {

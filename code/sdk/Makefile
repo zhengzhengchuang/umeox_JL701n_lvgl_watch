@@ -540,6 +540,8 @@ c_SRC_FILES := \
     apps/common/ui/lvgl/src/font/lv_font_fmt_txt.c  \
     apps/common/ui/lvgl/src/font/lv_font_loader.c  \
 	apps/common/ui/lvgl/src/font/font_common_32.c  \
+	apps/common/ui/lvgl/src/font/font_common_num_36.c  \
+	apps/common/ui/lvgl/src/font/font_common_num_42.c  \
 	apps/common/ui/lvgl/src/font/font_common_num_52.c  \
 	apps/common/ui/lvgl/src/font/font_common_num_64.c  \
     apps/common/ui/lvgl/src/font/lv_font_montserrat_12.c  \
@@ -1006,6 +1008,11 @@ c_SRC_FILES := \
 	apps/common/ui/lv_watch/ui_menu/call/contacts.c \
 	apps/common/ui/lv_watch/ui_menu/call/call_log.c \
 	apps/common/ui/lv_watch/ui_menu/call/call_dial.c \
+	apps/common/ui/lv_watch/ui_menu/call/call_out.c \
+	apps/common/ui/lv_watch/ui_menu/call/call_in.c \
+	apps/common/ui/lv_watch/ui_menu/call/call_online.c \
+	apps/common/ui/lv_watch/ui_menu/call/call_volume.c \
+	apps/common/ui/lv_watch/ui_menu/call/call_end.c \
 	apps/common/ui/lv_watch/comm_nor_vm/nor_vm_main.c \
 	apps/common/ui/lv_watch/comm_nor_vm/nor_vm_contacts.c \
 	apps/common/ui/lv_watch/comm_nor_vm/nor_vm_weather.c \

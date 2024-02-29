@@ -233,7 +233,12 @@
         "le_smartbox_multi_common.h": "c",
         "tws_api.h": "c",
         "ble_user.h": "c",
-        "avctp_user.h": "c"
+        "avctp_user.h": "c",
+        "call_out.h": "c",
+        "call_in.h": "c",
+        "call_online.h": "c",
+        "call_volume.h": "c",
+        "call_end.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

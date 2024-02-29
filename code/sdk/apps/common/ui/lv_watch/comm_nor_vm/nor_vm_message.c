@@ -115,8 +115,13 @@ void vm_message_ctx_falsh_save(vm_message_ctx_t *p)
         flash_common_delete_by_index(\
             nor_vm_file, 0);
 
-    flash_common_write_file(nor_vm_file, \
-        0, message_ctx_len, (uint8_t *)p);
+    int file_id = \
+        flash_common_open_id(nor_vm_file, 0, \
+            message_ctx_len);
+    if(!file_id) return;
+
+    flash_common_write_packet(nor_vm_file, file_id, \
+        message_ctx_len, (uint8_t *)p);
 
     return;
 }

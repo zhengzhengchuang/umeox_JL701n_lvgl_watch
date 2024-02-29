@@ -61,7 +61,7 @@ static void weather_report_1_elem_create(void)
     lv_obj_t *weather_type_label = \
         common_widget_label_create(&widget_label_para);
     lv_obj_align(weather_type_label, LV_ALIGN_TOP_MID, \
-        0, 20);
+        0, 40);
 
     widget_img_para.img_parent = \
         weather_report_container;
@@ -74,7 +74,7 @@ static void weather_report_1_elem_create(void)
         common_widget_img_create(&widget_img_para, \
             NULL);
     lv_obj_align(weather_type_icon, LV_ALIGN_TOP_MID, \
-        0, 116);
+        0, 136);
 
     int16_t weather_other_00_x = \
         150;
@@ -126,7 +126,7 @@ static void weather_report_1_elem_create(void)
 /*********************************************************************************
                                   第二~七天天气预报                       
 *********************************************************************************/
-static void weather_report_2_7_elem_create(void)
+static void weather_report_2_7_elem_create(menu_align_t menu_align)
 {  
     int16_t elem_container_w = \
         LCD_WIDTH;
@@ -169,14 +169,13 @@ static void weather_report_2_7_elem_create(void)
         Label_Line_Height;
     widget_label_para.long_mode = \
         LV_LABEL_LONG_SCROLL;
-    widget_label_para.text_align = \
-        LV_TEXT_ALIGN_LEFT;
     widget_label_para.label_text_color = \
         lv_color_hex(0xffffff);
     widget_label_para.label_ver_center = \
         false;
     widget_label_para.user_text_font = NULL;
 
+    int16_t data_sx = 0;
     for(uint8_t i = 1; i < 7; i++)
     {   
         widget_obj_para.obj_y = \
@@ -192,8 +191,12 @@ static void weather_report_2_7_elem_create(void)
             weather_72x68_00_index + weather_x_type;
         lv_obj_t *weather_type_icon = \
             common_widget_img_create(&widget_img_para, NULL);
-        lv_obj_align(weather_type_icon, LV_ALIGN_LEFT_MID, \
-            24, 0);
+        if(menu_align == menu_align_right)
+            lv_obj_align(weather_type_icon, LV_ALIGN_RIGHT_MID, \
+                -24, 0);
+        else 
+            lv_obj_align(weather_type_icon, LV_ALIGN_LEFT_MID, \
+                24, 0);
 
         enum_week += 1;
         enum_week %= Comm_Enum_Week_Max;
@@ -202,48 +205,132 @@ static void weather_report_2_7_elem_create(void)
         widget_label_para.label_text = \
             get_lang_txt_with_id(lang_txtid_sunday + \
                 enum_week);
+        if(menu_align == menu_align_right)
+            widget_label_para.text_align = \
+                LV_TEXT_ALIGN_RIGHT;
+        else
+            widget_label_para.text_align = \
+                LV_TEXT_ALIGN_LEFT;
         lv_obj_t *enum_week_label = \
             common_widget_label_create(&widget_label_para);
-        lv_obj_align(enum_week_label, LV_ALIGN_TOP_LEFT, \
-            116, 4);
-        
+        if(menu_align == menu_align_right)
+            lv_obj_align_to(enum_week_label, weather_type_icon, \
+                LV_ALIGN_OUT_LEFT_TOP, -20, -10);
+        else
+            lv_obj_align_to(enum_week_label, weather_type_icon, \
+                LV_ALIGN_OUT_RIGHT_TOP, 20, -10);
+
         int16_t weather_min_tempera = \
-            vm_weather_data_min_temper(i);
-        widget_data_para.data_x = 116;
-        widget_data_para.data_y = 60;
+                vm_weather_data_min_temper(i);
+        int16_t weather_max_tempera = \
+                vm_weather_data_max_temper(i); 
+        widget_data_para.data_y = 56;
         widget_data_para.num_inv = 0;
         widget_data_para.data_parent = \
             elem_container;
         widget_data_para.num_addr_index = \
             comm_num_14x22_wh_00_index;
         widget_data_para.data_align = \
-            widget_data_align_left;
-        int16_t data_end_x = \
-            common_data_widget_create(&widget_data_para, \
-                widget_data_type_min0_weather + (i*2), \
-                    &weather_min_tempera);
-        
-        widget_img_para.img_x = \
-            data_end_x + 4;
-        widget_img_para.img_y = 57;
-        widget_img_para.file_img_dat = \
-            weather_other_00_index;
-        common_widget_img_create(&widget_img_para, NULL);
+                widget_data_align_left;
+        if(menu_align == menu_align_right)
+        {
+            data_sx = 252;
 
-        int16_t weather_max_tempera = \
-            vm_weather_data_max_temper(i);
-        widget_data_para.data_x = \
-            data_end_x + 30;
-        data_end_x = \
-            common_data_widget_create(&widget_data_para, \
-                widget_data_type_max0_weather + (i*2), \
-                    &weather_max_tempera);
+            char tempera_str[10];
+            memset(tempera_str, 0, \
+                sizeof(tempera_str));
+            sprintf(tempera_str, "%dC", \
+                weather_min_tempera);
+            uint8_t bit_num = \
+                strlen(tempera_str);
+            uint16_t num_width = 0;
+            for(uint8_t i = 0; i < bit_num; i++)
+            {
+                if(tempera_str[i] == '-')
+                    num_width += 7;
+                else if(tempera_str[i] == 'C')
+                    num_width += 14;
+                else if(tempera_str[i] >= '0' && \
+                    tempera_str[i] <= '9')
+                    num_width += 14;
+            }
+            data_sx -= (num_width + 10 + 4);
+            widget_data_para.data_x = \
+                data_sx;
+            int16_t data_end_x = \
+                common_data_widget_create(&widget_data_para, \
+                    widget_data_type_min0_weather + (i*2), \
+                        &weather_min_tempera); 
 
-        widget_img_para.img_x = \
-            data_end_x + 4;
-        widget_img_para.file_img_dat = \
-            weather_other_01_index;
-        common_widget_img_create(&widget_img_para, NULL);
+            widget_img_para.img_x = \
+                data_end_x + 4;
+            widget_img_para.img_y = 53;
+            widget_img_para.file_img_dat = \
+                weather_other_00_index;
+            common_widget_img_create(&widget_img_para, NULL);
+
+
+            memset(tempera_str, 0, \
+                sizeof(tempera_str));
+            sprintf(tempera_str, "%dC", \
+                weather_max_tempera);
+            bit_num = \
+                strlen(tempera_str);
+            num_width = 0;
+            for(uint8_t i = 0; i < bit_num; i++)
+            {
+                if(tempera_str[i] == '-')
+                    num_width += 7;
+                else if(tempera_str[i] == 'C')
+                    num_width += 14;
+                else if(tempera_str[i] >= '0' && \
+                    tempera_str[i] <= '9')
+                    num_width += 14;
+            }
+            data_sx -= (num_width + 30 + 10 + 4);
+            widget_data_para.data_x = \
+                data_sx;
+            data_end_x = \
+                common_data_widget_create(&widget_data_para, \
+                    widget_data_type_max0_weather + (i*2), \
+                        &weather_max_tempera);
+
+            widget_img_para.img_x = \
+                data_end_x + 4;
+            widget_img_para.file_img_dat = \
+                weather_other_01_index;
+            common_widget_img_create(&widget_img_para, NULL);
+        }else
+        {
+            data_sx = 116;
+  
+            widget_data_para.data_x = \
+                data_sx;           
+            int16_t data_end_x = \
+                common_data_widget_create(&widget_data_para, \
+                    widget_data_type_min0_weather + (i*2), \
+                        &weather_min_tempera); 
+
+            widget_img_para.img_x = \
+                data_end_x + 4;
+            widget_img_para.img_y = 53;
+            widget_img_para.file_img_dat = \
+                weather_other_00_index;
+            common_widget_img_create(&widget_img_para, NULL);
+
+            widget_data_para.data_x = \
+                data_end_x + 30;
+            data_end_x = \
+                common_data_widget_create(&widget_data_para, \
+                    widget_data_type_max0_weather + (i*2), \
+                        &weather_max_tempera);
+
+            widget_img_para.img_x = \
+                data_end_x + 4;
+            widget_img_para.file_img_dat = \
+                weather_other_01_index;
+            common_widget_img_create(&widget_img_para, NULL);
+        }
     }
 
     return;
@@ -280,7 +367,12 @@ static void menu_display_cb(lv_obj_t *obj)
 
     weather_report_1_elem_create();
 
-    weather_report_2_7_elem_create();
+    menu_align_t menu_align = \
+        menu_align_left;
+    if(lang_txt_is_arabic())
+        menu_align = \
+            menu_align_right;
+    weather_report_2_7_elem_create(menu_align);
 
     return;
 }

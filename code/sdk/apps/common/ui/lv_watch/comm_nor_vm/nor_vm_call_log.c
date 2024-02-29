@@ -110,60 +110,21 @@ void vm_call_log_ctx_falsh_save(vm_call_log_ctx_t *p)
 
     uint8_t call_log_num = \
         vm_call_log_item_num();
+
+    printf("call_log_num = %d\n", \
+        call_log_num);
     
     if(call_log_num >= Call_log_Max_Num)
         flash_common_delete_by_index(\
             nor_vm_file, 0);
 
-    flash_common_write_file(nor_vm_file, \
-        0, call_log_ctx_len, (uint8_t *)p);
+    int file_id = \
+        flash_common_open_id(nor_vm_file, 0, \
+            call_log_ctx_len);
+    if(!file_id) return;
+
+    flash_common_write_packet(nor_vm_file, file_id, \
+        call_log_ctx_len, (uint8_t *)p);
 
     return;
 }
-
-#if 0
-static const vm_call_log_ctx_t vm_call_log_ctx_1[\
-    Call_log_Max_Num] = 
-{
-    {.check_code = Nor_Vm_Check_Code, .call_log_state = call_log_state_hangup, \
-        .call_log_time_str = "16:17", .call_log_name_str = {0}, \
-            .call_log_number_str = "17820295895"},
-    {.check_code = Nor_Vm_Check_Code, .call_log_state = call_log_state_hangup, \
-        .call_log_time_str = "16:17", .call_log_name_str = {0}, \
-            .call_log_number_str = "17820295895"},
-    {.check_code = Nor_Vm_Check_Code, .call_log_state = call_log_state_hangup, \
-        .call_log_time_str = "16:17", .call_log_name_str = {0}, \
-            .call_log_number_str = "17820295895"},
-    {.check_code = Nor_Vm_Check_Code, .call_log_state = call_log_state_hangup, \
-        .call_log_time_str = "16:17", .call_log_name_str = {0}, \
-            .call_log_number_str = "17820295895"},
-    {.check_code = Nor_Vm_Check_Code, .call_log_state = call_log_state_hangup, \
-        .call_log_time_str = "16:17", .call_log_name_str = {0}, \
-            .call_log_number_str = "17820295895"},
-    {.check_code = Nor_Vm_Check_Code, .call_log_state = call_log_state_hangup, \
-        .call_log_time_str = "16:17", .call_log_name_str = {0}, \
-            .call_log_number_str = "17820295895"},
-    {.check_code = Nor_Vm_Check_Code, .call_log_state = call_log_state_hangup, \
-        .call_log_time_str = "16:17", .call_log_name_str = {0}, \
-            .call_log_number_str = "17820295895"},
-    {.check_code = Nor_Vm_Check_Code, .call_log_state = call_log_state_hangup, \
-        .call_log_time_str = "16:17", .call_log_name_str = {0}, \
-            .call_log_number_str = "17820295895"},
-    {.check_code = Nor_Vm_Check_Code, .call_log_state = call_log_state_hangup, \
-        .call_log_time_str = "16:17", .call_log_name_str = {0}, \
-            .call_log_number_str = "17820295895"},
-    {.check_code = Nor_Vm_Check_Code, .call_log_state = call_log_state_hangup, \
-        .call_log_time_str = "16:17", .call_log_name_str = {0}, \
-            .call_log_number_str = "17820295895"},
-};
-
-void vm_call_log_ctx_falsh_test(void)
-{
-    for(uint8_t i = 0; i < Call_log_Max_Num; i++)
-    {
-        vm_call_log_ctx_falsh_save(&vm_call_log_ctx_1[i]);
-    }
-
-    return;
-}
-#endif

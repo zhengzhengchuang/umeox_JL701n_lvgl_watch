@@ -198,6 +198,8 @@ void chsc6x_tp_reset(void)
     CHSC6X_RESET_H();
     mdelay(30);//30ms
 
+    printf("**********%s\n", __func__);
+
     return;
 }
 
@@ -206,6 +208,8 @@ void chsc6x_tp_reset_active(void)
     CHSC6X_RESET_L();
     mdelay(30);//30ms
     CHSC6X_RESET_H();
+
+    printf("----------%s\n", __func__);
 
     return;
 }

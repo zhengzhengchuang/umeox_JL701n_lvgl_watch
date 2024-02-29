@@ -978,6 +978,8 @@ int chsc6x_tp_dect(struct ts_fw_infos *pfw_infos, unsigned char *update_ret_flag
 exit:
     chsc6x_tp_reset();
 
+    //chsc6x_tp_reset();
+
     return 1;
 }
 

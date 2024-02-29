@@ -21,11 +21,141 @@ static const uint8_t call_dial_click_idx[12] =
 };
 
 /*********************************************************************************
+                                  拨号盘数字字符串                                 
+*********************************************************************************/
+#define Call_Dial_Num_Max (15)
+static uint8_t call_dial_num_len = 0;
+static lv_obj_t *call_dial_num_label = NULL;
+char call_dial_num_str[Call_Dial_Num_Max + 1] = {0};
+
+/*********************************************************************************
+                                  拨号盘数字点击处理                                 
+*********************************************************************************/
+static void call_dial_num_click_handle(uint8_t num)
+{
+    if(call_dial_num_len >= \
+        Call_Dial_Num_Max)
+        return;
+
+    if(!call_dial_num_label)
+        return;
+
+    call_dial_num_str[\
+        call_dial_num_len] = num + '0';
+
+    lv_label_set_text(call_dial_num_label, \
+        call_dial_num_str);
+  
+    call_dial_num_len += 1;
+
+    return;
+}
+
+/*********************************************************************************
+                                  拨号盘回退点击处理                                 
+*********************************************************************************/
+static void call_dial_back_click_handle(void)
+{
+    if(!call_dial_num_len)
+        return;
+
+    if(!call_dial_num_label)
+        return;
+
+    call_dial_num_str[\
+        call_dial_num_len - 1] = '\0';
+
+    lv_label_set_text(call_dial_num_label, \
+        call_dial_num_str);
+  
+    call_dial_num_len -= 1;
+
+    return;
+}
+
+/*********************************************************************************
+                                  拨号盘拨打点击处理                                 
+*********************************************************************************/
+static void call_dial_dial_click_handle(void)
+{
+    if(!call_dial_num_len)
+        return;
+
+    ui_ctrl_call_out_by_number(\
+        call_dial_num_str, \
+            call_dial_num_len);
+    
+    return;
+}
+
+/*********************************************************************************
                                   拨号盘点击回调                                 
 *********************************************************************************/
 static void call_dial_click_cb(lv_event_t *e)
 {
     if(!e) return;
+
+    uint8_t idx = \
+        *(uint8_t *)lv_event_get_user_data(e);
+
+    if(idx >= 0 && idx <= 9)
+        call_dial_num_click_handle(idx);
+    else if(idx == 10)
+        call_dial_back_click_handle();
+    else if(idx == 11)
+        call_dial_dial_click_handle();
+
+    return;
+}
+
+/*********************************************************************************
+                                  拨号盘回退按键长按回调                                 
+*********************************************************************************/
+static lv_timer_t *long_press_back_timer = NULL;
+
+static void long_press_back_timer_cb(lv_timer_t *timer)
+{
+    if(!long_press_back_timer)
+        return;
+
+    if(!call_dial_num_len)
+    {
+        lv_timer_del(long_press_back_timer);
+        long_press_back_timer = NULL;
+        return;
+    }
+
+    call_dial_back_click_handle();
+
+    return;
+}
+
+static void call_dial_back_long_press_cb(lv_event_t *e)
+{
+    if(!e) return;
+
+    if(long_press_back_timer)
+    {
+        lv_timer_del(long_press_back_timer);
+        long_press_back_timer = NULL;
+    }
+
+    long_press_back_timer = \
+        lv_timer_create(long_press_back_timer_cb, \
+            150, NULL);
+
+    return;
+}
+
+static void call_dial_back_release_cb(lv_event_t *e)
+{
+    if(!e) return;
+
+    if(long_press_back_timer)
+    {
+        lv_timer_del(long_press_back_timer);
+        long_press_back_timer = NULL;
+    }
 
     return;
 }
@@ -34,8 +164,11 @@ static void menu_create_cb(lv_obj_t *obj)
 {
     if(!obj) return;
 
+    ui_act_id_t prev_act_id = \
+        read_menu_return_level_id();
+
     tileview_register_all_menu(obj, ui_act_id_null, \
-        ui_act_id_null, ui_act_id_null, ui_act_id_null, \
+        ui_act_id_null, prev_act_id, ui_act_id_null, \
             ui_act_id_call_dial);
 
     return;
@@ -119,8 +252,47 @@ static void menu_display_cb(lv_obj_t *obj)
             common_widget_img_create(&widget_img_para, \
                 NULL);
         lv_obj_set_ext_click_area(button_container, 5);
+
+        if(i == 10)
+        {
+            lv_obj_add_event_cb(button_container, \
+                call_dial_back_long_press_cb, LV_EVENT_LONG_PRESSED, \
+                    NULL);
+
+            lv_obj_add_event_cb(button_container, \
+                call_dial_back_release_cb, LV_EVENT_RELEASED, \
+                    NULL);      
+        }
+            
     }
-        
+  
+    call_dial_num_len = 0;
+    call_dial_num_label = NULL;
+    memset(call_dial_num_str, 0, \
+        sizeof(call_dial_num_str));
+
+    widget_label_para.label_w = \
+        (300);
+    widget_label_para.label_h = \
+        49;
+    widget_label_para.long_mode = \
+        LV_LABEL_LONG_CLIP;
+    widget_label_para.text_align = \
+        LV_TEXT_ALIGN_CENTER;
+    widget_label_para.label_text_color = \
+        lv_color_hex(0xffffff);
+    widget_label_para.label_ver_center = \
+        false;
+    widget_label_para.user_text_font = \
+        &font_common_num_36;
+    widget_label_para.label_parent = \
+        obj;
+    widget_label_para.label_text = \
+        call_dial_num_str;
+    call_dial_num_label = \
+        common_widget_label_create(&widget_label_para);
+    lv_obj_align(call_dial_num_label, LV_ALIGN_TOP_MID, \
+        0, 44);
 
     return;
 }

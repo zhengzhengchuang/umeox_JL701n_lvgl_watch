@@ -47,7 +47,7 @@ typedef uint8_t ui_menu_view_t;
 
 enum
 {
-    ui_act_id_null = 0,
+    ui_act_id_null = 0x0000,
 
     /*****表盘相关页面*****/
     ui_act_id_watchface,
@@ -56,7 +56,6 @@ enum
     ui_act_id_menu,
 
     /*****设置相关页面*****/
-    
     ui_act_id_about,
     ui_act_id_reset, 
     ui_act_id_lang_sel,
@@ -73,6 +72,11 @@ enum
     ui_act_id_contacts,
     ui_act_id_call_log,
     ui_act_id_call_dial,
+    ui_act_id_call_in,
+    ui_act_id_call_out,
+    ui_act_id_call_online,
+    ui_act_id_call_volume,
+    ui_act_id_call_end,
 
     /*****提醒相关页面*****/
     ui_act_id_hr_warn,
@@ -83,10 +87,10 @@ enum
     ui_act_id_low_battery,
     ui_act_id_watchface_transp,
     
-    /*****快捷相关页面*****/
+    /*****工具盒子相关页面*****/
     ui_act_id_tool_box,
     
-    /*****礼拜相关页面*****/
+    /*****礼拜时间相关页面*****/
     ui_act_id_worship_time,
     
     /*****天气相关页面*****/

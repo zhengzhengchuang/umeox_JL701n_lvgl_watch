@@ -5,8 +5,7 @@ static const uint32_t settings_list_icon_src[\
     Settings_List_Elem_Num] = 
 {
     settings_00_index, settings_01_index, settings_02_index, \
-    settings_03_index, settings_04_index, settings_05_index, \
-    settings_06_index, 
+    settings_03_index, settings_04_index, settings_06_index, 
 };
 
 /****************文本源id****************/
@@ -14,15 +13,23 @@ static const comm_lang_txtid_t settings_list_text_id[\
     Settings_List_Elem_Num] = 
 {
     lang_txtid_menu_view, lang_txtid_sound, lang_txtid_display, \
-    lang_txtid_language, lang_txtid_unit, lang_txtid_shortcuts, \
-    lang_txtid_shortcuts,
+    lang_txtid_language, lang_txtid_unit, lang_txtid_about,
 };
 
-/****************设置容器点击索引****************/
+/****************设置元素容器点击索引****************/
 static const uint8_t settings_list_elem_container_idx[\
     Settings_List_Elem_Num] =
 {
-    0, 1, 2, 3, 4, 5, 6, 
+    0, 1, 2, 3, 4, 5, 
+};
+
+/****************设置元素页面跳转id****************/
+static const ui_act_id_t settings_list_menu_id[\
+    Settings_List_Elem_Num] = 
+{
+    ui_act_id_menu_view, ui_act_id_sound_ctrl, \
+    ui_act_id_backlight, ui_act_id_lang_sel, \
+    ui_act_id_unit_switch, ui_act_id_about,
 };
 
 /****************设置列表滚动参数****************/
@@ -64,7 +71,7 @@ static const int16_t settings_list_elem_container_width = \
 
 /****************设置列表元素容器高****************/
 static const int16_t settings_list_elem_container_height = \
-    (118);
+    (112);
 
 /****************函数声明****************/
 static void settings_list_elem_container_scroll(void);
@@ -173,16 +180,17 @@ static void settings_list_throw_anim_ready_cb(lv_anim_t *anim)
 }
 
 /*********************************************************************************
-                                  创建设置标题                                 
+                                  创建设置标题容器                                 
 *********************************************************************************/
-static void settings_list_title_create(lv_obj_t *obj)
+static void settings_list_title_container_create(lv_obj_t *obj)
 {
     lv_obj_t **settings_list_title = \
         &(settings_list_ctx.settings_list_title);
 
     widget_obj_para.obj_parent = obj;
     widget_obj_para.obj_x = 0;
-    widget_obj_para.obj_y = 0;
+    widget_obj_para.obj_y = \
+        Settings_List_y_Offset;
     widget_obj_para.obj_width = \
         Settings_List_Title_W;
     widget_obj_para.obj_height = \
@@ -207,7 +215,8 @@ static void settings_list_title_create(lv_obj_t *obj)
 /*********************************************************************************
                                   创建设置标题标签                                 
 *********************************************************************************/
-static void settings_list_title_label_create(void)
+static void settings_list_title_label_create(\
+    menu_align_t menu_align)
 {
     lv_obj_t **settings_list_title_label = \
         &(settings_list_ctx.settings_list_title_label);
@@ -251,7 +260,8 @@ static void settings_list_container_create(lv_obj_t *obj)
     widget_obj_para.obj_parent = obj;
     widget_obj_para.obj_x = 0;
     widget_obj_para.obj_y = \
-        Settings_List_Title_H;
+        Settings_List_Title_H + \
+            Settings_List_y_Offset;
     widget_obj_para.obj_width = \
         Settings_List_Container_W;
     widget_obj_para.obj_height = \
@@ -294,7 +304,7 @@ static void settings_list_elem_container_click_cb(lv_event_t *e)
     uint8_t idx = \
         *(uint8_t *)lv_event_get_user_data(e);
 
-    printf("******%s:%d\n", __func__, idx);
+    ui_menu_jump(settings_list_menu_id[idx]);
 
     return;
 }
@@ -302,7 +312,8 @@ static void settings_list_elem_container_click_cb(lv_event_t *e)
 /*********************************************************************************
                                   设置列表元素容器创建                             
 *********************************************************************************/
-static void settings_list_elem_container_create(void)
+static void settings_list_elem_container_create(\
+    menu_align_t menu_align)
 {
     lv_obj_t **settings_list_elem_container = \
         settings_list_ctx.settings_list_elem_container;
@@ -389,7 +400,8 @@ static void settings_list_elem_container_scroll(void)
 /*********************************************************************************
                                   设置列表元素图标创建                             
 *********************************************************************************/
-static void settings_list_elem_icon_create(void)
+static void settings_list_elem_icon_create(\
+    menu_align_t menu_align)
 {
     lv_obj_t **settings_list_icon = \
         settings_list_ctx.settings_list_icon;
@@ -410,8 +422,13 @@ static void settings_list_elem_icon_create(void)
             settings_list_icon_src[idx];
         settings_list_icon[idx] = \
             common_widget_img_create(&widget_img_para, NULL);
-        lv_obj_align(settings_list_icon[idx], \
-            LV_ALIGN_LEFT_MID, 20, 0);
+
+        if(menu_align == menu_align_right)
+            lv_obj_align(settings_list_icon[idx], \
+                LV_ALIGN_RIGHT_MID, -20, 0);
+        else
+            lv_obj_align(settings_list_icon[idx], \
+                LV_ALIGN_LEFT_MID, 20, 0);
     }
 
     return;
@@ -420,7 +437,8 @@ static void settings_list_elem_icon_create(void)
 /*********************************************************************************
                                   设置列表元素标签创建                             
 *********************************************************************************/
-static void settings_list_elem_label_create(void)
+static void settings_list_elem_label_create(\
+    menu_align_t menu_align)
 {
     lv_obj_t **settings_list_icon = \
         settings_list_ctx.settings_list_icon;
@@ -436,8 +454,12 @@ static void settings_list_elem_label_create(void)
         Label_Line_Height*2;
     widget_label_para.long_mode = \
         LV_LABEL_LONG_WRAP;
-    widget_label_para.text_align = \
-        LV_TEXT_ALIGN_LEFT;
+    if(menu_align == menu_align_right)
+        widget_label_para.text_align = \
+            LV_TEXT_ALIGN_RIGHT;
+    else
+        widget_label_para.text_align = \
+            LV_TEXT_ALIGN_LEFT;
     widget_label_para.label_text_color = \
         lv_color_hex(0xffffff);
     widget_label_para.label_ver_center = \
@@ -452,8 +474,13 @@ static void settings_list_elem_label_create(void)
             get_lang_txt_with_id(settings_list_text_id[idx]);
         settings_list_label[idx] = \
             common_widget_label_create(&widget_label_para);
-        lv_obj_align_to(settings_list_label[idx], settings_list_icon[idx], \
-            LV_ALIGN_OUT_RIGHT_MID, 20, 0);
+
+        if(menu_align == menu_align_right)
+            lv_obj_align_to(settings_list_label[idx], settings_list_icon[idx], \
+                LV_ALIGN_OUT_LEFT_MID, -20, 0);
+        else
+            lv_obj_align_to(settings_list_label[idx], settings_list_icon[idx], \
+                LV_ALIGN_OUT_RIGHT_MID, 20, 0);
     }
 
     return;
@@ -462,7 +489,8 @@ static void settings_list_elem_label_create(void)
 /*********************************************************************************
                                   设置列表元素箭头创建                             
 *********************************************************************************/
-static void setting_list_elem_arrow_create(void)
+static void setting_list_elem_arrow_create(\
+    menu_align_t menu_align)
 {
     lv_obj_t **settings_list_arrow = \
         settings_list_ctx.settings_list_arrow;
@@ -485,8 +513,13 @@ static void setting_list_elem_arrow_create(void)
             settings_07_index;
         settings_list_arrow[idx] = \
             common_widget_img_create(&widget_img_para, NULL);
-        lv_obj_align_to(settings_list_arrow[idx], settings_list_label[idx], \
-            LV_ALIGN_OUT_RIGHT_MID, 10, 0);
+
+        if(menu_align == menu_align_right)
+            lv_obj_align_to(settings_list_arrow[idx], settings_list_label[idx], \
+                LV_ALIGN_OUT_LEFT_MID, -10, 0);
+        else
+            lv_obj_align_to(settings_list_arrow[idx], settings_list_label[idx], \
+                LV_ALIGN_OUT_RIGHT_MID, 10, 0);
     }
 
     return;
@@ -672,15 +705,26 @@ static void settings_list_container_event_cb(lv_event_t *e)
 *********************************************************************************/
 static void settings_list_layout_create(void)
 {
-    settings_list_title_label_create();
+    menu_align_t menu_align = \
+        menu_align_left;
+    if(lang_txt_is_arabic())
+        menu_align = \
+            menu_align_right;
 
-    settings_list_elem_container_create();
+    settings_list_title_label_create(\
+        menu_align);
 
-    settings_list_elem_icon_create();
+    settings_list_elem_container_create(\
+        menu_align);
 
-    settings_list_elem_label_create();
+    settings_list_elem_icon_create(\
+        menu_align);
 
-    setting_list_elem_arrow_create();
+    settings_list_elem_label_create(\
+        menu_align);
+
+    setting_list_elem_arrow_create(\
+        menu_align);
 
 #if 0
     lv_obj_t *settings_list_container = \
@@ -699,8 +743,11 @@ static void menu_create_cb(lv_obj_t *obj)
 {
     if(!obj) return;
 
+    ui_act_id_t prev_act_id = \
+        read_menu_return_level_id();
+
     tileview_register_all_menu(obj, ui_act_id_null, \
-        ui_act_id_null, ui_act_id_null, ui_act_id_null, \
+        ui_act_id_null, prev_act_id, ui_act_id_null, \
             ui_act_id_settings_list);
 
     return;
@@ -727,7 +774,7 @@ static void menu_display_cb(lv_obj_t *obj)
     memset(&settings_list_ctx, 0, \
         sizeof(settings_list_ctx_t));
 
-    settings_list_title_create(obj);
+    settings_list_title_container_create(obj);
 
     settings_list_container_create(obj);
 

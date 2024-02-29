@@ -79,6 +79,12 @@ enum
     lang_txtid_contacts,//联系人
     lang_txtid_call_disc_tips,//电话未连接，请在连接电话后重试。
     lang_txtid_no_record,//无记录
+    lang_txtid_call_end,//通话结束
+    lang_txtid_connect_and_open,//请连接手机，并打开播放器。
+    lang_txtid_not_connected_phone,//未连接到手机
+    lang_txtid_searching_for_phone,//正在寻找附近的手机...
+    lang_txtid_dnd_enable,//勿扰模式 - 开启
+    lang_txtid_dnd_disable,//勿扰模式 - 关闭
     
     lang_txtid_max,
 };

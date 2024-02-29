@@ -69,6 +69,10 @@ static void menu_view_confirm_button_cb(lv_event_t *e)
     set_vm_para_cache_with_label(\
         vm_label_menu_view, menu_view_vm_cache);
 
+    ui_act_id_t prev_act_id = \
+        read_menu_return_level_id();
+    ui_menu_jump(prev_act_id);
+
     return;
 }
 
@@ -76,8 +80,11 @@ static void menu_create_cb(lv_obj_t *obj)
 {
     if(!obj) return;
 
+    ui_act_id_t prev_act_id = \
+        read_menu_return_level_id();
+
     tileview_register_all_menu(obj, ui_act_id_null, \
-        ui_act_id_null, ui_act_id_null, ui_act_id_null, \
+        ui_act_id_null, prev_act_id, ui_act_id_null, \
             ui_act_id_menu_view);
 
     return;
@@ -98,6 +105,12 @@ static void menu_refresh_cb(lv_obj_t *obj)
 static void menu_display_cb(lv_obj_t *obj)
 {
     if(!obj) return;
+
+    menu_align_t menu_align = \
+        menu_align_left;
+    if(lang_txt_is_arabic())
+        menu_align = \
+            menu_align_right;
 
     int cur_menu_view = \
         get_vm_para_cache_with_label(\
@@ -142,8 +155,13 @@ static void menu_display_cb(lv_obj_t *obj)
         lv_obj_t *menu_view_icon = \
             common_widget_img_create(&widget_img_para, \
                 NULL);
-        lv_obj_align(menu_view_icon, LV_ALIGN_LEFT_MID, \
-            44, 0);
+
+        if(menu_align == menu_align_right)
+            lv_obj_align(menu_view_icon, LV_ALIGN_RIGHT_MID, \
+                -44, 0);
+        else
+            lv_obj_align(menu_view_icon, LV_ALIGN_LEFT_MID, \
+                44, 0);
     }
 
     widget_label_para.label_x = 0;
@@ -153,8 +171,12 @@ static void menu_display_cb(lv_obj_t *obj)
         Label_Line_Height;
     widget_label_para.long_mode = \
         LV_LABEL_LONG_SCROLL;
-    widget_label_para.text_align = \
-        LV_TEXT_ALIGN_LEFT;
+    if(menu_align == menu_align_right)
+        widget_label_para.text_align = \
+            LV_TEXT_ALIGN_RIGHT;
+    else
+        widget_label_para.text_align = \
+            LV_TEXT_ALIGN_LEFT;
     widget_label_para.label_text_color = \
         lv_color_hex(0xffffff);
     widget_label_para.label_ver_center = \
@@ -169,8 +191,12 @@ static void menu_display_cb(lv_obj_t *obj)
             get_lang_txt_with_id(menu_view_text_id[i]);
         lv_obj_t *menu_view_label = \
             common_widget_label_create(&widget_label_para);
-        lv_obj_align(menu_view_label, LV_ALIGN_LEFT_MID, \
-            104, 0);
+        if(menu_align == menu_align_right)
+            lv_obj_align(menu_view_label, LV_ALIGN_RIGHT_MID, \
+                -104, 0);
+        else
+            lv_obj_align(menu_view_label, LV_ALIGN_LEFT_MID, \
+                104, 0);
     }
 
     widget_img_para.img_parent = obj;
