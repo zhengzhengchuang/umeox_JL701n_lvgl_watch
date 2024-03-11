@@ -238,13 +238,15 @@ void set_psram_free()
 // EN 控制
 void lcd_en_ctrl(u8 val)
 {
-    if (lcd_dat->pin_en == NO_CONFIG_PORT) {
+    if (lcd_dat->pin_en == NO_CONFIG_PORT)
         return;
-    }
 
     printf("=======lcd_en_ctrl:%d\n", val);
+    
     gpio_set_die(lcd_dat->pin_en, 1);
     gpio_direction_output(lcd_dat->pin_en, val);
+
+    return;
 }
 
 // BL 控制
@@ -516,6 +518,16 @@ int lcd_drv_power_ctrl(u8 on)
     if (__lcd && __lcd->power_ctrl) {
         __lcd->power_ctrl(on);
     }
+
+    return 0;
+}
+
+int ldo_power_ctrl(uint8_t on)
+{
+    on = !!on;
+
+    gpio_set_die(IO_PORTA_05, 1);
+    gpio_direction_output(IO_PORTA_05, on);
 
     return 0;
 }
@@ -1711,8 +1723,12 @@ int lcd_sleep_ctrl(u8 enter)
         lcd_sleep_in = true;
 #endif
         clock_remove_set(DEC_UI_CLK);
+
+        ldo_power_ctrl(0);
     } else 
     {
+        ldo_power_ctrl(1);
+
         clock_add_set(DEC_UI_CLK);
 
         norflash_flash_power_check();

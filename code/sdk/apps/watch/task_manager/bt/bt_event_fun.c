@@ -1713,7 +1713,7 @@ void bt_status_phone_active(struct bt_event *bt)
     app_audio_set_volume(APP_AUDIO_STATE_CALL, app_var.call_volume, 1);
 #endif
 
-    ui_call_answer_menu_jump();
+    bt_call_answer_menu_jump();
 }
 
 u32 bt_get_phone_active_start_time_ms(void)
@@ -1765,7 +1765,7 @@ void bt_status_phone_hangup(struct bt_event *bt)
     }
 
     update_call_log_message_flash();
-    ui_call_hang_up_menu_jump(); 
+    bt_call_hang_up_menu_jump(); 
     record_call_status_clear(); 
 }
 
@@ -1807,7 +1807,7 @@ void bt_status_phone_number(struct bt_event *bt)
     {
         bt_user_priv_var.phone_num_flag = 1;
 
-        ui_call_out_or_in_menu_jump();
+        bt_call_out_or_in_menu_jump();
     }else 
     {
         log_debug("PHONE_NUMBER len err\n");

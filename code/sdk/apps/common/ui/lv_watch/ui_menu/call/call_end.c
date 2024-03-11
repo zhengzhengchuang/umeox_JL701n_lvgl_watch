@@ -91,14 +91,14 @@ static void menu_display_cb(lv_obj_t *obj)
     widget_label_para.label_parent = \
         obj;
     widget_label_para.label_text = \
-        ui_get_call_number_name();
+        bt_get_call_number_name();
     lv_obj_t *call_number_name_label = \
         common_widget_label_create(&widget_label_para);
     lv_obj_align(call_number_name_label, LV_ALIGN_TOP_MID, \
         0, 80);
 
     uint32_t call_online_duration = \
-        ui_get_call_online_duration();
+        get_call_online_duration();
     char call_online_duration_str[9];
     memset(call_online_duration_str, 0, \
         sizeof(call_online_duration_str));

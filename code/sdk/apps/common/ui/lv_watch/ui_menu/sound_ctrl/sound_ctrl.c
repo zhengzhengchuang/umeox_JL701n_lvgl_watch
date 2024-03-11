@@ -5,6 +5,7 @@
 /*滑块范围增大*/
 #define Slider_Range_Inc (5)
 
+static uint8_t last_music_vol = 0;
 static uint16_t switch_dsc_idx = 0xffff;
 static lv_obj_t *music_vol_slider = NULL;
 
@@ -50,9 +51,14 @@ static void sound_vol_slider_event_cb(lv_event_t *e)
     cur_music_vol = cur_music_vol > get_max_sys_vol()? \
         get_max_sys_vol():cur_music_vol;
 
-    app_audio_set_volume(APP_AUDIO_STATE_MUSIC, \
-        cur_music_vol, 1);
- 
+    if(cur_music_vol != last_music_vol)
+    {
+        last_music_vol = cur_music_vol;
+
+        app_audio_set_volume(APP_AUDIO_STATE_MUSIC, \
+            cur_music_vol, 1);
+    }
+    
     return;
 }
 
@@ -159,20 +165,31 @@ static void menu_display_cb(lv_obj_t *obj)
             -10, 0);
     lv_obj_set_ext_click_area(sound_on_switch, 10);
 
-    int32_t cur_music_vol = \
+
+    s8 cur_music_vol = \
         app_audio_get_volume(\
-            APP_AUDIO_STATE_MUSIC)*Slider_Range_Inc;
-    int32_t max_music_vol = \
-        get_max_sys_vol()*Slider_Range_Inc;
+            APP_AUDIO_STATE_MUSIC);
+    uint8_t max_music_vol = \
+        get_max_sys_vol();
+
+    last_music_vol = cur_music_vol;
+
+    int32_t slider_min_val = 0;
+    int32_t slider_cur_val = \
+        cur_music_vol*Slider_Range_Inc;
+    int32_t slider_max_val = \
+        max_music_vol*Slider_Range_Inc;
+
     widget_slider_para.slider_parent = \
         obj;
     widget_slider_para.slider_width = 82;
     widget_slider_para.slider_height = 284;
-    widget_slider_para.slider_min_value = 0;
+    widget_slider_para.slider_min_value = \
+        slider_min_val;
     widget_slider_para.slider_max_value = \
-        max_music_vol;
+        slider_max_val;
     widget_slider_para.slider_cur_value = \
-        cur_music_vol;
+        slider_cur_val;
     widget_slider_para.slider_main_color = \
         lv_color_hex(0xB28146);
     widget_slider_para.slider_indic_color = \

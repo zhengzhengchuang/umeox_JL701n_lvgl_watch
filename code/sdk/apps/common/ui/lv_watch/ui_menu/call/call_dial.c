@@ -81,7 +81,7 @@ static void call_dial_dial_click_handle(void)
     if(!call_dial_num_len)
         return;
 
-    ui_ctrl_call_out_by_number(\
+    bt_ctrl_call_out_by_number(\
         call_dial_num_str, \
             call_dial_num_len);
     
@@ -274,7 +274,7 @@ static void menu_display_cb(lv_obj_t *obj)
     widget_label_para.label_w = \
         (300);
     widget_label_para.label_h = \
-        49;
+        42;
     widget_label_para.long_mode = \
         LV_LABEL_LONG_CLIP;
     widget_label_para.text_align = \

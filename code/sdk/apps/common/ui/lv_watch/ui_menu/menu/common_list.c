@@ -240,7 +240,8 @@ static void common_list_elem_container_click_cb(lv_event_t *e)
 /*********************************************************************************
                                   通用列表元素容器创建                             
 *********************************************************************************/
-static void common_list_elem_container_create(void)
+static void common_list_elem_container_create(\
+    menu_align_t menu_align)
 {
     lv_obj_t **common_list_elem_container = \
         common_list_ctx.common_list_elem_container;
@@ -327,7 +328,8 @@ static void common_list_elem_container_scroll(void)
 /*********************************************************************************
                                   通用列表元素图标创建                             
 *********************************************************************************/
-static void common_list_elem_icon_create(void)
+static void common_list_elem_icon_create(\
+    menu_align_t menu_align)
 {
     lv_obj_t **common_list_icon = \
         common_list_ctx.common_list_icon;
@@ -348,8 +350,13 @@ static void common_list_elem_icon_create(void)
             common_list_icon_src[idx];
         common_list_icon[idx] = \
             common_widget_img_create(&widget_img_para, NULL);
-        lv_obj_align(common_list_icon[idx], \
-            LV_ALIGN_LEFT_MID, 20, 0);
+
+        if(menu_align == menu_align_right)
+            lv_obj_align(common_list_icon[idx], \
+                LV_ALIGN_RIGHT_MID, -20, 0);
+        else
+            lv_obj_align(common_list_icon[idx], \
+                LV_ALIGN_LEFT_MID, 20, 0);
     }
 
     return;
@@ -358,7 +365,8 @@ static void common_list_elem_icon_create(void)
 /*********************************************************************************
                                   通用列表元素标签创建                             
 *********************************************************************************/
-static void common_list_elem_label_create(void)
+static void common_list_elem_label_create(\
+    menu_align_t menu_align)
 {
     lv_obj_t **common_list_icon = \
         common_list_ctx.common_list_icon;
@@ -374,8 +382,12 @@ static void common_list_elem_label_create(void)
         Label_Line_Height*2;
     widget_label_para.long_mode = \
         LV_LABEL_LONG_WRAP;
-    widget_label_para.text_align = \
-        LV_TEXT_ALIGN_LEFT;
+    if(menu_align == menu_align_right)
+        widget_label_para.text_align = \
+            LV_TEXT_ALIGN_RIGHT;
+    else
+        widget_label_para.text_align = \
+            LV_TEXT_ALIGN_LEFT;
     widget_label_para.label_text_color = \
         lv_color_hex(0xffffff);
     widget_label_para.label_ver_center = \
@@ -390,8 +402,12 @@ static void common_list_elem_label_create(void)
             get_lang_txt_with_id(common_list_text_id[idx]);
         common_list_label[idx] = \
             common_widget_label_create(&widget_label_para);
-        lv_obj_align_to(common_list_label[idx], common_list_icon[idx], \
-            LV_ALIGN_OUT_RIGHT_MID, 20, 0);
+        if(menu_align == menu_align_right)
+            lv_obj_align_to(common_list_label[idx], \
+                common_list_icon[idx], LV_ALIGN_OUT_LEFT_MID, -20, 0);
+        else
+            lv_obj_align_to(common_list_label[idx], \
+                common_list_icon[idx], LV_ALIGN_OUT_RIGHT_MID, 20, 0);
     }
 
     return;
@@ -577,11 +593,20 @@ static void common_list_container_event_cb(lv_event_t *e)
 *********************************************************************************/
 static void common_list_layout_create(void)
 {
-    common_list_elem_container_create();
+    menu_align_t menu_align = \
+        menu_align_left;
+    if(lang_txt_is_arabic())
+        menu_align = \
+            menu_align_right;
 
-    common_list_elem_icon_create();
+    common_list_elem_container_create(\
+        menu_align);
 
-    common_list_elem_label_create();
+    common_list_elem_icon_create(\
+        menu_align);
+
+    common_list_elem_label_create(\
+        menu_align);
 
     lv_obj_t *common_list_container = \
         common_list_ctx.common_list_container;
@@ -589,7 +614,8 @@ static void common_list_layout_create(void)
         (-1)*(common_list_elem_num - common_list_visual_line)* \
             common_list_elem_container_height;
     common_scrollbar_create(common_list_container, \
-        common_list_scroll_offset, scroll_bottom_val);
+        common_list_scroll_offset, scroll_bottom_val, \
+            menu_align);
 
     return;
 }

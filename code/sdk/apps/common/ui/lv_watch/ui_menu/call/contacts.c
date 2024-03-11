@@ -21,21 +21,23 @@ static void no_contacts_menu_create(lv_obj_t *obj)
 {
     widget_img_para.img_parent = \
         obj;
-    widget_img_para.img_x = 104;
-    widget_img_para.img_y = 88;
     widget_img_para.file_img_dat = \
         call_03_index;
     widget_img_para.img_click_attr = \
         false;
     widget_img_para.event_cb = \
         NULL;
-    common_widget_img_create(&widget_img_para, NULL);
+    lv_obj_t *no_contacts_icon= \
+        common_widget_img_create(&widget_img_para, NULL);
+    lv_obj_align(no_contacts_icon, LV_ALIGN_TOP_MID, \
+        0, 88);
 
-    widget_img_para.img_x = 32;
-    widget_img_para.img_y = 266;
     widget_img_para.file_img_dat = \
         comm_icon_11_index;
-    common_widget_img_create(&widget_img_para, NULL);
+    lv_obj_t *comm_11_icon = \
+        common_widget_img_create(&widget_img_para, NULL);
+    lv_obj_align(comm_11_icon, LV_ALIGN_TOP_MID, \
+        0, 266);
 
     widget_label_para.label_w = \
         (300);
@@ -57,7 +59,7 @@ static void no_contacts_menu_create(lv_obj_t *obj)
     lv_obj_t *no_record_label = \
         common_widget_label_create(&widget_label_para);
     lv_obj_align(no_record_label, LV_ALIGN_TOP_MID, \
-        0, 332);
+        0, 342);
 
     return;
 }
@@ -109,7 +111,7 @@ static void contacts_elem_click_cb(lv_event_t *e)
         &vm_contacts_ctx);
     if(!ret) return;
 
-    ui_ctrl_call_out_by_number(\
+    bt_ctrl_call_out_by_number(\
         vm_contacts_ctx.contacts_number_str, \
             strlen(vm_contacts_ctx.contacts_number_str));
 

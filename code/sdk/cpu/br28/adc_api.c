@@ -608,7 +608,6 @@ void adc_init()
     volatage_trim_init();
 
     _adc_init(1);
-
 }
 void adc_test()
 {

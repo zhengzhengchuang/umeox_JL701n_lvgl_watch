@@ -17,7 +17,7 @@ extern "C" {
 /****************语言列表容器宽、高****************/
 #define Lang_List_Container_W   (LCD_WIDTH)
 #define Lang_List_Container_H   \
-    (LCD_HEIGHT - Lang_List_Title_H)
+    (LCD_HEIGHT - Lang_List_Title_H - LCD_UI_Y_OFFSET)
 
 /****************语言列表参数内容****************/
 typedef struct 

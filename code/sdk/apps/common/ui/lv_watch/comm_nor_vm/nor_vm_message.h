@@ -15,21 +15,16 @@ extern "C" {
 /*********************************************************************************
                                   信息内容长度                                  
 *********************************************************************************/
-#define Message_Content_Len (120)
+#define Message_Content_Len (240)
 
-/*********************************************************************************
-                                  信息时间字符串长度                                  
-*********************************************************************************/
-#define Message_Time_Str_Len (6)
 
 /*********************************************************************************
                                   信息类型(不要改枚举的顺序)                                 
 *********************************************************************************/
 enum
 {
-    message_type_facebook,
-    message_type_blog,
-    message_type_messenger,
+    message_type_facebook = 0x00,
+    message_type_vkontakte,
     message_type_instagram,
     message_type_linkedin,
     message_type_tiktok,
@@ -37,12 +32,14 @@ enum
     message_type_wechat,
     message_type_snapchat,
     message_type_telegram,
-    message_type_weibo,
+    message_type_twitter,
     message_type_skype,
     message_type_line,
     message_type_gmail,
     message_type_sms,
-    message_type_other,
+
+    /******区别于消息通知*******/
+    message_type_phone,
 
     message_type_unknown,
 };
@@ -57,10 +54,10 @@ typedef struct
 
 	message_type_t \
         message_type;
-    char message_time_str[\
-        Message_Time_Str_Len];
     char message_content_str[\
         Message_Content_Len];
+    
+    struct sys_time message_time;
 }vm_message_ctx_t;
 
 /*********************************************************************************
@@ -68,6 +65,7 @@ typedef struct
 *********************************************************************************/
 void vm_message_ctx_clear(void);
 uint8_t vm_message_item_num(void);
+void vm_message_delete_by_index(uint8_t index);
 void vm_message_ctx_falsh_save(vm_message_ctx_t *p);
 bool vm_message_ctx_by_idx(uint8_t idx, vm_message_ctx_t *p);
 #ifdef __cplusplus

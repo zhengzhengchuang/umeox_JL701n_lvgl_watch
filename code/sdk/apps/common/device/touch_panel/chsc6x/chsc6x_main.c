@@ -129,7 +129,7 @@ void chsc6x_read_touch_info()
             touch_y = events[0].y;  
 
             touch_down = false;	           
-        }   
+        }
 
         //printf("%s:x = %d, y = %d\n", __func__, touch_x, touch_y);
     }else

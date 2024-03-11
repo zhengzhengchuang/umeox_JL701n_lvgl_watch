@@ -10,6 +10,16 @@ extern "C" {
 #include "../comm_remind/alarm_manage.h"
 
 /*********************************************************************************
+                                  时间小时制枚举                                      
+*********************************************************************************/
+enum
+{
+    time_format_24 = 0x00,
+    time_format_12,
+};
+typedef uint8_t comm_time_format_t;
+
+/*********************************************************************************
                              距离计量单位                              
 *********************************************************************************/
 enum
@@ -123,7 +133,8 @@ typedef struct
     uint16_t vm_store_para_mask;
 
     alarm_manage_para_t alarm_manage_para;
-    vm_store_para_with_label_t vm_store_para[Vm_Store_Para_Num];  
+    vm_store_para_with_label_t vm_store_para[\
+        Vm_Store_Para_Num];  
 }vm_store_para_cache_t;
 extern vm_store_para_cache_t *p_vm_para_cache;
 extern const ui_menu_load_info_t *watchface_load_info[];

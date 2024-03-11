@@ -18,10 +18,10 @@ extern "C" {
 #define Comm_Symbol_15 (15) //(~)
 #define Comm_Symbol_16 (16) //(℃)
 #define Comm_Symbol_17 (17) //(℉)
-#define Comm_Symbol_18 (18) //(°)
+#define Comm_Symbol_18 (18) //(°) //代码字符用^代替
 #define Comm_Symbol_19 (19) //(_)
-#define Comm_Symbol_20 (20) //(')
-#define Comm_Symbol_21 (21) //(")
+#define Comm_Symbol_20 (20) //(') //代码字符用*代替
+#define Comm_Symbol_21 (21) //(") //代码字符用+代替
 
 #ifdef __cplusplus
 } /* extern "C" */

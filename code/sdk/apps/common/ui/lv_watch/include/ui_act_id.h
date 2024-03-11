@@ -7,8 +7,16 @@ extern "C" {
 
 #include "../../lvgl/lvgl.h"
 
+/*********************************************************************************
+                                    屏幕的宽高                             
+*********************************************************************************/
 #define LCD_WIDTH  (368)
 #define LCD_HEIGHT (448)
+
+/*********************************************************************************
+                                    屏幕UI显示Y偏移                             
+*********************************************************************************/
+#define LCD_UI_Y_OFFSET (20)
 
 enum
 {
@@ -96,7 +104,34 @@ enum
     /*****天气相关页面*****/
     ui_act_id_weather_data,
     ui_act_id_weather_report,
-    
+
+    /*****远程音乐页面*****/
+    ui_act_id_remote_music,
+
+    /*****相机页面*****/
+    ui_act_id_camera,
+
+    /*****信息相关页面*****/
+    ui_act_id_msg_list,
+    ui_act_id_msg_detail,
+
+    /*****闹钟相关页面*****/
+    ui_act_id_alarm_main,
+    ui_act_id_alarm_time,
+    ui_act_id_alarm_repeat,
+    ui_act_id_alarm_modify,
+    ui_act_id_alarm_remind,
+
+    /*****倒计时相关页面*****/
+    ui_act_id_countdown_time,
+    ui_act_id_countdown_state,
+    ui_act_id_countdown_over,
+
+    /*****秒表相关页面*****/
+    ui_act_id_stopwatch_main,
+    ui_act_id_stopwatch_state,
+    ui_act_id_stopwatch_over,
+
     ui_act_id_max,
 };
 typedef uint16_t ui_act_id_t;

@@ -32,9 +32,10 @@
 #include "include/nandflash_ftl.h"
 #include "usb/otg.h"
 #include "le_smartbox_adv.h"
+#include "../../../common/ui/lv_watch/comm_task/comm_task.h"
 #include "../../../../common/device/sensor_iic/sensor_iic.h"
 #include "../../../../../cpu/br28/ui_driver/lvgl/lvgl_main.h"
-#include "../../../common/ui/lv_watch/comm_remind/remind_task.h"
+
 #if TCFG_PAY_ALIOS_ENABLE
 #if (TCFG_PAY_ALIOS_WAY_SEL == TCFG_PAY_ALIOS_WAY_ALIYUN)
 #include "upay.h"
@@ -1171,6 +1172,8 @@ void board_init()
     cfg_file_parse(0);
     /* devices_init(); */
 
+    ldo_power_ctrl(1);
+
 #if TCFG_PSRAM_DEV_ENABLE
 	psram_init();
 #endif /* #if TCFG_PSRAM_DEV_ENABLE */
@@ -1200,6 +1203,7 @@ void board_init()
 #if (TCFG_SD0_ENABLE || TCFG_SD1_ENABLE)
 	sd_power_config(4);
 #endif
+
 
 // 触摸屏 和 屏公用复位，先初始化触摸
 #if TCFG_TOUCH_PANEL_ENABLE
@@ -1296,7 +1300,7 @@ void board_init()
 
 #if TCFG_RTC_ENABLE
     //alarm_init(); //不用RTC闹钟，使用用户闹钟
-    remind_task_init();
+    comm_handle_task_init();
 #endif
 
 #if TCFG_SENSOR_DEBUG_ENABLE

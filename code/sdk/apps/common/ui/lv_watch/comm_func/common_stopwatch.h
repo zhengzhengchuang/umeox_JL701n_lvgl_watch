@@ -48,6 +48,8 @@ typedef struct
 #if STOPWATCH_RECORD_EN
     stopwatch_attribute_data_t stopwatch_record_data[STOPWATCH_RECORD_MAX];
 #endif
+
+    stopwatch_attribute_data_t stopwatch_over_data;
 }common_stopwatch_para_t;
 
 void common_user_stopwatch_reset(void);

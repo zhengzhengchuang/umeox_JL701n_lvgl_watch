@@ -11,21 +11,36 @@ lv_obj_t *common_widget_arc_create(common_widget_arc_para_t *arc_para)
     if(!arc_para) 
         return NULL;
 
-    lv_obj_t *common_widget_arc = lv_arc_create(arc_para->arc_parent);
-    lv_obj_set_size(common_widget_arc, arc_para->arc_bg_width, arc_para->arc_bg_height);
-    lv_obj_set_pos(common_widget_arc, arc_para->arc_x, arc_para->arc_y);
-    lv_obj_set_style_bg_opa(common_widget_arc, arc_para->arc_bg_opax, LV_PART_MAIN);
-    lv_arc_set_bg_angles(common_widget_arc, arc_para->arc_main_start_angle, arc_para->arc_main_end_angle);
-    lv_arc_set_angles(common_widget_arc, arc_para->arc_indic_start_angle, arc_para->arc_indic_end_angle);
-    lv_arc_set_rotation(common_widget_arc, arc_para->arc_rotation_angle);
-    lv_arc_set_range(common_widget_arc, arc_para->arc_min_value, arc_para->arc_max_value);
-    lv_arc_set_value(common_widget_arc, arc_para->arc_cur_value);
-    lv_obj_set_style_arc_width(common_widget_arc, arc_para->arc_main_line_width, LV_PART_MAIN);
-    lv_obj_set_style_arc_width(common_widget_arc, arc_para->arc_indic_line_width, LV_PART_INDICATOR);
-    lv_obj_set_style_arc_color(common_widget_arc, arc_para->arc_main_line_color, LV_PART_MAIN);
-    lv_obj_set_style_arc_color(common_widget_arc, arc_para->arc_indic_line_color, LV_PART_INDICATOR);
-    lv_obj_set_style_arc_rounded(common_widget_arc, arc_para->arc_main_is_rounded, LV_PART_MAIN);
-    lv_obj_set_style_arc_rounded(common_widget_arc, arc_para->arc_indic_is_rounded, LV_PART_INDICATOR);
+    lv_obj_t *common_widget_arc = \
+        lv_arc_create(arc_para->arc_parent);
+    lv_obj_set_size(common_widget_arc, \
+        arc_para->arc_bg_width, arc_para->arc_bg_height);
+    lv_obj_set_pos(common_widget_arc, \
+        arc_para->arc_x, arc_para->arc_y);
+    lv_obj_set_style_bg_opa(common_widget_arc, \
+        arc_para->arc_bg_opax, LV_PART_MAIN);
+    lv_arc_set_bg_angles(common_widget_arc, \
+        arc_para->arc_main_start_angle, arc_para->arc_main_end_angle);
+    lv_arc_set_angles(common_widget_arc, \
+        arc_para->arc_indic_start_angle, arc_para->arc_indic_end_angle);
+    lv_arc_set_rotation(common_widget_arc, \
+        arc_para->arc_rotation_angle);
+    lv_arc_set_range(common_widget_arc, \
+        arc_para->arc_min_value, arc_para->arc_max_value);
+    lv_arc_set_value(common_widget_arc, \
+        arc_para->arc_cur_value);
+    lv_obj_set_style_arc_width(common_widget_arc, \
+        arc_para->arc_main_line_width, LV_PART_MAIN);
+    lv_obj_set_style_arc_width(common_widget_arc, \
+        arc_para->arc_indic_line_width, LV_PART_INDICATOR);
+    lv_obj_set_style_arc_color(common_widget_arc, \
+        arc_para->arc_main_line_color, LV_PART_MAIN);
+    lv_obj_set_style_arc_color(common_widget_arc, \
+        arc_para->arc_indic_line_color, LV_PART_INDICATOR);
+    lv_obj_set_style_arc_rounded(common_widget_arc, \
+        arc_para->arc_main_is_rounded, LV_PART_MAIN);
+    lv_obj_set_style_arc_rounded(common_widget_arc, \
+        arc_para->arc_indic_is_rounded, LV_PART_INDICATOR);
 
     if(arc_para->arc_click_is_clear)
         lv_obj_clear_flag(common_widget_arc, LV_OBJ_FLAG_CLICKABLE);
@@ -141,18 +156,28 @@ lv_obj_t *common_widget_label_create(common_widget_label_para_t *label_para)
     if(!label_para) 
         return NULL;
 
-    lv_obj_t *common_widget_label = lv_label_create(label_para->label_parent);
-    lv_obj_set_pos(common_widget_label, label_para->label_x, label_para->label_y);
-    lv_label_set_text(common_widget_label, label_para->label_text);
-    lv_label_set_ver_center(common_widget_label, label_para->label_ver_center);
-    lv_label_set_long_mode(common_widget_label, label_para->long_mode);
-    lv_obj_set_size(common_widget_label, label_para->label_w, label_para->label_h);
-    lv_obj_set_style_text_align(common_widget_label, label_para->text_align, LV_PART_MAIN);
-    lv_obj_set_style_text_color(common_widget_label, label_para->label_text_color, LV_PART_MAIN);
+    lv_obj_t *common_widget_label = \
+        lv_label_create(label_para->label_parent);
+    lv_obj_set_pos(common_widget_label, \
+        label_para->label_x, label_para->label_y);
+    lv_label_set_text(common_widget_label, \
+        label_para->label_text);
+    lv_label_set_ver_center(common_widget_label, \
+        label_para->label_ver_center);
+    lv_label_set_long_mode(common_widget_label, \
+        label_para->long_mode);
+    lv_obj_set_size(common_widget_label, \
+        label_para->label_w, label_para->label_h);
+    lv_obj_set_style_text_align(common_widget_label, \
+        label_para->text_align, LV_PART_MAIN);
+    lv_obj_set_style_text_color(common_widget_label, \
+        label_para->label_text_color, LV_PART_MAIN);
     if(label_para->user_text_font)
-        lv_obj_set_style_text_font(common_widget_label, label_para->user_text_font, LV_PART_MAIN);
+        lv_obj_set_style_text_font(common_widget_label, \
+            label_para->user_text_font, LV_PART_MAIN);
     else
-        lv_obj_set_style_text_font(common_widget_label, sys_default_label_font(), LV_PART_MAIN);
+        lv_obj_set_style_text_font(common_widget_label, \
+            sys_default_label_font(), LV_PART_MAIN);
   
 
     return common_widget_label;
@@ -170,11 +195,16 @@ lv_obj_t *common_widget_obj_create(common_widget_obj_para_t *obj_para)
     if(!obj_para)
         return NULL;
 
-    lv_obj_t *common_widget_obj = lv_obj_create(obj_para->obj_parent);
-    lv_obj_set_size(common_widget_obj, obj_para->obj_width, obj_para->obj_height);
-    lv_obj_set_pos(common_widget_obj, obj_para->obj_x, obj_para->obj_y);
-    lv_obj_set_style_bg_opa(common_widget_obj, obj_para->obj_bg_opax, LV_PART_MAIN);
-    lv_obj_set_style_bg_color(common_widget_obj, obj_para->obj_bg_color, LV_PART_MAIN);
+    lv_obj_t *common_widget_obj = \
+        lv_obj_create(obj_para->obj_parent);
+    lv_obj_set_size(common_widget_obj, \
+        obj_para->obj_width, obj_para->obj_height);
+    lv_obj_set_pos(common_widget_obj, \
+        obj_para->obj_x, obj_para->obj_y);
+    lv_obj_set_style_bg_opa(common_widget_obj, \
+        obj_para->obj_bg_opax, LV_PART_MAIN);
+    lv_obj_set_style_bg_color(common_widget_obj, \
+        obj_para->obj_bg_color, LV_PART_MAIN);
 
 #if 0
     // if(obj_para->obj_bg_opax == LV_OPA_100)
@@ -190,19 +220,27 @@ lv_obj_t *common_widget_obj_create(common_widget_obj_para_t *obj_para)
 
     if(obj_para->obj_border_width)
     {
-        lv_obj_set_style_border_opa(common_widget_obj, obj_para->obj_border_opax, LV_PART_MAIN);
-        lv_obj_set_style_border_width(common_widget_obj, obj_para->obj_border_width, LV_PART_MAIN);
-        lv_obj_set_style_border_color(common_widget_obj, obj_para->obj_border_color, LV_PART_MAIN);
+        lv_obj_set_style_border_opa(common_widget_obj, \
+            obj_para->obj_border_opax, LV_PART_MAIN);
+        lv_obj_set_style_border_width(common_widget_obj, \
+            obj_para->obj_border_width, LV_PART_MAIN);
+        lv_obj_set_style_border_color(common_widget_obj, \
+            obj_para->obj_border_color, LV_PART_MAIN);
     }else
-        lv_obj_set_style_border_width(common_widget_obj, obj_para->obj_border_width, LV_PART_MAIN);
+        lv_obj_set_style_border_width(common_widget_obj, \
+            obj_para->obj_border_width, LV_PART_MAIN);
 
-    lv_obj_set_style_radius(common_widget_obj, obj_para->obj_radius, LV_PART_MAIN);
-    lv_obj_set_style_pad_all(common_widget_obj, 0, LV_PART_MAIN);
+    lv_obj_set_style_radius(common_widget_obj, \
+        obj_para->obj_radius, LV_PART_MAIN);
+    lv_obj_set_style_pad_all(common_widget_obj, \
+        0, LV_PART_MAIN);
 
     if(!(obj_para->obj_is_scrollable))
-        lv_obj_clear_flag(common_widget_obj, LV_OBJ_FLAG_SCROLLABLE);
+        lv_obj_clear_flag(common_widget_obj, \
+            LV_OBJ_FLAG_SCROLLABLE);
     else
-        lv_obj_remove_style(common_widget_obj, NULL, LV_PART_SCROLLBAR);
+        lv_obj_remove_style(common_widget_obj, \
+            NULL, LV_PART_SCROLLBAR);
 
     return common_widget_obj;
 }
@@ -218,19 +256,29 @@ lv_obj_t *common_widget_slider_create(common_widget_slider_para_t *slider_para)
     if(!slider_para)
         return NULL;
 
-    lv_obj_t *common_widget_slider = lv_slider_create(slider_para->slider_parent);
-    lv_obj_set_size(common_widget_slider, slider_para->slider_width, slider_para->slider_height);
-    lv_obj_set_pos(common_widget_slider, slider_para->slider_x, slider_para->slider_y);
-    lv_slider_set_range(common_widget_slider, slider_para->slider_min_value, slider_para->slider_max_value);
-    lv_slider_set_value(common_widget_slider, slider_para->slider_cur_value, LV_ANIM_OFF);
-    lv_obj_set_style_bg_color(common_widget_slider, slider_para->slider_main_color, LV_PART_MAIN);
-    lv_obj_set_style_bg_color(common_widget_slider, slider_para->slider_indic_color, LV_PART_INDICATOR);
-    lv_obj_set_style_bg_opa(common_widget_slider, slider_para->slider_knob_opax, LV_PART_KNOB);
+    lv_obj_t *common_widget_slider = \
+        lv_slider_create(slider_para->slider_parent);
+    lv_obj_set_size(common_widget_slider, \
+        slider_para->slider_width, slider_para->slider_height);
+    lv_obj_set_pos(common_widget_slider, \
+        slider_para->slider_x, slider_para->slider_y);
+    lv_slider_set_range(common_widget_slider, \
+        slider_para->slider_min_value, slider_para->slider_max_value);
+    lv_slider_set_value(common_widget_slider, \
+        slider_para->slider_cur_value, LV_ANIM_OFF);
+    lv_obj_set_style_bg_color(common_widget_slider, \
+        slider_para->slider_main_color, LV_PART_MAIN);
+    lv_obj_set_style_bg_color(common_widget_slider, \
+        slider_para->slider_indic_color, LV_PART_INDICATOR);
+    lv_obj_set_style_bg_opa(common_widget_slider, \
+        slider_para->slider_knob_opax, LV_PART_KNOB);
     if(slider_para->slider_knob_opax)
-        lv_obj_set_style_bg_color(common_widget_slider, slider_para->slider_knob_color, LV_PART_KNOB);
+        lv_obj_set_style_bg_color(common_widget_slider, \
+            slider_para->slider_knob_color, LV_PART_KNOB);
 
     if(slider_para->event_cb)
-        lv_obj_add_event_cb(common_widget_slider, slider_para->event_cb, LV_EVENT_VALUE_CHANGED, slider_para->user_data);
+        lv_obj_add_event_cb(common_widget_slider, \
+            slider_para->event_cb, LV_EVENT_VALUE_CHANGED, slider_para->user_data);
 
     return common_widget_slider;
 }
@@ -246,19 +294,27 @@ lv_obj_t *common_widget_switch_create(common_widget_switch_para_t *switch_para)
     if(!switch_para)
         return NULL;
 
-    lv_obj_t *common_widget_switch = lv_switch_create(switch_para->switch_parent);
-    lv_obj_set_size(common_widget_switch, switch_para->switch_width, switch_para->switch_height);
-    lv_obj_set_pos(common_widget_switch, switch_para->switch_x, switch_para->switch_y);
-    lv_obj_set_style_bg_color(common_widget_switch, switch_para->switch_main_color, LV_PART_MAIN);
-    lv_obj_set_style_bg_color(common_widget_switch, switch_para->switch_indic_color, LV_PART_INDICATOR|LV_STATE_CHECKED);  
+    lv_obj_t *common_widget_switch = \
+        lv_switch_create(switch_para->switch_parent);
+    lv_obj_set_size(common_widget_switch, \
+        switch_para->switch_width, switch_para->switch_height);
+    lv_obj_set_pos(common_widget_switch, \
+        switch_para->switch_x, switch_para->switch_y);
+    lv_obj_set_style_bg_color(common_widget_switch, \
+        switch_para->switch_main_color, LV_PART_MAIN);
+    lv_obj_set_style_bg_color(common_widget_switch, \
+        switch_para->switch_indic_color, LV_PART_INDICATOR|LV_STATE_CHECKED);  
 
     if(switch_para->switch_cur_state)
-        lv_obj_add_state(common_widget_switch, LV_STATE_CHECKED);
+        lv_obj_add_state(common_widget_switch, \
+            LV_STATE_CHECKED);
     else
-        lv_obj_clear_state(common_widget_switch, LV_STATE_CHECKED);
+        lv_obj_clear_state(common_widget_switch, \
+            LV_STATE_CHECKED);
 
     if(switch_para->event_cb)
-        lv_obj_add_event_cb(common_widget_switch, switch_para->event_cb, LV_EVENT_VALUE_CHANGED, switch_para->user_data);
+        lv_obj_add_event_cb(common_widget_switch, \
+            switch_para->event_cb, LV_EVENT_VALUE_CHANGED, switch_para->user_data);
 
     return common_widget_switch;
 }
@@ -274,36 +330,56 @@ lv_obj_t *common_widget_roller_create(common_widget_roller_para_t *roller_para)
     if(!roller_para)
         return NULL;
 
-    lv_obj_t *common_widget_roller = lv_roller_create(roller_para->roller_parent);
-    lv_obj_set_size(common_widget_roller, roller_para->roller_width, roller_para->roller_height);
-    lv_obj_set_pos(common_widget_roller, roller_para->roller_x, roller_para->roller_y);
-    lv_roller_set_options(common_widget_roller, roller_para->roller_options, roller_para->roller_mode);
-    lv_roller_set_selected(common_widget_roller, roller_para->roller_sel, LV_ANIM_OFF);
-    lv_obj_set_style_text_line_space(common_widget_roller, roller_para->roller_line_inv, LV_PART_MAIN);
-    lv_obj_set_style_bg_opa(common_widget_roller, roller_para->roller_main_bg_opax, LV_PART_MAIN);
+    lv_obj_t *common_widget_roller = \
+        lv_roller_create(roller_para->roller_parent);
+    lv_obj_set_size(common_widget_roller, \
+        roller_para->roller_width, roller_para->roller_height);
+    lv_obj_set_pos(common_widget_roller, \
+        roller_para->roller_x, roller_para->roller_y);
+    lv_roller_set_options(common_widget_roller, \
+        roller_para->roller_options, roller_para->roller_mode);
+    lv_roller_set_selected(common_widget_roller, \
+        roller_para->roller_sel, LV_ANIM_OFF);
+    lv_obj_set_style_text_line_space(common_widget_roller, \
+        roller_para->roller_line_inv, LV_PART_MAIN);
+    lv_obj_set_style_bg_opa(common_widget_roller, \
+        roller_para->roller_main_bg_opax, LV_PART_MAIN);
     if(roller_para->roller_main_bg_opax)
-        lv_obj_set_style_bg_color(common_widget_roller, roller_para->roller_main_bg_color, LV_PART_MAIN);
-    lv_obj_set_style_bg_opa(common_widget_roller, roller_para->roller_selected_bg_opax, LV_PART_SELECTED);
+        lv_obj_set_style_bg_color(common_widget_roller, \
+            roller_para->roller_main_bg_color, LV_PART_MAIN);
+    lv_obj_set_style_bg_opa(common_widget_roller, \
+        roller_para->roller_selected_bg_opax, LV_PART_SELECTED);
     if(roller_para->roller_selected_bg_opax)
-        lv_obj_set_style_bg_color(common_widget_roller, roller_para->roller_selected_bg_color, LV_PART_SELECTED);
+        lv_obj_set_style_bg_color(common_widget_roller, \
+            roller_para->roller_selected_bg_color, LV_PART_SELECTED);
 
     if(roller_para->roller_border_width)
     {
-        lv_obj_set_style_border_opa(common_widget_roller, roller_para->roller_border_opax, LV_PART_MAIN);
-        lv_obj_set_style_border_width(common_widget_roller, roller_para->roller_border_width, LV_PART_MAIN);
-        lv_obj_set_style_border_color(common_widget_roller, roller_para->roller_border_color, LV_PART_MAIN);
+        lv_obj_set_style_border_opa(common_widget_roller, \
+            roller_para->roller_border_opax, LV_PART_MAIN);
+        lv_obj_set_style_border_width(common_widget_roller, \
+            roller_para->roller_border_width, LV_PART_MAIN);
+        lv_obj_set_style_border_color(common_widget_roller, \
+            roller_para->roller_border_color, LV_PART_MAIN);
     }else
-        lv_obj_set_style_border_width(common_widget_roller, roller_para->roller_border_width, LV_PART_MAIN);
+        lv_obj_set_style_border_width(common_widget_roller, \
+            roller_para->roller_border_width, LV_PART_MAIN);
 
-    lv_obj_set_style_text_font(common_widget_roller, roller_para->roller_main_text_font, LV_PART_MAIN);
-    lv_obj_set_style_text_color(common_widget_roller, roller_para->roller_main_text_color, LV_PART_MAIN);
-    lv_obj_set_style_text_font(common_widget_roller, roller_para->roller_selected_text_font, LV_PART_SELECTED);
-    lv_obj_set_style_text_color(common_widget_roller, roller_para->roller_selected_text_color, LV_PART_SELECTED);
+    lv_obj_set_style_text_font(common_widget_roller, \
+        roller_para->roller_main_text_font, LV_PART_MAIN);
+    lv_obj_set_style_text_color(common_widget_roller, \
+        roller_para->roller_main_text_color, LV_PART_MAIN);
+    lv_obj_set_style_text_font(common_widget_roller, \
+        roller_para->roller_selected_text_font, LV_PART_SELECTED);
+    lv_obj_set_style_text_color(common_widget_roller, \
+        roller_para->roller_selected_text_color, LV_PART_SELECTED);
     
-    lv_roller_set_visible_row_count(common_widget_roller, roller_para->roller_row_count);
+    lv_roller_set_visible_row_count(common_widget_roller, \
+        roller_para->roller_row_count);
     
     if(roller_para->event_cb)
-        lv_obj_add_event_cb(common_widget_roller, roller_para->event_cb, LV_EVENT_VALUE_CHANGED, roller_para->user_data);
+        lv_obj_add_event_cb(common_widget_roller, \
+            roller_para->event_cb, LV_EVENT_VALUE_CHANGED, roller_para->user_data);
 
     return common_widget_roller;
 }
@@ -319,18 +395,27 @@ lv_obj_t *common_widget_button_create(common_widget_button_para_t *button_para)
     if(!button_para)
         return NULL;
 
-    lv_obj_t *common_widget_button = lv_btn_create(button_para->button_parent);
-    lv_obj_remove_style(common_widget_button, NULL, LV_PART_MAIN|LV_STATE_PRESSED);
-    lv_obj_set_size(common_widget_button, button_para->button_width, button_para->button_height);
-    lv_obj_set_pos(common_widget_button, button_para->button_x, button_para->button_y);
-    lv_obj_set_style_bg_opa(common_widget_button, button_para->button_main_opax, LV_PART_MAIN);
+    lv_obj_t *common_widget_button = \
+        lv_btn_create(button_para->button_parent);
+    lv_obj_remove_style(common_widget_button, \
+        NULL, LV_PART_MAIN|LV_STATE_PRESSED);
+    lv_obj_set_size(common_widget_button, \
+        button_para->button_width, button_para->button_height);
+    lv_obj_set_pos(common_widget_button, \
+        button_para->button_x, button_para->button_y);
+    lv_obj_set_style_bg_opa(common_widget_button, \
+        button_para->button_main_opax, LV_PART_MAIN);
     if(button_para->button_main_opax)
-        lv_obj_set_style_bg_color(common_widget_button, button_para->button_main_color, LV_PART_MAIN);
-    lv_obj_set_style_shadow_width(common_widget_button, 0, LV_PART_MAIN);
-    lv_obj_set_style_radius(common_widget_button, button_para->button_radius, LV_PART_MAIN);
+        lv_obj_set_style_bg_color(common_widget_button, \
+            button_para->button_main_color, LV_PART_MAIN);
+    lv_obj_set_style_shadow_width(common_widget_button, \
+        0, LV_PART_MAIN);
+    lv_obj_set_style_radius(common_widget_button, \
+        button_para->button_radius, LV_PART_MAIN);
 
     if(button_para->event_cb)
-        lv_obj_add_event_cb(common_widget_button, button_para->event_cb, LV_EVENT_SHORT_CLICKED, button_para->user_data);
+        lv_obj_add_event_cb(common_widget_button, \
+            button_para->event_cb, LV_EVENT_SHORT_CLICKED, button_para->user_data);
 
     return common_widget_button;
 }
@@ -414,48 +499,121 @@ lv_obj_t *common_widget_chart_create(common_widget_chart_para_t *chart_para)
     if(!chart_para)
         return NULL;
 
-    lv_obj_t *common_widget_chart = lv_chart_create(chart_para->chart_parent);
-    lv_obj_set_size(common_widget_chart, chart_para->chart_width, chart_para->chart_height);
-    lv_obj_set_pos(common_widget_chart, chart_para->chart_x, chart_para->chart_y);
-    lv_chart_set_type(common_widget_chart, chart_para->chart_type);
-    lv_chart_set_point_count(common_widget_chart, chart_para->chart_item_cnt);
-    lv_chart_set_update_mode(common_widget_chart, chart_para->chart_update_mode);
-    lv_chart_set_div_line_count(common_widget_chart, chart_para->chart_hor_div, chart_para->chart_ver_div);
-    lv_chart_set_range(common_widget_chart, LV_CHART_AXIS_PRIMARY_Y, chart_para->chart_priy_range_min, chart_para->chart_priy_range_max);
+    lv_obj_t *common_widget_chart = \
+        lv_chart_create(chart_para->chart_parent);
+    lv_obj_set_size(common_widget_chart, \
+        chart_para->chart_width, chart_para->chart_height);
+    lv_obj_set_pos(common_widget_chart, \
+        chart_para->chart_x, chart_para->chart_y);
+    lv_chart_set_type(common_widget_chart, \
+        chart_para->chart_type);
+    lv_chart_set_point_count(common_widget_chart, \
+        chart_para->chart_item_cnt);
+    lv_chart_set_update_mode(common_widget_chart, \
+        chart_para->chart_update_mode);
+    lv_chart_set_div_line_count(common_widget_chart, \
+        chart_para->chart_hor_div, chart_para->chart_ver_div);
+    lv_chart_set_range(common_widget_chart, \
+        LV_CHART_AXIS_PRIMARY_Y, chart_para->chart_priy_range_min, \
+            chart_para->chart_priy_range_max);
 
-    lv_obj_set_style_line_dash_gap(common_widget_chart, 3, LV_PART_MAIN);    
-    lv_obj_set_style_line_dash_width(common_widget_chart, 5, LV_PART_MAIN);
-    lv_obj_set_style_bg_opa(common_widget_chart, chart_para->chart_main_opax, LV_PART_MAIN);
+    lv_obj_set_style_line_dash_gap(common_widget_chart, \
+        3, LV_PART_MAIN);    
+    lv_obj_set_style_line_dash_width(common_widget_chart, \
+        5, LV_PART_MAIN);
+    lv_obj_set_style_bg_opa(common_widget_chart, \
+        chart_para->chart_main_opax, LV_PART_MAIN);
     if(chart_para->chart_main_opax)
-        lv_obj_set_style_bg_color(common_widget_chart, chart_para->chart_main_color, LV_PART_MAIN);
+        lv_obj_set_style_bg_color(common_widget_chart, \
+            chart_para->chart_main_color, LV_PART_MAIN);
 
-    lv_obj_set_style_pad_ver(common_widget_chart, 0, LV_PART_MAIN);
-    lv_obj_set_style_border_width(common_widget_chart, 2, LV_PART_MAIN);
-    lv_obj_set_style_radius(common_widget_chart, 0, LV_PART_MAIN);
-    lv_obj_set_style_border_side(common_widget_chart, LV_BORDER_SIDE_LEFT|LV_BORDER_SIDE_BOTTOM, LV_PART_MAIN);
+    lv_obj_set_style_pad_ver(common_widget_chart, \
+        0, LV_PART_MAIN);
+    lv_obj_set_style_border_width(common_widget_chart, \
+        2, LV_PART_MAIN);
+    lv_obj_set_style_radius(common_widget_chart, \
+        0, LV_PART_MAIN);
+    lv_obj_set_style_border_side(common_widget_chart, \
+        LV_BORDER_SIDE_LEFT|LV_BORDER_SIDE_BOTTOM, LV_PART_MAIN);
 
     if(chart_para->chart_type == LV_CHART_TYPE_BAR)
-        lv_obj_set_style_radius(common_widget_chart, 5, LV_PART_ITEMS);
+        lv_obj_set_style_radius(common_widget_chart, \
+            5, LV_PART_ITEMS);
     else if(chart_para->chart_type == LV_CHART_TYPE_LINE)
     {
-        lv_obj_set_style_size(common_widget_chart, 6, LV_PART_INDICATOR);
-        lv_obj_set_style_line_width(common_widget_chart, 4, LV_PART_ITEMS);
+        lv_obj_set_style_size(common_widget_chart, \
+            6, LV_PART_INDICATOR);
+        lv_obj_set_style_line_width(common_widget_chart, \
+            4, LV_PART_ITEMS);
     }
 
-    lv_chart_set_axis_tick(common_widget_chart, LV_CHART_AXIS_PRIMARY_X, 0, 0, chart_para->chart_prix_major_cnt, 5, true, 35);
-    lv_chart_set_axis_tick(common_widget_chart, LV_CHART_AXIS_PRIMARY_Y, 0, 0, chart_para->chart_priy_major_cnt, 5, true, 35);
+    lv_chart_set_axis_tick(common_widget_chart, \
+        LV_CHART_AXIS_PRIMARY_X, 0, 0, chart_para->chart_prix_major_cnt, 5, true, 35);
+    lv_chart_set_axis_tick(common_widget_chart, \
+        LV_CHART_AXIS_PRIMARY_Y, 0, 0, chart_para->chart_priy_major_cnt, 5, true, 35);
 
     for(uint8_t i = 0; i < chart_para->chart_series_num; i++)
     {
-        chart_para->chart_series[i] = lv_chart_add_series(common_widget_chart, chart_para->chart_series_color[i], LV_CHART_AXIS_PRIMARY_Y);
-        lv_chart_set_ext_y_array(common_widget_chart, chart_para->chart_series[i], chart_para->chart_ext_y_array + i*chart_para->chart_item_cnt);
+        chart_para->chart_series[i] = \
+            lv_chart_add_series(common_widget_chart, \
+                chart_para->chart_series_color[i], LV_CHART_AXIS_PRIMARY_Y);
+        lv_chart_set_ext_y_array(common_widget_chart, \
+            chart_para->chart_series[i], chart_para->chart_ext_y_array + \
+                i*chart_para->chart_item_cnt);
     }
 
-    lv_obj_add_event_cb(common_widget_chart, chart_draw_part_begin, LV_EVENT_DRAW_PART_BEGIN, (void *)chart_para);
+    lv_obj_add_event_cb(common_widget_chart, \
+        chart_draw_part_begin, LV_EVENT_DRAW_PART_BEGIN, (void *)chart_para);
 
     return common_widget_chart;
 }
 
+
+/*********************************************************************************
+                                  文本区域控件                                       
+*********************************************************************************/
+common_widget_textarea_para_t widget_textarea_para = {0};
+lv_obj_t *common_widget_textarea_create(common_widget_textarea_para_t *textarea_para)
+{
+    if(!textarea_para)
+        return NULL;
+
+    lv_obj_t *common_widget_textarea = \
+        lv_textarea_create(textarea_para->parent);
+    lv_obj_set_size(common_widget_textarea, \
+        textarea_para->width, textarea_para->height);
+    lv_obj_set_pos(common_widget_textarea, \
+        textarea_para->x, textarea_para->y);
+    lv_textarea_add_text(common_widget_textarea, \
+        textarea_para->txt);
+    lv_obj_set_scrollbar_mode(common_widget_textarea, \
+        LV_SCROLLBAR_MODE_OFF);
+    if(textarea_para->font)
+        lv_obj_set_style_text_font(common_widget_textarea, \
+            textarea_para->font, LV_PART_MAIN);
+    else
+        lv_obj_set_style_text_font(common_widget_textarea, \
+            sys_default_label_font(), LV_PART_MAIN);
+    lv_obj_set_style_text_color(common_widget_textarea, \
+        textarea_para->color, LV_PART_MAIN);
+    lv_obj_set_style_text_align(common_widget_textarea, \
+        textarea_para->align, LV_PART_MAIN);
+    lv_obj_set_style_bg_opa(common_widget_textarea, \
+        textarea_para->bg_opa_x, LV_PART_MAIN);
+    lv_obj_set_style_bg_color(common_widget_textarea, \
+        textarea_para->bg_color, LV_PART_MAIN);
+    lv_obj_set_style_border_width(common_widget_textarea, \
+        textarea_para->border_width, LV_PART_MAIN);
+    if(textarea_para->border_width)
+    {
+        lv_obj_set_style_border_opa(common_widget_textarea, \
+            textarea_para->border_opa_x, LV_PART_MAIN);
+        lv_obj_set_style_border_color(common_widget_textarea, \
+            textarea_para->border_color, LV_PART_MAIN);
+    }
+
+    return common_widget_textarea;
+}
 
 
 /*********************************************************************************
@@ -538,6 +696,10 @@ void common_widget_para_init(void)
     /**************图表控件参数复位**************/
     memset(&widget_chart_para, 0, \
         sizeof(common_widget_chart_para_t));
+
+    /**************文本区域控件参数复位**************/
+    memset(&widget_textarea_para, 0, \
+        sizeof(common_widget_textarea_para_t));
 
     /**************动画相关参数复位**************/
     memset(&widget_anim_para, 0, \

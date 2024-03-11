@@ -540,6 +540,7 @@ c_SRC_FILES := \
     apps/common/ui/lvgl/src/font/lv_font_fmt_txt.c  \
     apps/common/ui/lvgl/src/font/lv_font_loader.c  \
 	apps/common/ui/lvgl/src/font/font_common_32.c  \
+	apps/common/ui/lvgl/src/font/font_common_num_32.c  \
 	apps/common/ui/lvgl/src/font/font_common_num_36.c  \
 	apps/common/ui/lvgl/src/font/font_common_num_42.c  \
 	apps/common/ui/lvgl/src/font/font_common_num_52.c  \
@@ -952,6 +953,7 @@ c_SRC_FILES := \
 	apps/common/ui/lv_watch/comm_widget/widget_calorie.c \
 	apps/common/ui/lv_watch/comm_widget/widget_distance.c \
 	apps/common/ui/lv_watch/comm_widget/widget_weather.c \
+	apps/common/ui/lv_watch/comm_widget/widget_num_str.c \
 	apps/common/ui/lv_watch/comm_widget/common_data.c \
 	apps/common/ui/lv_watch/comm_widget/widget_date.c \
 	apps/common/ui/lv_watch/comm_widget/widget_week.c \
@@ -960,7 +962,7 @@ c_SRC_FILES := \
 	apps/common/ui/lv_watch/comm_widget/widget_refresh.c \
 	apps/common/ui/lv_watch/comm_func/common_stopwatch.c \
 	apps/common/ui/lv_watch/comm_func/common_countdown.c \
-	apps/common/ui/lv_watch/comm_remind/remind_task.c \
+	apps/common/ui/lv_watch/comm_task/comm_task.c \
 	apps/common/ui/lv_watch/comm_remind/alarm_manage.c \
 	apps/common/ui/lv_watch/ui_translate/ui_translate.c \
 	apps/common/ui/lv_watch/ui_cover/ui_cover.c \
@@ -1013,6 +1015,21 @@ c_SRC_FILES := \
 	apps/common/ui/lv_watch/ui_menu/call/call_online.c \
 	apps/common/ui/lv_watch/ui_menu/call/call_volume.c \
 	apps/common/ui/lv_watch/ui_menu/call/call_end.c \
+	apps/common/ui/lv_watch/ui_menu/remote_music/remote_music.c \
+	apps/common/ui/lv_watch/ui_menu/message/msg_list.c \
+	apps/common/ui/lv_watch/ui_menu/message/msg_detail.c \
+	apps/common/ui/lv_watch/ui_menu/camera/camera.c \
+	apps/common/ui/lv_watch/ui_menu/alarm/alarm_main.c \
+	apps/common/ui/lv_watch/ui_menu/alarm/alarm_time.c \
+	apps/common/ui/lv_watch/ui_menu/alarm/alarm_repeat.c \
+	apps/common/ui/lv_watch/ui_menu/alarm/alarm_modify.c \
+	apps/common/ui/lv_watch/ui_menu/alarm/alarm_remind.c \
+	apps/common/ui/lv_watch/ui_menu/countdown/countdown_time.c \
+	apps/common/ui/lv_watch/ui_menu/countdown/countdown_state.c \
+	apps/common/ui/lv_watch/ui_menu/countdown/countdown_over.c \
+	apps/common/ui/lv_watch/ui_menu/stopwatch/stopwatch_main.c \
+	apps/common/ui/lv_watch/ui_menu/stopwatch/stopwatch_state.c \
+	apps/common/ui/lv_watch/ui_menu/stopwatch/stopwatch_over.c \
 	apps/common/ui/lv_watch/comm_nor_vm/nor_vm_main.c \
 	apps/common/ui/lv_watch/comm_nor_vm/nor_vm_contacts.c \
 	apps/common/ui/lv_watch/comm_nor_vm/nor_vm_weather.c \

@@ -27,9 +27,9 @@ const ui_menu_load_info_t *menu_style_load_info[] =
 /*********************************************************************************
                              系统带标签参数的缺省值                                  
 *********************************************************************************/
-static const vm_store_para_with_label_t default_label_para[Vm_Store_Para_Num] = \
-{
-    /*********默认屏幕背光亮度 80%*********/
+static const vm_store_para_with_label_t default_label_para[\
+    Vm_Store_Para_Num] = {
+    /*********默认屏幕背光亮度*********/
     {.label = vm_label_backlight, \
         .store_para_val = \
             TCFG_BACKLIGHT_MIN_VAL + \
@@ -41,11 +41,11 @@ static const vm_store_para_with_label_t default_label_para[Vm_Store_Para_Num] = 
 
     /*********默认菜单风格*********/
     {.label = vm_label_menu_view, \
-        .store_para_val = ui_menu_view_00},
+        .store_para_val = ui_menu_view_02},
 
     /*********默认时间格式:24小时制*********/
     {.label = vm_label_time_format, \
-        .store_para_val = comm_time_format_12},
+        .store_para_val = time_format_12},
 
     /*********默认屏幕熄屏时间 30s*********/
     {.label = vm_label_offscreen_time, \

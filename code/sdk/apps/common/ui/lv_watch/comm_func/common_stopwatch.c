@@ -1,6 +1,6 @@
 #include "../lv_watch.h"
 #include "common_stopwatch.h"
-#include "../comm_remind/remind_task.h"
+#include "../comm_task/comm_task.h"
 #include "../poc_modem/poc_modem_cache.h"
 
 /*
@@ -14,8 +14,8 @@ static void common_user_stopwatch_timeout_cb(void *priv)
 {
     int countdown_timeout_msg[1];
     countdown_timeout_msg[0] = \
-        remind_msg_stopwatch_timeout;
-    post_remind_msg(countdown_timeout_msg, 1);
+        comm_msg_stopwatch_timeout;
+    post_comm_handle_msg(countdown_timeout_msg, 1);
 
     return;
 }
@@ -121,22 +121,38 @@ void common_user_stopwatch_timeout_handle(void)
 {
     stopwatch_attribute_data_t *stopwatch_data = \
         &p_ui_info_cache->common_stopwatch_para.stopwatch_data;
+    stopwatch_attribute_data_t *stopwatch_over_data = \
+        &p_ui_info_cache->common_stopwatch_para.stopwatch_over_data;
 
-    uint8_t time_sec_cnt = 1000/stopwatch_timer_inv;
+    uint8_t time_sec_cnt = \
+        1000/stopwatch_timer_inv;
 
-    stopwatch_data->stopwatch_m_second += 1;
+    stopwatch_data->stopwatch_m_second += \
+        1;
 
-    stopwatch_data->stopwatch_m_second %= time_sec_cnt;
+    stopwatch_data->stopwatch_m_second %= \
+        time_sec_cnt;
     if(!(stopwatch_data->stopwatch_m_second))
     {
         stopwatch_data->stopwatch_second += 1;
         stopwatch_data->stopwatch_second %= 60;
+
         if(!(stopwatch_data->stopwatch_second))
         {
             stopwatch_data->stopwatch_minute += 1;
-            stopwatch_data->stopwatch_minute %= 100;
-            if(!(stopwatch_data->stopwatch_minute))
-               stopwatch_data->stopwatch_minute = 0; 
+
+            if(stopwatch_data->stopwatch_minute >= \
+                60)
+            {
+                memcpy(stopwatch_over_data, stopwatch_data, \
+                    sizeof(stopwatch_attribute_data_t));
+
+                common_user_stopwatch_reset();
+
+                if(lcd_sleep_status())
+                    ui_menu_jump(\
+                        ui_act_id_stopwatch_over);
+            }      
         }     
     }
 
@@ -162,10 +178,13 @@ void common_user_stopwatch_create(void)
         &p_ui_info_cache->common_stopwatch_para.stopwatch_data;
     memset(stopwatch_data, 0, sizeof(stopwatch_attribute_data_t));
 
-
     stopwatch_attribute_state_t *stopwatch_state = \
         &p_ui_info_cache->common_stopwatch_para.stopwatch_state;
     *stopwatch_state = stopwatch_state_start;
+
+    stopwatch_attribute_data_t *stopwatch_over_data = \
+        &p_ui_info_cache->common_stopwatch_para.stopwatch_over_data;
+    memset(stopwatch_over_data, 0, sizeof(stopwatch_attribute_data_t));
 
 #if STOPWATCH_RECORD_EN
     stopwatch_attribute_data_t *stopwatch_record_data = \

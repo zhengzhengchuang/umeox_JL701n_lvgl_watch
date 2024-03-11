@@ -21,21 +21,23 @@ static void no_call_log_menu_create(lv_obj_t *obj)
 {
     widget_img_para.img_parent = \
         obj;
-    widget_img_para.img_x = 104;
-    widget_img_para.img_y = 88;
     widget_img_para.file_img_dat = \
         call_04_index;
     widget_img_para.img_click_attr = \
         false;
     widget_img_para.event_cb = \
         NULL;
-    common_widget_img_create(&widget_img_para, NULL);
+    lv_obj_t *no_call_log_icon = \
+        common_widget_img_create(&widget_img_para, NULL);
+    lv_obj_align(no_call_log_icon, LV_ALIGN_TOP_MID, \
+        0, 88);
 
-    widget_img_para.img_x = 32;
-    widget_img_para.img_y = 266;
     widget_img_para.file_img_dat = \
         comm_icon_11_index;
-    common_widget_img_create(&widget_img_para, NULL);
+    lv_obj_t *comm_11_icon = \
+        common_widget_img_create(&widget_img_para, NULL);
+    lv_obj_align(comm_11_icon, LV_ALIGN_TOP_MID, \
+        0, 266);
 
     widget_label_para.label_w = \
         (300);
@@ -57,7 +59,7 @@ static void no_call_log_menu_create(lv_obj_t *obj)
     lv_obj_t *no_record_label = \
         common_widget_label_create(&widget_label_para);
     lv_obj_align(no_record_label, LV_ALIGN_TOP_MID, \
-        0, 332);
+        0, 342);
 
     return;
 }
@@ -125,7 +127,7 @@ static void call_log_elem_click_cb(lv_event_t *e)
         &vm_call_log_ctx);
     if(!ret) return;
 
-    ui_ctrl_call_out_by_number(\
+    bt_ctrl_call_out_by_number(\
         vm_call_log_ctx.call_log_number_str, \
             strlen(vm_call_log_ctx.call_log_number_str));
 
@@ -208,7 +210,7 @@ static void has_call_log_menu_create(lv_obj_t *obj, \
             sizeof(call_log_time_str));
         int time_format = \
             get_vm_para_cache_with_label(vm_label_time_format);
-        if(time_format == comm_time_format_24)
+        if(time_format == time_format_24)
         {
             call_log_hour = \
                 vm_call_log_ctx.call_log_time.hour;     
@@ -226,7 +228,6 @@ static void has_call_log_menu_create(lv_obj_t *obj, \
                 call_log_hour -= 12;
             else if(call_log_hour == 0)
                 call_log_hour = 12;
-  
         }
         call_log_minute = \
                 vm_call_log_ctx.call_log_time.min;  
@@ -254,7 +255,7 @@ static void has_call_log_menu_create(lv_obj_t *obj, \
         widget_img_para.img_parent = \
             elem_container;
         widget_img_para.file_img_dat = \
-            am_or_pm + call_19_index;
+            am_or_pm + comm_icon_20_index;
         lv_obj_t *ampm_icon = \
              common_widget_img_create(&widget_img_para, \
                 NULL);
@@ -264,7 +265,7 @@ static void has_call_log_menu_create(lv_obj_t *obj, \
         else
             lv_obj_align_to(ampm_icon, call_log_time_label, \
                 LV_ALIGN_OUT_RIGHT_BOTTOM, 0, -5);
-        if(time_format == comm_time_format_24)
+        if(time_format == time_format_24)
             lv_obj_add_flag(ampm_icon, LV_OBJ_FLAG_HIDDEN);
         
         char *call_log_str;

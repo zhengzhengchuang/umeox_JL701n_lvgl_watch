@@ -124,7 +124,7 @@ static void menu_display_cb(lv_obj_t *obj)
 
     /********************圆点********************/
     widget_img_para.img_x = 170;
-    widget_img_para.img_y = 398;
+    widget_img_para.img_y = 408;
     widget_img_para.img_parent = \
         obj;
     widget_img_para.file_img_dat = \

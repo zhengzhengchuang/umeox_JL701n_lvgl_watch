@@ -3,7 +3,21 @@
 #include "../poc_modem/poc_modem_vm.h"
 #include "../../../../watch/include/task_manager/rtc/alarm.h"
 
+static uint8_t reminding_alarm_id;
 static const uint32_t no_alarm_info = No_Alarm_Info;
+
+uint8_t get_reminding_alarm_id(void)
+{
+    return reminding_alarm_id;
+}
+
+void set_reminding_alarm_id(uint8_t id)
+{
+    reminding_alarm_id = \
+        id;
+
+    return;
+}
 
 uint32_t common_user_alarm_read_info(uint8_t alarm_id)
 {
@@ -270,6 +284,25 @@ void common_user_alarm_delete_one(uint8_t alarm_id)
 
 static void common_user_alarm_is_on_handle(void)
 {
+    ui_menu_load_info_t *ui_menu_load_info;
+    if(lcd_sleep_status())
+        ui_menu_load_info = \
+            &(p_ui_info_cache->exit_menu_load_info);
+    else
+        ui_menu_load_info = \
+            &(p_ui_info_cache->menu_load_info); 
+    /*锁定菜单，闹钟不提醒，当前有不能打断的页面事件处理*/
+    if(ui_menu_load_info->lock_flag)
+        return;
+
+    /*有其他事件不能提醒闹钟得，在此添加*/
+    //.......
+
+    /*在此响铃、震动*/
+
+    /*弹出ui页面*/
+    ui_menu_jump(ui_act_id_alarm_remind);
+
     return;
 }
 
@@ -287,23 +320,28 @@ void common_user_alarm_real_time_monitor(void)
     if(alarm_num == 0)
         return;
 
-    ui_get_sys_time(&alarm_sys_time);
+    get_utc_time(&alarm_sys_time);
 
     for(uint8_t i = 0; i < alarm_num; i++)
     {
         if(alarm_sys_time.hour == alarm_info[i].bit_field.alarm_hour && \
             alarm_sys_time.min == alarm_info[i].bit_field.alarm_minute)
         {
-            alarm_weekday = rtc_calculate_week_val(&alarm_sys_time);
+            alarm_weekday = \
+                rtc_calculate_week_val(&alarm_sys_time);
 
             if(!(alarm_info[i].bit_field.alarm_repeat))
             {
                 if(alarm_info[i].bit_field.alarm_enable)
                 {
+                    set_reminding_alarm_id(i);
+
                     alarm_info[i].bit_field.alarm_enable = 0;
 
-                    /*闹钟到啦,此处做处理*/
-                    common_user_alarm_is_on_handle();     
+                    common_user_alarm_is_on_handle();
+
+                    /*如果找到一个生效的闹钟，就不会往后查找啦*/
+                    break;  
                 }
             }else
             {
@@ -312,10 +350,12 @@ void common_user_alarm_real_time_monitor(void)
                 {
                     if(alarm_info[i].bit_field.alarm_enable)
                     {
-                        /*闹钟到啦,此处做处理*/
+                        set_reminding_alarm_id(i);
+
                         common_user_alarm_is_on_handle();
 
-                        printf("%s:repeat\n", __func__);
+                        /*如果找到一个生效的闹钟，就不会往后查找啦*/
+                        break;
                     }
                 }
             }
@@ -324,3 +364,4 @@ void common_user_alarm_real_time_monitor(void)
 
     return;
 }
+

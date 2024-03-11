@@ -65,3 +65,36 @@ bool lang_txt_is_arabic(void)
 
     return false;
 }
+
+/*********************************************************************************
+                                  判断字符串中是否存在阿拉伯文                                 
+*********************************************************************************/
+bool utf8_str_is_arabic(const char *utf8_str, uint32_t str_len)
+{
+    if(!utf8_str || !str_len) 
+        return false;
+
+    uint8_t utf8_size;
+    uint32_t unicode_letter;
+
+    for(uint32_t idx = 0; idx < str_len; idx += utf8_size)
+    {
+        utf8_size = \
+            _lv_txt_encoded_size(&utf8_str[idx]);
+        if(!utf8_size)
+            break;
+
+        unicode_letter = \
+            _lv_txt_encoded_next(utf8_str, &idx);
+
+        if((unicode_letter >= 0x0600 && unicode_letter <= 0x06FF) || \
+            (unicode_letter >= 0x0750 && unicode_letter <= 0x07FF) || \
+                (unicode_letter >= 0xFB50 && unicode_letter <= 0xFDFF) || \
+                    (unicode_letter >= 0xFE70 && unicode_letter <= 0xFEFF))
+            return true;
+
+    }
+    
+    
+    return false;
+}

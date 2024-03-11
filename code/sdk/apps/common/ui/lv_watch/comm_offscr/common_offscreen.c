@@ -11,9 +11,24 @@ static uint16_t menu_lock_timer_id = 0;
 /**************当前熄屏时间**************/
 static uint32_t cur_offscreen_time = 0;
 
+/**************是否进入灭屏**************/
+static bool is_enter_offscreen = false;
+
 /**************函数声明**************/
 static void common_menu_lock_timer_cb(void *priv);
 
+bool get_is_enter_offscreen(void)
+{
+    return is_enter_offscreen;
+}
+
+void set_is_enter_offscreen(bool status)
+{
+    is_enter_offscreen = \
+        status;
+
+    return;
+}
 
 void common_menu_lock_timer_del(void)
 {
@@ -45,8 +60,11 @@ static void common_offscreen_timer_cb(void *priv)
     if(cur_offscreen_time == Always_OnScreen)
         return;
         
+    set_is_enter_offscreen(true);
+
     int menu_offscreen_msg[1];
-    menu_offscreen_msg[0] = ui_msg_menu_offscreen;
+    menu_offscreen_msg[0] = \
+        ui_msg_menu_offscreen;
     post_ui_msg(menu_offscreen_msg, 1);
 
     return;
@@ -68,8 +86,8 @@ void common_offscreen_msg_handle(void)
     ui_menu_jump_handle(ui_act_id_null);//传ui_act_id_null即是销毁页面
 
     /**************关掉TE, 下次亮屏能缩短时间**************/
-    extern volatile u8 usr_wait_te;
-    usr_wait_te = 0;
+    // extern volatile u8 usr_wait_te;
+    // usr_wait_te = 0;
 
     /**************灭屏菜单定时锁定机制**************/
     common_menu_lock_timer_add();
@@ -92,6 +110,8 @@ void common_offscreen_timer_create(void)
     if(!offscreen_timer_id)
         offscreen_timer_id = sys_timeout_add(NULL, \
             common_offscreen_timer_cb, cur_offscreen_time);
+
+    set_is_enter_offscreen(false);
 
     return;
 }

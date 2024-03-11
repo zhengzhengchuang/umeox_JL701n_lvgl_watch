@@ -1,10 +1,11 @@
 #include "tool_box.h"
 
-/*************页面元素***************/
-static lv_obj_t *tool_box_container = NULL;
-static lv_obj_t *tool_box_tips_label = NULL;
-static lv_timer_t *tips_label_hd_timer = NULL;
-static const uint16_t tips_label_duration = 3*1000;
+static uint16_t dnd_state_icon_dsc;
+static lv_obj_t *tool_box_container;
+static lv_obj_t *tool_box_tips_label;
+static lv_timer_t *tips_label_hd_timer;
+static const uint16_t tips_label_duration = \
+    3*1000;
 
 static void tips_label_hd_timer_cb(lv_timer_t *timer)
 {
@@ -13,8 +14,11 @@ static void tips_label_hd_timer_cb(lv_timer_t *timer)
 
     lv_timer_pause(tips_label_hd_timer);
 
-    lv_obj_add_flag(tool_box_tips_label, \
-        LV_OBJ_FLAG_HIDDEN);
+    lv_label_set_text(tool_box_tips_label, \
+        get_lang_txt_with_id(\
+            lang_txtid_no_reminder));
+    // lv_obj_add_flag(tool_box_tips_label, \
+    //     LV_OBJ_FLAG_HIDDEN);
 
     return;
 }
@@ -63,7 +67,7 @@ static void tool_box_find_event_cb(lv_event_t *e)
     if(!e) return;
 
     uint8_t ble_bt_connect = \
-        ui_get_ble_bt_connect_status();
+        get_ble_bt_connect_status();
     if(ble_bt_connect == 0 || \
         ble_bt_connect == 2)
     {
@@ -76,11 +80,11 @@ static void tool_box_find_event_cb(lv_event_t *e)
             get_lang_txt_with_id(\
                 lang_txtid_searching_for_phone));
 
-        ui_ctrl_ble_dev_find_phone();
+        ble_dev_ctrl_find_phone();
     }
 
-    lv_obj_clear_flag(tool_box_tips_label, \
-            LV_OBJ_FLAG_HIDDEN);
+    // lv_obj_clear_flag(tool_box_tips_label, \
+    //         LV_OBJ_FLAG_HIDDEN);
 
     tips_label_hd_timer_resume();
 
@@ -93,7 +97,7 @@ static void tool_box_camera_event_cb(lv_event_t *e)
     if(!e) return;
 
     uint8_t ble_bt_connect = \
-        ui_get_ble_bt_connect_status();
+        get_ble_bt_connect_status();
     if(ble_bt_connect == 0 || \
         ble_bt_connect == 2)
     {
@@ -101,15 +105,15 @@ static void tool_box_camera_event_cb(lv_event_t *e)
             get_lang_txt_with_id(\
                 lang_txtid_not_connected_phone));
 
-        lv_obj_clear_flag(tool_box_tips_label, \
-            LV_OBJ_FLAG_HIDDEN);
+        // lv_obj_clear_flag(tool_box_tips_label, \
+        //     LV_OBJ_FLAG_HIDDEN);
 
         tips_label_hd_timer_resume();  
     }else
     {
-        /****进入相机操作页面****/
-
-        ui_ctrl_phone_enter_camera();
+        ble_dev_ctrl_phone_enter_camera();
+        
+        ui_menu_jump(ui_act_id_camera);
     }
 
     return;
@@ -130,6 +134,39 @@ static void tool_box_dnd_state_event_cb(lv_event_t *e)
 {
     if(!e) return;
 
+    lv_obj_t *obj = \
+        lv_event_get_target(e);
+
+    int dnd_state = \
+        get_vm_para_cache_with_label(\
+            vm_label_dnd_state);
+    if(dnd_state == \
+        dnd_state_disable)
+        dnd_state = dnd_state_enable;
+    else if(dnd_state == \
+        dnd_state_enable)
+        dnd_state = dnd_state_disable;
+
+    uint32_t file_img_dat = \
+        tool_box_dnd_00_index + dnd_state;
+    common_widget_img_replace_src(obj, \
+        file_img_dat, dnd_state_icon_dsc);
+
+    if(dnd_state == dnd_state_disable)
+        lv_label_set_text(tool_box_tips_label, \
+            get_lang_txt_with_id(\
+                lang_txtid_dnd_disable));
+    else if(dnd_state == dnd_state_enable)
+        lv_label_set_text(tool_box_tips_label, \
+            get_lang_txt_with_id(\
+                lang_txtid_dnd_enable));
+    // lv_obj_clear_flag(tool_box_tips_label, \
+    //     LV_OBJ_FLAG_HIDDEN);
+    tips_label_hd_timer_resume(); 
+
+    set_vm_para_cache_with_label(\
+        vm_label_dnd_state, dnd_state);
+
     return;
 }
 
@@ -146,6 +183,7 @@ static void tool_box_backlight_event_cb(lv_event_t *e)
 static void tool_box_earphone_state_event_cb(lv_event_t *e)
 {
     if(!e) return;
+
 
     return;
 }
@@ -182,7 +220,7 @@ static void menu_create_cb(lv_obj_t *obj)
     if(!obj) return;
 
     tileview_register_all_menu(obj, ui_act_id_null, \
-        ui_act_id_null, ui_act_id_null, ui_act_id_null, \
+        ui_act_id_null, ui_act_id_null, ui_act_id_remote_music, \
             ui_act_id_tool_box);
 
     tips_label_hd_timer_create();
@@ -257,7 +295,8 @@ static void menu_display_cb(lv_obj_t *obj)
     widget_img_para.event_cb = \
         tool_box_dnd_state_event_cb;
     lv_obj_t *dnd_state_icon = 
-        common_widget_img_create(&widget_img_para, NULL);
+        common_widget_img_create(&widget_img_para, \
+            &dnd_state_icon_dsc);
     lv_obj_align(dnd_state_icon, LV_ALIGN_BOTTOM_LEFT, \
         0, 0);
 
@@ -308,14 +347,15 @@ static void menu_display_cb(lv_obj_t *obj)
         lv_color_hex(0x000000);
     widget_label_para.label_ver_center = \
         true;
-    widget_label_para.user_text_font = NULL;
-    widget_label_para.label_text = \
+    widget_label_para.user_text_font = \
         NULL;
+    widget_label_para.label_text = \
+        get_lang_txt_with_id(lang_txtid_no_reminder);
     tool_box_tips_label = \
         common_widget_label_create(&widget_label_para);
     lv_obj_center(tool_box_tips_label);
-    lv_obj_add_flag(tool_box_tips_label, \
-        LV_OBJ_FLAG_HIDDEN);
+    // lv_obj_add_flag(tool_box_tips_label, \
+    //     LV_OBJ_FLAG_HIDDEN);
 
     return;
 }

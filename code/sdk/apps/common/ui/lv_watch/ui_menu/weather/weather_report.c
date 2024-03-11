@@ -135,9 +135,9 @@ static void weather_report_2_7_elem_create(menu_align_t menu_align)
     weather_type_t weather_x_type;
 
     struct sys_time utc_time;
-    ui_get_sys_time(&utc_time);
+    get_utc_time(&utc_time);
     comm_enum_week_t enum_week = \
-        ui_get_sys_week(&utc_time);
+        get_utc_week(&utc_time);
 
     /*********obj容器***********/
     widget_obj_para.obj_x = 0;

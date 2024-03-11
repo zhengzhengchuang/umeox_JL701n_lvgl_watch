@@ -4,7 +4,7 @@ static void call_in_answer_cb(lv_event_t *e)
 {
     if(!e) return;
 
-    ui_ctrl_call_answer();
+    bt_ctrl_call_answer();
     
     return;
 }
@@ -13,7 +13,7 @@ static void call_in_hang_up_cb(lv_event_t *e)
 {
     if(!e) return;
 
-    ui_ctrl_call_hang_up();
+    bt_ctrl_call_hang_up();
 
     return;
 }
@@ -62,7 +62,7 @@ static void menu_display_cb(lv_obj_t *obj)
     widget_label_para.label_parent = \
         obj;
     widget_label_para.label_text = \
-        ui_get_call_number_name();
+        bt_get_call_number_name();
     lv_obj_t *call_number_name_label = \
         common_widget_label_create(&widget_label_para);
     lv_obj_align(call_number_name_label, LV_ALIGN_TOP_MID, \

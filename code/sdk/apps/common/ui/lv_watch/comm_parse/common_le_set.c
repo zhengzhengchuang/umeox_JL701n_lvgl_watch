@@ -24,7 +24,7 @@ void common_le_set_utc_time(uint8_t *para_buf, \
     utc_time.hour = para_buf[idx++];
     utc_time.min = para_buf[idx++];
     utc_time.sec = para_buf[idx++];
-    ui_set_sys_time(&utc_time);
+    set_utc_time(&utc_time);
 
     common_clock_pointer_angle_update();
 

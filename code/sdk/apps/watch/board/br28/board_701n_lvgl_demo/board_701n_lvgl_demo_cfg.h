@@ -133,7 +133,7 @@
 //*********************************************************************************//
 //                                  SD 配置                                        //
 //*********************************************************************************//
-#define TCFG_SD0_ENABLE						ENABLE_THIS_MOUDLE	//SD0模块使能
+#define TCFG_SD0_ENABLE						DISABLE//ENABLE_THIS_MOUDLE	//SD0模块使能
 #define TCFG_SD0_DAT_MODE					1               //线数设置，1：一线模式  4：四线模式
 #define TCFG_SD0_DET_MODE					SD_IO_DECT//SD_CLK_DECT		//SD卡检测方式
 #define TCFG_SD0_DET_IO                     IO_PORTB_03      //当检测方式为IO检测可用
@@ -146,7 +146,7 @@
 #define TCFG_SD0_PORT_DA2					NO_CONFIG_PORT
 #define TCFG_SD0_PORT_DA3					NO_CONFIG_PORT
 
-#define TCFG_SD_ALWAY_ONLINE_ENABLE         ENABLE
+#define TCFG_SD_ALWAY_ONLINE_ENABLE         DISABLE//ENABLE
 #define TCFG_KEEP_CARD_AT_ACTIVE_STATUS	    DISABLE	// 保持卡活跃状态。会增加功耗
 
 #define TCFG_SD0_POWER_PORT					IO_PORTG_08 // 没有psram时使用SDPG（PE6），该宏定义无效。psram占用SDPG时，使用mos管控制SDPG

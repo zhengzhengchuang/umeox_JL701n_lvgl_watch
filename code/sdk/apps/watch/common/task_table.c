@@ -98,7 +98,7 @@ const struct task_info task_info_table[] = {
 #if PRODUCT_TEST_ENABLE
     {"pt",					1,	    0,  512,	  128  },
 #endif
-    {"remind_task",       1,     1,   128,   128},
+    {"comm_handle_task",       1,     1,   512,   128},
     {0, 0},
 };
 

@@ -43,7 +43,8 @@
 #define LCD_W 368
 #define LCD_H 448
 #define LCD_BLOCK_W 368
-#if (defined(TCFG_SMART_VOICE_ENABLE) && (TCFG_SMART_VOICE_ENABLE == 1))
+#if (defined(TCFG_SMART_VOICE_ENABLE) && \
+    (TCFG_SMART_VOICE_ENABLE == 1))
 #define LCD_BLOCK_H 20
 #else /*TCFG_SMART_VOICE_ENABLE == 0*/
 #define LCD_BLOCK_H 152
@@ -108,6 +109,8 @@ static void lcd_adjust_display_brightness(u8 percent)
     para[1] = (brightness >> 8) & 0x80;
 
     lcd_write_cmd(0x51, para, 2);
+
+    return;
 }
 
 /*
@@ -142,8 +145,6 @@ static int lcd_spi_ft2308_power_ctrl(u8 onoff)
 }
 
 
-//#define DEEP_STANDBY  1
-
 /*
 ** 设置lcd进入睡眠
 */
@@ -170,7 +171,7 @@ static void lcd_spi_ft2308_exitsleep(void)
     return;
 }
 
-static u32 lcd_spi_ft2308_read_id()
+static u32 lcd_spi_ft2308_read_id(void)
 {
     u8 id[3];
     lcd_read_cmd(0xDA, id, sizeof(id));
@@ -179,7 +180,8 @@ static u32 lcd_spi_ft2308_read_id()
 }
 
 
-struct imd_param lcd_spi_ft2308_param = {
+struct imd_param lcd_spi_ft2308_param = 
+{
     .scr_x    = SCR_X,
     .scr_y	  = SCR_Y,
     .scr_w	  = SCR_W,
@@ -211,7 +213,8 @@ struct imd_param lcd_spi_ft2308_param = {
     .debug_mode_color = 0xff0000,
 };
 
-REGISTER_LCD_DEVICE(ft2308) = {
+REGISTER_LCD_DEVICE(ft2308) = 
+{
     .logo = "ft2308",
     .row_addr_align    = 2,
     .column_addr_align = 2,
@@ -230,5 +233,3 @@ REGISTER_LCD_DEVICE(ft2308) = {
     .lcd_id = 0x000000,
 };
 #endif
-
-

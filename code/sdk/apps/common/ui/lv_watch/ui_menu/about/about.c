@@ -1,6 +1,5 @@
 #include "about.h"
 
-//static int16_t scroll_y_val = 0;
 static lv_obj_t *about_container = NULL;
 
 #if 0
@@ -21,11 +20,12 @@ static void about_container_create(lv_obj_t *obj)
 {
     widget_obj_para.obj_parent = obj;
     widget_obj_para.obj_x = 0;
-    widget_obj_para.obj_y = 0;
+    widget_obj_para.obj_y = \
+        LCD_UI_Y_OFFSET;
     widget_obj_para.obj_width = \
         LCD_WIDTH;
     widget_obj_para.obj_height = \
-        LCD_HEIGHT;
+        LCD_HEIGHT - LCD_UI_Y_OFFSET;
     widget_obj_para.obj_bg_opax = \
         LV_OPA_0;
     widget_obj_para.obj_bg_color = \
@@ -142,7 +142,7 @@ static void about_ble_name_elem_create(void)
 
 
     const char *ble_name_str = \
-        ui_get_dev_ble_name();
+        get_dev_ble_name();
     widget_label_para.label_text_color = \
         lv_color_hex(0xffffff);
     widget_label_para.label_text = \
@@ -196,7 +196,7 @@ static void about_ble_mac_elem_create(void)
     uint8_t ble_mac_idx = 0;
     char ble_mac_str[18] = {0};
     const uint8_t *ble_mac = \
-        ui_get_dev_ble_mac();
+        get_dev_ble_mac();
 
     for(uint8_t i = 0; i < 17; i++)
     {
@@ -377,8 +377,11 @@ static void menu_create_cb(lv_obj_t *obj)
 {
     if(!obj) return;
 
+    ui_act_id_t prev_act_id = \
+        read_menu_return_level_id();
+
     tileview_register_all_menu(obj, ui_act_id_null, \
-        ui_act_id_null, ui_act_id_null, ui_act_id_null, \
+        ui_act_id_null, prev_act_id, ui_act_id_null, \
             ui_act_id_about);
 
     return;

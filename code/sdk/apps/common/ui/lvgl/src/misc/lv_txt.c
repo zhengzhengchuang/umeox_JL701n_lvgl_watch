@@ -529,6 +529,7 @@ static uint8_t lv_txt_utf8_size(const char * str)
         return 3;
     else if(LV_IS_4BYTES_UTF8_CODE(str[0]))
         return 4;
+        
     return 0;
 }
 

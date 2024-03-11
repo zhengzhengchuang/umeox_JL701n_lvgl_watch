@@ -47,8 +47,12 @@ typedef union
 typedef struct
 {
     uint8_t alarm_num;
-    alarm_info_union_t alarm_info[Alarm_Max_Num];
+    alarm_info_union_t alarm_info[\
+        Alarm_Max_Num];
 }alarm_manage_para_t;
+
+uint8_t get_reminding_alarm_id(void);
+void set_reminding_alarm_id(uint8_t id);
 
 void common_user_alarm_delete_all(void);
 void common_user_alarm_add(uint32_t alarm_union);

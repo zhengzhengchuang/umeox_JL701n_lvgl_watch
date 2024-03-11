@@ -68,6 +68,7 @@ enum
     lang_txtid_pouring,//大雨
     lang_txtid_light_rain,//小雨
     lang_txtid_no_data,//无数据
+    lang_txtid_every_day,//每天
     lang_txtid_sunday,//周日
     lang_txtid_monday,//周一
     lang_txtid_tuesday,//周二
@@ -85,6 +86,8 @@ enum
     lang_txtid_searching_for_phone,//正在寻找附近的手机...
     lang_txtid_dnd_enable,//勿扰模式 - 开启
     lang_txtid_dnd_disable,//勿扰模式 - 关闭
+    lang_txtid_no_reminder,//无提醒
+    lang_txtid_no_message,//无消息
     
     lang_txtid_max,
 };

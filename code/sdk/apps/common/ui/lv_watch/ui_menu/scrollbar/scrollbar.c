@@ -65,7 +65,8 @@ void common_scrollbar_destroy(void)
 }
 
 void common_scrollbar_create(lv_obj_t *obj, \
-    int16_t scroll_offset, int16_t scroll_total)
+    int16_t scroll_offset, int16_t scroll_total, \
+        menu_align_t menu_align)
 {
     if(!obj) return;
 
@@ -94,8 +95,12 @@ void common_scrollbar_create(lv_obj_t *obj, \
         scrollbar_0_w/2;
     *scrollbar_0_obj = \
         common_widget_obj_create(&widget_obj_para);
-    lv_obj_align(*scrollbar_0_obj, LV_ALIGN_TOP_RIGHT, \
-        -40, 50);
+    if(menu_align == menu_align_right)
+        lv_obj_align(*scrollbar_0_obj, LV_ALIGN_TOP_LEFT, \
+            40, 50);
+    else
+        lv_obj_align(*scrollbar_0_obj, LV_ALIGN_TOP_RIGHT, \
+            -40, 50);
 
     uint16_t scrollbar_1_w = \
         scrollbar_0_w;

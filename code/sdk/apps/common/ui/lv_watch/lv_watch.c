@@ -8,6 +8,17 @@
 extern BT_USER_PRIV_VAR bt_user_priv_var;
 
 /*********************************************************************************
+                                时间滚轮共用                                    
+*********************************************************************************/
+const char time_hour_str[] = {
+    "00\n01\n02\n03\n04\n05\n06\n07\n08\n09\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23"
+};
+
+const char time_min_sec_str[] = {
+    "00\n01\n02\n03\n04\n05\n06\n07\n08\n09\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25\n26\n27\n28\n29\n30\n31\n32\n33\n34\n35\n36\n37\n38\n39\n40\n41\n42\n43\n44\n45\n46\n47\n48\n49\n50\n51\n52\n53\n54\n55\n56\n57\n58\n59"
+};
+
+/*********************************************************************************
                                 ui层页面跳转                                    
 *********************************************************************************/
 void ui_menu_jump(ui_act_id_t act_id)
@@ -34,9 +45,9 @@ bool ui_act_id_validity(ui_act_id_t act_id)
 }
 
 /*********************************************************************************
-                                ui层设置系统UTC时间                                    
+                                设置系统UTC时间                                    
 *********************************************************************************/
-void ui_set_sys_time(struct sys_time *utc_time)
+void set_utc_time(struct sys_time *utc_time)
 {
     void *fd = dev_open("rtc", NULL);
     if(!fd) return;
@@ -49,9 +60,9 @@ void ui_set_sys_time(struct sys_time *utc_time)
 }
 
 /*********************************************************************************
-                                ui层获取系统UTC时间                                    
+                                获取系统UTC时间                                    
 *********************************************************************************/
-void ui_get_sys_time(struct sys_time *utc_time)
+void get_utc_time(struct sys_time *utc_time)
 {
     void *fd = dev_open("rtc", NULL);
     if(!fd) return;
@@ -64,50 +75,50 @@ void ui_get_sys_time(struct sys_time *utc_time)
 }
 
 /*********************************************************************************
-                                ui层获取系统星期                                    
+                                获取系统星期                                    
 *********************************************************************************/
-comm_enum_week_t ui_get_sys_week(struct sys_time *utc_time)
+comm_enum_week_t get_utc_week(struct sys_time *utc_time)
 {
     return ((comm_enum_week_t)rtc_calculate_week_val(utc_time));
 }
 
 /*********************************************************************************
-                                ui层获取bt蓝牙mac                                  
+                                获取bt蓝牙mac                                  
 *********************************************************************************/
-const uint8_t *ui_get_dev_bt_mac(void)
+const uint8_t *get_dev_bt_mac(void)
 {
     return (bt_get_mac_addr());
 }
 
 /*********************************************************************************
-                                ui层获取ble蓝牙mac                                   
+                                获取ble蓝牙mac                                   
 *********************************************************************************/
-const uint8_t *ui_get_dev_ble_mac(void)
+const uint8_t *get_dev_ble_mac(void)
 {
     return (jl_ble_get_mac_addr());
 }
 
 /*********************************************************************************
-                                ui层获取bt蓝牙名称                                
+                                获取bt蓝牙名称                                
 *********************************************************************************/
-const char *ui_get_dev_bt_name(void)
+const char *get_dev_bt_name(void)
 {
     return (bt_get_local_name());
 }
 
 /*********************************************************************************
-                                ui层获取ble蓝牙名称                                   
+                                获取ble蓝牙名称                                   
 *********************************************************************************/
-const char *ui_get_dev_ble_name(void)
+const char *get_dev_ble_name(void)
 {
     return (bt_get_local_name());
 }
 
 /*********************************************************************************
-                                ui层获取ble、bt连接状态  
+                                获取ble、bt连接状态  
                         0:都未连接 1：仅ble连接 2：仅bt连接 3：都连接                                 
 *********************************************************************************/
-uint8_t ui_get_ble_bt_connect_status(void)
+uint8_t get_ble_bt_connect_status(void)
 {
     uint8_t bt_status = \
         bt_get_connect_status();
@@ -173,13 +184,13 @@ void ui_ctl_lcd_enter_sleep(bool sleep)
 /*********************************************************************************
                                 通过号码拨出电话                                    
 *********************************************************************************/
-void ui_ctrl_call_out_by_number(char *call_number, uint8_t number_len)
+void bt_ctrl_call_out_by_number(char *call_number, uint8_t number_len)
 {
     if(!call_number || !number_len)
         return;
 
     uint8_t ble_bt_connect = \
-        ui_get_ble_bt_connect_status();
+        get_ble_bt_connect_status();
     if(ble_bt_connect == 0 || \
         ble_bt_connect == 1)
     {
@@ -199,7 +210,7 @@ void ui_ctrl_call_out_by_number(char *call_number, uint8_t number_len)
                                 获取来电号码
                     (如果联系人列表有，返回名字，否则返回号码)                                    
 *********************************************************************************/
-char *ui_get_call_number_name(void)
+char *bt_get_call_number_name(void)
 {
     static char *call_name;
     static uint8_t *call_number;
@@ -225,7 +236,7 @@ char *ui_get_call_number_name(void)
 /*********************************************************************************
                                 控制通话接听                                   
 *********************************************************************************/
-void ui_ctrl_call_answer(void)
+void bt_ctrl_call_answer(void)
 {
     user_send_cmd_prepare(USER_CTRL_HFP_CALL_ANSWER, \
         0, NULL);
@@ -236,7 +247,7 @@ void ui_ctrl_call_answer(void)
 /*********************************************************************************
                                 控制通话挂断                                   
 *********************************************************************************/
-void ui_ctrl_call_hang_up(void)
+void bt_ctrl_call_hang_up(void)
 {
     user_send_cmd_prepare(USER_CTRL_HFP_CALL_HANGUP, \
         0, NULL);
@@ -321,7 +332,7 @@ void update_call_log_message_flash(void)
        memcpy((void *)(vm_call_log_ctx.call_log_name_str), \
         (void *)call_name, Call_Name_Max_Len);
 
-    ui_get_sys_time(&(vm_call_log_ctx.call_log_time));
+    get_utc_time(&(vm_call_log_ctx.call_log_time));
     
     vm_call_log_ctx_falsh_save(&vm_call_log_ctx);
 
@@ -333,23 +344,47 @@ void update_call_log_message_flash(void)
 /*********************************************************************************
                                 通话中获取音量                                   
 *********************************************************************************/
-uint8_t ui_get_calling_volumn(void)
+uint8_t bt_get_calling_volumn(void)
 {
     return app_var.call_volume;
 }
 
 /*********************************************************************************
-                                拨出、拨入页面跳转                                
+                                拨出、来电页面跳转                                
 *********************************************************************************/
-void ui_call_out_or_in_menu_jump(void)
+static bool call_ui_is_valid = false;
+
+void bt_call_out_or_in_menu_jump(void)
 {
     //判断当前是否符合弹出的条件
-    //.......
+    ui_menu_load_info_t *ui_menu_load_info;
+    if(lcd_sleep_status())
+        ui_menu_load_info = \
+            &(p_ui_info_cache->exit_menu_load_info);
+    else
+        ui_menu_load_info = \
+            &(p_ui_info_cache->menu_load_info); 
+    /*锁定菜单，不弹出窗口，当前有不能打断的页面事件处理*/
+    if(ui_menu_load_info->lock_flag)
+    {
+        call_ui_is_valid = \
+            false;
+
+        return;
+    }
+
+    /*勿扰模开启*/
+    //......
+    
+    /*震动、响铃*/
+    //......
 
     if(call_out_or_in == 1)
         ui_menu_jump(ui_act_id_call_out); 
     else if(call_out_or_in == 2)
-        ui_menu_jump(ui_act_id_call_in);   
+        ui_menu_jump(ui_act_id_call_in); 
+
+    call_ui_is_valid = true;  
 
     return;
 }
@@ -357,8 +392,11 @@ void ui_call_out_or_in_menu_jump(void)
 /*********************************************************************************
                                 挂断后页面跳转                                  
 *********************************************************************************/
-void ui_call_hang_up_menu_jump(void)
+void bt_call_hang_up_menu_jump(void)
 {
+    if(!call_ui_is_valid)
+        return;
+
     ui_act_id_t prev_act_id = \
         read_menu_return_level_id();
 
@@ -375,8 +413,11 @@ void ui_call_hang_up_menu_jump(void)
 /*********************************************************************************
                                 接通后页面跳转                                  
 *********************************************************************************/
-void ui_call_answer_menu_jump(void)
+void bt_call_answer_menu_jump(void)
 {
+    if(!call_ui_is_valid)
+        return;
+
     ui_menu_jump(ui_act_id_call_online);
 
     return;
@@ -397,7 +438,7 @@ static void call_online_duration_timer_cb(void *priv)
     return;
 }
 
-uint32_t ui_get_call_online_duration(void)
+uint32_t get_call_online_duration(void)
 {
     return call_online_duration;
 }
@@ -438,9 +479,9 @@ void call_online_duration_timer_delete(void)
 }
 
 /*********************************************************************************
-                                ui控制查找手机                                  
+                                设备查找手机                                 
 *********************************************************************************/
-void ui_ctrl_ble_dev_find_phone(void)
+void ble_dev_ctrl_find_phone(void)
 {
     printf("%s\n", __func__);
 
@@ -448,30 +489,115 @@ void ui_ctrl_ble_dev_find_phone(void)
 }
 
 /*********************************************************************************
-                                ui控制手机相机相关操作                                 
+                                控制手机相机相关操作                                 
 *********************************************************************************/
-void ui_ctrl_phone_enter_camera(void)
+void ble_dev_ctrl_phone_enter_camera(void)
 {
     printf("%s\n", __func__);
 
     return;
 }
 
-void ui_ctrl_phone_exit_camera(void)
+void ble_dev_ctrl_phone_exit_camera(void)
 {
     printf("%s\n", __func__);
 
     return;
 }
 
-void ui_ctrl_phone_take_photos(void)
+void ble_dev_ctrl_phone_take_photos(void)
 {
     printf("%s\n", __func__);
 
     return;
 }
 
-void ui_ctrl_phone_dly_take_photos(void)
+void ble_dev_ctrl_phone_dly_take_photo(void)
+{
+    printf("%s\n", __func__);
+
+    return;
+}
+
+
+/*********************************************************************************
+                        远程音乐控制相关操作(安卓走协议、ios走ams)                                
+*********************************************************************************/
+static remote_music_ctrl_t remote_music_ctrl = {
+    .volume = 8,
+    .music_title = {0},
+    .play_state = \
+        remote_music_puase,
+};
+
+void sync_remote_music_volume(void)
+{
+    printf("%s\n", __func__);
+
+    return;
+}
+
+uint8_t get_remote_music_volume(void)
+{
+    return remote_music_ctrl.volume;
+}
+
+void set_remote_music_volume(uint8_t volume)
+{
+    remote_music_ctrl.volume = \
+        volume;
+
+    return;
+}
+
+remote_music_state_t get_remote_music_state(void)
+{
+    return remote_music_ctrl.play_state;
+}
+
+void set_remote_music_state(remote_music_state_t state)
+{
+    remote_music_ctrl.play_state = \
+        state;
+
+    return;
+}
+
+char *get_remote_music_title(void)
+{
+    return remote_music_ctrl.music_title;
+}
+
+void set_remote_music_title(char *title, uint8_t len)
+{
+    if(!title || !len)
+        return;
+
+    if(len > \
+        Remote_Music_Title_Len)
+        len = Remote_Music_Title_Len;
+
+    memcpy(remote_music_ctrl.music_title, \
+        title, len);
+
+    return;
+}
+
+void ble_dev_ctrl_remote_music_prev(void)
+{
+    printf("%s\n", __func__);
+
+    return;
+}
+
+void ble_dev_ctrl_remote_music_next(void)
+{
+    printf("%s\n", __func__);
+
+    return;
+}
+
+void ble_dev_ctrl_remote_music_state(void)
 {
     printf("%s\n", __func__);
 

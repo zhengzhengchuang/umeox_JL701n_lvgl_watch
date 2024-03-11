@@ -7,20 +7,22 @@ static const char *lang_sel_text_src[\
     "العربية",
     "English",
     "Français",
-    "اردو",
-    "Türk",
+    "اوردو زبان",
+    "Türkçe",
     "简体中文",
-    "Bahasa Indonesia",
+    "IndonesiaName",
     "فارسی",
     "Deutsch",
-    "Pусский",
+    "Русский язык",
+    "MalaysiaName",
+    "O'zbek tili",
 };
 
 /****************语言容器点击索引****************/
 static const uint8_t lang_list_elem_container_idx[\
     Lang_List_Elem_Num] =
 {
-    0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
 };
 
 /****************语言列表滚动参数****************/
@@ -62,7 +64,7 @@ static const int16_t lang_list_elem_container_width = \
 
 /****************语言列表元素容器高****************/
 static const int16_t lang_list_elem_container_height = \
-    (118);
+    (112);
 
 
 /****************函数声明****************/
@@ -174,14 +176,15 @@ static void lang_list_throw_anim_ready_cb(lv_anim_t *anim)
 /*********************************************************************************
                                   创建语言标题                                 
 *********************************************************************************/
-static void lang_list_title_create(lv_obj_t *obj)
+static void lang_list_title_container_create(lv_obj_t *obj)
 {
     lv_obj_t **lang_list_title = \
         &(lang_list_ctx.lang_list_title);
 
     widget_obj_para.obj_parent = obj;
     widget_obj_para.obj_x = 0;
-    widget_obj_para.obj_y = 0;
+    widget_obj_para.obj_y = \
+        LCD_UI_Y_OFFSET;
     widget_obj_para.obj_width = \
         Lang_List_Title_W;
     widget_obj_para.obj_height = \
@@ -213,8 +216,6 @@ static void lang_list_title_label_create(void)
     lv_obj_t *lang_list_title = \
         lang_list_ctx.lang_list_title;
 
-    widget_label_para.label_x = 0;
-    widget_label_para.label_y = 0;
     widget_label_para.label_w = \
         (Lang_List_Title_W - 30);
     widget_label_para.label_h = \
@@ -250,7 +251,8 @@ static void lang_list_container_create(lv_obj_t *obj)
     widget_obj_para.obj_parent = obj;
     widget_obj_para.obj_x = 0;
     widget_obj_para.obj_y = \
-        Lang_List_Title_H;
+        Lang_List_Title_H + \
+            LCD_UI_Y_OFFSET;
     widget_obj_para.obj_width = \
         Lang_List_Container_W;
     widget_obj_para.obj_height = \
@@ -663,8 +665,11 @@ static void menu_create_cb(lv_obj_t *obj)
 {
     if(!obj) return;
 
+    ui_act_id_t prev_act_id = \
+        read_menu_return_level_id();
+
     tileview_register_all_menu(obj, ui_act_id_null, \
-        ui_act_id_null, ui_act_id_null, ui_act_id_null, \
+        ui_act_id_null, prev_act_id, ui_act_id_null, \
             ui_act_id_lang_sel);
 
     return;
@@ -691,21 +696,11 @@ static void menu_display_cb(lv_obj_t *obj)
     memset(&lang_list_ctx, 0, \
         sizeof(lang_list_ctx_t));
 
-    lang_list_title_create(obj);
+    lang_list_title_container_create(obj);
 
     lang_list_container_create(obj);
 
     lang_list_layout_create();
-
-#if 0
-    lv_obj_t *lang_list_container = \
-        lang_list_ctx.lang_list_container;
-    int16_t scroll_bottom_val = \
-        (-1)*(lang_list_elem_num - lang_list_visual_line)* \
-            lang_list_elem_container_height;
-    common_scrollbar_create(lang_list_container, \
-        lang_list_scroll_offset, scroll_bottom_val);
-#endif
 
     return;
 }

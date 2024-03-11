@@ -18,7 +18,8 @@ typedef struct
 void common_scrollbar_destroy(void);
 void common_scrollbar_released_handle(void);
 void common_scrollbar_create(lv_obj_t *obj, \
-    int16_t scroll_offset, int16_t scroll_total);
+    int16_t scroll_offset, int16_t scroll_total, \
+        menu_align_t menu_align);
 void common_scrollbar_press_handle(int16_t scroll_offset);
 #ifdef __cplusplus
 } /* extern "C" */

@@ -190,7 +190,7 @@ static void settings_list_title_container_create(lv_obj_t *obj)
     widget_obj_para.obj_parent = obj;
     widget_obj_para.obj_x = 0;
     widget_obj_para.obj_y = \
-        Settings_List_y_Offset;
+        LCD_UI_Y_OFFSET;
     widget_obj_para.obj_width = \
         Settings_List_Title_W;
     widget_obj_para.obj_height = \
@@ -261,7 +261,7 @@ static void settings_list_container_create(lv_obj_t *obj)
     widget_obj_para.obj_x = 0;
     widget_obj_para.obj_y = \
         Settings_List_Title_H + \
-            Settings_List_y_Offset;
+            LCD_UI_Y_OFFSET;
     widget_obj_para.obj_width = \
         Settings_List_Container_W;
     widget_obj_para.obj_height = \
@@ -725,16 +725,6 @@ static void settings_list_layout_create(void)
 
     setting_list_elem_arrow_create(\
         menu_align);
-
-#if 0
-    lv_obj_t *settings_list_container = \
-        settings_list_ctx.settings_list_container;
-    int16_t scroll_bottom_val = \
-        (-1)*(settings_list_elem_num - settings_list_visual_line)* \
-            settings_list_elem_container_height;
-    common_scrollbar_create(settings_list_container, \
-        settings_list_scroll_offset, scroll_bottom_val);
-#endif
 
     return;
 }

@@ -62,6 +62,7 @@ const uint8_t lang_str_table[Comm_Lang_Num]\
         "أمطار غزيرة",
         "مطر + ثلوج",
         "لا توجد بيانات",
+        "كل يوم",
         "الأحد",
         "الإثنين",
         "الثلاثاء", 
@@ -79,6 +80,8 @@ const uint8_t lang_str_table[Comm_Lang_Num]\
         "البحث عن الهاتف بالقرب ...",
         "وضع عدم الإزعاج قيد التشغيل",
         "وضع عدم الإزعاج مغلق",
+        "لا أذكر",
+        "لا رسالة",
     },
 #endif
 #if Comm_Conf_Lang_En
@@ -376,6 +379,7 @@ const uint8_t lang_str_table[Comm_Lang_Num]\
         "大雨",
         "小雨",
         "无数据",
+        "每天",
         "周日",
         "周一",
         "周二",
@@ -393,6 +397,8 @@ const uint8_t lang_str_table[Comm_Lang_Num]\
         "正在寻找附近\n的手机...",
         "勿扰模式 - 开启",
         "勿扰模式 - 关闭",
+        "无提醒",
+        "无消息",
     },
 #endif
 

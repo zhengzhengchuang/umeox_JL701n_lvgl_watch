@@ -3,9 +3,58 @@
 #include "../../../../../../include_lib/btstack/avctp_user.h"
 
 /*滑块范围增大*/
-#define Slider_Range_Inc (5)
+#define Slider_Range_Inc (6)
 static uint8_t last_call_vol = 0;
-static lv_obj_t *call_vol_slider = NULL;
+static lv_obj_t *call_vol_slider;
+static lv_timer_t *menu_return_timer;
+static const uint16_t menu_return_duration = \
+    5*1000;
+
+static void menu_return_timer_cb(lv_timer_t *timer)
+{
+    if(!menu_return_timer)
+        return;
+
+    ui_menu_jump(ui_act_id_call_online);
+
+    return;
+}
+
+static void menu_return_timer_resume(void)
+{
+    if(!menu_return_timer)
+        return;
+
+    lv_timer_reset(menu_return_timer);
+ 
+    return;
+}
+
+static void menu_return_timer_create(void)
+{
+    if(menu_return_timer)
+    {
+        lv_timer_del(menu_return_timer);
+        menu_return_timer = NULL;
+    }
+
+    menu_return_timer = \
+        lv_timer_create(menu_return_timer_cb, \
+            menu_return_duration, NULL);
+
+    return;
+}
+
+static void menu_return_timer_destory(void)
+{
+    if(menu_return_timer)
+    {
+        lv_timer_del(menu_return_timer);
+        menu_return_timer = NULL;
+    }
+
+    return;
+}
 
 static void call_vol_slider_event_cb(lv_event_t *e)
 {
@@ -14,7 +63,8 @@ static void call_vol_slider_event_cb(lv_event_t *e)
     lv_obj_t *obj = \
         lv_event_get_target(e);
     int32_t cur_call_vol = \
-        lv_slider_get_value(obj)/Slider_Range_Inc;
+        lv_slider_get_value(obj)/ \
+            Slider_Range_Inc;
 
     if(cur_call_vol != last_call_vol)
     {
@@ -27,6 +77,8 @@ static void call_vol_slider_event_cb(lv_event_t *e)
             &cur_call_vol);
     }
 
+    menu_return_timer_resume();
+
     return;
 }
 
@@ -38,12 +90,16 @@ static void menu_create_cb(lv_obj_t *obj)
         ui_act_id_null, ui_act_id_call_online, ui_act_id_null, \
             ui_act_id_call_volume);
 
+    menu_return_timer_create();
+
     return;
 }
 
 static void menu_destory_cb(lv_obj_t *obj)
 {
     call_vol_slider = NULL;
+
+    menu_return_timer_destory();
 
     return;
 }
@@ -52,7 +108,30 @@ static void menu_refresh_cb(lv_obj_t *obj)
 {
     if(!obj) return;
 
-    //TODO:手机同步下来的音量怎么更新
+    if(!call_vol_slider)
+        return;
+
+    /*如果说当前是设备更新音量，就不要同步手机的音量*/
+    bool slider_dragged = \
+        lv_slider_is_dragged(\
+            call_vol_slider);
+    if(slider_dragged)
+        return;
+
+    s8 cur_call_vol = \
+        app_audio_get_volume(\
+            APP_AUDIO_STATE_CALL);
+    if(cur_call_vol == last_call_vol)
+        return;
+
+    last_call_vol = cur_call_vol;
+
+    int32_t slider_cur_value = \
+        cur_call_vol*Slider_Range_Inc;
+    lv_slider_set_value(call_vol_slider, \
+        slider_cur_value, LV_ANIM_OFF);
+
+    menu_return_timer_resume();
 
     return;
 }
@@ -61,24 +140,31 @@ static void menu_display_cb(lv_obj_t *obj)
 {
     if(!obj) return;
 
-     int32_t cur_call_vol = \
+    s8 cur_call_vol = \
         app_audio_get_volume(\
             APP_AUDIO_STATE_CALL);
-    int32_t max_call_vol = \
+    uint8_t max_call_vol = \
         (get_max_sys_vol() - 1);
 
     last_call_vol = cur_call_vol;
+
+    int32_t slider_min_value = 0;
+    int32_t slider_cur_value = \
+        cur_call_vol*Slider_Range_Inc;
+    int32_t slider_max_value = \
+        max_call_vol*Slider_Range_Inc;
 
     widget_slider_para.slider_parent = obj;
     widget_slider_para.slider_x = 0;
     widget_slider_para.slider_y = 0;
     widget_slider_para.slider_width = 82;
     widget_slider_para.slider_height = 284;
-    widget_slider_para.slider_min_value = 0;
+    widget_slider_para.slider_min_value = \
+        slider_min_value;
     widget_slider_para.slider_max_value = \
-        max_call_vol*Slider_Range_Inc;
+        slider_max_value;
     widget_slider_para.slider_cur_value = \
-        cur_call_vol*Slider_Range_Inc;
+        slider_cur_value;
     widget_slider_para.slider_main_color = \
         lv_color_hex(0xB28146);
     widget_slider_para.slider_indic_color = \
@@ -94,13 +180,14 @@ static void menu_display_cb(lv_obj_t *obj)
         common_widget_slider_create(&widget_slider_para);
     lv_obj_center(call_vol_slider);
 
-    widget_img_para.event_cb = NULL;
-    widget_img_para.user_data = NULL;
     widget_img_para.img_parent = \
         call_vol_slider;
     widget_img_para.file_img_dat = \
         sound_ctrl_01_index;
-    widget_img_para.img_click_attr = false;
+    widget_img_para.img_click_attr = \
+        false;
+    widget_img_para.event_cb = NULL;
+    widget_img_para.user_data = NULL;
     lv_obj_t *vol_down_icon = \
         common_widget_img_create(&widget_img_para, \
             NULL);

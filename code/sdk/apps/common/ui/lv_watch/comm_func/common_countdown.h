@@ -23,7 +23,7 @@ typedef enum
 *********************************************************************************/
 typedef struct
 {
-    uint8_t countdown_per; //倒计时进行中百分比 最大范围0~100。
+    int16_t countdown_per;
     uint32_t countdown_cur_cnt;
     uint32_t countdown_total_cnt;
     uint32_t countdown_over_total_cnt;
@@ -39,6 +39,7 @@ typedef struct
     countdown_attribute_state_t countdown_state;
 }common_countdown_para_t;
 
+int16_t get_countdown_per_max(void);
 void common_user_countdown_reset(void);
 void common_user_countdown_pause(void);
 void common_user_countdown_resume(void);

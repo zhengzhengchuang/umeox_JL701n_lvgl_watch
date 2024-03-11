@@ -412,6 +412,44 @@ extern common_widget_chart_para_t widget_chart_para;
 lv_obj_t *common_widget_chart_create(common_widget_chart_para_t *chart_para);
 
 
+/*********************************************************************************
+                                  文本区域控件                                       
+*********************************************************************************/
+typedef struct
+{
+    lv_obj_t *parent;
+
+    /*文本区域的坐标*/
+    int16_t x;
+    int16_t y;
+
+    /*文本区域的宽、高*/
+    uint16_t width;
+    uint16_t height;
+
+    /*文本区域的文本*/
+    const char *txt;
+
+    /*文本区域的字体*/
+    const lv_font_t *font;
+
+    /*文本区域的颜色*/
+    lv_color_t color;
+
+    /*文本区域的对齐*/
+    lv_text_align_t align;
+
+    /*文本区域的背景透明、颜色*/
+    lv_opa_t bg_opa_x;
+    lv_color_t bg_color;
+
+    /*文本区域的边框透明、颜色、宽度*/
+    lv_opa_t border_opa_x;
+    uint16_t border_width;
+    lv_color_t border_color;
+}common_widget_textarea_para_t;
+extern common_widget_textarea_para_t widget_textarea_para;
+lv_obj_t *common_widget_textarea_create(common_widget_textarea_para_t *textarea_para);
 
 /*********************************************************************************
                                   动画相关                                       

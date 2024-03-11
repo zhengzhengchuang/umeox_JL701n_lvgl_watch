@@ -42,7 +42,7 @@ typedef uint8_t nor_vm_type_t;
 #define Nor_Vm_Call_log_Size  \
     (1*4096)
 #define Nor_Vm_Message_Size   \
-    (10*4096)
+    (5*4096)
 
 /*********************************************************************************
                                   Nor vm具体分块偏移                                     

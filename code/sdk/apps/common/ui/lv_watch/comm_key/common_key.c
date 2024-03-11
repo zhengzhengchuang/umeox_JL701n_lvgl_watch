@@ -68,9 +68,9 @@ void common_key_msg_handle(int key_value, int key_event)
             common_menu_lock_timer_del();
 
             /**************亮屏打开TE**************/
-            if(!enable_te_timer_id)
-                enable_te_timer_id = sys_timeout_add(NULL, \
-                    enable_te_timeout_cb, 10);
+            // if(!enable_te_timer_id)
+            //     enable_te_timer_id = sys_timeout_add(NULL, \
+            //         enable_te_timeout_cb, 10);
         }
     }else
     {
@@ -79,14 +79,6 @@ void common_key_msg_handle(int key_value, int key_event)
 
         /*******亮屏按键操作时，需重置熄屏定时器*******/
         common_offscreen_timer_restart();
-
-#if 0
-        char call_number_buf[6] = "10086";
-        uint8_t call_number_len = 5;
-        ui_ctrl_call_out_by_number(call_number_buf, \
-            call_number_len);
-        printf("***********%s\n", __func__);
-#endif
 
         /*******页面不锁定，主按键返回表盘*******/
         bool menu_lock_flag = \

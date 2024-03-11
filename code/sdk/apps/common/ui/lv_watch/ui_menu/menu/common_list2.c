@@ -228,7 +228,8 @@ static void common_list2_elem_container_click_cb(lv_event_t *e)
 /*********************************************************************************
                                   通用列表2元素容器创建                             
 *********************************************************************************/
-static void common_list2_elem_container_create(void)
+static void common_list2_elem_container_create(\
+    menu_align_t menu_align)
 {
     lv_obj_t **common_list2_elem_container = \
         common_list2_ctx.common_list2_elem_container;
@@ -316,7 +317,8 @@ static void common_list2_elem_container_scroll(void)
 /*********************************************************************************
                                   通用列表2元素图标创建                             
 *********************************************************************************/
-static void common_list2_elem_icon_create(void)
+static void common_list2_elem_icon_create(\
+    menu_align_t menu_align)
 {
     lv_obj_t **common_list2_icon = \
         common_list2_ctx.common_list2_icon;
@@ -528,9 +530,17 @@ static void common_list2_container_event_cb(lv_event_t *e)
 *********************************************************************************/
 static void common_list2_layout_create(void)
 {
-    common_list2_elem_container_create();
+    menu_align_t menu_align = \
+        menu_align_left;
+    if(lang_txt_is_arabic())
+        menu_align = \
+            menu_align_right;
 
-    common_list2_elem_icon_create();
+    common_list2_elem_container_create(\
+        menu_align);
+
+    common_list2_elem_icon_create(\
+        menu_align);
 
     lv_obj_t *common_list2_container = \
         common_list2_ctx.common_list2_container;
@@ -538,7 +548,8 @@ static void common_list2_layout_create(void)
         (-1)*((common_list2_elem_num+2)/3 - common_list2_visual_line) * \
             common_list2_elem_container_height;
     common_scrollbar_create(common_list2_container, \
-        common_list2_scroll_offset, scroll_bottom_val);
+        common_list2_scroll_offset, scroll_bottom_val, \
+            menu_align);
 
     return;
 }
