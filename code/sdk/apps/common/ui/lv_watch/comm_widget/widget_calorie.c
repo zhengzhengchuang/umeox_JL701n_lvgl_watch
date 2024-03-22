@@ -58,13 +58,17 @@ void common_calorie_widget_init(void)
     if(!calorie_group_num)
         return;
 
-    calorie_group_num = 0;
-
     memset(calorie_dsc_idx, 0xffff, \
         sizeof(calorie_dsc_idx));
 
     memset(common_calorie_widget, 0, \
         sizeof(common_calorie_widget));
+
+    memset(calorie_para_cache, 0, \
+        sizeof(widget_data_para_t)* \
+            calorie_group_num);
+
+    calorie_group_num = 0;
 
     return;
 }

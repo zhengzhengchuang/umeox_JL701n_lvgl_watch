@@ -1,6 +1,6 @@
 #include "lang_table.h"
 
-const uint8_t lang_str_table[Comm_Lang_Num]\
+const char lang_str_table[Comm_Lang_Num]\
     [Comm_Lang_Str_Num][Comm_Lang_Str_Len] = 
 {
 #if Comm_Conf_Lang_Ar
@@ -398,7 +398,7 @@ const uint8_t lang_str_table[Comm_Lang_Num]\
         "勿扰模式 - 开启",
         "勿扰模式 - 关闭",
         "无提醒",
-        "无消息",
+        "无消息", 
     },
 #endif
 

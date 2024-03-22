@@ -1,17 +1,5 @@
 #include "common_list1.h"
 
-/****************图标源****************/
-static const uint32_t common_list1_icon_src[\
-    Common_List1_Elem_Num] = 
-{
-    menu_100_100_icon_00_index, menu_100_100_icon_01_index, menu_100_100_icon_02_index, \
-    menu_100_100_icon_03_index, menu_100_100_icon_04_index, menu_100_100_icon_05_index, \
-    menu_100_100_icon_06_index, menu_100_100_icon_07_index, menu_100_100_icon_08_index, \
-    menu_100_100_icon_09_index, menu_100_100_icon_10_index, menu_100_100_icon_11_index, \
-    menu_100_100_icon_12_index, menu_100_100_icon_13_index, menu_100_100_icon_14_index, \
-    menu_100_100_icon_15_index, \
-};
-
 /****************文本源id****************/
 static const comm_lang_txtid_t common_list1_text_id[\
     Common_List1_Elem_Num] = 
@@ -189,7 +177,8 @@ static void common_list1_container_create(lv_obj_t *obj)
 
     widget_obj_para.obj_parent = obj;
     widget_obj_para.obj_x = 0;
-    widget_obj_para.obj_y = 0;
+    widget_obj_para.obj_y = \
+        LCD_UI_Y_OFFSET;
     widget_obj_para.obj_width = \
         Common_List1_Container_W;
     widget_obj_para.obj_height = \
@@ -348,7 +337,7 @@ static void common_list1_elem_icon_create(\
         widget_img_para.img_parent = \
             common_list1_elem_container[idx];
         widget_img_para.file_img_dat = \
-            common_list1_icon_src[idx];
+            menu_100_100_icon_00_index + idx;
         common_list1_icon[idx] = \
             common_widget_img_create(&widget_img_para, NULL);
         lv_obj_align(common_list1_icon[idx], \

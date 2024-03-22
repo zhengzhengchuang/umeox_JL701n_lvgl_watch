@@ -57,14 +57,18 @@ void common_hr_widget_init(void)
 {
     if(!hr_group_num)
         return;
-
-    hr_group_num = 0;
-
+    
     memset(hr_dsc_idx, 0xffff, \
         sizeof(hr_dsc_idx));
 
     memset(common_hr_widget, 0, \
         sizeof(common_hr_widget));
+
+    memset(hr_para_cache, 0, \
+        sizeof(widget_data_para_t)*\
+            hr_group_num);
+
+    hr_group_num = 0;
 
     return;
 }
@@ -95,10 +99,25 @@ void common_hr_widget_refresh(void)
             continue;
 
         int __data = \
-            get_vm_para_cache_with_label(vm_label_type); 
+            get_vm_para_cache_with_label(\
+                vm_label_type); 
 
-        uint32_t num_addr_index = \
-            p_hr_para->num_addr_index;
+        int hr_warn_val = \
+        get_vm_para_cache_with_label(\
+            vm_label_hr_warn_val);
+
+        uint32_t num_addr_index;
+        if(p_hr_para->user0_para_valid)
+        {
+            if(__data >= hr_warn_val)
+                num_addr_index = \
+                    p_hr_para->user0_num_addr_index;
+            else
+                num_addr_index = \
+                    p_hr_para->num_addr_index;
+        }else
+            num_addr_index = \
+                p_hr_para->num_addr_index;
 
         lv_img_dsc_t *data_img_dsc = \
             common_widget_img_open_res(\
@@ -210,9 +229,23 @@ int16_t common_hr_widget_create(widget_data_para_t *data_para, \
     widget_data_para_t *p_hr_para = \
         &hr_para_cache[hr_group_num];
 
-    uint32_t num_addr_index = \
-        p_hr_para->num_addr_index;
+    int hr_warn_val = \
+        get_vm_para_cache_with_label(\
+            vm_label_hr_warn_val);
 
+    uint32_t num_addr_index;
+    if(p_hr_para->user0_para_valid)
+    {
+        if(__data >= hr_warn_val)
+            num_addr_index = \
+                p_hr_para->user0_num_addr_index;
+        else
+            num_addr_index = \
+                p_hr_para->num_addr_index;
+    }else
+        num_addr_index = \
+            p_hr_para->num_addr_index;
+    
     lv_img_dsc_t *data_img_dsc = \
         common_widget_img_open_res(\
             num_addr_index);

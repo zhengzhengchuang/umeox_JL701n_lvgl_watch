@@ -19,7 +19,7 @@ extern "C" {
 *********************************************************************************/
 #define Comm_Lang_Str_Num (lang_txtid_max)
 
-extern const uint8_t lang_str_table[Comm_Lang_Num]\
+extern const char lang_str_table[Comm_Lang_Num]\
     [Comm_Lang_Str_Num][Comm_Lang_Str_Len];
 #ifdef __cplusplus
 } /* extern "C" */

@@ -2,6 +2,7 @@
 #include "lang_txtid.h"
 #include "lang_table.h"
 #include "../lv_watch.h"
+#include "name_99_table.h"
 #include "../poc_modem/poc_modem_vm.h"
 
 /*********************************************************************************
@@ -36,7 +37,7 @@ void set_comm_sys_language(comm_language_id_t lang_id)
 }
 
 /*********************************************************************************
-                                  通过对应id获取词条                                       
+                                  常用词条文本获取                                    
 *********************************************************************************/
 const void *get_lang_txt_with_id(comm_lang_txtid_t txtid)
 {
@@ -97,4 +98,42 @@ bool utf8_str_is_arabic(const char *utf8_str, uint32_t str_len)
     
     
     return false;
+}
+
+/*********************************************************************************
+                                  真主名词条文本获取(随语言)                                   
+*********************************************************************************/
+const void *al_name_lang_txt_with_id(uint8_t id)
+{
+    int vm_lang_id = \
+        get_vm_para_cache_with_label(vm_label_sys_language);
+
+    comm_language_id_t lang_id = \
+        (comm_language_id_t)vm_lang_id;
+        
+
+    return (al_name_str_table[lang_id][id]);
+}
+
+/*********************************************************************************
+                                  真主名词条文本获取(阿拉伯语)                                   
+*********************************************************************************/
+const void *al_name_ar_lang_txt_with_id(uint8_t id)
+{
+    return (al_name_str_table[comm_language_id_arabic][id]);
+}
+
+/*********************************************************************************
+                                  真主名解释词条文本获取                                    
+*********************************************************************************/
+const void *al_name_ex_lang_txt_with_id(uint8_t id)
+{
+    int vm_lang_id = \
+        get_vm_para_cache_with_label(vm_label_sys_language);
+
+    comm_language_id_t lang_id = \
+        (comm_language_id_t)vm_lang_id;
+        
+
+    return (al_name_ex_str_table[lang_id][id]);
 }

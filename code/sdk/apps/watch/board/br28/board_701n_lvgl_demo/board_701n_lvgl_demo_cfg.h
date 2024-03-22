@@ -851,7 +851,7 @@ DAC硬件上的连接方式,可选的配置：
 #define TCFG_GSENSOR_DETECT_IO                    (-1) //传感器中断io
 #define TCFG_GSENSOR_ALGO_SILAN                   (0) //士兰微的G-Sensor算法
 
-#define TCFG_QMI8658_EN                           (0)
+#define TCFG_QMI8658_EN                           (1)
 
 //*********************************************************************************//
 //                                  imu-sensor配置                                   //

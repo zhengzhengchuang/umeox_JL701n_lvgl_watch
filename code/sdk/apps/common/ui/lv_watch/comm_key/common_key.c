@@ -23,16 +23,25 @@ void set_menu_timer_lock_flag(bool flag)
     return;
 }
 
-/************使能TE超时回调函数************/
 static void enable_te_timeout_cb(void *priv)
 {
     if(enable_te_timer_id)
         sys_timeout_del(enable_te_timer_id);
-
     enable_te_timer_id = 0;
 
-    extern volatile u8 usr_wait_te;
-    usr_wait_te = 1;
+    struct lcd_interface *lcd = \
+        lcd_get_hdl();
+    if(lcd->power_ctrl)
+        lcd->power_ctrl(true);
+
+    int lcd_backlight = \
+        get_vm_para_cache_with_label(vm_label_backlight);
+
+    if(lcd->backlight_ctrl)
+        lcd->backlight_ctrl((uint8_t)lcd_backlight);
+
+    // extern volatile u8 usr_wait_te;
+    // usr_wait_te = 1;
     
     return;
 }
@@ -46,8 +55,7 @@ void common_key_msg_handle(int key_value, int key_event)
     {
         if(key_value == Common_Key_Val_0 && key_event == KEY_EVENT_CLICK)
         {
-            /**************屏幕和tp进入休眠**************/
-            ui_ctl_lcd_enter_sleep(false);
+            lcd_sleep_ctrl(false);
 
             /************按键亮屏显示页************/
             ui_act_id_t act_id = ui_act_id_watchface;
@@ -63,14 +71,14 @@ void common_key_msg_handle(int key_value, int key_event)
                 if(timer_lock_flag)
                     act_id = menu_load_info->menu_id;
             }
-            ui_menu_jump_handle(act_id);
+            
+            ui_menu_jump(act_id);
 
             common_menu_lock_timer_del();
 
-            /**************亮屏打开TE**************/
-            // if(!enable_te_timer_id)
-            //     enable_te_timer_id = sys_timeout_add(NULL, \
-            //         enable_te_timeout_cb, 10);
+            if(!enable_te_timer_id)
+                enable_te_timer_id = sys_timeout_add(NULL, \
+                    enable_te_timeout_cb, 50);
         }
     }else
     {
@@ -86,9 +94,11 @@ void common_key_msg_handle(int key_value, int key_event)
         if(key_value == Common_Key_Val_0 && \
             key_event == KEY_EVENT_CLICK && !menu_lock_flag)
         {
-            if(p_ui_info_cache->cur_act_id != ui_act_id_watchface)
+            if(p_ui_info_cache->cur_act_id != \
+                ui_act_id_watchface)
             {
                 ui_menu_jump(ui_act_id_watchface);
+
                 return;
             }     
         }

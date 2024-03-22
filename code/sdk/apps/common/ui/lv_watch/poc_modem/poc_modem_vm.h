@@ -99,18 +99,24 @@ enum
     /*******计量单位*******/
     vm_label_unit_distance,
     vm_label_unit_temperature,
+
+    /*******99真主名列表模式*******/
+    vm_label_al_name_list_mode,
   
-    /*******心率数据*******/
+    /*******日常心率数据*******/
     vm_label_hr,
     vm_label_min_hr,
     vm_label_max_hr,
 
-    /*******血氧数据*******/
+    /*******日常心率预警值*******/
+    vm_label_hr_warn_val,
+
+    /*******日常血氧数据*******/
     vm_label_bo,
     vm_label_min_bo,
     vm_label_max_bo,
 
-    /*******日常数据*******/
+    /*******日常运动数据*******/
     vm_label_daily_step,
     vm_label_daily_pace,
     vm_label_daily_calorie,
@@ -139,6 +145,7 @@ typedef struct
 extern vm_store_para_cache_t *p_vm_para_cache;
 extern const ui_menu_load_info_t *watchface_load_info[];
 extern const ui_menu_load_info_t *menu_style_load_info[];
+extern const ui_menu_load_info_t *al_name_load_info[];
 
 void vm_store_para_init(void);
 int get_vm_para_cache_with_label(uint16_t label);

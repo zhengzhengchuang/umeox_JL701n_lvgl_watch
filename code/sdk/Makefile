@@ -294,27 +294,10 @@ c_SRC_FILES := \
 	apps/common/dev_manager/dev_reg.c \
 	apps/common/dev_manager/dev_update.c \
 	apps/common/device/sensor_iic/sensor_iic.c \
-	apps/common/device/bmp280/bmp280.c \
-	apps/common/device/detection.c \
-	apps/common/device/gSensor/SC7A20.c \
-	apps/common/device/gSensor/gSensor_manage.c \
-	apps/common/device/gSensor/mc3433.c \
-	apps/common/device/gSensor/mpu6050.c \
-	apps/common/device/gSensor/msa310.c \
-	apps/common/device/gSensor/msa310_function.c \
-	apps/common/device/gSensor/p11_gsensor.c \
-	apps/common/device/gSensor/silan/silan_motion_module.c \
 	apps/common/device/gSensor/qmi8658/qmi8658.c \
-	apps/common/device/hr_sensor/hrSensor_manage.c \
-	apps/common/device/hr_sensor/hrs3300.c \
-	apps/common/device/hr_sensor/hrs3603.c \
-	apps/common/device/hr_sensor/p11_hrsensor.c \
-	apps/common/device/hr_sensor/vchr02/module_heart_vc_int.c \
-	apps/common/device/hr_sensor/vchr02/vcHr02Hci.c \
-	apps/common/device/imu_sensor/imuSensor_manage.c \
-	apps/common/device/imu_sensor/mpu6887/mpu6887p.c \
-	apps/common/device/imu_sensor/mpu9250/mpu9250.c \
-	apps/common/device/imu_sensor/sh3001/sh3001.c \
+	apps/common/device/m_sensor/qmc6309/qmc6309.c \
+	apps/common/device/hr_sensor/vc9201/module_heart_vc_int.c \
+	apps/common/device/hr_sensor/vc9201/vcHr02Hci.c \
 	apps/common/device/key/adkey.c \
 	apps/common/device/key/iokey.c \
 	apps/common/device/key/irkey.c \
@@ -326,16 +309,9 @@ c_SRC_FILES := \
 	apps/common/device/norflash/inside_norflash.c \
 	apps/common/device/norflash/norflash.c \
 	apps/common/device/norflash/norflash_sfc.c \
-	apps/common/device/touch_panel/IT7259E.c \
-	apps/common/device/touch_panel/bl6133.c \
-	apps/common/device/touch_panel/bl_fw_update.c \
 	apps/common/device/touch_panel/chsc6x/chsc6x_comp.c \
 	apps/common/device/touch_panel/chsc6x/chsc6x_main.c \
 	apps/common/device/touch_panel/chsc6x/chsc6x_platform.c \
-	apps/common/device/touch_panel/cst816d/cst816d.c \
-	apps/common/device/touch_panel/cst816s/cst816s.c \
-	apps/common/device/touch_panel/ft6336g.c \
-	apps/common/device/touch_panel/spt511x/spt511x_firmware_customer.c \
 	apps/common/device/usb/device/cdc.c \
 	apps/common/device/usb/device/custom_hid.c \
 	apps/common/device/usb/device/descriptor.c \
@@ -540,6 +516,9 @@ c_SRC_FILES := \
     apps/common/ui/lvgl/src/font/lv_font_fmt_txt.c  \
     apps/common/ui/lvgl/src/font/lv_font_loader.c  \
 	apps/common/ui/lvgl/src/font/font_common_32.c  \
+	apps/common/ui/lvgl/src/font/font_common_num_12.c  \
+	apps/common/ui/lvgl/src/font/font_common_num_18.c  \
+	apps/common/ui/lvgl/src/font/font_common_num_24.c  \
 	apps/common/ui/lvgl/src/font/font_common_num_32.c  \
 	apps/common/ui/lvgl/src/font/font_common_num_36.c  \
 	apps/common/ui/lvgl/src/font/font_common_num_42.c  \
@@ -938,6 +917,7 @@ c_SRC_FILES := \
 	apps/common/ui/lv_watch/comm_key/common_key.c \
 	apps/common/ui/lv_watch/comm_lang/lang_conf.c \
 	apps/common/ui/lv_watch/comm_lang/lang_table.c \
+	apps/common/ui/lv_watch/comm_lang/name_99_table.c \
 	apps/common/ui/lv_watch/comm_parse/common_rev.c \
 	apps/common/ui/lv_watch/comm_parse/common_send.c \
 	apps/common/ui/lv_watch/comm_parse/common_parse.c \
@@ -963,6 +943,10 @@ c_SRC_FILES := \
 	apps/common/ui/lv_watch/comm_func/common_stopwatch.c \
 	apps/common/ui/lv_watch/comm_func/common_countdown.c \
 	apps/common/ui/lv_watch/comm_task/comm_task.c \
+	apps/common/ui/lv_watch/comm_task/minute_task.c \
+	apps/common/ui/lv_watch/comm_sensor/sensor_hr_task.c \
+	apps/common/ui/lv_watch/comm_sensor/sensor_gs_task.c \
+	apps/common/ui/lv_watch/comm_sensor/sensor_mag_task.c \
 	apps/common/ui/lv_watch/comm_remind/alarm_manage.c \
 	apps/common/ui/lv_watch/ui_translate/ui_translate.c \
 	apps/common/ui/lv_watch/ui_cover/ui_cover.c \
@@ -1030,6 +1014,11 @@ c_SRC_FILES := \
 	apps/common/ui/lv_watch/ui_menu/stopwatch/stopwatch_main.c \
 	apps/common/ui/lv_watch/ui_menu/stopwatch/stopwatch_state.c \
 	apps/common/ui/lv_watch/ui_menu/stopwatch/stopwatch_over.c \
+	apps/common/ui/lv_watch/ui_menu/al_name_99/al_name_list0.c \
+	apps/common/ui/lv_watch/ui_menu/al_name_99/al_name_list1.c \
+	apps/common/ui/lv_watch/ui_menu/al_name_99/al_name_ex.c \
+	apps/common/ui/lv_watch/ui_menu/hr/hr_sample.c \
+	apps/common/ui/lv_watch/ui_menu/bo/bo_sample.c \
 	apps/common/ui/lv_watch/comm_nor_vm/nor_vm_main.c \
 	apps/common/ui/lv_watch/comm_nor_vm/nor_vm_contacts.c \
 	apps/common/ui/lv_watch/comm_nor_vm/nor_vm_weather.c \
@@ -1128,14 +1117,13 @@ LFLAGS := \
 	cpu/br28/liba/sleep.a \
 	cpu/br28/liba/wrist_bright.a \
 	cpu/br28/liba/Preprocess.a \
+	cpu/br28/liba/qmc6309/fangkuang.a \
+	cpu/br28/liba/vc9201/lib_hr_v637_jieli_NA_01.a \
+	cpu/br28/liba/vc9201/lib_spo2_vp60a2_int_JieLi_NA_01.a \
 	cpu/br28/liba/fall_detection.a \
 	cpu/br28/liba/motion_detection.a \
-	cpu/br28/liba/HeartRate_Calc.a \
 	cpu/br28/liba/sedentary.a \
-	cpu/br28/liba/SPO2.a \
 	cpu/br28/liba/p33_algo_motion.a \
-	cpu/br28/liba/vcHrAlgoV619ForCodeBlocks701N.a \
-	cpu/br28/liba/vcSpo2AlgoV151_lc11s_B_v1.a \
 	cpu/br28/liba/libjlsp_kws.a \
 	cpu/br28/liba/lib_pitch_speed.a \
 	cpu/br28/liba/libFFT_pi32v2_OnChip.a \
@@ -1167,8 +1155,6 @@ LFLAGS := \
 	apps/common/pay/upay_t_head/lib/JL/libalipay_secure_cert.a \
 	apps/common/pay/upay_t_head/lib/JL/libcJSON.a \
 	apps/common/pay/upay_t_head/lib/JL/libalipay_mbedtls.a \
-	apps/common/device/gSensor/silan/silan_data.a \
-	apps/common/device/gSensor/silan/silan_motion_algo.a \
 	--end-group \
 	-Tcpu/br28/sdk.ld \
 	-M=cpu/br28/tools/sdk.map \

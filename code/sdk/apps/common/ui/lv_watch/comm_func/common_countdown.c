@@ -17,7 +17,7 @@ static void common_user_countdown_timeout_cb(void *priv)
     int countdown_timeout_msg[1];
     countdown_timeout_msg[0] = \
         comm_msg_countdown_timeout;
-    post_comm_handle_msg(countdown_timeout_msg, 1);
+    post_comm_task_msg(countdown_timeout_msg, 1);
 
     return;
 }

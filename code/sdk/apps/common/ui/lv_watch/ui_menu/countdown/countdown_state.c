@@ -105,6 +105,12 @@ static void menu_display_cb(lv_obj_t *obj)
 {
     if(!obj) return;
 
+    menu_align_t menu_align = \
+        menu_align_left;
+    if(lang_txt_is_arabic())
+        menu_align = \
+            menu_align_right;
+
     uint32_t countdown_time_total = \
         get_countdown_time_total();
     common_user_countdown_create(\
@@ -158,8 +164,12 @@ static void menu_display_cb(lv_obj_t *obj)
 
     widget_img_para.img_parent = \
         obj;
-    widget_img_para.img_x = \
-        113;
+    if(menu_align == menu_align_right)
+        widget_img_para.img_x = \
+            215;
+    else
+        widget_img_para.img_x = \
+            113;
     widget_img_para.img_y = \
         123;
     widget_img_para.file_img_dat = \
@@ -185,8 +195,12 @@ static void menu_display_cb(lv_obj_t *obj)
 
     num_str_para.parent = \ 
         obj;
-    num_str_para.num_obj_x = \
-        160;
+    if(menu_align == menu_align_right)
+        num_str_para.num_obj_x = \
+            105;
+    else
+        num_str_para.num_obj_x = \
+            160;
     num_str_para.num_obj_y = \
         130;
     num_str_para.p_num_str = \

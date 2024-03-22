@@ -100,6 +100,9 @@ lv_obj_t *common_widget_img_create(common_widget_img_para_t *img_para, \
 
     user_img_dsc.img_dst_cnt++;
 
+    // printf("img_dst_cnt = %d\n", \
+    //     user_img_dsc.img_dst_cnt);
+
     return common_widget_img;
 }
 
@@ -430,24 +433,36 @@ static void chart_draw_part_begin(lv_event_t *e)
 {
     if(!e) return;
 
-    lv_obj_draw_part_dsc_t *dsc = lv_event_get_param(e);
-    common_widget_chart_para_t *user_data = (common_widget_chart_para_t *)lv_event_get_user_data(e);
+    lv_obj_draw_part_dsc_t *dsc = \
+        lv_event_get_param(e);
+    common_widget_chart_para_t *user_data = \
+        (common_widget_chart_para_t *)lv_event_get_user_data(e);
 
-    if(dsc->part == LV_PART_TICKS && dsc->id == LV_CHART_AXIS_PRIMARY_X) 
+    if(dsc->part == LV_PART_TICKS && \
+        dsc->id == LV_CHART_AXIS_PRIMARY_X) 
     {
-        lv_snprintf(dsc->text, dsc->text_length, "%s", user_data->chart_prix_label_str[dsc->value]);
+        lv_snprintf(dsc->text, dsc->text_length, "%s", \
+            user_data->chart_prix_label_str[dsc->value]);
     }
 
-    if(dsc->part == LV_PART_TICKS && dsc->id == LV_CHART_AXIS_PRIMARY_Y)
+    if(dsc->part == LV_PART_TICKS && \
+        dsc->id == LV_CHART_AXIS_PRIMARY_Y)
     {
+#if 0
         int16_t range_radio = 1;
 
         if(user_data->chart_priy_major_cnt >= 2)
-            range_radio = user_data->chart_priy_range_max/(user_data->chart_priy_major_cnt-1);
+            range_radio = user_data->chart_priy_range_max/\
+                (user_data->chart_priy_major_cnt-1);
         else
             return;
 
-        lv_snprintf(dsc->text, dsc->text_length, "%s", user_data->chart_priy_label_str[dsc->value/range_radio]);
+        printf("range_radio = %d\n", range_radio);
+        printf("value = %d\n", dsc->value);
+
+        lv_snprintf(dsc->text, dsc->text_length, "%s", \
+            user_data->chart_priy_label_str[dsc->value/range_radio]);
+#endif
     }
 
 #if 0
@@ -561,6 +576,9 @@ lv_obj_t *common_widget_chart_create(common_widget_chart_para_t *chart_para)
             chart_para->chart_series[i], chart_para->chart_ext_y_array + \
                 i*chart_para->chart_item_cnt);
     }
+
+    lv_obj_set_style_text_font(common_widget_chart, \
+        &font_common_num_18, LV_PART_TICKS);
 
     lv_obj_add_event_cb(common_widget_chart, \
         chart_draw_part_begin, LV_EVENT_DRAW_PART_BEGIN, (void *)chart_para);

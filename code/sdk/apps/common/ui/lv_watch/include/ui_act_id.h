@@ -53,6 +53,19 @@ typedef uint8_t ui_menu_view_t;
 #define list_for_ui_menu_style(id) \
     for(id = ui_menu_view_00; id < ui_menu_view_max; id++)
 
+
+enum
+{
+    al_name_list_mode0 = 0x00,
+    al_name_list_mode1,
+
+    al_name_list_mode_max,
+};
+typedef uint8_t al_name_list_mode_t;
+
+#define list_for_ui_al_name_list(id) \
+    for(id = al_name_list_mode0; id < al_name_list_mode_max; id++)
+
 enum
 {
     ui_act_id_null = 0x0000,
@@ -131,6 +144,16 @@ enum
     ui_act_id_stopwatch_main,
     ui_act_id_stopwatch_state,
     ui_act_id_stopwatch_over,
+
+    /*****99真主名相关页面*****/
+    ui_act_id_al_name_list,
+    ui_act_id_al_name_ex,
+
+    /*****心率相关页面*****/
+    ui_act_id_hr_sample,
+    
+    /*****血氧相关页面*****/
+    ui_act_id_bo_sample,
 
     ui_act_id_max,
 };

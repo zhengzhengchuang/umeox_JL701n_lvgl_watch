@@ -59,13 +59,17 @@ void common_pace_widget_init(void)
     if(!pace_group_num)
         return;
 
-    pace_group_num = 0;
-
     memset(pace_dsc_idx, 0xffff, \
         sizeof(pace_dsc_idx));
 
     memset(common_pace_widget, 0, \
         sizeof(common_pace_widget));
+
+    memset(pace_para_cache, 0, \
+        sizeof(widget_data_para_t)* \
+            pace_group_num);
+
+    pace_group_num = 0;
 
     return;
 }

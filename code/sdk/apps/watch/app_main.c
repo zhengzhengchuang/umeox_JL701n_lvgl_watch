@@ -27,12 +27,16 @@
 
 APP_VAR app_var;
 
-#if 0
+#if 1
+// static volatile u32 sPreTickcnt = 0;
+// static volatile u32 sPreTimerCnt = 0;
 u32 get_user_time_cnt(void)
 {
+#if 1
     static u32 cnt = 0;
 
-    cnt = (u32)((P2M_LPTIME3_CNT3 << 24) | (P2M_LPTIME3_CNT2 << 16) | (P2M_LPTIME3_CNT1 << 8) | (P2M_LPTIME3_CNT0));
+    cnt = (u32)((P2M_LPTIME3_CNT3 << 24) | (P2M_LPTIME3_CNT2 << 16) | \
+        (P2M_LPTIME3_CNT1 << 8) | (P2M_LPTIME3_CNT0));
    //cnt +=  (P11_LPTMR3->CNT );
 //    if(!read_cnt_flag){
 //        cnt = 10;
@@ -40,9 +44,30 @@ u32 get_user_time_cnt(void)
 
     u8 curr_freq_div = (__get_lrc_hz() / 32000);
     cnt = (cnt / curr_freq_div);
-    printf("%s = %d\n",__func__,cnt);
-    printf("---lrc_hz = %d,curr_freq_div = %d\n",__get_lrc_hz(),curr_freq_div);
+    //printf("%s = %d\n",__func__,cnt);
+    // printf("---lrc_hz = %d,curr_freq_div = %d\n",__get_lrc_hz(),curr_freq_div);
     return cnt;
+#endif
+#if 0
+    u32 cnt, curTickcnt, timercnt;
+    curTickcnt = (u32)((P2M_LPTIME3_CNT3 << 24) | (P2M_LPTIME3_CNT2 << 16) | \
+        (P2M_LPTIME3_CNT1 << 8) | (P2M_LPTIME3_CNT0));
+    timercnt = P11_TMR3_CNT;
+    if(sPreTickcnt == curTickcnt && timercnt< sPreTimerCnt)
+    {
+        printf("RTc %s = %d %d %d %d\n",__func__, sPreTimerCnt, \
+            timercnt, sPreTickcnt, curTickcnt);
+        cnt = sPreTimerCnt + sPreTickcnt;
+    }else
+    {
+        cnt = curTickcnt + timercnt;
+    }
+
+    sPreTickcnt = curTickcnt;
+    sPreTimerCnt = timercnt;
+
+    return cnt;
+#endif
 }
 #endif
 
@@ -219,6 +244,7 @@ void app_main()
     }
 #endif
     //sys_timer_add(NULL, mem_printf, 1000);
+    //usr_timer_add(NULL, get_user_time_cnt, 1000, 1);
     app_task_loop();
 }
 

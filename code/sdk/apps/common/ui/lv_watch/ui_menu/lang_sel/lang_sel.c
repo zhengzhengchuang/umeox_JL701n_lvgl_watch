@@ -7,15 +7,15 @@ static const char *lang_sel_text_src[\
     "العربية",
     "English",
     "Français",
-    "اوردو زبان",
-    "Türkçe",
+    "اردو",
+    "Türk",
     "简体中文",
-    "IndonesiaName",
+    "Bahasa Indonesia",
     "فارسی",
     "Deutsch",
-    "Русский язык",
-    "MalaysiaName",
-    "O'zbek tili",
+    "Pусский",
+    "Melayu",
+    "o'zbek",
 };
 
 /****************语言容器点击索引****************/

@@ -277,7 +277,8 @@ int gravity_sensor_init(void *_data)
     } else {
         log_info(">>>>gSensor_Int SUCC\n");
         gSensor_info->init_flag  = 1;
-        if (platform_data->gSensor_int_io != -1) {
+        if (platform_data->gSensor_int_io != -1) 
+        {
             gpio_set_pull_up(platform_data->gSensor_int_io, 1);
             gpio_set_pull_down(platform_data->gSensor_int_io, 0);
             gpio_set_direction(platform_data->gSensor_int_io, 1);

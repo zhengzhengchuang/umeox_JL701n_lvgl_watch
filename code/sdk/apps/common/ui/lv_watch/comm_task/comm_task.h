@@ -7,19 +7,19 @@ extern "C" {
 
 #include "../include/ui_menu.h"
 
-#define SYS_COMM_TASK_NAME \
-    "comm_handle_task"
+#define Comm_Task_Name "comm_task"
 
 enum
 {
-    comm_msg_alarm_monitor = 0x00,
+    comm_msg_minute_handle,
+
     comm_msg_countdown_timeout,
     comm_msg_stopwatch_timeout,
 };
 
-void comm_handle_task_init(void);
+void comm_task_create(void);
 void comm_task_msg_handle(int *msg, u8 len);
-int post_comm_handle_msg(int *post_msg, u8 len);
+int post_comm_task_msg(int *post_msg, u8 len);
 #ifdef __cplusplus
 } /* extern "C" */
 #endif

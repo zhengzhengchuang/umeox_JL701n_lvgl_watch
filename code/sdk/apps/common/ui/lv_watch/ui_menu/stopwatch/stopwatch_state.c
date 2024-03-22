@@ -68,8 +68,7 @@ static void menu_refresh_cb(lv_obj_t *obj)
 
     stopwatch_attribute_data_t *stopwatch_over_data = \
         &p_ui_info_cache->common_stopwatch_para.stopwatch_over_data;
-    if(stopwatch_over_data->stopwatch_minute >= \
-        60)
+    if(stopwatch_over_data->stopwatch_minute >= 60)
     {
         ui_menu_jump_handle(\
             ui_act_id_stopwatch_over);

@@ -137,7 +137,7 @@ static void lv_tileview_tile_constructor(const lv_obj_class_t * class_p, lv_obj_
 
     LV_UNUSED(class_p);
     lv_obj_t * parent = lv_obj_get_parent(obj);
-    printf("%s:%p\n", __func__, parent);
+    // printf("%s:%p\n", __func__, parent);
     lv_obj_set_size(obj, LV_PCT(100), LV_PCT(100));
     lv_obj_update_layout(obj);  /*Be sure the size is correct*/
     lv_obj_set_pos(obj, create_col_id * lv_obj_get_content_width(parent),

@@ -12,7 +12,8 @@ extern "C" {
 
 /****************通用列表宽、高度****************/
 #define Common_List_Container_W   (LCD_WIDTH)
-#define Common_List_Container_H   (LCD_HEIGHT)
+#define Common_List_Container_H   \
+    (LCD_HEIGHT - LCD_UI_Y_OFFSET)
 
 /****************通用列表参数内容****************/
 typedef struct 

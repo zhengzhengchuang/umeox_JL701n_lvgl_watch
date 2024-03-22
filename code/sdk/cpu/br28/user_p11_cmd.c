@@ -82,7 +82,8 @@ static int config_m2p_cubuff_init(int type, u16 len, u8 *data)
     sensor_cbuffer[0] = msg[1];
     sensor_cbuffer[1] = (sensor_cbuffer[0] + 1);
     sensor_cbuffer[2] = (sensor_cbuffer[1] + 1);
-    printf(">>>>>%s %d %x %x %x\n", __FUNCTION__, __LINE__, sensor_cbuffer[0], sensor_cbuffer[1], sensor_cbuffer[2]);
+    printf(">>>>>%s %d %x %x %x\n", __FUNCTION__, __LINE__, \
+        sensor_cbuffer[0], sensor_cbuffer[1], sensor_cbuffer[2]);
     return TRUE;
 }
 

@@ -337,6 +337,20 @@ ui_menu_load_info_t *ui_menu_load_info(ui_act_id_t act_id)
                 break;
             }    
         }
+    }else if(act_id == ui_act_id_al_name_list)
+    {
+        al_name_list_mode_t list_mode = \
+            get_vm_para_cache_with_label(vm_label_al_name_list_mode);
+        
+        al_name_list_mode_t i;
+        list_for_ui_al_name_list(i)
+        {
+            if(i == list_mode)
+            {
+                menu_load_info = al_name_load_info[i];
+                break;
+            }
+        }
     }
 
     return menu_load_info;

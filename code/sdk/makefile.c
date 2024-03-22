@@ -115,3 +115,39 @@ apps/common/ui/ui/components/ui_comp_stepgroup.c  \
 apps/common/ui/ui/components/ui_comp_titlegroup.c  \
 apps/common/ui/ui/components/ui_comp_todayweathergroup.c  \
 apps/common/ui/ui/components/ui_comp_weathergroup1.c  \
+
+
+apps/common/device/hr_sensor/hrSensor_manage.c \
+apps/common/device/hr_sensor/hrs3300.c \
+apps/common/device/hr_sensor/hrs3603.c \
+apps/common/device/hr_sensor/p11_hrsensor.c \
+apps/common/device/hr_sensor/vchr02/module_heart_vc_int.c \
+apps/common/device/hr_sensor/vchr02/vcHr02Hci.c \
+apps/common/device/gSensor/SC7A20.c \
+apps/common/device/gSensor/gSensor_manage.c \
+apps/common/device/gSensor/mc3433.c \
+apps/common/device/gSensor/mpu6050.c \
+apps/common/device/gSensor/msa310.c \
+apps/common/device/gSensor/msa310_function.c \
+apps/common/device/gSensor/p11_gsensor.c \
+apps/common/device/gSensor/silan/silan_motion_module.c \
+apps/common/device/imu_sensor/imuSensor_manage.c \
+apps/common/device/imu_sensor/mpu6887/mpu6887p.c \
+apps/common/device/imu_sensor/mpu9250/mpu9250.c \
+apps/common/device/imu_sensor/sh3001/sh3001.c \
+apps/common/device/bmp280/bmp280.c \
+apps/common/device/detection.c \
+apps/common/device/touch_panel/cst816d/cst816d.c \
+apps/common/device/touch_panel/cst816s/cst816s.c \
+apps/common/device/touch_panel/ft6336g.c \
+apps/common/device/touch_panel/spt511x/spt511x_firmware_customer.c \
+apps/common/device/touch_panel/IT7259E.c \
+apps/common/device/touch_panel/bl6133.c \
+apps/common/device/touch_panel/bl_fw_update.c \
+
+apps/common/device/gSensor/silan/silan_data.a \
+apps/common/device/gSensor/silan/silan_motion_algo.a \
+cpu/br28/liba/vcHrAlgoV619ForCodeBlocks701N.a \
+cpu/br28/liba/vcSpo2AlgoV151_lc11s_B_v1.a \
+cpu/br28/liba/HeartRate_Calc.a \
+cpu/br28/liba/SPO2.a \

@@ -1,24 +1,25 @@
 #include "about.h"
 
+static int16_t about_scroll_to_y;
 static lv_obj_t *about_container = NULL;
 
-#if 0
+
 static void about_container_scroll_cb(lv_event_t *e)
 {
     if(!e) return;
 
     lv_obj_t *obj = \
         lv_event_get_target(e);
-    scroll_y_val = \
+    about_scroll_to_y = \
         lv_obj_get_scroll_y(obj);
 
     return;
 }
-#endif
 
 static void about_container_create(lv_obj_t *obj)
 {
-    widget_obj_para.obj_parent = obj;
+    widget_obj_para.obj_parent = \
+        obj;
     widget_obj_para.obj_x = 0;
     widget_obj_para.obj_y = \
         LCD_UI_Y_OFFSET;
@@ -42,15 +43,9 @@ static void about_container_create(lv_obj_t *obj)
         common_widget_obj_create(&widget_obj_para);
     lv_obj_set_style_pad_bottom(about_container, \
         25, LV_PART_MAIN);
-
-#if 0
     lv_obj_add_event_cb(about_container, \
         about_container_scroll_cb, LV_EVENT_SCROLL, \
             NULL);
-
-    lv_obj_scroll_to_y(about_container, scroll_y_val, \
-        LV_ANIM_OFF);
-#endif
 
     return;
 }
@@ -74,8 +69,6 @@ static void about_title_icon_create(void)
 
 static void about_title_label_create(void)
 {
-    widget_label_para.label_x = 0;
-    widget_label_para.label_y = 0;
     widget_label_para.label_w = \
         (LCD_WIDTH - 30);
     widget_label_para.label_h = \
@@ -418,6 +411,9 @@ static void menu_display_cb(lv_obj_t *obj)
     about_QR_code_elem_create();
 
     about_reset_button_elem_create();
+
+    lv_obj_scroll_to_y(about_container, \
+        about_scroll_to_y, LV_ANIM_OFF);
 
     return;
 }

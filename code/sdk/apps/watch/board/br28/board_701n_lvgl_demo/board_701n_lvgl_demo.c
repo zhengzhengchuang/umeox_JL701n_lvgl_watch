@@ -978,6 +978,21 @@ struct port_wakeup port3 = {
 };
 #endif
 
+#if TCFG_QMI8658_EN
+struct port_wakeup port3 = {
+    .pullup_down_enable = ENABLE,                            //配置I/O 内部上下拉是否使能
+    .edge               = RISING_EDGE,                      //唤醒方式选择,可选：上升沿\下降沿
+    .iomap              = IO_PORTB_03,                       //唤醒口选择
+};
+#endif
+
+//用于心率中断
+struct port_wakeup port6 = {
+    .pullup_down_enable = ENABLE,                            //配置I/O 内部上下拉是否使能
+    .edge               = RISING_EDGE,                      //唤醒方式选择,可选：上升沿\下降沿
+    .iomap              = IO_PORTB_02,                       //唤醒口选择
+};
+
 #if TCFG_CHARGE_ENABLE
 struct port_wakeup charge_port = {
     .edge               = RISING_EDGE,                       //唤醒方式选择,可选：上升沿\下降沿\双边沿
@@ -1013,6 +1028,13 @@ const struct wakeup_param wk_param = {
 #if (TCFG_GSENSOR_ENABLE||TCFG_IMUSENSOR_ENABLE)
     .port[4] = &port3,
 #endif
+
+#if TCFG_QMI8658_EN
+    .port[4] = &port3,
+#endif
+
+    //心率中断
+    .port[6] = &port6,
 
 #if (1)
     .port[5] = &port4,
@@ -1113,7 +1135,7 @@ static void board_devices_init(void)
 	uart_key_init();
 #endif /* #if TCFG_UART_KEY_ENABLE */
 
-    //sensor_iic_init();
+    sensor_iic_init();
 
 #if (TCFG_HR_SENSOR_ENABLE||TCFG_SPO2_SENSOR_ENABLE)
     hr_sensor_init(&hrSensor_data);
@@ -1126,6 +1148,12 @@ static void board_devices_init(void)
 #if TCFG_QMI8658_EN
     qmi8658_init();
 #endif
+
+    extern int qmc6309_init(void);
+    qmc6309_init();
+
+    extern void vcHr02DevInit();
+    vcHr02DevInit();
 
 #if TCFG_IMUSENSOR_ENABLE
     imu_sensor_init(imu_sensor_data,sizeof(imu_sensor_data));
@@ -1300,8 +1328,11 @@ void board_init()
 
 #if TCFG_RTC_ENABLE
     //alarm_init(); //不用RTC闹钟，使用用户闹钟
-    comm_handle_task_init();
+    comm_task_create();
 #endif
+    SensorHrTaskCreate();
+    SensorGsTaskCreate();
+    SensorMagTaskCreate();
 
 #if TCFG_SENSOR_DEBUG_ENABLE
     data_export_init();

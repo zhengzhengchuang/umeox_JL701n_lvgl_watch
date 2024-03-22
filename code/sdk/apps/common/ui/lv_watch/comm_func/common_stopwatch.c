@@ -15,7 +15,7 @@ static void common_user_stopwatch_timeout_cb(void *priv)
     int countdown_timeout_msg[1];
     countdown_timeout_msg[0] = \
         comm_msg_stopwatch_timeout;
-    post_comm_handle_msg(countdown_timeout_msg, 1);
+    post_comm_task_msg(countdown_timeout_msg, 1);
 
     return;
 }
@@ -119,6 +119,7 @@ void common_user_stopwatch_record(void)
 *********************************************************************************/
 void common_user_stopwatch_timeout_handle(void)
 {
+#if 1
     stopwatch_attribute_data_t *stopwatch_data = \
         &p_ui_info_cache->common_stopwatch_para.stopwatch_data;
     stopwatch_attribute_data_t *stopwatch_over_data = \
@@ -149,12 +150,37 @@ void common_user_stopwatch_timeout_handle(void)
 
                 common_user_stopwatch_reset();
 
+                #if 0
+                if(lcd_sleep_status())
+                {
+                    ui_menu_load_info_t *menu_load_info = \
+                        &p_ui_info_cache->exit_menu_load_info;
+
+                    if(!menu_load_info->lock_flag)
+                        ui_menu_jump(\
+                            ui_act_id_stopwatch_over);
+                }else
+                {
+                    ui_menu_load_info_t *menu_load_info = \
+                        &p_ui_info_cache->menu_load_info;
+
+                    if(p_ui_info_cache->cur_act_id != \
+                        ui_act_id_stopwatch_state)
+                    {
+                        if(!menu_load_info->lock_flag)
+                            ui_menu_jump(\
+                                ui_act_id_stopwatch_over);
+                    }
+                }
+                #else
                 if(lcd_sleep_status())
                     ui_menu_jump(\
-                        ui_act_id_stopwatch_over);
+                            ui_act_id_stopwatch_over);
+                #endif
             }      
         }     
     }
+#endif
 
     return;
 }

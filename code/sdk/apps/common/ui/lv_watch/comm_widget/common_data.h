@@ -117,6 +117,10 @@ typedef struct
     lv_obj_t *data_parent;
     uint32_t num_addr_index;
     widget_data_align_t data_align;
+
+    /*********后续扩展参数*************/
+    bool user0_para_valid;
+    uint32_t user0_num_addr_index;//有些控件需要在特定条件更换数字组，如果无，忽略此参数
 }widget_data_para_t;
 extern widget_data_para_t widget_data_para;
 

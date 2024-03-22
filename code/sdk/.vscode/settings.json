@@ -262,7 +262,25 @@
         "stopwatch.h": "c",
         "stopwatch_main.h": "c",
         "stopwatch_state.h": "c",
-        "stopwatch_over.h": "c"
+        "stopwatch_over.h": "c",
+        "name_99_table.h": "c",
+        "al_name_list0.h": "c",
+        "al_name_list1.h": "c",
+        "al_name_list.h": "c",
+        "al_name_ex.h": "c",
+        "minute_task.h": "c",
+        "spo2algo.h": "c",
+        "vchr02hci.h": "c",
+        "algo.h": "c",
+        "sensor_hr_task.h": "c",
+        "hr.h": "c",
+        "hr_sample.h": "c",
+        "icfg_gdf30x.h": "c",
+        "ical_gdf30x.h": "c",
+        "qmc6309.h": "c",
+        "stdio.h": "c",
+        "sensor_mag_task.h": "c",
+        "sensor_gs_task.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

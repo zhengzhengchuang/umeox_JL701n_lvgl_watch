@@ -58,13 +58,17 @@ void common_bo_widget_init(void)
     if(!bo_group_num)
         return;
 
-    bo_group_num = 0;
-
     memset(bo_dsc_idx, 0xffff, \
         sizeof(bo_dsc_idx));
 
     memset(common_bo_widget, 0, \
         sizeof(common_bo_widget));
+
+    memset(bo_para_cache, 0, \
+        sizeof(widget_data_para_t)*\
+            bo_group_num);
+
+    bo_group_num = 0;
 
     return;
 }
@@ -129,7 +133,7 @@ void common_bo_widget_refresh(void)
             sizeof(bo_num_str));
 
         if(!__data)
-            memcpy(bo_num_str, (void *)"__", 2);
+            memcpy(bo_num_str, (void *)"__%", 3);
         else
             sprintf(bo_num_str, "%d%%", __data);
 
@@ -258,7 +262,7 @@ int16_t common_bo_widget_create(widget_data_para_t *data_para, \
         sizeof(bo_num_str));
 
     if(!__data)
-        memcpy(bo_num_str, (void *)"__", 2);
+        memcpy(bo_num_str, (void *)"__%", 3);
     else
         sprintf(bo_num_str, "%d%%", __data);
 

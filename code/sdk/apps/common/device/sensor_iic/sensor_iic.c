@@ -27,7 +27,8 @@
 static spinlock_t sensor_iic_lock;
 static const u8 sensor_iic_delay = 1;
 static bool sensor_iic_init_flag = false;
-static const soft_iic_dev sensor_iic_hdl = TCFG_SENOR_IIC_INDEX;
+static const soft_iic_dev sensor_iic_hdl = \
+    TCFG_SENOR_IIC_INDEX;
 
 void sensor_iic_init(void)
 {
@@ -39,6 +40,8 @@ void sensor_iic_init(void)
     spin_lock_init(&sensor_iic_lock);
 
     sensor_iic_init_flag = true;
+
+    printf("******%s\n", __func__);
 
     return;
 }

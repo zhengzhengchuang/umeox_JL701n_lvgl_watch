@@ -1,7 +1,5 @@
 #include "includes.h"
-#include "comm_task.h"
 #include "../lv_watch.h"
-#include "../comm_remind/alarm_manage.h"
 
 static bool minute_handle = true;
 static uint16_t minute_timer_id = 0;
@@ -22,14 +20,14 @@ static void minute_timerout_cb(void *priv)
 
     int minute_handle_msg[1];
     minute_handle_msg[0] = \
-        comm_msg_alarm_monitor;
-    post_comm_handle_msg(\
+        comm_msg_minute_handle;
+    post_comm_task_msg(\
         minute_handle_msg, 1);
 
     return;
 }
 
-static void comm_handle_task(void *p)
+static void comm_task_handle(void *p)
 {
     int rev_ret;
     int rev_msg[8] = {0};
@@ -62,8 +60,8 @@ void comm_task_msg_handle(int *rev_msg, u8 len)
 
     switch(msg_cmd)
     {
-        case comm_msg_alarm_monitor:
-            common_user_alarm_real_time_monitor();
+        case comm_msg_minute_handle:
+            watch_minute_task_msg_handle();
             break;
 
         case comm_msg_countdown_timeout:
@@ -82,17 +80,17 @@ void comm_task_msg_handle(int *rev_msg, u8 len)
     return;
 }
 
-void comm_handle_task_init(void)
+void comm_task_create(void)
 {
-    int err = task_create(comm_handle_task, \
-        NULL, SYS_COMM_TASK_NAME);
+    int err = task_create(comm_task_handle, \
+        NULL, Comm_Task_Name);
     if(err) 
-        r_printf("comm task create err:%d \n", err);
+        r_printf("comm task create err!!!!!!!:%d \n", err);
 
     return;
 }
 
-int post_comm_handle_msg(int *post_msg, u8 len)
+int post_comm_task_msg(int *post_msg, u8 len)
 {
     int err = 0;
     int count = 0;
@@ -101,15 +99,15 @@ int post_comm_handle_msg(int *post_msg, u8 len)
         return -1;
 
 __retry:
-    err = os_taskq_post_type(\
-        SYS_COMM_TASK_NAME, post_msg[0], len - 1, &post_msg[1]);
+    err = os_taskq_post_type(Comm_Task_Name, \
+        post_msg[0], len - 1, &post_msg[1]);
 
     if(cpu_in_irq() || cpu_irq_disabled())
         return err;
 
     if(err) 
     {
-        if(!strcmp(os_current_task(), SYS_COMM_TASK_NAME)) 
+        if(!strcmp(os_current_task(), Comm_Task_Name)) 
             return err;
 
         if(count > 20)

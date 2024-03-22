@@ -1,16 +1,5 @@
 #include "common_list.h"
 
-/****************图标源****************/
-static const uint32_t common_list_icon_src[\
-    Common_List_Elem_Num] = 
-{
-    menu_100_100_icon_00_index, menu_100_100_icon_01_index, menu_100_100_icon_02_index, \
-    menu_100_100_icon_03_index, menu_100_100_icon_04_index, menu_100_100_icon_05_index, \
-    menu_100_100_icon_06_index, menu_100_100_icon_07_index, menu_100_100_icon_08_index, \
-    menu_100_100_icon_09_index, menu_100_100_icon_10_index, menu_100_100_icon_11_index, \
-    menu_100_100_icon_12_index, menu_100_100_icon_13_index, menu_100_100_icon_14_index, \
-    menu_100_100_icon_15_index, \
-};
 
 /****************文本源id****************/
 static const comm_lang_txtid_t common_list_text_id[\
@@ -24,7 +13,7 @@ static const comm_lang_txtid_t common_list_text_id[\
 };
 
 /****************元素容器点击索引****************/
-static const uint16_t common_list_elem_container_idx[\
+static const uint8_t common_list_elem_container_idx[\
     Common_List_Elem_Num] =
 {
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, \
@@ -189,7 +178,8 @@ static void common_list_container_create(lv_obj_t *obj)
 
     widget_obj_para.obj_parent = obj;
     widget_obj_para.obj_x = 0;
-    widget_obj_para.obj_y = 0;
+    widget_obj_para.obj_y = \
+        LCD_UI_Y_OFFSET;
     widget_obj_para.obj_width = \
         Common_List_Container_W;
     widget_obj_para.obj_height = \
@@ -216,7 +206,7 @@ static void common_list_container_create(lv_obj_t *obj)
 /*********************************************************************************
                                   通用列表元素容器点击回调                          
 *********************************************************************************/
-static void common_list_elem_container_click_cb(lv_event_t *e)
+static void common_list_elem_container_cb(lv_event_t *e)
 {
     if(!e) return;
 
@@ -279,7 +269,7 @@ static void common_list_elem_container_create(\
         lv_obj_add_flag(common_list_elem_container[idx], \
             LV_OBJ_FLAG_EVENT_BUBBLE);
         lv_obj_add_event_cb(common_list_elem_container[idx], \
-            common_list_elem_container_click_cb, LV_EVENT_SHORT_CLICKED, \
+            common_list_elem_container_cb, LV_EVENT_SHORT_CLICKED, \
                 (void *)&common_list_elem_container_idx[idx]);
 
         if(widget_obj_para.obj_y >= Common_List_Container_H || \
@@ -347,7 +337,8 @@ static void common_list_elem_icon_create(\
         widget_img_para.img_parent = \
             common_list_elem_container[idx];
         widget_img_para.file_img_dat = \
-            common_list_icon_src[idx];
+            menu_100_100_icon_00_index + \
+                idx;
         common_list_icon[idx] = \
             common_widget_img_create(&widget_img_para, NULL);
 

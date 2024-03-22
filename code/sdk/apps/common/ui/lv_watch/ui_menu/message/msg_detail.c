@@ -160,9 +160,9 @@ static void menu_display_cb(lv_obj_t *obj)
         LV_OPA_0;
     widget_textarea_para.border_color = \
         lv_color_hex(0x000000);
-    lv_obj_t *msg_detail_ctx = \
+    lv_obj_t *msg_detail_textarea = \
         common_widget_textarea_create(&widget_textarea_para);
-    lv_obj_align(msg_detail_ctx, LV_ALIGN_TOP_MID, \
+    lv_obj_align(msg_detail_textarea, LV_ALIGN_TOP_MID, \
         0, 68);
 
     widget_img_para.img_parent = \

@@ -9,8 +9,7 @@
 
 vm_store_para_cache_t *p_vm_para_cache = NULL;
 static vm_store_para_cache_t vm_para_cache = {0};
-const ui_menu_load_info_t *watchface_load_info[] = 
-{
+const ui_menu_load_info_t *watchface_load_info[] = {
     &menu_load_watchface_00, &menu_load_watchface_01, \
     &menu_load_watchface_02, &menu_load_watchface_03, \
     &menu_load_watchface_04, &menu_load_watchface_05, \
@@ -18,10 +17,14 @@ const ui_menu_load_info_t *watchface_load_info[] =
     &menu_load_watchface_08, &menu_load_watchface_09, \
     &menu_load_watchface_10, &menu_load_watchface_11,
 };
-const ui_menu_load_info_t *menu_style_load_info[] = 
-{
+
+const ui_menu_load_info_t *menu_style_load_info[] = {
     &menu_load_common_list, &menu_load_common_list1, \
     &menu_load_common_list2,
+};
+
+const ui_menu_load_info_t *al_name_load_info[] = {
+    &menu_load_al_name_list0, &menu_load_al_name_list1,
 };
 
 /*********************************************************************************
@@ -41,7 +44,7 @@ static const vm_store_para_with_label_t default_label_para[\
 
     /*********默认菜单风格*********/
     {.label = vm_label_menu_view, \
-        .store_para_val = ui_menu_view_02},
+        .store_para_val = ui_menu_view_00},
 
     /*********默认时间格式:24小时制*********/
     {.label = vm_label_time_format, \
@@ -57,7 +60,7 @@ static const vm_store_para_with_label_t default_label_para[\
 
     /*********默认系统语言*********/
     {.label = vm_label_sys_language, \
-        .store_para_val = comm_language_id_arabic},
+        .store_para_val = comm_language_id_chinese},
 
     /*********默认系统声音开启、音量*********/
     {.label = vm_label_sys_sound_on, \
@@ -77,21 +80,39 @@ static const vm_store_para_with_label_t default_label_para[\
     {.label = vm_label_unit_temperature, \
         .store_para_val = unit_temperature_C},
 
-    /*********默认心率*********/
-    {.label = vm_label_hr, .store_para_val = 0},
-    {.label = vm_label_min_hr, .store_para_val = 0},
-    {.label = vm_label_max_hr, .store_para_val = 0},
+    /*******99真主名列表模式*******/
+    {.label = vm_label_al_name_list_mode, \
+        .store_para_val = al_name_list_mode0},
 
-    /*********默认血氧*********/
-    {.label = vm_label_bo, .store_para_val = 0},
-    {.label = vm_label_min_bo, .store_para_val = 0},
-    {.label = vm_label_max_bo, .store_para_val = 0},
+    /*********默认日常心率*********/
+    {.label = vm_label_hr, \
+        .store_para_val = 0},
+    {.label = vm_label_min_hr, \
+        .store_para_val = 0},
+    {.label = vm_label_max_hr, \
+        .store_para_val = 0},
+
+    /*********默认心率预警值*********/
+    {.label = vm_label_hr_warn_val, \
+        .store_para_val = 150},
+
+    /*********默认日常血氧*********/
+    {.label = vm_label_bo, \
+        .store_para_val = 0},
+    {.label = vm_label_min_bo, \
+        .store_para_val = 0},
+    {.label = vm_label_max_bo, \
+        .store_para_val = 0},
 
     /*********默认日常数据*********/
-    {.label = vm_label_daily_step, .store_para_val = 0},
-    {.label = vm_label_daily_pace, .store_para_val = 0},
-    {.label = vm_label_daily_calorie, .store_para_val = 0},
-    {.label = vm_label_daily_distance, .store_para_val = 0},
+    {.label = vm_label_daily_step, \
+        .store_para_val = 0},
+    {.label = vm_label_daily_pace, \
+        .store_para_val = 0},
+    {.label = vm_label_daily_calorie, \
+        .store_para_val = 0},
+    {.label = vm_label_daily_distance, \
+        .store_para_val = 0},
 };
 
 /*********************************************************************************
