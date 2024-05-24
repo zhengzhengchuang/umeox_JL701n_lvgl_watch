@@ -7,11 +7,12 @@ extern "C" {
 
 #include "../../lv_watch.h"
 
+#if 0
 /****************单位距离选项数量****************/
-#define Unit_Distance_Sel_Num (unit_distance_max)
+#define Unit_Distance_Sel_Num (unit_distance_num)
 
 /****************单位距离选项数量****************/
-#define Unit_Temperature_Sel_Num (unit_temperature_max)
+#define Unit_Temperature_Sel_Num (unit_temperature_num)
 
 
 /****************单位切换参数内容****************/
@@ -33,6 +34,7 @@ typedef struct
     uint16_t unit_temperature_img_dsc[\
         Unit_Temperature_Sel_Num];
 }unit_switch_ctx_t;
+#endif
 
 #ifdef __cplusplus
 } /* extern "C" */

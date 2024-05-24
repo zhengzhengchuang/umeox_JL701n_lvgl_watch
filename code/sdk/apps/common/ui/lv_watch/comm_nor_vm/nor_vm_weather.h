@@ -13,11 +13,6 @@ extern "C" {
 #define Weather_Sync_Days (7)
 
 /*********************************************************************************
-                                  天气无效值                                       
-*********************************************************************************/
-#define Weather_Invalid_Code (0x7fff)
-
-/*********************************************************************************
                                   天气类型(不要改枚举的顺序)                                    
 *********************************************************************************/
 enum
@@ -39,30 +34,31 @@ enum
 };
 typedef uint8_t weather_type_t;
 
-/*********************************************************************************
-                                  天气数据内容                                       
-*********************************************************************************/
 typedef struct
 {
-    uint16_t check_code; 	
+    weather_type_t \
+        type;
+    int8_t real_temper;
+    int8_t min_temper;
+    int8_t max_temper;
+}vm_weather_data_ctx_t;
 
-	int16_t weather_max_temper;
-	int16_t weather_min_temper;
-    int16_t weather_real_temper;
-	weather_type_t weather_type;
+typedef struct
+{
+    uint16_t check_code;
+
+    struct sys_time time;
+
+    vm_weather_data_ctx_t \
+        vm_ctx[Weather_Sync_Days];
 }vm_weather_ctx_t;
+extern vm_weather_ctx_t w_weather;
+extern vm_weather_ctx_t r_weather;
 
-/*********************************************************************************
-                                  天气接口                                       
-*********************************************************************************/
-void vm_weather_ctx_clear(void);
-uint8_t vm_weather_item_num(void);
-bool vm_whether_data_is_valid(void);
-int16_t vm_weather_data_real_temper(void);
-int16_t vm_weather_data_min_temper(uint8_t day);
-int16_t vm_weather_data_max_temper(uint8_t day);
-weather_type_t vm_weather_data_weather_type(uint8_t day);
-void vm_weather_ctx_falsh_save(uint8_t idx, vm_weather_ctx_t *p);
+void VmWeatherCtxClear(void);
+uint8_t VmWeatherItemNum(void);
+bool VmWeatherCtxFlashRead(void);
+void VmWeatherCtxFlashSave(void *p);
 #ifdef __cplusplus
 }
 #endif

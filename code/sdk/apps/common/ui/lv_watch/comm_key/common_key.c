@@ -35,7 +35,7 @@ static void enable_te_timeout_cb(void *priv)
         lcd->power_ctrl(true);
 
     int lcd_backlight = \
-        get_vm_para_cache_with_label(vm_label_backlight);
+        GetVmParaCacheByLabel(vm_label_backlight);
 
     if(lcd->backlight_ctrl)
         lcd->backlight_ctrl((uint8_t)lcd_backlight);
@@ -51,9 +51,15 @@ void common_key_msg_handle(int key_value, int key_event)
     if(app_var.goto_poweroff_flag)
         return;
 
+    printf("key_value = %d, key_event = %d\n", \
+        key_value, key_event);
+
     if(lcd_sleep_status())
     {
-        if(key_value == Common_Key_Val_0 && key_event == KEY_EVENT_CLICK)
+        if(key_value >= Common_Key_Val_Max)
+            return;
+
+        if(key_event == KEY_EVENT_CLICK)
         {
             lcd_sleep_ctrl(false);
 
@@ -88,19 +94,44 @@ void common_key_msg_handle(int key_value, int key_event)
         /*******亮屏按键操作时，需重置熄屏定时器*******/
         common_offscreen_timer_restart();
 
-        /*******页面不锁定，主按键返回表盘*******/
-        bool menu_lock_flag = \
+        bool menu_lock = \
             p_ui_info_cache->menu_load_info.lock_flag;
-        if(key_value == Common_Key_Val_0 && \
-            key_event == KEY_EVENT_CLICK && !menu_lock_flag)
-        {
-            if(p_ui_info_cache->cur_act_id != \
-                ui_act_id_watchface)
-            {
-                ui_menu_jump(ui_act_id_watchface);
+        ui_act_id_t cur_act_id = \
+            p_ui_info_cache->cur_act_id;
 
-                return;
-            }     
+        if(key_value == Common_Key_Val_1)
+        {
+            //电源键
+            if(key_event == KEY_EVENT_CLICK)
+                common_offscreen_handle(); 
+            else if(key_event == KEY_EVENT_LONG_3S)
+                DevOpMenuPopUp();
+        }else if(key_value == Common_Key_Val_0)
+        {
+            //菜单键 Home键
+            if(cur_act_id == ui_act_id_watchface)
+            {
+                if(key_event == KEY_EVENT_CLICK)
+                {
+                    ui_menu_jump(\
+                        ui_act_id_menu);
+                    return;
+                }
+            }else
+            {
+                if(key_event == KEY_EVENT_CLICK)
+                {
+                    if(menu_lock == false)
+                    {
+                        ui_menu_jump(\
+                            ui_act_id_watchface);
+                        return;
+                    }
+                }
+            }
+        }else
+        {
+            return;
         }
 
         /*******按键无通用功能，回调到页面做相应地处理*******/

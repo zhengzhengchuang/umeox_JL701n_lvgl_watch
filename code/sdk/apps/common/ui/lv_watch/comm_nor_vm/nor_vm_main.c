@@ -14,6 +14,14 @@ static const nor_vm_para_t nor_vm_para[\
         Nor_Vm_Call_log_Size, Nor_Vm_Call_log_Offset},
     {nor_vm_type_message, Message_Max_Num, \
         Nor_Vm_Message_Size, Nor_Vm_Message_Offset},
+    {nor_vm_type_sleep, Sleep_Max_Days, \
+        Nor_Vm_Sleep_Size, Nor_Vm_Sleep_Offset},
+    {nor_vm_type_hr, Hr_Max_Days, \
+        Nor_Vm_Hr_Size, Nor_Vm_Hr_Offset},
+    {nor_vm_type_bo, Bo_Max_Days, \
+        Nor_Vm_Bo_Size, Nor_Vm_Bo_Offset},
+    {nor_vm_type_activity, Activity_Max_Days, \
+        Nor_Vm_Activity_Size, Nor_Vm_Activity_Offset},
 };
 
 void nor_flash_vm_init(void)
@@ -31,27 +39,34 @@ void nor_flash_vm_init(void)
                 p->vm_offset + p->vm_size);
     }
 
+    SetSleepInfoPara();
+    SetWeatherInfoPara();
+
+    PowerOnSetHrVmCache();
+    PowerOnSetBoVmCache();
+
     return;
 }
 
 void nor_flash_vm_clear(void)
 {
-    vm_weather_ctx_clear();
-    vm_message_ctx_clear();
-    vm_contacts_ctx_clear();
-    vm_call_log_ctx_clear();
-
+    VmHrCtxClear();
+    VmBoCtxClear();
+    VmSleepCtxClear();
+    VmWeatherCtxClear();
+    VmMessageCtxClear();
+    VmContactsCtxClear();
+    VmCallLogCtxClear();
+    
     return;
 }
 
 void *nor_flash_vm_file(nor_vm_type_t nor_vm_type)
 {
-    if(nor_vm_type >= \
-        Nor_Vm_Type_Max)
+    if(nor_vm_type >= Nor_Vm_Type_Max)
         return NULL;
     
-    return nor_vm_file[\
-        nor_vm_type];
+    return nor_vm_file[nor_vm_type];
 }
 
 uint8_t nor_flash_vm_num_max(nor_vm_type_t nor_vm_type)

@@ -636,7 +636,8 @@ static int music_key_event_opr(struct sys_event *event)
         log_i("KEY_MUSIC_PLAYER_START !!\n");
         ///断点播放活动设备
         logo = dev_manager_get_logo(dev_manager_find_active(1));
-        if (music_player_get_play_status() == FILE_DEC_STATUS_PLAY) {
+        if (music_player_get_play_status() == FILE_DEC_STATUS_PLAY) 
+        {
             if (music_player_get_dev_cur() && logo) {
                 ///播放的设备跟当前活动的设备是同一个设备，不处理
                 if (0 == strcmp(logo, music_player_get_dev_cur())) {
@@ -674,7 +675,8 @@ static int music_key_event_opr(struct sys_event *event)
     ///播放执行类消息
     case  KEY_MUSIC_PP:
         log_i("KEY_MUSIC_PP\n");
-        if (music_player_get_play_status() == FILE_DEC_STATUS_PLAY) {
+        if (music_player_get_play_status() == FILE_DEC_STATUS_PLAY) 
+        {
             char *logo = NULL;
             int str_len   = 0;
             logo = music_player_get_phy_dev(&str_len);

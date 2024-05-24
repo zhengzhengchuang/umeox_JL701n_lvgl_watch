@@ -17,10 +17,6 @@ void ui_info_cache_init(ui_act_id_t act_id)
     p_ui_info_cache->cur_act_id = \
         act_id;
 
-    //test
-    p_ui_info_cache->ui_mode = \
-        ui_mode_menu_list;
-
     return;
 }
 

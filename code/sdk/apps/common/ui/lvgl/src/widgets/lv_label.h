@@ -69,6 +69,7 @@ typedef struct {
 #endif
 
     lv_point_t offset; /*Text draw position offset*/
+    uint8_t lines_num;
     lv_label_long_mode_t long_mode : 3; /*Determine what to do with the long texts*/
     uint8_t static_txt : 1;             /*Flag to indicate the text is static*/
     uint8_t recolor : 1;                /*Enable in-line letter re-coloring*/
@@ -134,6 +135,8 @@ void lv_label_set_long_mode(lv_obj_t * obj, lv_label_long_mode_t long_mode);
 void lv_label_set_recolor(lv_obj_t * obj, bool en);
 
 void lv_label_set_ver_center(lv_obj_t * obj, bool en);
+// uint8_t lv_label_get_lines_num(lv_obj_t * obj);
+// void lv_label_set_lines_num(lv_obj_t * obj, uint8_t lines);
 
 /**
  * Set where text selection should start

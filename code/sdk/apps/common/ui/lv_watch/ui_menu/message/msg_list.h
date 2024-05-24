@@ -7,10 +7,8 @@ extern "C" {
 
 #include "../../lv_watch.h"
 
-extern vm_message_ctx_t ui_message_ctx;
+#define Max_Elem_Num (Message_Max_Num)
 
-uint8_t get_msg_detail_query_id(void);
-void set_msg_detail_query_id(uint8_t id);
 #ifdef __cplusplus
 } /* extern "C" */
 #endif

@@ -10,12 +10,12 @@ static const uint8_t has_alarm_idx[\
     0, 1, 2, 3, 4,
 };
 
-uint8_t get_alarm_edit_id(void)
+uint8_t GetAlarmEditId(void)
 {
     return alarm_edit_id;
 }
 
-void set_alarm_edit_id(uint8_t id)
+void SetAlarmEditId(uint8_t id)
 {
     alarm_edit_id = \
         id;
@@ -29,21 +29,22 @@ static void no_alarm_add_cb(lv_event_t *e)
 
     struct sys_time \
         utc_time;
-    get_utc_time(&utc_time);
-    set_alarm_time_tmp(utc_time.hour, \
+    GetUtcTime(&utc_time);
+    SetAlarmTimeTmp(utc_time.hour, \
         utc_time.min);
-    set_alarm_repeat_tmp(0x00);
+    SetAlarmRepeatTmp(0x00);
 
     uint8_t alarm_num = \
-        p_vm_para_cache->alarm_manage_para.alarm_num;
-    set_alarm_edit_id(alarm_num);
+        Alarm_Info.alarm_num;
+    SetAlarmEditId(alarm_num);
 
     ui_menu_jump(ui_act_id_alarm_time);
 
     return;
 }
 
-static void no_alarm_menu_create(lv_obj_t *obj)
+static void no_alarm_menu_create(lv_obj_t *obj, \
+    menu_align_t menu_align)
 {
     widget_img_para.img_parent = \
         obj;
@@ -55,15 +56,13 @@ static void no_alarm_menu_create(lv_obj_t *obj)
         NULL;
     lv_obj_t *no_alarm_icon = \
         common_widget_img_create(&widget_img_para, NULL);
-    lv_obj_align(no_alarm_icon, LV_ALIGN_TOP_MID, \
-        0, 88);
+    lv_obj_align(no_alarm_icon, LV_ALIGN_TOP_MID, 0, 88);
 
     widget_img_para.file_img_dat = \
         comm_icon_11_index;
     lv_obj_t *comm_11_icon =
         common_widget_img_create(&widget_img_para, NULL);
-    lv_obj_align(comm_11_icon, LV_ALIGN_TOP_MID, \
-        0, 266);
+    lv_obj_align(comm_11_icon, LV_ALIGN_TOP_MID, 0, 266);
 
     widget_img_para.file_img_dat = \
         comm_icon_18_index;
@@ -75,8 +74,7 @@ static void no_alarm_menu_create(lv_obj_t *obj)
         NULL;
     lv_obj_t *alarm_add_icon = \
         common_widget_img_create(&widget_img_para, NULL);
-    lv_obj_align(alarm_add_icon, LV_ALIGN_TOP_MID, \
-        0, 376);
+    lv_obj_align(alarm_add_icon, LV_ALIGN_TOP_MID, 0, 376);
     lv_obj_set_ext_click_area(alarm_add_icon, 20);
 
     return;
@@ -87,18 +85,18 @@ static void has_alarm_add_cb(lv_event_t *e)
     if(!e) return;
 
     uint8_t alarm_num = \
-        p_vm_para_cache->alarm_manage_para.alarm_num;
+        Alarm_Info.alarm_num;
     if(alarm_num >= Alarm_Max_Num)
         return;
 
     struct sys_time \
         utc_time;
-    get_utc_time(&utc_time);
-    set_alarm_time_tmp(utc_time.hour, \
+    GetUtcTime(&utc_time);
+    SetAlarmTimeTmp(utc_time.hour, \
         utc_time.min);
-    set_alarm_repeat_tmp(0x00);
+    SetAlarmRepeatTmp(0x00);
 
-    set_alarm_edit_id(alarm_num);
+    SetAlarmEditId(alarm_num);
 
     ui_menu_jump(ui_act_id_alarm_time);
 
@@ -112,11 +110,11 @@ static void has_alarm_modify_cb(lv_event_t *e)
     uint8_t idx = \
         *(uint8_t *)lv_event_get_user_data(e);
     uint8_t alarm_num = \
-        p_vm_para_cache->alarm_manage_para.alarm_num;
+        Alarm_Info.alarm_num;
     if(idx >= alarm_num)
         return;
 
-    set_alarm_edit_id(idx);
+    SetAlarmEditId(idx);
 
     ui_menu_jump(ui_act_id_alarm_modify);
 
@@ -129,16 +127,14 @@ static void has_alarm_enable_cb(lv_event_t *e)
 
     uint8_t idx = \
         *(uint8_t *)lv_event_get_user_data(e);
-    uint8_t alarm_x_enable = \ 
-        p_vm_para_cache->alarm_manage_para.alarm_info[\
-            idx].bit_field.alarm_enable;
-    if(alarm_x_enable == 1)
-        alarm_x_enable = 0;
+    alarm_union_t alarm_union_tmp;
+    alarm_union_tmp.info = \
+        Alarm_Info.alarm_union[idx].info;
+    if(alarm_union_tmp.bit_field.alarm_enable)
+        alarm_union_tmp.bit_field.alarm_enable = 0;
     else
-        alarm_x_enable = 1;
-    p_vm_para_cache->alarm_manage_para.alarm_info[\
-        idx].bit_field.alarm_enable = \
-        alarm_x_enable;
+        alarm_union_tmp.bit_field.alarm_enable = 1;
+    UserAlarmEnableModify(alarm_union_tmp.info);
 
     ui_act_id_t cur_act_id = \
         p_ui_info_cache->cur_act_id;
@@ -183,8 +179,6 @@ static void alarm_main_container_create(lv_obj_t *obj)
         true;
     alarm_main_container = \
         common_widget_obj_create(&widget_obj_para);
-    lv_obj_set_style_pad_bottom(alarm_main_container, \
-        25, LV_PART_MAIN);
     lv_obj_add_event_cb(alarm_main_container, \
         alarm_main_scroll_cb, LV_EVENT_SCROLL, NULL);
 
@@ -200,7 +194,7 @@ static void has_alarm_menu_create(lv_obj_t *obj, \
     alarm_main_container_create(obj);
 
     int time_format = \
-        get_vm_para_cache_with_label(\
+        GetVmParaCacheByLabel(\
             vm_label_time_format);
 
     uint8_t i;
@@ -210,8 +204,7 @@ static void has_alarm_menu_create(lv_obj_t *obj, \
     char alarm_time_str[6];
     uint8_t alarm_time_hour;
     uint8_t alarm_time_minute;
-    int16_t elem_container_sy = \
-        32;
+    int16_t elem_container_sy = 32;
     for(i = 0; i < alarm_num; i++)
     {
         widget_img_para.img_parent = \
@@ -233,11 +226,9 @@ static void has_alarm_menu_create(lv_obj_t *obj, \
         memset(alarm_time_str, 0, \
             sizeof(alarm_time_str));
         alarm_time_hour = \
-            p_vm_para_cache->alarm_manage_para.alarm_info[\
-                i].bit_field.alarm_hour;
+            Alarm_Info.alarm_union[i].bit_field.alarm_hour;
         alarm_time_minute = \
-            p_vm_para_cache->alarm_manage_para.alarm_info[\
-                i].bit_field.alarm_minute;
+            Alarm_Info.alarm_union[i].bit_field.alarm_minute;
         if(time_format == time_format_12)
         {
             if(alarm_time_hour >= 12)
@@ -303,8 +294,7 @@ static void has_alarm_menu_create(lv_obj_t *obj, \
             lv_obj_add_flag(ampm_icon, LV_OBJ_FLAG_HIDDEN);
 
         alarm_enable = \
-            p_vm_para_cache->alarm_manage_para.alarm_info[\
-                i].bit_field.alarm_enable;
+            Alarm_Info.alarm_union[i].bit_field.alarm_enable;
         widget_img_para.img_parent = \
             elem_container;
         widget_img_para.file_img_dat = \
@@ -326,8 +316,7 @@ static void has_alarm_menu_create(lv_obj_t *obj, \
         lv_obj_set_ext_click_area(alarm_enable_sw, 16);
 
         alarm_repeat = \
-            p_vm_para_cache->alarm_manage_para.alarm_info[\
-                i].bit_field.alarm_repeat;
+            Alarm_Info.alarm_union[i].bit_field.alarm_repeat;
         widget_img_para.img_parent = \
             elem_container;
         widget_img_para.img_y = \
@@ -367,6 +356,7 @@ static void has_alarm_menu_create(lv_obj_t *obj, \
                  
                 alarm_repeat_sw = \
                     common_widget_img_create(&widget_img_para, NULL);
+                    
                 total_width += 24;
             }
         }
@@ -388,7 +378,11 @@ static void has_alarm_menu_create(lv_obj_t *obj, \
             common_widget_img_create(&widget_img_para, NULL);
         lv_obj_align(alarm_add_icon, LV_ALIGN_TOP_MID, \
             0, elem_container_sy + i*96 + 52);
-        lv_obj_set_ext_click_area(alarm_add_icon, 10);
+        lv_obj_set_ext_click_area(alarm_add_icon, 20);
+    }else
+    {
+        lv_obj_set_style_pad_bottom(alarm_main_container, \
+            25, LV_PART_MAIN);
     }
 
     lv_obj_scroll_to_y(alarm_main_container, 0, \
@@ -408,9 +402,14 @@ static void menu_create_cb(lv_obj_t *obj)
 {
     if(!obj) return;
 
-    tileview_register_all_menu(obj, ui_act_id_null, \
-        ui_act_id_null, ui_act_id_null, ui_act_id_null, \
-            ui_act_id_alarm_main);
+    ui_act_id_t prev_act_id = \
+        ui_act_id_menu;
+    if(!lang_txt_is_arabic())
+        tileview_register_all_menu(obj, ui_act_id_null, ui_act_id_null, \
+            prev_act_id, ui_act_id_null, ui_act_id_alarm_main);
+    else
+        tileview_register_all_menu(obj, ui_act_id_null, ui_act_id_null, \
+            ui_act_id_null, prev_act_id, ui_act_id_alarm_main);
 
     return;
 }
@@ -438,9 +437,10 @@ static void menu_display_cb(lv_obj_t *obj)
             menu_align_right;
 
     uint8_t alarm_num = \
-        p_vm_para_cache->alarm_manage_para.alarm_num;
+        Alarm_Info.alarm_num;
     if(alarm_num == 0)
-        no_alarm_menu_create(obj);
+        no_alarm_menu_create(obj, \
+            menu_align);
     else
         has_alarm_menu_create(obj, \
             alarm_num, menu_align);

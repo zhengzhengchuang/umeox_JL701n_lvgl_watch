@@ -49,17 +49,28 @@ static u8 tws_sibling_bat_level = 0xff;
 static u8 tws_sibling_bat_percent_level = 0xff;
 static u8 cur_bat_st = VBAT_NORMAL;
 
+//user 控制电池使能管教 0:不使能 1:使能
+int vbat_power_ctrl(uint8_t on)
+{
+    //on = !on;
+
+    // gpio_set_die(IO_PORTC_06, 1);
+    // gpio_direction_output(IO_PORTC_06, on);
+
+    return 0;
+}
+
 static int vm_vbat_value=0;
 void write_vm_vbat_value(int vm_value){
     if(vm_value<0){
-            vm_value=0;
+        vm_value=0;
     }
     else if(vm_value>100){
         vm_value=100;
     }
     // if(lcd_backlight_status()){
         // log_sylon("change voltage to VM if lcd backlight is ok = %d",vm_value);
-        syscfg_write(VM_BAT_PRESENT, &vm_value, sizeof(vm_value));
+    syscfg_write(VM_BAT_PRESENT, &vm_value, sizeof(vm_value));
     // }
 }
 
@@ -294,7 +305,6 @@ void vbat_calculate_loop()
     #endif
     avr_bat_percent_val = vm_vbat_value; //real_vbat_value;
     printf("Current SOC: %d\n", avr_bat_percent_val);
-
 }
 /************************************************************************************
 time: 2023 05 24 >>>>>>>>>>>>>>>>>>>
@@ -523,8 +533,6 @@ u16 get_vbat_value(void)
     return bat_val;
 }
 
-
-
 u8 get_vbat_percent(void)
 {
    printf("%s,bat_val %d\n",__func__,bat_val);
@@ -534,7 +542,7 @@ u8 get_vbat_percent(void)
     {
         return 0;
     }
-	printf("%s,get_vbat_averge_percent =%d\n",__func__,get_vbat_averge_percent());
+	//printf("%s,get_vbat_averge_percent =%d\n",__func__,get_vbat_averge_percent());
     return get_vbat_averge_percent();
     #endif
 
@@ -823,6 +831,7 @@ void check_power_on_voltage(void)
         clr_wdt();
         val = get_vbat_level();
         printf("vbat: %d\n", val);
+        //printf("poweroff_tone_v: %d\n", app_var.poweroff_tone_v);//3.3v
         if ((val < app_var.poweroff_tone_v) || adc_check_vbat_lowpower()) {
             low_power_cnt++;
             normal_power_cnt = 0;

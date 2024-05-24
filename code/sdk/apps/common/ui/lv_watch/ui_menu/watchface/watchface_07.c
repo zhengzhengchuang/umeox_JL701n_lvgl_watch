@@ -74,7 +74,7 @@ static void menu_display_cb(lv_obj_t *obj)
     common_week_widget_create(&comm_week_para);
 
     int step_val = \
-        get_vm_para_cache_with_label(\
+        GetVmParaCacheByLabel(\
             vm_label_daily_step);
     widget_data_para.data_x = 266;
     widget_data_para.data_y = 68;
@@ -87,16 +87,18 @@ static void menu_display_cb(lv_obj_t *obj)
     common_data_widget_create(&widget_data_para, \
         widget_data_type_step, &step_val);
 
+#if 0
     int hr_val = \
-        get_vm_para_cache_with_label(\
+        GetVmParaCacheByLabel(\
             vm_label_hr);
     widget_data_para.data_x = 266;
     widget_data_para.data_y = 166;
     common_data_widget_create(&widget_data_para, \
         widget_data_type_hr, &hr_val);
+#endif
 
     int calorie_val = \
-        get_vm_para_cache_with_label(\
+        GetVmParaCacheByLabel(\
             vm_label_daily_calorie);
     widget_data_para.data_x = 266;
     widget_data_para.data_y = 264;

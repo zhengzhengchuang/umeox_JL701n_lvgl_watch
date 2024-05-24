@@ -7,8 +7,8 @@ extern "C" {
 
 #include "../../lv_watch.h"
 
-uint8_t get_alarm_edit_id(void);
-void set_alarm_edit_id(uint8_t id);
+uint8_t GetAlarmEditId(void);
+void SetAlarmEditId(uint8_t id);
 #ifdef __cplusplus
 } /* extern "C" */
 #endif

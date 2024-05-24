@@ -566,7 +566,9 @@ static int bt_connction_status_event_handler(struct bt_event *bt)
 #if TCFG_UI_ENABLE_PHONEBOOK
             update_call_log_message();
 #endif /* #if TCFG_UI_ENABLE_PHONEBOOK */
-
+            UpdateCallLogVmFlash();
+            CallHangUpAfterHandle(); 
+            ClearThisCallProcess(); 
             //UI_WINDOW_PREEMPTION_POP(ID_WINDOW_PHONE);
 
             break;

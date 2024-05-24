@@ -8,7 +8,7 @@ extern "C" {
 #include "../../lv_watch.h"
 
 /****************元素总数****************/
-#define Common_List2_Elem_Num      (16)
+#define Common_List2_Elem_Num      (17)
 
 /****************通用列表1宽、高度****************/
 #define Common_List2_Container_W   (LCD_WIDTH)

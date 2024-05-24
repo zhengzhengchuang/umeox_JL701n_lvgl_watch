@@ -78,8 +78,9 @@ static void menu_display_cb(lv_obj_t *obj)
             watchface_06_week_en_00_index;
     common_week_widget_create(&comm_week_para);
 
+#if 0
     weather_type_t weather_type = \
-        vm_weather_data_weather_type(0);
+        weather_weather_type(0);
     widget_img_para.img_x = 92;
     widget_img_para.img_y = 214;
     widget_img_para.img_parent = \
@@ -94,7 +95,7 @@ static void menu_display_cb(lv_obj_t *obj)
             &weather_type_dsc_idx);
     
     int16_t real_temper = \
-        vm_weather_data_real_temper();
+        weather_real_temper();
     widget_data_para.data_x = 20;
     widget_data_para.data_y = 223;
     widget_data_para.num_inv = 0;
@@ -105,6 +106,7 @@ static void menu_display_cb(lv_obj_t *obj)
         widget_data_align_right;
     common_data_widget_create(&widget_data_para, \
         widget_data_type_weather, &real_temper);
+#endif
 
     return;
 }

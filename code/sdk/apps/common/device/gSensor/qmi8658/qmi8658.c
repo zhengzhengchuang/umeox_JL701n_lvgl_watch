@@ -13,8 +13,6 @@ static qmi8658_state g_imu;
 static qmi8658_cali g_cali;
 #endif
 
-// static s16 *fifo_data;
-// static cbuffer_t *data_w_cbuf;
 static const int interrupt_io_num = \
 	IO_PORTB_03;
 
@@ -25,11 +23,11 @@ int qmi8658_write_reg(unsigned char reg, unsigned char value)
 
 	u8 slave_addr = g_imu.slave;
 
-    succ_ret = sensor_iic_tx_byte(slave_addr, reg, value);
+    succ_ret = sensor_iic_u8addr_tx_byte(slave_addr, reg, value);
 
     while(retry && !succ_ret)
     {
-        succ_ret = sensor_iic_tx_byte(slave_addr, reg, value);
+        succ_ret = sensor_iic_u8addr_tx_byte(slave_addr, reg, value);
 
         retry--;
 
@@ -49,11 +47,11 @@ int qmi8658_write_regs(unsigned char reg, unsigned char *value, unsigned char le
 
 	u8 slave_addr = g_imu.slave;
 
-    succ_ret = sensor_iic_tx_buf(slave_addr, reg, value, len);
+    succ_ret = sensor_iic_u8addr_tx_buf(slave_addr, reg, value, len);
 
     while(retry && !succ_ret)
     {
-        succ_ret = sensor_iic_tx_buf(slave_addr, reg, value, len);
+        succ_ret = sensor_iic_u8addr_tx_buf(slave_addr, reg, value, len);
 
         retry--;
 
@@ -73,11 +71,11 @@ int qmi8658_read_reg(unsigned char reg, unsigned char* buf, unsigned short len)
 
 	u8 slave_addr = g_imu.slave;
 
-    succ_ret = sensor_iic_rx_buf(slave_addr, reg, buf, len);
+    succ_ret = sensor_iic_u8addr_rx_buf(slave_addr, reg, buf, len);
 
     while(retry && !succ_ret)
     {
-        succ_ret = sensor_iic_rx_buf(slave_addr, reg, buf, len);
+        succ_ret = sensor_iic_u8addr_rx_buf(slave_addr, reg, buf, len);
 
         retry--;
 
@@ -101,6 +99,10 @@ void qmi8658_delay_us(unsigned int us)
     return;
 }
 
+u16 GetGsACCSsvt(void)
+{
+	return g_imu.ssvt_a;
+}
 
 void qmi8658_axis_convert(float data_a[3], float data_g[3], int layout)
 {
@@ -915,7 +917,7 @@ unsigned char qmi8658_get_id(void)
 			//qmi8658_soft_reset();
 			//qmi8658_write_reg(Qmi8658Register_Ctrl1, 0x60|QMI8658_INT2_ENABLE|QMI8658_INT1_ENABLE);
 #endif
-			qmi8658_on_demand_cali();
+			//qmi8658_on_demand_cali();
 			qmi8658_write_reg(Qmi8658Register_Ctrl7, 0x00);
 			qmi8658_write_reg(Qmi8658Register_Ctrl8, g_imu.cfg.ctrl8_value);
 			break;
@@ -1467,7 +1469,7 @@ static void Qmi8658_Fifo_WM_int_handle(u8 index, u8 gpio)
 {
 	int SensorGsMsg[1];
 	SensorGsMsg[0] = \
-		SensorGsMsgFifoProcess;
+		SensorGsMsgProcess;
 	PostSensorGsTaskMsg(SensorGsMsg, 1);
 
 	return;

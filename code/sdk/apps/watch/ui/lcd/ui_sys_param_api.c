@@ -305,6 +305,7 @@ extern void mcpwm_set_duty(pwm_ch_num_type pwm_ch, u16 duty);
 void ui_moto_init(u8 gpio)
 {
     extern void mcpwm_init(struct pwm_platform_data * arg);
+    
     moto_pwm_p_data.pwm_aligned_mode = pwm_edge_aligned;         //边沿对齐
     moto_pwm_p_data.pwm_ch_num = pwm_ch1;                        //通道
     moto_pwm_p_data.frequency = 10000;                           //Hz
@@ -436,7 +437,8 @@ void ui_moto_run(u8 run_mode)
 
     printf("moto_key  == %d", moto_key);
 
-    if (moto_key == 0) {
+    if (moto_key == 0) 
+    {
         moto_mode = get_ui_sys_param(MotoMode);
         if (run_mode == 1) { //间隔震动
             printf("moto_run_mode = 1 ");

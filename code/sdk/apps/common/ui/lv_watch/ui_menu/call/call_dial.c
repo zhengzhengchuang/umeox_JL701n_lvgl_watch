@@ -1,10 +1,6 @@
 #include "call_dial.h"
 
-/*********************************************************************************
-                                  拨号盘坐标                                 
-*********************************************************************************/
-static const lv_point_t call_dial_coord[12] = 
-{
+static const lv_point_t button_crd[12] = {
     {24, 352}, \
     {24, 100}, {137, 100}, {250, 100}, \
     {24, 184}, {137, 184}, {250, 184}, \
@@ -12,41 +8,31 @@ static const lv_point_t call_dial_coord[12] =
     {137, 352}, {250, 352},
 };
 
-/*********************************************************************************
-                                  拨号盘点击下标                               
-*********************************************************************************/
-static const uint8_t call_dial_click_idx[12] = 
-{
+static const uint8_t button_idx[12] = {
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
 };
 
-/*********************************************************************************
-                                  拨号盘数字字符串                                 
-*********************************************************************************/
-#define Call_Dial_Num_Max (15)
-static uint8_t call_dial_num_len = 0;
-static lv_obj_t *call_dial_num_label = NULL;
-char call_dial_num_str[Call_Dial_Num_Max + 1] = {0};
+#define Num_Max (15)
+static uint8_t num_len;
+char num_str[Num_Max + 1];
 
-/*********************************************************************************
-                                  拨号盘数字点击处理                                 
-*********************************************************************************/
-static void call_dial_num_click_handle(uint8_t num)
+static lv_obj_t *num_label;
+
+
+static void num_click_handle(uint8_t num)
 {
-    if(call_dial_num_len >= \
-        Call_Dial_Num_Max)
+    if(num_len >= Num_Max)
         return;
 
-    if(!call_dial_num_label)
+    if(!num_label)
         return;
 
-    call_dial_num_str[\
-        call_dial_num_len] = num + '0';
+    num_str[num_len] = num + '0';
 
-    lv_label_set_text(call_dial_num_label, \
-        call_dial_num_str);
+    lv_label_set_text(num_label, \
+        num_str);
   
-    call_dial_num_len += 1;
+    num_len += 1;
 
     return;
 }
@@ -54,44 +40,33 @@ static void call_dial_num_click_handle(uint8_t num)
 /*********************************************************************************
                                   拨号盘回退点击处理                                 
 *********************************************************************************/
-static void call_dial_back_click_handle(void)
+static void back_click_handle(void)
 {
-    if(!call_dial_num_len)
-        return;
+    if(!num_len) return;
 
-    if(!call_dial_num_label)
-        return;
+    if(!num_label) return;
 
-    call_dial_num_str[\
-        call_dial_num_len - 1] = '\0';
+    num_str[num_len - 1] = '\0';
 
-    lv_label_set_text(call_dial_num_label, \
-        call_dial_num_str);
+    lv_label_set_text(num_label, \
+        num_str);
   
-    call_dial_num_len -= 1;
+    num_len -= 1;
 
     return;
 }
 
-/*********************************************************************************
-                                  拨号盘拨打点击处理                                 
-*********************************************************************************/
-static void call_dial_dial_click_handle(void)
+static void dial_click_handle(void)
 {
-    if(!call_dial_num_len)
-        return;
+    if(!num_len) return;
 
-    bt_ctrl_call_out_by_number(\
-        call_dial_num_str, \
-            call_dial_num_len);
+    CtrlCallOutByNum(num_str, \
+        num_len);
     
     return;
 }
 
-/*********************************************************************************
-                                  拨号盘点击回调                                 
-*********************************************************************************/
-static void call_dial_click_cb(lv_event_t *e)
+static void click_cb(lv_event_t *e)
 {
     if(!e) return;
 
@@ -99,62 +74,58 @@ static void call_dial_click_cb(lv_event_t *e)
         *(uint8_t *)lv_event_get_user_data(e);
 
     if(idx >= 0 && idx <= 9)
-        call_dial_num_click_handle(idx);
+        num_click_handle(idx);
     else if(idx == 10)
-        call_dial_back_click_handle();
+        back_click_handle();
     else if(idx == 11)
-        call_dial_dial_click_handle();
+        dial_click_handle();
 
     return;
 }
 
-/*********************************************************************************
-                                  拨号盘回退按键长按回调                                 
-*********************************************************************************/
-static lv_timer_t *long_press_back_timer = NULL;
+static lv_timer_t *lpb_timer = NULL;
 
-static void long_press_back_timer_cb(lv_timer_t *timer)
+static void lpb_timer_cb(lv_timer_t *timer)
 {
-    if(!long_press_back_timer)
+    if(!lpb_timer)
         return;
 
-    if(!call_dial_num_len)
+    if(!num_len)
     {
-        lv_timer_del(long_press_back_timer);
-        long_press_back_timer = NULL;
+        lv_timer_del(lpb_timer);
+        lpb_timer = NULL;
         return;
     }
 
-    call_dial_back_click_handle();
+    back_click_handle();
 
     return;
 }
 
-static void call_dial_back_long_press_cb(lv_event_t *e)
+static void lpb_pressed_cb(lv_event_t *e)
 {
     if(!e) return;
 
-    if(long_press_back_timer)
+    if(lpb_timer)
     {
-        lv_timer_del(long_press_back_timer);
-        long_press_back_timer = NULL;
+        lv_timer_del(lpb_timer);
+        lpb_timer = NULL;
     }
 
-    long_press_back_timer = \
-        lv_timer_create(long_press_back_timer_cb, \
-            150, NULL);
+    lpb_timer = \
+        lv_timer_create(lpb_timer_cb, 150, NULL);
 
     return;
 }
 
-static void call_dial_back_release_cb(lv_event_t *e)
+static void lpb_release_cb(lv_event_t *e)
 {
     if(!e) return;
 
-    if(long_press_back_timer)
+    if(lpb_timer)
     {
-        lv_timer_del(long_press_back_timer);
-        long_press_back_timer = NULL;
+        lv_timer_del(lpb_timer);
+        lpb_timer = NULL;
     }
 
     return;
@@ -165,11 +136,13 @@ static void menu_create_cb(lv_obj_t *obj)
     if(!obj) return;
 
     ui_act_id_t prev_act_id = \
-        read_menu_return_level_id();
-
-    tileview_register_all_menu(obj, ui_act_id_null, \
-        ui_act_id_null, prev_act_id, ui_act_id_null, \
-            ui_act_id_call_dial);
+        ui_act_id_call_main;
+    if(!lang_txt_is_arabic())
+        tileview_register_all_menu(obj, ui_act_id_null, ui_act_id_null, \
+            prev_act_id, ui_act_id_null, ui_act_id_call_dial);
+    else
+        tileview_register_all_menu(obj, ui_act_id_null, ui_act_id_null, \
+            ui_act_id_null, prev_act_id, ui_act_id_call_dial);
 
     return;
 }
@@ -196,9 +169,9 @@ static void menu_display_cb(lv_obj_t *obj)
     for(i = 0; i < 10; i++)
     {
         widget_img_para.img_x = \
-            call_dial_coord[i].x;
+            button_crd[i].x;
         widget_img_para.img_y = \
-            call_dial_coord[i].y;
+            button_crd[i].y;
         widget_img_para.img_parent = \
             obj;
         widget_img_para.file_img_dat = \
@@ -206,9 +179,9 @@ static void menu_display_cb(lv_obj_t *obj)
         widget_img_para.img_click_attr = \
             true;
         widget_img_para.event_cb = \
-            call_dial_click_cb;
+            click_cb;
         widget_img_para.user_data = \
-            (void *)&call_dial_click_idx[i];
+            (void *)&button_idx[i];
         lv_obj_t *button_container = \
             common_widget_img_create(&widget_img_para, \
                 NULL);
@@ -235,9 +208,9 @@ static void menu_display_cb(lv_obj_t *obj)
     for(; i < 12; i++)
     {
         widget_img_para.img_x = \
-            call_dial_coord[i].x;
+            button_crd[i].x;
         widget_img_para.img_y = \
-            call_dial_coord[i].y;
+            button_crd[i].y;
         widget_img_para.img_parent = \
             obj;
         widget_img_para.file_img_dat = \
@@ -245,31 +218,30 @@ static void menu_display_cb(lv_obj_t *obj)
         widget_img_para.img_click_attr = \
             true;
         widget_img_para.event_cb = \
-            call_dial_click_cb;
+            click_cb;
         widget_img_para.user_data = \
-            (void *)&call_dial_click_idx[i];
+            (void *)&button_idx[i];
         lv_obj_t *button_container = \
-            common_widget_img_create(&widget_img_para, \
-                NULL);
+            common_widget_img_create(&widget_img_para, NULL);
         lv_obj_set_ext_click_area(button_container, 5);
 
         if(i == 10)
         {
             lv_obj_add_event_cb(button_container, \
-                call_dial_back_long_press_cb, LV_EVENT_LONG_PRESSED, \
+                lpb_pressed_cb, LV_EVENT_LONG_PRESSED, \
                     NULL);
 
             lv_obj_add_event_cb(button_container, \
-                call_dial_back_release_cb, LV_EVENT_RELEASED, \
+                lpb_release_cb, LV_EVENT_RELEASED, \
                     NULL);      
         }
             
     }
   
-    call_dial_num_len = 0;
-    call_dial_num_label = NULL;
-    memset(call_dial_num_str, 0, \
-        sizeof(call_dial_num_str));
+    num_len = 0;
+    num_label = NULL;
+    memset(num_str, 0, \
+        sizeof(num_str));
 
     widget_label_para.label_w = \
         (300);
@@ -288,10 +260,10 @@ static void menu_display_cb(lv_obj_t *obj)
     widget_label_para.label_parent = \
         obj;
     widget_label_para.label_text = \
-        call_dial_num_str;
-    call_dial_num_label = \
+        num_str;
+    num_label = \
         common_widget_label_create(&widget_label_para);
-    lv_obj_align(call_dial_num_label, LV_ALIGN_TOP_MID, \
+    lv_obj_align(num_label, LV_ALIGN_TOP_MID, \
         0, 44);
 
     return;

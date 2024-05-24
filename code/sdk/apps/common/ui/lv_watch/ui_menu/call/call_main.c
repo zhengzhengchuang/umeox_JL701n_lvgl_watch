@@ -1,6 +1,6 @@
 #include "call_main.h"
 
-static void call_log_event_cb(lv_event_t *e)
+static void call_log_cb(lv_event_t *e)
 {
     if(!e) return;
 
@@ -9,7 +9,7 @@ static void call_log_event_cb(lv_event_t *e)
     return;
 }
 
-static void contacts_event_cb(lv_event_t *e)
+static void contacts_cb(lv_event_t *e)
 {
     if(!e) return;
 
@@ -18,7 +18,7 @@ static void contacts_event_cb(lv_event_t *e)
     return;
 }
 
-static void call_dial_event_cb(lv_event_t *e)
+static void call_dial_cb(lv_event_t *e)
 {
     if(!e) return;
 
@@ -32,12 +32,14 @@ static void menu_create_cb(lv_obj_t *obj)
     if(!obj) return;
 
     ui_act_id_t prev_act_id = \
-        read_menu_return_level_id();
-
-    tileview_register_all_menu(obj, ui_act_id_null, \
-        ui_act_id_null, prev_act_id, ui_act_id_null, \
-            ui_act_id_call_main);
-
+        ui_act_id_menu;
+    if(!lang_txt_is_arabic())
+        tileview_register_all_menu(obj, ui_act_id_null, ui_act_id_null, \
+            prev_act_id, ui_act_id_null, ui_act_id_call_main);
+    else
+        tileview_register_all_menu(obj, ui_act_id_null, ui_act_id_null, \
+            ui_act_id_null, prev_act_id, ui_act_id_call_main);
+            
     return;
 }
 
@@ -64,14 +66,14 @@ static void menu_display_cb(lv_obj_t *obj)
         comm_icon_12_index;
     widget_img_para.img_click_attr = true;
     widget_img_para.event_cb = \
-        call_log_event_cb;
+        call_log_cb;
     widget_img_para.user_data = NULL;
     lv_obj_t *call_log_container = \
         common_widget_img_create(&widget_img_para, NULL);
 
     widget_img_para.img_x = 194;
     widget_img_para.event_cb = \
-        contacts_event_cb;
+        contacts_cb;
     lv_obj_t *contacts_container = \
         common_widget_img_create(&widget_img_para, NULL);
 
@@ -80,7 +82,7 @@ static void menu_display_cb(lv_obj_t *obj)
     widget_img_para.file_img_dat = \
         call_02_index;
     widget_img_para.event_cb = \
-        call_dial_event_cb;
+        call_dial_cb;
     common_widget_img_create(&widget_img_para, NULL);
 
     widget_img_para.img_parent = \
@@ -91,8 +93,7 @@ static void menu_display_cb(lv_obj_t *obj)
     widget_img_para.event_cb = NULL;
     lv_obj_t *call_log_icon = \
         common_widget_img_create(&widget_img_para, NULL);
-    lv_obj_align(call_log_icon, LV_ALIGN_TOP_MID, \
-        0, 20);
+    lv_obj_align(call_log_icon, LV_ALIGN_CENTER, 0, 0);
 
     widget_img_para.img_parent = \
         contacts_container;
@@ -100,9 +101,9 @@ static void menu_display_cb(lv_obj_t *obj)
         call_01_index;
     lv_obj_t *contacts_icon = \
         common_widget_img_create(&widget_img_para, NULL);
-    lv_obj_align(contacts_icon, LV_ALIGN_TOP_MID, \
-        0, 20);
+    lv_obj_align(contacts_icon, LV_ALIGN_CENTER, 0, 0);
 
+#if 0
     widget_label_para.label_w = \
         (130);
     widget_label_para.label_h = \
@@ -122,8 +123,7 @@ static void menu_display_cb(lv_obj_t *obj)
         get_lang_txt_with_id(lang_txtid_call_log);
     lv_obj_t *call_log_label = \
         common_widget_label_create(&widget_label_para);
-    lv_obj_align(call_log_label, LV_ALIGN_TOP_MID, \
-        0, 117);
+    lv_obj_align(call_log_label, LV_ALIGN_TOP_MID, 0, 117);
 
     widget_label_para.label_parent = \
         contacts_container;
@@ -131,8 +131,8 @@ static void menu_display_cb(lv_obj_t *obj)
         get_lang_txt_with_id(lang_txtid_contacts);
     lv_obj_t *contacts_label = \
         common_widget_label_create(&widget_label_para);
-    lv_obj_align(contacts_label, LV_ALIGN_TOP_MID, \
-        0, 117);
+    lv_obj_align(contacts_label, LV_ALIGN_TOP_MID, 0, 117);
+#endif
 
     return;
 }

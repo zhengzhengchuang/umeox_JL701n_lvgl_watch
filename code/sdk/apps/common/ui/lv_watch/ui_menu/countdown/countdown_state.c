@@ -1,45 +1,44 @@
 #include "countdown_time.h"
 #include "countdown_state.h"
 
-static lv_obj_t *countdown_time_arc;
-static lv_obj_t *countdown_time_obj[8];
-static uint16_t countdown_state_dsc_idx;
-static uint16_t countdown_num_dsc_idx[8];
+static lv_obj_t *percent_arc;
+static uint16_t state_dsc_idx;
+static lv_obj_t *time_obj[8];
+static uint16_t time_dsc_idx[8];
 
-static void countdown_reset_cb(lv_event_t *e)
+static void reset_cb(lv_event_t *e)
 {
     if(!e) return;
 
-    common_user_countdown_reset();
+    UserCountdownReset();
 
-    ui_act_id_t prev_act_id = \
-        read_menu_return_level_id();
-    ui_menu_jump(prev_act_id);
+    ui_menu_jump(\
+        ui_act_id_more_menu);
 
     return;
 }
 
-static void countdown_state_cb(lv_event_t *e)
+static void state_cb(lv_event_t *e)
 {
     if(!e) return;
 
     lv_obj_t *obj = \
         lv_event_get_target(e);
 
-    countdown_attribute_state_t countdown_state = \
-        p_ui_info_cache->common_countdown_para.countdown_state;
-    if(countdown_state == countdown_state_start)
+    countdown_state_t state = \
+        Countdown_Info.state;
+    if(state == countdown_state_start)
     {
-        common_user_countdown_pause();
+        UserCountdownPause();
 
         common_widget_img_replace_src(obj, \
-            comm_icon_28_index, countdown_state_dsc_idx);
-    }else if(countdown_state == countdown_state_puase)
+            comm_icon_28_index, state_dsc_idx);
+    }else if(state == countdown_state_puase)
     {
-        common_user_countdown_resume();
+        UserCountdownResume();
 
         common_widget_img_replace_src(obj, \
-            comm_icon_27_index, countdown_state_dsc_idx);
+            comm_icon_27_index, state_dsc_idx);
     }
         
     return;
@@ -49,9 +48,14 @@ static void menu_create_cb(lv_obj_t *obj)
 {
     if(!obj) return;
 
-    tileview_register_all_menu(obj, ui_act_id_null, \
-        ui_act_id_null, ui_act_id_null, ui_act_id_null, \
-            ui_act_id_countdown_state);
+    ui_act_id_t prev_act_id = \
+        ui_act_id_more_menu;
+    if(!lang_txt_is_arabic())
+        tileview_register_all_menu(obj, ui_act_id_null, ui_act_id_null, \
+            prev_act_id, ui_act_id_null, ui_act_id_countdown_state);
+    else
+        tileview_register_all_menu(obj, ui_act_id_null, ui_act_id_null, \
+            ui_act_id_null, prev_act_id, ui_act_id_countdown_state);
 
     return;
 }
@@ -65,38 +69,42 @@ static void menu_refresh_cb(lv_obj_t *obj)
 {
     if(!obj) return;
 
-    uint32_t file_img_dat;
-    countdown_attribute_data_t *countdown_data = \
-        &p_ui_info_cache->common_countdown_para.countdown_data;
+    countdown_state_t state = \
+        Countdown_Info.state;
+    if(state == countdown_state_puase)
+        return;
 
-    uint8_t countdown_time_hour = \
-        countdown_data->countdown_cur_cnt/3600;
-    uint8_t countdown_time_minute = \
-        (countdown_data->countdown_cur_cnt%3600)/60;
-    uint8_t countdown_time_second = \
-        (countdown_data->countdown_cur_cnt%3600)%60;
-    char countdown_time_str[10];
-    memset(countdown_time_str, 0, \
-        sizeof(countdown_time_str));
-    sprintf(countdown_time_str, "%02d:%02d:%02d", \
-        countdown_time_hour, countdown_time_minute, \
-            countdown_time_second);
+    countdown_ctx_t *c_ctx = \
+        &(Countdown_Info.ctx);
+    int16_t percent = c_ctx->percent;
+    uint32_t cur_cnt = c_ctx->cur_cnt;
+    uint32_t total_cnt = c_ctx->total_cnt;
+    
+    uint8_t time_hour = cur_cnt/3600;
+    uint8_t time_minute = (cur_cnt%3600)/60;
+    uint8_t time_second = (cur_cnt%3600)%60;
+    char cur_time_str[10];
+    memset(cur_time_str, 0, \
+        sizeof(cur_time_str));
+    sprintf(cur_time_str, "%02d:%02d:%02d", \
+        time_hour, time_minute, time_second);
+
+    uint32_t file_img_dat;
     for(uint8_t i = 0; i < 8; i++)
     {
-        if(countdown_time_str[i] == ':')
+        if(cur_time_str[i] == ':')
             file_img_dat = \
                 comm_num_30x50_wh_10_index;
         else
             file_img_dat = \
                 comm_num_30x50_wh_00_index + \
-                    (countdown_time_str[i] - '0');
+                    (cur_time_str[i] - '0');
 
-        common_widget_img_replace_src(countdown_time_obj[i], \
-            file_img_dat, countdown_num_dsc_idx[i]);
+        common_widget_img_replace_src(time_obj[i], \
+            file_img_dat, time_dsc_idx[i]);
     }
-
-    lv_arc_set_value(countdown_time_arc, \
-        countdown_data->countdown_per);
+    
+    lv_arc_set_value(percent_arc, percent);
 
     return;
 }
@@ -111,14 +119,17 @@ static void menu_display_cb(lv_obj_t *obj)
         menu_align = \
             menu_align_right;
 
-    uint32_t countdown_time_total = \
-        get_countdown_time_total();
-    common_user_countdown_create(\
-        countdown_time_total);
-
-    countdown_attribute_data_t *countdown_data = \
-        &p_ui_info_cache->common_countdown_para.countdown_data;
-
+    countdown_ctx_t *c_ctx = \
+        &(Countdown_Info.ctx);
+    int16_t percent = c_ctx->percent;
+    uint32_t cur_cnt = c_ctx->cur_cnt;
+    uint32_t total_cnt = c_ctx->total_cnt;
+    
+    bool exist = \
+        Countdown_Info.exist;
+    countdown_state_t state = \
+        Countdown_Info.state;
+    
     widget_arc_para.arc_parent = \
         obj;
     widget_arc_para.arc_bg_width = \
@@ -140,9 +151,9 @@ static void menu_display_cb(lv_obj_t *obj)
     widget_arc_para.arc_min_value = \
         0;
     widget_arc_para.arc_max_value = \
-        get_countdown_per_max();
+        GetPercentMax();
     widget_arc_para.arc_cur_value = \
-        countdown_data->countdown_per;
+        percent;
     widget_arc_para.arc_main_line_width = \
         10;
     widget_arc_para.arc_indic_line_width = \
@@ -157,10 +168,9 @@ static void menu_display_cb(lv_obj_t *obj)
         true;
     widget_arc_para.arc_click_is_clear = \
         true;
-    countdown_time_arc = \
+    percent_arc = \
         common_widget_arc_create(&widget_arc_para);
-    lv_obj_align(countdown_time_arc, LV_ALIGN_TOP_MID, \
-        0, 40);
+    lv_obj_align(percent_arc, LV_ALIGN_TOP_MID, 0, 40);
 
     widget_img_para.img_parent = \
         obj;
@@ -180,19 +190,17 @@ static void menu_display_cb(lv_obj_t *obj)
         NULL;
     common_widget_img_create(&widget_img_para, NULL);
 
-    uint8_t countdown_time_hour = \
-        countdown_data->countdown_cur_cnt/3600;
-    uint8_t countdown_time_minute = \
-        (countdown_data->countdown_cur_cnt%3600)/60;
-    uint8_t countdown_time_second = \
-        (countdown_data->countdown_cur_cnt%3600)%60;
-    char countdown_time_str[10];
-    memset(countdown_time_str, 0, \
-        sizeof(countdown_time_str));
-    sprintf(countdown_time_str, "%02d:%02d:%02d", \
-        countdown_time_hour, countdown_time_minute, \
-            countdown_time_second);
-
+    uint8_t total_time_hour = \
+        total_cnt/3600;
+    uint8_t total_time_minute = \
+        (total_cnt%3600)/60;
+    uint8_t total_time_second = \
+        (total_cnt%3600)%60;
+    char total_time_str[10];
+    memset(total_time_str, 0, \
+        sizeof(total_time_str));
+    sprintf(total_time_str, "%02d:%02d:%02d", \
+        total_time_hour, total_time_minute, total_time_second);
     num_str_para.parent = \ 
         obj;
     if(menu_align == menu_align_right)
@@ -204,7 +212,7 @@ static void menu_display_cb(lv_obj_t *obj)
     num_str_para.num_obj_y = \
         130;
     num_str_para.p_num_str = \
-        countdown_time_str;
+        total_time_str;
     num_str_para.num_str_len = \
         8;
     num_str_para.num_obj = \
@@ -217,16 +225,33 @@ static void menu_display_cb(lv_obj_t *obj)
         comm_num_14x22_gr_00_index;
     common_widget_num_str_create(&num_str_para);
 
+    uint8_t cur_time_hour = \
+        cur_cnt/3600;
+    uint8_t cur_time_minute = \
+        (cur_cnt%3600)/60;
+    uint8_t cur_time_second = \
+        (cur_cnt%3600)%60;
+    char cur_time_str[10];
+    memset(cur_time_str, 0, \
+        sizeof(cur_time_str));
+    sprintf(cur_time_str, "%02d:%02d:%02d", \
+        cur_time_hour, cur_time_minute, cur_time_second);
+    num_str_para.parent = \ 
+        obj;
     num_str_para.num_obj_x = \
         79;
     num_str_para.num_obj_y = \
         190;
+    num_str_para.p_num_str = \
+        cur_time_str;
+    num_str_para.num_str_len = \
+        8;
     num_str_para.num_obj = \
-        countdown_time_obj;
+        time_obj;
     num_str_para.num_obj_max = \
         8;
     num_str_para.num_dsc_idx = \
-        countdown_num_dsc_idx;
+        time_dsc_idx;
     num_str_para.file_00_index = \
         comm_num_30x50_wh_00_index;
     common_widget_num_str_create(&num_str_para);
@@ -242,29 +267,31 @@ static void menu_display_cb(lv_obj_t *obj)
     widget_img_para.img_click_attr = \
         true;
     widget_img_para.event_cb = \
-        countdown_reset_cb;
+        reset_cb;
     widget_img_para.user_data = \
         NULL;
-    lv_obj_t *countdown_reset_icon = \
+    lv_obj_t *reset_button = \
         common_widget_img_create(&widget_img_para, NULL);
-    lv_obj_set_ext_click_area(countdown_reset_icon, 20);
+    lv_obj_set_ext_click_area(reset_button, 20);
 
-    countdown_attribute_state_t countdown_state = \
-        p_ui_info_cache->common_countdown_para.countdown_state;
     widget_img_para.img_x = \
         214;
-    if(countdown_state == countdown_state_start)
+    if(state == countdown_state_start)
         widget_img_para.file_img_dat = \
             comm_icon_27_index;
-    else if(countdown_state == countdown_state_puase)
+    else if(state == countdown_state_puase)
         widget_img_para.file_img_dat = \
             comm_icon_28_index;
     widget_img_para.event_cb = \
-        countdown_state_cb;
-    lv_obj_t *countdown_state_icon = \
+        state_cb;
+    lv_obj_t *state_button = \
     common_widget_img_create(&widget_img_para, \
-        &countdown_state_dsc_idx);
-    lv_obj_set_ext_click_area(countdown_state_icon, 20);
+        &state_dsc_idx);
+    lv_obj_set_ext_click_area(state_button, 20);
+
+    if(state == countdown_state_start && \
+        exist == false)
+        UserCountdownStart();
 
     return;
 }
@@ -281,7 +308,7 @@ register_ui_menu_load_info(\
     menu_load_countdown_state) = 
 {
     .menu_arg = NULL,
-    .lock_flag = true,
+    .lock_flag = false,
     .return_flag = false,
     .menu_id = \
         ui_act_id_countdown_state,

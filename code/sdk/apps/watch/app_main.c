@@ -176,7 +176,6 @@ void app_main()
     // void *fd = fopen("storage/sd0/C/test.bin", "r");
     // printf("appmain >>>>>>>>>>fd %x", fd);
 
-    
     // lcd_sleep_ctrl(1);
 #if TCFG_PSRAM_UI_EFFECT
     static struct effect_sca_alpha sal = {0};

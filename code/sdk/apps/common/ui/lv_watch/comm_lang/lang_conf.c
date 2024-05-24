@@ -1,8 +1,5 @@
-#include "lang_conf.h"
-#include "lang_txtid.h"
 #include "lang_table.h"
 #include "../lv_watch.h"
-#include "name_99_table.h"
 #include "../poc_modem/poc_modem_vm.h"
 
 /*********************************************************************************
@@ -11,7 +8,7 @@
 comm_language_id_t get_comm_sys_language(void)
 {
     int vm_lang_id = \
-        get_vm_para_cache_with_label(vm_label_sys_language);
+        GetVmParaCacheByLabel(vm_label_sys_language);
 
     comm_language_id_t lang_id = \
         (comm_language_id_t)vm_lang_id;
@@ -25,12 +22,12 @@ comm_language_id_t get_comm_sys_language(void)
 void set_comm_sys_language(comm_language_id_t lang_id)
 {
     comm_language_id_t vm_lang_id = \
-        get_vm_para_cache_with_label(vm_label_sys_language);
+        GetVmParaCacheByLabel(vm_label_sys_language);
 
     if(lang_id == vm_lang_id)
         return;
 
-    set_vm_para_cache_with_label(vm_label_sys_language, \
+    SetVmParaCacheByLabel(vm_label_sys_language, \
         lang_id);
 
     return;
@@ -42,7 +39,7 @@ void set_comm_sys_language(comm_language_id_t lang_id)
 const void *get_lang_txt_with_id(comm_lang_txtid_t txtid)
 {
     int vm_lang_id = \
-        get_vm_para_cache_with_label(vm_label_sys_language);
+        GetVmParaCacheByLabel(vm_label_sys_language);
 
     comm_language_id_t lang_id = \
         (comm_language_id_t)vm_lang_id;
@@ -100,13 +97,14 @@ bool utf8_str_is_arabic(const char *utf8_str, uint32_t str_len)
     return false;
 }
 
+#if 0
 /*********************************************************************************
                                   真主名词条文本获取(随语言)                                   
 *********************************************************************************/
 const void *al_name_lang_txt_with_id(uint8_t id)
 {
     int vm_lang_id = \
-        get_vm_para_cache_with_label(vm_label_sys_language);
+        GetVmParaCacheByLabel(vm_label_sys_language);
 
     comm_language_id_t lang_id = \
         (comm_language_id_t)vm_lang_id;
@@ -129,7 +127,7 @@ const void *al_name_ar_lang_txt_with_id(uint8_t id)
 const void *al_name_ex_lang_txt_with_id(uint8_t id)
 {
     int vm_lang_id = \
-        get_vm_para_cache_with_label(vm_label_sys_language);
+        GetVmParaCacheByLabel(vm_label_sys_language);
 
     comm_language_id_t lang_id = \
         (comm_language_id_t)vm_lang_id;
@@ -137,3 +135,4 @@ const void *al_name_ex_lang_txt_with_id(uint8_t id)
 
     return (al_name_ex_str_table[lang_id][id]);
 }
+#endif

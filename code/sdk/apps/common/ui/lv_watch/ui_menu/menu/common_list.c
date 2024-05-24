@@ -1,15 +1,15 @@
 #include "common_list.h"
 
-
-/****************文本源id****************/
-static const comm_lang_txtid_t common_list_text_id[\
+/****************菜单id****************/
+static const ui_act_id_t common_list_act_id[\
     Common_List_Elem_Num] = 
 {
-    lang_txtid_phone, lang_txtid_notify, lang_txtid_quran_player, \
-    lang_txtid_prayer_times, lang_txtid_azkar, lang_txtid_tasbih_reminder, \
-    lang_txtid_allah_99_name, lang_txtid_hijri_calendar, lang_txtid_sleep, \
-    lang_txtid_heart_rate, lang_txtid_spo2, lang_txtid_sports, lang_txtid_alarm, \
-    lang_txtid_more, lang_txtid_settings, lang_txtid_pedometer,
+    ui_act_id_call_main, ui_act_id_msg_list, ui_act_id_null, \
+    ui_act_id_null, ui_act_id_prayer_time_main, ui_act_id_azkar_list, \
+    ui_act_id_tasbih_main, ui_act_id_al_name_list, ui_act_id_Gcalendar_main, \
+    ui_act_id_null, ui_act_id_sleep_main, ui_act_id_weather_data, \
+    ui_act_id_hr_sample, ui_act_id_bo_sample, ui_act_id_alarm_main, \
+    ui_act_id_more_menu, ui_act_id_set_main, 
 };
 
 /****************元素容器点击索引****************/
@@ -17,7 +17,7 @@ static const uint8_t common_list_elem_container_idx[\
     Common_List_Elem_Num] =
 {
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, \
-    10, 11, 12, 13, 14, 15, 
+    10, 11, 12, 13, 14, 15, 16,
 };
 
 /****************通用列表滚动参数****************/
@@ -219,10 +219,27 @@ static void common_list_elem_container_cb(lv_event_t *e)
     if(common_list_ver_scroll || anim_progress)
         return;
 
-    uint16_t idx = \
-        *(uint16_t *)lv_event_get_user_data(e);
+    uint8_t idx = \
+        *(uint8_t *)lv_event_get_user_data(e);
 
-    printf("******%s:%d\n", __func__, idx);
+    if(idx == 2)
+    {
+        bool cali_succ = \
+            GetSensorGmCaliSucc();
+        if(cali_succ == false)
+            ui_menu_jump(ui_act_id_gm_cali);
+        else
+        {
+            if(!(ll_info.position_valid))
+                ui_menu_jump(ui_act_id_kaaba_position);   
+            else
+                ui_menu_jump(ui_act_id_kaaba_qibla);
+        }
+    }else
+    {
+        ui_menu_jump(\
+            common_list_act_id[idx]);
+    }
 
     return;
 }
@@ -390,7 +407,7 @@ static void common_list_elem_label_create(\
         widget_label_para.label_parent = \
             common_list_elem_container[idx];
         widget_label_para.label_text = \
-            get_lang_txt_with_id(common_list_text_id[idx]);
+            get_lang_txt_with_id(lang_txtid_phone + idx);
         common_list_label[idx] = \
             common_widget_label_create(&widget_label_para);
         if(menu_align == menu_align_right)

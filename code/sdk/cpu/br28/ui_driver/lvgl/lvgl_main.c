@@ -58,7 +58,7 @@ static void lvgl_task(void *p)
 
     vm_store_para_init();
     ui_act_id_t start_act_id = \
-        ui_act_id_stopwatch_main;
+        ui_act_id_watchface;
     ui_info_cache_init(start_act_id);
     
     lv_port_disp_init(p);
@@ -84,6 +84,8 @@ static void lvgl_task(void *p)
     //lv_port_fs_init();
 
     ui_menu_jump(start_act_id);
+
+    motor_run(1, def_motor_duty);
 
 #if 0
 

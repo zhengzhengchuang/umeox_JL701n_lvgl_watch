@@ -7,7 +7,7 @@ static void SensorGsTask(void *p)
     int rev_ret;
     int rev_msg[8] = {0};
 
-    AppCtrlGsEnableModule();
+    EnableSensorGsModule();
 
     while(1)
     {
@@ -42,9 +42,9 @@ void SensorGsTaskMsgHandle(int *rev_msg, u8 len)
 
     switch(msg_cmd)
     {
-        case SensorGsMsgFifoProcess:
+        case SensorGsMsgProcess:
         {
-            AppCtrlGsFifoIntProcess();
+            SensorGsIntProcess();
         }
             break;
 
@@ -103,27 +103,25 @@ __retry:
     return err;
 }
 
-void AppCtrlGsEnableModule(void)
+void EnableSensorGsModule(void)
 {
     int SensorGsMsg[1];
-	SensorGsMsg[0] = \
-		SensorGsMsgEnableModule;
+	SensorGsMsg[0] = SensorGsMsgEnableModule;
 	PostSensorGsTaskMsg(SensorGsMsg, 1); 
 
     return;
 } 
 
-void AppCtrlGsDisableModule(void)
+void DisableSensorGsModule(void)
 {
     int SensorGsMsg[1];
-	SensorGsMsg[0] = \
-		SensorGsMsgDisableModule;
+	SensorGsMsg[0] = SensorGsMsgDisableModule;
 	PostSensorGsTaskMsg(SensorGsMsg, 1); 
 
     return;
 } 
 
-void AppCtrlGsFifoIntProcess(void)
+void SensorGsIntProcess(void)
 {
 	memset(GsFifoData, 0, \
 		Gs_Fifo_Size);
@@ -131,9 +129,13 @@ void AppCtrlGsFifoIntProcess(void)
 		 qmi8658_read_fifo(GsFifoData);
 	if(fifo_level > Qmi8658_Fifo_WM)
 		fifo_level = Qmi8658_Fifo_WM;
- 
+  
     /*运动心率与Gs数据的配套使用*/
-    vcHr02GsensorDatacbufWrite(GsFifoData, \
+    HrGsDataFifoWrite(GsFifoData, \
+        fifo_level*Gs_Fifo_Num*6);
+
+    /*地磁与Gs数据的配套使用*/
+    SensorGmGsDataFifoWrite(GsFifoData, \
         fifo_level*Gs_Fifo_Num*6);
 
     return;

@@ -8,20 +8,17 @@ static void alarm_modify_edit_cb(lv_event_t *e)
     if(!e) return;
 
     uint8_t alarm_id = \
-        get_alarm_edit_id();
+        GetAlarmEditId();
 
     uint8_t alarm_hour = \
-        p_vm_para_cache->alarm_manage_para.alarm_info[\
-            alarm_id].bit_field.alarm_hour;
+        Alarm_Info.alarm_union[alarm_id].bit_field.alarm_hour;
     uint8_t alarm_minute = \
-        p_vm_para_cache->alarm_manage_para.alarm_info[\
-            alarm_id].bit_field.alarm_minute;
-    set_alarm_time_tmp(alarm_hour, alarm_minute);
+        Alarm_Info.alarm_union[alarm_id].bit_field.alarm_minute;
+    SetAlarmTimeTmp(alarm_hour, alarm_minute);
 
     uint8_t alarm_repeat = \
-        p_vm_para_cache->alarm_manage_para.alarm_info[\
-            alarm_id].bit_field.alarm_repeat;
-    set_alarm_repeat_tmp(alarm_repeat);
+        Alarm_Info.alarm_union[alarm_id].bit_field.alarm_repeat;
+    SetAlarmRepeatTmp(alarm_repeat);
 
     ui_menu_jump(ui_act_id_alarm_time);
 
@@ -33,14 +30,11 @@ static void alarm_modify_delete_cb(lv_event_t *e)
     if(!e) return;
 
     uint8_t alarm_id = \
-        get_alarm_edit_id();
+        GetAlarmEditId();
 
-    common_user_alarm_delete_one(\
-        alarm_id);
+    UserAlarmDeleteOne(alarm_id);
 
-    ui_act_id_t prev_act_id = \
-        read_menu_return_level_id();
-    ui_menu_jump(prev_act_id);
+    ui_menu_jump(ui_act_id_alarm_main);
 
     return;
 }
@@ -50,16 +44,15 @@ static void alarm_modify_enable_cb(lv_event_t *e)
     if(!e) return;
 
     uint8_t alarm_id = \
-        get_alarm_edit_id();
-    uint8_t alarm_x_enable = \ 
-        p_vm_para_cache->alarm_manage_para.alarm_info[\
-            alarm_id].bit_field.alarm_enable;
-    if(alarm_x_enable == 1)
-        alarm_x_enable = 0;
+        GetAlarmEditId();
+    alarm_union_t alarm_union_tmp;
+    alarm_union_tmp.info = \
+        Alarm_Info.alarm_union[alarm_id].info;
+    if(alarm_union_tmp.bit_field.alarm_enable)
+        alarm_union_tmp.bit_field.alarm_enable = 0;
     else
-        alarm_x_enable = 1;
-    p_vm_para_cache->alarm_manage_para.alarm_info[\
-        alarm_id].bit_field.alarm_enable = alarm_x_enable;
+        alarm_union_tmp.bit_field.alarm_enable = 1;
+    UserAlarmEnableModify(alarm_union_tmp.info);
 
     ui_act_id_t cur_act_id = \
         p_ui_info_cache->cur_act_id;
@@ -73,11 +66,13 @@ static void menu_create_cb(lv_obj_t *obj)
     if(!obj) return;
 
     ui_act_id_t prev_act_id = \
-        read_menu_return_level_id();
-
-    tileview_register_all_menu(obj, ui_act_id_null, \
-        ui_act_id_null, prev_act_id, ui_act_id_null, \
-            ui_act_id_alarm_modify);
+        ui_act_id_alarm_main;
+    if(!lang_txt_is_arabic())
+        tileview_register_all_menu(obj, ui_act_id_null, ui_act_id_null, \
+            prev_act_id, ui_act_id_null, ui_act_id_alarm_modify);
+    else
+        tileview_register_all_menu(obj, ui_act_id_null, ui_act_id_null, \
+            ui_act_id_null, prev_act_id, ui_act_id_alarm_modify);
 
     return;
 }
@@ -105,7 +100,7 @@ static void menu_display_cb(lv_obj_t *obj)
             menu_align_right;
 
     uint8_t alarm_id = \
-        get_alarm_edit_id();
+        GetAlarmEditId();
 
     widget_img_para.img_parent = \
         obj;
@@ -122,7 +117,7 @@ static void menu_display_cb(lv_obj_t *obj)
 
     /************闹钟时间num************/
      int time_format = \
-        get_vm_para_cache_with_label(\
+        GetVmParaCacheByLabel(\
             vm_label_time_format);
 
     uint8_t am_or_pm;
@@ -132,11 +127,9 @@ static void menu_display_cb(lv_obj_t *obj)
     memset(alarm_time_str, 0, \
         sizeof(alarm_time_str));
     alarm_time_hour = \
-        p_vm_para_cache->alarm_manage_para.alarm_info[\
-            alarm_id].bit_field.alarm_hour;
+        Alarm_Info.alarm_union[alarm_id].bit_field.alarm_hour;
     alarm_time_minute = \
-        p_vm_para_cache->alarm_manage_para.alarm_info[\
-            alarm_id].bit_field.alarm_minute;
+        Alarm_Info.alarm_union[alarm_id].bit_field.alarm_minute;
     if(time_format == time_format_12)
     {
         if(alarm_time_hour >= 12)
@@ -202,8 +195,7 @@ static void menu_display_cb(lv_obj_t *obj)
         lv_obj_add_flag(ampm_icon, LV_OBJ_FLAG_HIDDEN);
 
     uint8_t alarm_enable = \
-        p_vm_para_cache->alarm_manage_para.alarm_info[\
-            alarm_id].bit_field.alarm_enable;
+        Alarm_Info.alarm_union[alarm_id].bit_field.alarm_enable;
     widget_img_para.img_parent = \
         alarm_modify_container;
     widget_img_para.file_img_dat = \
@@ -225,8 +217,7 @@ static void menu_display_cb(lv_obj_t *obj)
     lv_obj_set_ext_click_area(alarm_enable_sw, 16);
 
     uint8_t alarm_repeat = \
-        p_vm_para_cache->alarm_manage_para.alarm_info[\
-            alarm_id].bit_field.alarm_repeat;
+        Alarm_Info.alarm_union[alarm_id].bit_field.alarm_repeat;
     widget_img_para.img_parent = \
         alarm_modify_container;
     widget_img_para.img_y = \
@@ -284,7 +275,7 @@ static void menu_display_cb(lv_obj_t *obj)
         common_widget_img_create(&widget_img_para, NULL);
     lv_obj_align_to(delete_button, alarm_modify_container, \
         LV_ALIGN_OUT_BOTTOM_LEFT, 40, 80);
-    lv_obj_set_ext_click_area(delete_button, 10);
+    lv_obj_set_ext_click_area(delete_button, 20);
 
     widget_img_para.file_img_dat = \
         comm_icon_15_index;
@@ -294,7 +285,7 @@ static void menu_display_cb(lv_obj_t *obj)
         common_widget_img_create(&widget_img_para, NULL);
     lv_obj_align_to(edit_button, alarm_modify_container, \
         LV_ALIGN_OUT_BOTTOM_RIGHT, -40, 80);
-    lv_obj_set_ext_click_area(delete_button, 10);
+    lv_obj_set_ext_click_area(delete_button, 20);
 
     return;
 }

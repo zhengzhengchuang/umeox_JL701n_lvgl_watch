@@ -39,7 +39,7 @@ struct key_driver_para {
 //== 用于判定长按和HOLD事件参数
     const u8 long_time;  	//按键判定长按数量
     const u8 hold_time;  	//按键判定HOLD数量
-    u8 press_cnt;  		 	//与long_time和hold_time对比, 判断long_event和hold_event
+    u16 press_cnt;  		 	//与long_time和hold_time对比, 判断long_event和hold_event
 //== 用于判定连击事件参数
     u8 click_cnt;  			//单击次数
     u8 click_delay_cnt;  	//按键被抬起后等待连击事件延时计数

@@ -242,6 +242,26 @@ void lv_label_set_ver_center(lv_obj_t * obj, bool en)
     return;
 }
 
+#if 0
+void lv_label_set_lines_num(lv_obj_t * obj, uint8_t lines)
+{
+    LV_ASSERT_OBJ(obj, MY_CLASS);
+
+    lv_label_t * label = (lv_label_t *)obj;
+
+    label->lines_num = lines;
+
+    return;
+}
+
+uint8_t lv_label_get_lines_num(lv_obj_t * obj)
+{  
+    lv_label_t * label = (lv_label_t *)obj;
+
+    return label->lines_num;
+}
+#endif
+
 void lv_label_set_text_sel_start(lv_obj_t * obj, uint32_t index)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
@@ -882,6 +902,7 @@ static void draw_main(lv_event_t * e)
         if(size.y < h && label->ver_center)
             label_draw_dsc.ofs_y += \
                 (h - size.y)/2;
+        //lv_label_set_lines_num(label, h/size.y);
     }
     //user add end
 

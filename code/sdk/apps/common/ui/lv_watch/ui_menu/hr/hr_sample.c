@@ -3,27 +3,22 @@
 static uint8_t hr_GIF_cnt;
 static lv_obj_t *hr_GIF_icon;
 static uint16_t hr_GIF_dsc_idx;
+
+static int16_t hrs_scroll_y;
 static lv_obj_t *hr_sample_container;
 
-#define CHART_PRIX_MAJOR_CNT 5
-static const char *chart_prix_label_str[\
-    CHART_PRIX_MAJOR_CNT] = {
-    "00:00", "06:00", "12:00", "18:00", "00:00",
-};
+static void hrs_container_scroll_cb(\
+    lv_event_t *e)
+{
+    if(!e) return;
 
-#define CHART_PRIY_MAJOR_CNT 5
+    lv_obj_t *obj = \
+        lv_event_get_target(e);
+    hrs_scroll_y = \
+        lv_obj_get_scroll_y(obj);
 
-#define CHART_ITEM_CNT 24
-#define CHART_SERIES_NUM 1
-static int16_t hr_sample_chart_points[\
-    CHART_SERIES_NUM][CHART_ITEM_CNT] = {
-    LV_CHART_POINT_NONE
-};
-
-static lv_color_t hr_sample_chart_color[\
-    CHART_SERIES_NUM];
-static lv_chart_series_t *hr_sample_chart_series[\
-    CHART_SERIES_NUM];
+    return;
+}
 
 static void hr_sample_container_create(\
     lv_obj_t *obj)
@@ -32,11 +27,11 @@ static void hr_sample_container_create(\
         obj;
     widget_obj_para.obj_x = 0;
     widget_obj_para.obj_y = \
-        LCD_UI_Y_OFFSET;
+        0;
     widget_obj_para.obj_width = \
         LCD_WIDTH;
     widget_obj_para.obj_height = \
-        LCD_HEIGHT - LCD_UI_Y_OFFSET;
+        LCD_HEIGHT;
     widget_obj_para.obj_bg_opax = \
         LV_OPA_0;
     widget_obj_para.obj_bg_color = \
@@ -51,48 +46,56 @@ static void hr_sample_container_create(\
         true;
     hr_sample_container = \
         common_widget_obj_create(&widget_obj_para);
-    lv_obj_set_style_pad_bottom(hr_sample_container, \
-        84, LV_PART_MAIN);
+    lv_obj_add_event_cb(hr_sample_container, \
+        hrs_container_scroll_cb, LV_EVENT_SCROLL, NULL);
 
     return;
 }
 
-static uint8_t hr_sample_data[2][CHART_ITEM_CNT] = {
-    [0] = {
-        54, 56, 58, 62, 66, 64, 62, 65, 68, 66, \
-        67, 54, 58, 62, 66, 64, 62, 65, 68, 66, \
-        67, 54, 58, 62,
-    },
-
-    [1] = {
-        90, 84, 74, 80, 86, 90, 85, 90, 80, 87, \
-        87, 94, 74, 85, 86, 90, 85, 90, 80, 87, \
-        87, 94, 74, 85,
-    },
+#define CHART_PRIX_MAJOR_CNT 5
+static const char *chart_prix_label_str[\
+    CHART_PRIX_MAJOR_CNT] = {
+    "00:00", "06:00", "12:00", "18:00", "00:00",
 };
 
-static void hr_sample_minmax_chart_create(void)
+#define CHART_PRIY_MAJOR_CNT 5
+
+#define CHART_SERIES_NUM 1
+static int16_t hr_sample_chart_points[\
+    CHART_SERIES_NUM][24] = {
+    LV_CHART_POINT_NONE
+};
+
+static lv_color_t hr_sample_chart_color[\
+    CHART_SERIES_NUM];
+static lv_chart_series_t *hr_sample_chart_series[\
+    CHART_SERIES_NUM];
+
+static void hr_range_chart_create(lv_obj_t *obj)
 {
-    const uint8_t hr_chart_min = \
-        0;
-    const uint8_t hr_chart_max = \
-        140;
-    const uint8_t hr_pixel_per = \
-        2;
+    const uint8_t hr_chart_min = 0;
+    const uint8_t hr_chart_max = 140;
+    const uint8_t hr_pixel_per = 2;
+
+    uint16_t chart_h = \
+        (hr_chart_max - hr_chart_min)*hr_pixel_per;
+
+    lv_obj_set_style_pad_bottom(obj, \
+        (LCD_HEIGHT - chart_h)/2, LV_PART_MAIN);
 
     hr_sample_chart_color[0] = \
         lv_color_hex(0x000000);
 
     widget_chart_para.chart_parent = \
-        hr_sample_container;
+        obj;
     widget_chart_para.chart_width = \
         300;
     widget_chart_para.chart_height = \
-        (hr_chart_max - hr_chart_min)*hr_pixel_per;
+        chart_h;
     widget_chart_para.chart_type = \
         LV_CHART_TYPE_NONE;
     widget_chart_para.chart_item_cnt = \
-        CHART_ITEM_CNT;
+        24;
     widget_chart_para.chart_update_mode = \
         LV_CHART_UPDATE_MODE_CIRCULAR;
     widget_chart_para.chart_hor_div = \
@@ -126,7 +129,7 @@ static void hr_sample_minmax_chart_create(void)
     lv_obj_t *hr_sample_chart = \
         common_widget_chart_create(&widget_chart_para);
     lv_obj_align(hr_sample_chart, LV_ALIGN_TOP_MID, \
-        0, LCD_HEIGHT + 84);
+        0, (3*LCD_HEIGHT - chart_h)/2);
     lv_obj_clear_flag(hr_sample_chart, LV_OBJ_FLAG_SCROLLABLE);
 
 
@@ -157,12 +160,16 @@ static void hr_sample_minmax_chart_create(void)
     uint8_t hr_sample_min;
     uint8_t hr_sample_max;
     uint16_t hr_sample_bar_h;
-    for(uint8_t i = 0; i < CHART_ITEM_CNT; i++)
+
+    u8 HIdx = \
+       (w_hr.CurIdx)/(60/Hr_Inv_Dur);
+    
+    for(uint8_t i = 0; i < (HIdx + 1); i++)
     {
         hr_sample_min = \
-            hr_sample_data[0][i];
+            w_hr.min_data[i];
         hr_sample_max = \
-            hr_sample_data[1][i];
+            w_hr.max_data[i];
 
         if(hr_sample_max < \
             hr_sample_min)
@@ -198,26 +205,43 @@ static void menu_create_cb(lv_obj_t *obj)
 {
     if(!obj) return;
 
-    hr_GIF_cnt = 0;
-    set_vm_para_cache_with_label(\
-        vm_label_hr, 0);
+    SetHrRealVal(0);
 
-    ui_act_id_t prev_act_id = \
-        read_menu_return_level_id();
+    ui_mode_t ui_mode = \
+        p_ui_info_cache->ui_mode;
+    if(ui_mode == ui_mode_watchface)
+    {
+        ui_act_id_t left_act_id = \
+            ui_act_id_bo_sample;
+        ui_act_id_t right_act_id = \
+            ui_act_id_weather_data;
+        ui_act_id_t down_act_id = \
+            ui_act_id_null;
+        tileview_register_all_menu(obj, ui_act_id_null, down_act_id, \
+            left_act_id, right_act_id, ui_act_id_hr_sample);
+    }else
+    {
+        ui_act_id_t prev_act_id = \
+            ui_act_id_menu;
+        ui_act_id_t down_act_id = \
+            ui_act_id_null;
+        if(!lang_txt_is_arabic())
+            tileview_register_all_menu(obj, ui_act_id_null, down_act_id, \
+                prev_act_id, ui_act_id_null, ui_act_id_hr_sample);
+        else
+            tileview_register_all_menu(obj, ui_act_id_null, down_act_id, \
+                ui_act_id_null, prev_act_id, ui_act_id_hr_sample);
+    }
 
-    tileview_register_all_menu(obj, ui_act_id_null, \
-        ui_act_id_null, prev_act_id, ui_act_id_bo_sample, \
-            ui_act_id_hr_sample);
-
-    AppCtrlvcHr02StartSample(\
-        VCWORK_MODE_HRWORK);
+    //启动手动心率
+    HrSensorStartSample(SensorWorkHr, SensorModeManual);
 
     return;
 }
 
 static void menu_destory_cb(lv_obj_t *obj)
 {
-    AppCtrlvcHr02StopSample();
+    HrSensorStopSample();
 
     return;
 }
@@ -228,18 +252,23 @@ static void menu_refresh_cb(lv_obj_t *obj)
 
     hr_GIF_cnt++;
     hr_GIF_cnt %= 1;
-    common_widget_img_replace_src(\
-        hr_GIF_icon, hr_GIF_00_index + hr_GIF_cnt, \
-            hr_GIF_dsc_idx);
+    common_widget_img_replace_src(hr_GIF_icon, \
+        hr_GIF_00_index + hr_GIF_cnt, hr_GIF_dsc_idx);
 
     bool wear_status = \
-        AppGetvcHr02WearStatus();
-    int hr_sample_val = \
-        get_vm_para_cache_with_label(\
-            vm_label_hr);
-    if(hr_sample_val == 0 && \
-        wear_status)
-        common_offscreen_timer_restart();
+        GetHrSensorWearStatus();
+    if(!wear_status)
+    {
+        ui_menu_jump(\
+            ui_act_id_off_wrist);
+        return;
+    }else
+    {
+        u8 hr_sample_val = \
+            GetHrRealVal();
+        if(hr_sample_val == 0)
+            common_offscreen_timer_restart();
+    }
 
     return;
 }
@@ -260,13 +289,10 @@ static void menu_display_cb(lv_obj_t *obj)
         NULL;
     lv_obj_t *hr_sample_icon = \
         common_widget_img_create(&widget_img_para, NULL);
-    lv_obj_align(hr_sample_icon, LV_ALIGN_TOP_LEFT, \
-        24, 72);
+    lv_obj_align(hr_sample_icon, LV_ALIGN_TOP_LEFT, 24, 72);
 
-    int hr_sample_val = \
-        get_vm_para_cache_with_label(\
-            vm_label_hr);
-
+    u8 hr_sample_val = \
+        GetHrRealVal();
     widget_data_para.data_x = \
         136;
     widget_data_para.data_y = \
@@ -276,20 +302,20 @@ static void menu_display_cb(lv_obj_t *obj)
     widget_data_para.data_parent = \
         hr_sample_container;
     widget_data_para.num_addr_index = \
-        comm_num_30x40_wh_00_index;
+        comm_num_24x40_wh_00_index;
     widget_data_para.data_align = \
         widget_data_align_center;
     widget_data_para.user0_para_valid = \
         true;
     widget_data_para.user0_num_addr_index = \
-        comm_num_30x40_re_00_index;
+        comm_num_24x40_re_00_index;
     common_data_widget_create(&widget_data_para, \
         widget_data_type_hr, &hr_sample_val);
 
     widget_img_para.img_parent = \
         hr_sample_container;
     widget_img_para.img_x = \
-        234;
+        216;
     widget_img_para.img_y = \
         117;
     widget_img_para.file_img_dat = \
@@ -300,21 +326,23 @@ static void menu_display_cb(lv_obj_t *obj)
         NULL;
     common_widget_img_create(&widget_img_para, NULL);
 
+    hr_GIF_cnt = 0;
     widget_img_para.file_img_dat = \
         hr_GIF_00_index;
     hr_GIF_icon = \
         common_widget_img_create(&widget_img_para, &hr_GIF_dsc_idx);
-    lv_obj_align(hr_GIF_icon, LV_ALIGN_TOP_MID, \
-        0, 224);
+    lv_obj_align(hr_GIF_icon, LV_ALIGN_TOP_MID, 0, 224);
 
     widget_img_para.file_img_dat = \
         hr_02_index;
     lv_obj_t *hr_02_icon = \
         common_widget_img_create(&widget_img_para, NULL);
-    lv_obj_align(hr_02_icon, LV_ALIGN_TOP_MID, \
-        0, 392);
+    lv_obj_align(hr_02_icon, LV_ALIGN_TOP_MID, 0, 392);
 
-    hr_sample_minmax_chart_create();
+    hr_range_chart_create(hr_sample_container);
+
+    lv_obj_scroll_to_y(hr_sample_container, \
+        hrs_scroll_y, LV_ANIM_OFF);
 
     return;
 }
@@ -335,10 +363,8 @@ register_ui_menu_load_info(\
     .return_flag = true,
     .menu_id = \
         ui_act_id_hr_sample,
-    .user_offscreen_time = \
-        0,
-    .user_refresh_time_inv = \
-        200,
+    .user_offscreen_time = 0,
+    .user_refresh_time_inv = 0,
     .key_func_cb = menu_key_cb,
     .create_func_cb = menu_create_cb,
     .destory_func_cb = menu_destory_cb,

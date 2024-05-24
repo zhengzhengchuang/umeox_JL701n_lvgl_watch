@@ -1,44 +1,29 @@
 #include "msg_list.h"
 
-vm_message_ctx_t ui_message_ctx;
-static lv_obj_t *msg_list_container;
-static int16_t msg_list_scroll_y = 0;
+static int16_t scroll_y = 0;
+static lv_obj_t *list_ctx_container;
 
-static const uint8_t msg_elem_container_idx[\
-    Message_Max_Num] = {
-        0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+static const uint8_t ec_idx[Max_Elem_Num] = {
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
 };
 
-static uint8_t query_id;
-uint8_t get_msg_detail_query_id(void)
-{
-    return query_id;
-}
-
-void set_msg_detail_query_id(uint8_t id)
-{
-    query_id = id;
-
-    return;
-}
-
-static void msg_list_scroll_cb(lv_event_t *e)
+static void scroll_cb(lv_event_t *e)
 {
     if(!e) return;
 
     lv_obj_t *obj = \
         lv_event_get_target(e);
-    msg_list_scroll_y = \
+    scroll_y = \
         lv_obj_get_scroll_y(obj);
 
     return;
 }
 
-static void msg_list_delete_button_cb(lv_event_t *e)
+static void delete_cb(lv_event_t *e)
 {
     if(!e) return;
 
-    vm_message_ctx_clear();
+    VmMessageCtxClear();
 
     ui_act_id_t cur_act_id = \
         p_ui_info_cache->cur_act_id;
@@ -47,26 +32,28 @@ static void msg_list_delete_button_cb(lv_event_t *e)
     return;
 }
 
-static void msg_list_elem_container_cb(lv_event_t *e)
+static void elem_container_cb(lv_event_t *e)
 {
     if(!e) return;
 
     uint8_t idx = \
         *(uint8_t *)lv_event_get_user_data(e);
-    uint8_t msg_num = \
-        vm_message_item_num();
 
-    if(idx >= msg_num)
+    uint8_t num = \
+        GetMessageNum();
+
+    if(idx >= num)
         return;
 
-    set_msg_detail_query_id(idx);
+    SetQueryId(idx);
 
-    ui_menu_jump(ui_act_id_msg_detail);
+    ui_menu_jump(\
+        ui_act_id_msg_detail);
 
     return;
 }
 
-static void msg_list_container_create(lv_obj_t *obj)
+static void list_ctx_container_create(lv_obj_t *obj)
 {
     widget_obj_para.obj_parent = obj;
     widget_obj_para.obj_x = 0;
@@ -88,12 +75,12 @@ static void msg_list_container_create(lv_obj_t *obj)
     widget_obj_para.obj_radius = 0;
     widget_obj_para.obj_is_scrollable = \
         true;
-    msg_list_container = \
+    list_ctx_container = \
         common_widget_obj_create(&widget_obj_para);
-    lv_obj_set_style_pad_bottom(msg_list_container, \
+    lv_obj_set_style_pad_bottom(list_ctx_container, \
         25, LV_PART_MAIN);
-    lv_obj_add_event_cb(msg_list_container, \
-        msg_list_scroll_cb, LV_EVENT_SCROLL, NULL);
+    lv_obj_add_event_cb(list_ctx_container, \
+        scroll_cb, LV_EVENT_SCROLL, NULL);
 
     return;
 }
@@ -110,18 +97,16 @@ static void no_message_menu_create(lv_obj_t *obj)
         NULL;
     lv_obj_t *no_msg_icon = \
         common_widget_img_create(&widget_img_para, NULL);
-    lv_obj_align(no_msg_icon, LV_ALIGN_TOP_MID, \
-        0, 88);
+    lv_obj_align(no_msg_icon, LV_ALIGN_TOP_MID, 0, 88);
 
     widget_img_para.file_img_dat = \
         comm_icon_11_index;
     lv_obj_t *comm_11_icon =
         common_widget_img_create(&widget_img_para, NULL);
-    lv_obj_align(comm_11_icon, LV_ALIGN_TOP_MID, \
-        0, 266);
+    lv_obj_align(comm_11_icon, LV_ALIGN_TOP_MID, 0, 266);
 
     widget_label_para.label_w = \
-        (300);
+        300;
     widget_label_para.label_h = \
         Label_Line_Height*2;
     widget_label_para.long_mode = \
@@ -137,10 +122,9 @@ static void no_message_menu_create(lv_obj_t *obj)
         obj;
     widget_label_para.label_text = \
         get_lang_txt_with_id(lang_txtid_no_message);
-    lv_obj_t *no_msg_label = \
+    lv_obj_t *label = \
         common_widget_label_create(&widget_label_para);
-    lv_obj_align(no_msg_label, LV_ALIGN_TOP_MID, \
-        0, 342);
+    lv_obj_align(label, LV_ALIGN_TOP_MID, 0, 342);
 
     return;
 }
@@ -148,65 +132,60 @@ static void no_message_menu_create(lv_obj_t *obj)
 static void has_message_menu_create(lv_obj_t *obj, \
     uint8_t msg_num, menu_align_t menu_align)
 {
-    if(msg_num >= \
-        Message_Max_Num)
-        msg_num = Message_Max_Num;
+    if(msg_num >= Max_Elem_Num)
+        msg_num = Max_Elem_Num;
 
-    msg_list_container_create(obj);
+    list_ctx_container_create(obj);
 
-    uint8_t i;
+    uint8_t idx = 0;
+    int16_t ec_sy = 28;
     static char time_str[6];
-    int16_t elem_container_sy = \
-        28;
-    for(i = 0; i < msg_num; i++)
+    
+    for(uint8_t i = 0; i < msg_num; i++)
     { 
-        memset(&ui_message_ctx, 0, \
-            sizeof(vm_message_ctx_t));
-        vm_message_ctx_by_idx(i, &ui_message_ctx);
-
+        bool ret = \
+            GetVmFlashMessageCtx(i);
+        if(ret == false)
+            continue;
+       
         widget_img_para.img_parent = \
-            msg_list_container;
+            list_ctx_container;
         widget_img_para.file_img_dat = \
             message_icon_02_index; 
         widget_img_para.img_click_attr = \
             true;
         widget_img_para.event_cb = \
-            msg_list_elem_container_cb;
+            elem_container_cb;
         widget_img_para.user_data = \
-            (void *)&msg_elem_container_idx[i];
+            (void *)&ec_idx[i];
         lv_obj_t *elem_container = \
-            common_widget_img_create(&widget_img_para, \
-                NULL);
-        lv_obj_align(elem_container, LV_ALIGN_TOP_MID, \
-            0, elem_container_sy + 214*i);
+            common_widget_img_create(&widget_img_para, NULL);
+        lv_obj_align(elem_container, LV_ALIGN_TOP_MID, 0, ec_sy + 214*i);
 
+        message_type_t type = \
+            r_message.message_type;
         widget_img_para.img_parent = \
             elem_container;
         widget_img_para.file_img_dat = \
-            message_type_00_index + \
-                ui_message_ctx.message_type; 
-        widget_img_para.img_click_attr = \
-            false;
-        widget_img_para.event_cb = \
-            NULL;
-        widget_img_para.user_data = \
-            NULL;
+            message_type_00_index + type; 
+        widget_img_para.img_click_attr = false;
+        widget_img_para.event_cb = NULL;
+        widget_img_para.user_data = NULL;
         lv_obj_t *msg_type_icon = \
-            common_widget_img_create(&widget_img_para, \
-                NULL); 
+            common_widget_img_create(&widget_img_para, NULL); 
         if(menu_align == menu_align_right)
-            lv_obj_align(msg_type_icon, LV_ALIGN_TOP_RIGHT, \
-                -20, 10);
+            lv_obj_align(msg_type_icon, LV_ALIGN_TOP_RIGHT, -20, 10);
         else
-            lv_obj_align(msg_type_icon, LV_ALIGN_TOP_LEFT, \
-                20, 10);
+            lv_obj_align(msg_type_icon, LV_ALIGN_TOP_LEFT, 20, 10);
 
+        uint8_t hour = \
+            r_message.message_time.hour;
+        uint8_t minute = \
+            r_message.message_time.min;
         memset(time_str, 0, sizeof(time_str));
-        sprintf(time_str, "%02d:%02d", \
-            ui_message_ctx.message_time.hour, \
-                ui_message_ctx.message_time.min);
+        sprintf(time_str, "%02d:%02d", hour, minute);
         widget_label_para.label_w = \
-            (80);
+            80;
         widget_label_para.label_h = \
             Label_Line_Height;
         widget_label_para.long_mode = \
@@ -226,19 +205,17 @@ static void has_message_menu_create(lv_obj_t *obj, \
         lv_obj_t *time_str_label = \
             common_widget_label_create(&widget_label_para);
         if(menu_align == menu_align_right)
-            lv_obj_align(time_str_label, LV_ALIGN_TOP_LEFT, \
-                20, 10);
+            lv_obj_align(time_str_label, LV_ALIGN_TOP_LEFT, 20, 10);
         else
-            lv_obj_align(time_str_label, LV_ALIGN_TOP_RIGHT, \
-                -20, 10); 
+            lv_obj_align(time_str_label, LV_ALIGN_TOP_RIGHT, -20, 10); 
 
-        uint32_t str_len = \
-            strlen(ui_message_ctx.message_content_str);
+        char *ctx_str = \
+            r_message.message_content_str;
+        uint32_t str_len = strlen(ctx_str);
         bool arabic_letter = \
-            utf8_str_is_arabic(\
-                ui_message_ctx.message_content_str, str_len);
+            utf8_str_is_arabic(ctx_str, str_len);
         widget_label_para.label_w = \
-            (288);
+            288;
         widget_label_para.label_h = \
             Label_Line_Height*2;
         widget_label_para.long_mode = \
@@ -258,38 +235,37 @@ static void has_message_menu_create(lv_obj_t *obj, \
         widget_label_para.label_parent = \
             elem_container;
         widget_label_para.label_text = \
-            ui_message_ctx.message_content_str;
+            ctx_str;
         lv_obj_t *short_msg_label = \
             common_widget_label_create(&widget_label_para);
-        lv_obj_align(short_msg_label, LV_ALIGN_TOP_MID, \
-            0, 78);
+        lv_obj_align(short_msg_label, LV_ALIGN_TOP_MID, 0, 78);
+
+        idx++;
     }
 
     widget_img_para.img_parent = \
-        msg_list_container;
+        list_ctx_container;
     widget_img_para.file_img_dat = \
         comm_icon_14_index;
     widget_img_para.img_click_attr = \
         true;
     widget_img_para.event_cb = \
-        msg_list_delete_button_cb;
+        delete_cb;
     widget_img_para.user_data = \
         NULL;
     lv_obj_t *delete_button = \
-        common_widget_img_create(&widget_img_para, \
-            NULL);
-    lv_obj_align(delete_button, LV_ALIGN_TOP_MID, \
-        0, elem_container_sy + 214*i + 20);
-    lv_obj_set_ext_click_area(delete_button, 10);
+        common_widget_img_create(&widget_img_para, NULL);
+    lv_obj_align(delete_button, LV_ALIGN_TOP_MID, 0, ec_sy + 214*idx + 30);
+    lv_obj_set_ext_click_area(delete_button, 20);
 
-    lv_obj_scroll_to_y(msg_list_container, 0, \
+    lv_obj_scroll_to_y(list_ctx_container, 0, \
         LV_ANIM_OFF);
-    lv_obj_update_layout(msg_list_container);
+    lv_obj_update_layout(list_ctx_container);
     int16_t scroll_bottom_y = \
-        lv_obj_get_scroll_bottom(msg_list_container);
-    if(msg_list_scroll_y > scroll_bottom_y)
-        msg_list_scroll_y = scroll_bottom_y;
-    lv_obj_scroll_to_y(msg_list_container, msg_list_scroll_y, \
+        lv_obj_get_scroll_bottom(list_ctx_container);
+    if(scroll_y > scroll_bottom_y)
+        scroll_y = scroll_bottom_y;
+    lv_obj_scroll_to_y(list_ctx_container, scroll_y, \
         LV_ANIM_OFF);
 
     return;
@@ -299,18 +275,31 @@ static void menu_create_cb(lv_obj_t *obj)
 {
     if(!obj) return;
 
-    tileview_register_all_menu(obj, ui_act_id_null, \
-        ui_act_id_null, ui_act_id_null, ui_act_id_null, \
-            ui_act_id_msg_list);
+    ui_mode_t ui_mode = \
+        p_ui_info_cache->ui_mode;
+    if(ui_mode == ui_mode_watchface)
+    {
+        ui_act_id_t up_act_id = \
+            ui_act_id_watchface;
+        tileview_register_all_menu(obj, up_act_id, ui_act_id_null, \
+            ui_act_id_null, ui_act_id_null, ui_act_id_msg_list);
+    }else
+    {
+        ui_act_id_t prev_act_id = \
+            ui_act_id_menu;
+        if(!lang_txt_is_arabic())
+            tileview_register_all_menu(obj, ui_act_id_null, ui_act_id_null, \
+                prev_act_id, ui_act_id_null, ui_act_id_msg_list);
+        else
+            tileview_register_all_menu(obj, ui_act_id_null, ui_act_id_null, \
+                ui_act_id_null, prev_act_id, ui_act_id_msg_list);
+    }
 
     return;
 }
 
 static void menu_destory_cb(lv_obj_t *obj)
 {
-    msg_list_container = \
-        NULL;
-
     return;
 }
 
@@ -331,13 +320,13 @@ static void menu_display_cb(lv_obj_t *obj)
         menu_align = \
             menu_align_right;
 
-    uint8_t msg_num = \
-        vm_message_item_num();
-    if(msg_num == 0)
+    uint8_t num = \
+        GetMessageNum();
+    if(num == 0)
         no_message_menu_create(obj);
     else
         has_message_menu_create(obj, \
-            msg_num, menu_align);
+            num, menu_align);
 
     return;
 }

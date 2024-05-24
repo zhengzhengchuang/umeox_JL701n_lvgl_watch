@@ -83,23 +83,8 @@ void common_bo_widget_refresh(void)
         widget_data_para_t *p_bo_para = \
             &bo_para_cache[i];
 
-        uint16_t vm_label_type = \
-            vm_label_none;
-
-        if(bo_data_type[i] == \
-            widget_data_type_bo)
-            vm_label_type = vm_label_bo;
-        else if(bo_data_type[i] == \
-            widget_data_type_min_bo)
-            vm_label_type = vm_label_min_bo;
-        else if(bo_data_type[i] == \
-            widget_data_type_max_bo)
-            vm_label_type = vm_label_max_bo;
-        else
-            continue;
-
-        int __data = \
-            get_vm_para_cache_with_label(vm_label_type); 
+        u8 __data = \
+            GetBoRealVal();
 
         uint32_t num_addr_index = \
             p_bo_para->num_addr_index;
@@ -219,7 +204,7 @@ int16_t common_bo_widget_create(widget_data_para_t *data_para, \
         Bo_Group_Max)
         return data_end_x;
 
-    int __data = *(int *)data_val;
+    uint8_t __data = *(uint8_t *)data_val;
 
     bo_data_type[bo_group_num] = type;
 

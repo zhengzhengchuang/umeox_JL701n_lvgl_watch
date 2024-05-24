@@ -5,7 +5,6 @@
 extern "C" {
 #endif
 
-#include "msg_list.h"
 #include "../../lv_watch.h"
 
 #ifdef __cplusplus

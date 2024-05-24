@@ -1,6 +1,8 @@
 #ifndef APP_MAIN_H
 #define APP_MAIN_H
 
+#include "typedef.h"
+
 typedef struct _APP_VAR {
     s8 music_volume;
     s8 music_volume_r;

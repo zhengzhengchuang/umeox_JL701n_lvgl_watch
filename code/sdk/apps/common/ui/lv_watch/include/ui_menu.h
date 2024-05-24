@@ -69,7 +69,6 @@ extern_ui_menu_load_info(menu_load_common_list);
 extern_ui_menu_load_info(menu_load_common_list1);
 extern_ui_menu_load_info(menu_load_common_list2);
 
-/*多个真主列表共用同个id，需要extern出来*/
 extern_ui_menu_load_info(menu_load_al_name_list0);
 extern_ui_menu_load_info(menu_load_al_name_list1);
 #ifdef __cplusplus

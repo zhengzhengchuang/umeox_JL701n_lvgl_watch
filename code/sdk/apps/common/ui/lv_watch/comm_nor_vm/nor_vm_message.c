@@ -1,13 +1,14 @@
 #include "nor_vm_main.h"
 
-static vm_message_ctx_t vm_message_ctx;
+vm_message_ctx_t w_message;
+vm_message_ctx_t r_message;
 static const nor_vm_type_t nor_vm_type = \
     nor_vm_type_message;
 
 /*********************************************************************************
                               清除                                         
 *********************************************************************************/
-void vm_message_ctx_clear(void)
+void VmMessageCtxClear(void)
 {
     void *nor_vm_file = \
         nor_flash_vm_file(nor_vm_type);
@@ -15,18 +16,15 @@ void vm_message_ctx_clear(void)
     if(!nor_vm_file)
         return;
 
-    uint8_t message_num = \
-        vm_message_item_num();
+    uint8_t num = \
+        VmMessageItemNum();
 
-    if(!message_num) 
-        return;
-
-    while(message_num)
+    while(num)
     {
         flash_common_delete_by_index(\
             nor_vm_file, 0);
 
-        message_num--;
+        num--;
     }
     
     return;
@@ -35,7 +33,7 @@ void vm_message_ctx_clear(void)
 /*********************************************************************************
                               通过index删除指定信息                                         
 *********************************************************************************/
-void vm_message_delete_by_index(uint8_t index)
+void VmMessageDelByIdx(uint8_t index)
 {
     void *nor_vm_file = \
         nor_flash_vm_file(nor_vm_type);
@@ -52,60 +50,52 @@ void vm_message_delete_by_index(uint8_t index)
 /*********************************************************************************
                               存储数量                                         
 *********************************************************************************/
-uint8_t vm_message_item_num(void)
+uint8_t VmMessageItemNum(void)
 {
-    uint8_t message_num = 0;
+    uint8_t num = 0;
 
     void *nor_vm_file = \
         nor_flash_vm_file(nor_vm_type);
 
     if(!nor_vm_file)
-        return message_num;
+        return num;
 
-    message_num = \
-        flash_common_get_total(nor_vm_file);
+    num = flash_common_get_total(nor_vm_file);
 
-    if(message_num > Message_Max_Num)
-        message_num = Message_Max_Num;
+    if(num > Message_Max_Num)
+        num = Message_Max_Num;
 
-    return message_num;
+    return num;
 }
 
 /*********************************************************************************
                               获取内容                                        
 *********************************************************************************/
-bool vm_message_ctx_by_idx(uint8_t idx, vm_message_ctx_t *p)
+bool VmMessageCtxByIdx(uint8_t idx)
 {
-    uint8_t message_num = \
-        vm_message_item_num();
+    uint8_t num = \
+        VmMessageItemNum();
 
-    if(idx >= message_num)
+    if(idx >= num)
         return false;
-    
-    if(!p) return false;
 
     void *nor_vm_file = \
         nor_flash_vm_file(nor_vm_type);
-    int message_ctx_len = \
+    int ctx_len = \
         sizeof(vm_message_ctx_t);
     
     if(!nor_vm_file)
         return false;
 
-    idx = (message_num - 1) - \
-        idx;
+    idx = (num - 1) - idx;
     
-    memset(&vm_message_ctx, 0, \
-        message_ctx_len);
+    memset(&r_message, 0, ctx_len);
     flash_common_read_by_index(nor_vm_file, idx, 0, \
-        message_ctx_len, (uint8_t *)&vm_message_ctx);
+        ctx_len, (uint8_t *)&r_message);
 
-    if(vm_message_ctx.check_code != \
+    if(r_message.check_code != \
         Nor_Vm_Check_Code)
         return false;
-
-    memcpy(p, &vm_message_ctx, \
-        message_ctx_len);
 
     return true;
 }
@@ -113,32 +103,36 @@ bool vm_message_ctx_by_idx(uint8_t idx, vm_message_ctx_t *p)
 /*********************************************************************************
                               内容存储                                   
 *********************************************************************************/
-void vm_message_ctx_falsh_save(vm_message_ctx_t *p)
+void VmMessageCtxFlashSave(void *p)
 {
+#if !Vm_Debug_En
+    /*如果设备不绑定、不允许存储任何数据*/
+    int DevBondFlag = \
+        GetVmParaCacheByLabel(\
+            vm_label_dev_bond);
+    if(!DevBondFlag)
+        return;
+#endif
+
     if(!p) return;
 
     void *nor_vm_file = \
         nor_flash_vm_file(nor_vm_type);
-    int message_ctx_len = \
+    int ctx_len = \
         sizeof(vm_message_ctx_t);
 
     if(!nor_vm_file)
         return;
 
-    uint8_t message_num = \
-        vm_message_item_num();
+    uint8_t num = \
+        VmMessageItemNum();
     
-    if(message_num >= Message_Max_Num)
+    if(num >= Message_Max_Num)
         flash_common_delete_by_index(\
             nor_vm_file, 0);
 
-    int file_id = \
-        flash_common_open_id(nor_vm_file, 0, \
-            message_ctx_len);
-    if(!file_id) return;
-
-    flash_common_write_packet(nor_vm_file, file_id, \
-        message_ctx_len, (uint8_t *)p);
+    flash_common_write_file(nor_vm_file, 0, \
+        ctx_len, (uint8_t *)p);
 
     return;
 }
@@ -210,7 +204,7 @@ void vm_message_ctx_falsh_save_test(void)
 {
     for(uint8_t i = 0; i < Message_Max_Num; i++)
     {
-        vm_message_ctx_falsh_save(\
+        VmMessageCtxFlashSave(\
             &message_ctx_test[i]); 
     }
 }

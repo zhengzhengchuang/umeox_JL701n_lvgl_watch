@@ -1,12 +1,15 @@
 #include "../lv_watch.h"
 
-#define HrGs_FifoSize (600)
+extern void CtrlGh30xModuleStop(void);
+extern void CtrlGh30xModuleStart(uint8_t work_type);
 
-static u32 HrGs_Wlen = 0;
-static u32 HrGs_Rlen = 0;
-static u32 HrGs_WFifoIdx = 0;
-static u32 HrGs_RFifoIdx = 0;
-static u8 HrGs_FifoData[HrGs_FifoSize];
+#define HrGs_FifoSize (1080)
+
+u32 HrGs_Wlen = 0;
+u32 HrGs_Rlen = 0;
+u32 HrGs_WFifoIdx = 0;
+u32 HrGs_RFifoIdx = 0;
+u8 HrGs_FifoData[HrGs_FifoSize];
 
 static void HrGsFifoParaInit(void)
 {
@@ -27,8 +30,7 @@ static void SensorHrTask(void *p)
 
     HrGsFifoParaInit();
 
-    AppCtrlvcHr02StartSample(\
-        VCWORK_MODE_HRWORK);
+    HrSensorStopSample();
 
     while(1)
     {
@@ -37,7 +39,7 @@ static void SensorHrTask(void *p)
                 ARRAY_SIZE(rev_msg)); 
 
         if(rev_ret == OS_TASKQ)
-            SensorHrTaskMsgHandle(rev_msg, \
+            SensorHrTaskHandle(rev_msg, \
                 ARRAY_SIZE(rev_msg));
     }
     
@@ -54,7 +56,7 @@ void SensorHrTaskCreate(void)
     return;
 }
 
-void SensorHrTaskMsgHandle(int *rev_msg, u8 len)
+void SensorHrTaskHandle(int *rev_msg, u8 len)
 {
     if(!rev_msg || len == 0)
         return;
@@ -63,33 +65,43 @@ void SensorHrTaskMsgHandle(int *rev_msg, u8 len)
 
     switch(msg_cmd)
     {
-        case SensorHrMsgProcess:
+        case SensorHrProcess:
         {
-            vcHr02ProcessHanlde();
+            hal_gh30x_int_handler_bottom_half();
         }
             break;
 
-        case SensorHrMsgEnableModule:
+        case SensorHrEnableModule:
         {
             HrGsFifoParaInit();
 
-            CtrlvcHr02StartSample(\
-                (vcHr02Mode_t)rev_msg[1]);
+            CtrlGh30xModuleStart(\
+                (u8)rev_msg[1]);
 
-            SetvcHr02EnableFlag(true);
+            SetHrSensorWorkType(\
+                (u8)rev_msg[1]);
+
+            SetHrSensorWearStatus(true);
+
+            SetHrSensorEnableFlag(true);
+
+            SetHrSensorDataFilterCnt(\
+                Hr_Data_Filter_Cnt);
         }  
             break;
 
-        case SensorHrMsgDisableModule:
+        case SensorHrDisableModule:
         {
-            CtrlvcHr02StopSample();
+            CtrlGh30xModuleStop();
 
-            SetvcHr02EnableFlag(false);
+            SetHrSensorWorkType(\
+                SensorWorkNone);
+
+            SetHrSensorEnableFlag(false);
         } 
             break;
 
         default:
-            printf("*************ui msg not found\n");
             break;
     }
 
@@ -128,63 +140,103 @@ __retry:
     return err;
 }
 
+static u8 SensorMode = \
+    SensorModeManual;
+u8 GetHrSensorMode(void)
+{
+    return SensorMode;
+}
+void SetHrSensorMode(u8 mode)
+{
+    SensorMode = mode;
+
+    return;
+}
+
+static u8 SensorWorkType = \
+    SensorWorkNone;
+u8 GetHrSensorWorkType(void)
+{
+    return SensorWorkType;
+}
+void SetHrSensorWorkType(u8 type)
+{
+    SensorWorkType = type;
+
+    return;
+}
+
+static u8 DataFilterCnt = \
+    Hr_Data_Filter_Cnt;
+u8 GetHrSensorDataFilterCnt(void)
+{
+    return DataFilterCnt;
+}
+void SetHrSensorDataFilterCnt(u8 Cnt)
+{
+    DataFilterCnt = Cnt;
+
+    return;
+}
 
 static bool EnableFlag = \
     false; 
-bool GetvcHr02EnableFlag(void)
+bool GetHrSensorEnableFlag(void)
 {
     return EnableFlag;
 }
-
-void SetvcHr02EnableFlag(bool en)
+void SetHrSensorEnableFlag(bool en)
 {
     EnableFlag = en;
 
     return;
 }
 
-static bool vcHr02IsWear = true;
-bool AppGetvcHr02WearStatus(void)
+static bool HrSensorWear = \
+    true;
+bool GetHrSensorWearStatus(void)
 {
-    return vcHr02IsWear;
+    return HrSensorWear;
 }
-
-void AppSetvcHr02WearStatus(bool status)
+void SetHrSensorWearStatus(bool status)
 {
-    vcHr02IsWear = status;
+    HrSensorWear = status;
 
     return;
 }
 
-void AppCtrlvcHr02StopSample(void)
+void HrSensorStopSample(void)
 {
-    int SensorHrMsg[1];
-	SensorHrMsg[0] = \
-		SensorHrMsgDisableModule;
-	PostSensorHrTaskMsg(SensorHrMsg, 1); 
+    int SensorHrPost[1];
+	SensorHrPost[0] = \
+		SensorHrDisableModule;
+	PostSensorHrTaskMsg(SensorHrPost, 1); 
 
     return;
 }
 
-void AppCtrlvcHr02StartSample(vcHr02Mode_t mode)
+void HrSensorStartSample(SensorWorkType_t type, \
+    SensorWorkMode_t mode)
 {
-    int SensorHrMsg[2];
-	SensorHrMsg[0] = \
-		SensorHrMsgEnableModule;
-    SensorHrMsg[1] = \
-		(int)mode;
-	PostSensorHrTaskMsg(SensorHrMsg, 2); 
+    int SensorHrPost[2];
+	SensorHrPost[0] = \
+		SensorHrEnableModule;
+    SensorHrPost[1] = \
+		(int)type;
+	PostSensorHrTaskMsg(SensorHrPost, 2); 
+
+    SetHrSensorMode(mode);
 
     return;
 }
 
-void vcHr02GsensorDatacbufWrite(u8 *w_buf, u32 w_len)
-{ 
+void HrGsDataFifoWrite(u8 *w_buf, u32 w_len)
+{
     if(!w_buf || w_len == 0)
         return;
 
     bool EnableFlag = \
-        GetvcHr02EnableFlag();
+        GetHrSensorEnableFlag();
     if(EnableFlag == false)
         return;
 
@@ -194,6 +246,7 @@ void vcHr02GsensorDatacbufWrite(u8 *w_buf, u32 w_len)
             w_buf, w_len);
 
         HrGs_WFifoIdx += w_len;
+        HrGs_WFifoIdx %= HrGs_FifoSize;
     }else
     {
         u32 fifo_remain_len = \
@@ -216,30 +269,36 @@ void vcHr02GsensorDatacbufWrite(u8 *w_buf, u32 w_len)
     return;
 }
 
-u16 vcHr02GsensorDatacbufRead(s16 *xdata, s16 *ydata, \
-    s16 *zdata, u16 r_max_num)
+static const BoGs_Data_Max = 15;
+static const HrGs_Data_Max = 60;
+void HrGsDataFifoRead(ST_GS_DATA_TYPE *Gs_data, u16 *r_idx)
 {
-    u16 r_num = 0;
-
-    if(!xdata || !ydata || !zdata || \
-        r_max_num == 0)
-        return r_num;
+    if(!Gs_data || !r_idx)
+        return;
 
     bool EnableFlag = \
-        GetvcHr02EnableFlag();
+        GetHrSensorEnableFlag();
     if(EnableFlag == false)
-        return r_num;
+        return;
 
     u8 FifoData[6];
     s16 AccRawData[3];
 
-    u32 r_max_len = \
-        r_max_num*6;
+    u32 r_max_len;
+
+    u8 work_type = \
+        GetHrSensorWorkType();
+    if(work_type == SensorWorkHr)
+        r_max_len = HrGs_Data_Max*6;
+    else if(work_type == SensorWorkBo)
+        r_max_len = BoGs_Data_Max*6;
+    else
+        return;
 
     if(HrGs_Rlen + r_max_len > HrGs_Wlen)
     {
         if(HrGs_Rlen >= HrGs_Wlen)
-            return r_num;
+            return;
 
         r_max_len = \
             HrGs_Wlen - HrGs_Rlen;
@@ -247,7 +306,7 @@ u16 vcHr02GsensorDatacbufRead(s16 *xdata, s16 *ydata, \
             (r_max_len % 6);
 
         if(r_max_len == 0)
-            return r_num;
+            return;
     }
 
     if(HrGs_RFifoIdx + r_max_len <= HrGs_FifoSize)
@@ -265,9 +324,9 @@ u16 vcHr02GsensorDatacbufRead(s16 *xdata, s16 *ydata, \
             AccRawData[2] = (s16)(((uint16_t)FifoData[5] << 8) | \
                 (FifoData[4]));
 
-            xdata[i] = AccRawData[0];
-            ydata[i] = AccRawData[1];
-            zdata[i] = AccRawData[2];
+            Gs_data[i].sXAxisVal = AccRawData[0];
+            Gs_data[i].sYAxisVal = AccRawData[1];
+            Gs_data[i].sZAxisVal = AccRawData[2];
 
             HrGs_RFifoIdx += 6;
         }
@@ -291,9 +350,12 @@ u16 vcHr02GsensorDatacbufRead(s16 *xdata, s16 *ydata, \
                 AccRawData[2] = (s16)(((uint16_t)FifoData[5] << 8) | \
                     (FifoData[4]));
 
-                xdata[i] = AccRawData[0];
-                ydata[i] = AccRawData[1];
-                zdata[i] = AccRawData[2];
+                // xdata[i] = AccRawData[0];
+                // ydata[i] = AccRawData[1];
+                // zdata[i] = AccRawData[2];
+                Gs_data[i].sXAxisVal = AccRawData[0];
+                Gs_data[i].sYAxisVal = AccRawData[1];
+                Gs_data[i].sZAxisVal = AccRawData[2];
 
                 HrGs_RFifoIdx += 6;
             }
@@ -316,9 +378,12 @@ u16 vcHr02GsensorDatacbufRead(s16 *xdata, s16 *ydata, \
                 AccRawData[2] = (s16)(((uint16_t)FifoData[5] << 8) | \
                     (FifoData[4]));
 
-                xdata[j + i] = AccRawData[0];
-                ydata[j + i] = AccRawData[1];
-                zdata[j + i] = AccRawData[2];
+                // xdata[j + i] = AccRawData[0];
+                // ydata[j + i] = AccRawData[1];
+                // zdata[j + i] = AccRawData[2];
+                Gs_data[j + i].sXAxisVal = AccRawData[0];
+                Gs_data[j + i].sYAxisVal = AccRawData[1];
+                Gs_data[j + i].sZAxisVal = AccRawData[2];
 
                 HrGs_RFifoIdx += 6;
             }
@@ -340,9 +405,12 @@ u16 vcHr02GsensorDatacbufRead(s16 *xdata, s16 *ydata, \
                 AccRawData[2] = (s16)(((uint16_t)FifoData[5] << 8) | \
                     (FifoData[4]));
 
-                xdata[i] = AccRawData[0];
-                ydata[i] = AccRawData[1];
-                zdata[i] = AccRawData[2];
+                // xdata[i] = AccRawData[0];
+                // ydata[i] = AccRawData[1];
+                // zdata[i] = AccRawData[2];
+                Gs_data[i].sXAxisVal = AccRawData[0];
+                Gs_data[i].sYAxisVal = AccRawData[1];
+                Gs_data[i].sZAxisVal = AccRawData[2];
 
                 HrGs_RFifoIdx += 6;
             }
@@ -366,9 +434,12 @@ u16 vcHr02GsensorDatacbufRead(s16 *xdata, s16 *ydata, \
             AccRawData[2] = (s16)(((uint16_t)FifoData[5] << 8) | \
                 (FifoData[4]));
 
-            xdata[i++] = AccRawData[0];
-            ydata[i++] = AccRawData[1];
-            zdata[i++] = AccRawData[2];
+            // xdata[i++] = AccRawData[0];
+            // ydata[i++] = AccRawData[1];
+            // zdata[i++] = AccRawData[2];
+            Gs_data[i++].sXAxisVal = AccRawData[0];
+            Gs_data[i++].sYAxisVal = AccRawData[1];
+            Gs_data[i++].sZAxisVal = AccRawData[2];
 
             HrGs_RFifoIdx += (6 - fifo_remain_len_tmp);
 
@@ -387,9 +458,12 @@ u16 vcHr02GsensorDatacbufRead(s16 *xdata, s16 *ydata, \
                 AccRawData[2] = (s16)(((uint16_t)FifoData[5] << 8) | \
                     (FifoData[4]));
 
-                xdata[j + i] = AccRawData[0];
-                ydata[j + i] = AccRawData[1];
-                zdata[j + i] = AccRawData[2];
+                // xdata[j + i] = AccRawData[0];
+                // ydata[j + i] = AccRawData[1];
+                // zdata[j + i] = AccRawData[2];
+                Gs_data[j + i].sXAxisVal = AccRawData[0];
+                Gs_data[j + i].sYAxisVal = AccRawData[1];
+                Gs_data[j + i].sZAxisVal = AccRawData[2];
 
                 HrGs_RFifoIdx += 6;
             }
@@ -398,7 +472,10 @@ u16 vcHr02GsensorDatacbufRead(s16 *xdata, s16 *ydata, \
 
     HrGs_Rlen += r_max_len;
 
-    r_num =  r_max_len/6;
+    *r_idx =  r_max_len/6;
 
-    return r_num;
+    // printf("w = %d, r = %d\n", \
+    //     HrGs_Wlen, HrGs_Rlen);
+
+    return;
 }

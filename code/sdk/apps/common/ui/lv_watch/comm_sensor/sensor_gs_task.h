@@ -17,7 +17,7 @@ extern "C" {
 
 enum
 {
-    SensorGsMsgFifoProcess,
+    SensorGsMsgProcess,
     SensorGsMsgEnableModule,
     SensorGsMsgDisableModule,
 };
@@ -26,10 +26,10 @@ void SensorGsTaskCreate(void);
 int PostSensorGsTaskMsg(int *post_msg, u8 len);
 void SensorGsTaskMsgHandle(int *rev_msg, u8 len);
 
-void AppCtrlGsEnableModule(void);
-void AppCtrlGsDisableModule(void);
+void EnableSensorGsModule(void);
+void DisableSensorGsModule(void);
 
-void AppCtrlGsFifoIntProcess(void);
+void SensorGsIntProcess(void);
 #ifdef __cplusplus
 } /* extern "C" */
 #endif

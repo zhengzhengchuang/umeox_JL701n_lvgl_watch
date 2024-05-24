@@ -1,10 +1,10 @@
 #include "call_out.h"
 
-static void call_out_hang_up_cb(lv_event_t *e)
+static void hangup_cb(lv_event_t *e)
 {
     if(!e) return;
 
-    bt_ctrl_call_hang_up();
+    CtrlCallHangUp();
 
     return;
 }
@@ -13,9 +13,14 @@ static void menu_create_cb(lv_obj_t *obj)
 {
     if(!obj) return;
 
-    tileview_register_all_menu(obj, ui_act_id_null, \
-        ui_act_id_null, ui_act_id_null, ui_act_id_null, \
-            ui_act_id_call_out);
+    ui_act_id_t prev_act_id = \
+        ui_act_id_null;
+    if(!lang_txt_is_arabic())
+        tileview_register_all_menu(obj, ui_act_id_null, ui_act_id_null, \
+            prev_act_id, ui_act_id_null, ui_act_id_call_out);
+    else
+        tileview_register_all_menu(obj, ui_act_id_null, ui_act_id_null, \
+            ui_act_id_null, prev_act_id, ui_act_id_call_out);
 
     return;
 }
@@ -37,7 +42,7 @@ static void menu_display_cb(lv_obj_t *obj)
     if(!obj) return;
 
     widget_label_para.label_w = \
-        (220);
+        280;
     widget_label_para.label_h = \
         Label_Line_Height*2;
     widget_label_para.long_mode = \
@@ -53,11 +58,10 @@ static void menu_display_cb(lv_obj_t *obj)
     widget_label_para.label_parent = \
         obj;
     widget_label_para.label_text = \
-        bt_get_call_number_name();
-    lv_obj_t *call_number_name_label = \
+        GetCallNumName();
+    lv_obj_t *num_name_label = \
         common_widget_label_create(&widget_label_para);
-    lv_obj_align(call_number_name_label, LV_ALIGN_TOP_MID, \
-        0, 80);
+    lv_obj_align(num_name_label, LV_ALIGN_TOP_MID, 0, 80);
 
     widget_img_para.img_x = 134;
     widget_img_para.img_y = 168;
@@ -68,8 +72,7 @@ static void menu_display_cb(lv_obj_t *obj)
     widget_img_para.img_click_attr = \
         false;
     widget_img_para.event_cb = NULL;
-    common_widget_img_create(&widget_img_para, \
-        NULL);
+    common_widget_img_create(&widget_img_para, NULL);
 
     widget_img_para.img_x = 144;
     widget_img_para.img_y = 336;
@@ -78,11 +81,10 @@ static void menu_display_cb(lv_obj_t *obj)
     widget_img_para.img_click_attr = \
         true;
     widget_img_para.event_cb = \
-        call_out_hang_up_cb;
+        hangup_cb;
     widget_img_para.user_data = NULL;
-    common_widget_img_create(&widget_img_para, \
-        NULL);
-
+    common_widget_img_create(&widget_img_para, NULL);
+    
     return;
 }
 

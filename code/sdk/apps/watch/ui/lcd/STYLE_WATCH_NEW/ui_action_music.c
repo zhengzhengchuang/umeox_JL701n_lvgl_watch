@@ -85,7 +85,8 @@ static int music_pp_ontouch(void *ctr, struct element_touch_event *e)
         break;
     case ELM_EVENT_TOUCH_UP:
 #if TCFG_APP_MUSIC_EN
-        if (bt_get_music_device_style() == SET_MUSIC_IN_WATCH) {
+        if (bt_get_music_device_style() == SET_MUSIC_IN_WATCH) 
+        {
             if (app_get_curr_task() != APP_MUSIC_TASK) {
                 music_set_start_auto_play(1);
                 app_task_switch_to(APP_MUSIC_TASK);
@@ -212,6 +213,7 @@ static int music_cir_ontouch(void *ctr, struct element_touch_event *e)
             music_player_set_repeat_mode(FCYCLE_ALL);
             break;
         };
+
         switch (music_player_get_repeat_mode()) {
         case FCYCLE_ONE:
             ui_pic_show_image_by_id(MUSIC_CIR_PIC, 0);

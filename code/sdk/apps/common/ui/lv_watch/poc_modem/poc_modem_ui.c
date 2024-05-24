@@ -219,8 +219,10 @@ ui_act_id_t ui_menu_jump_prepare(ui_act_id_t act_id)
 
 void ui_menu_container_create(void)
 {
-    int16_t lcd_w = lv_disp_get_hor_res(NULL);
-    int16_t lcd_h = lv_disp_get_ver_res(NULL);
+    int16_t lcd_w = \
+        lv_disp_get_hor_res(NULL);
+    int16_t lcd_h = \
+        lv_disp_get_ver_res(NULL);
 
     lv_obj_t *ui_menu_container = \
         lv_obj_create(lv_scr_act());
@@ -263,7 +265,7 @@ void ui_menu_jump_handle(ui_act_id_t act_id)
             p_ui_info_cache->ui_mode;
         bool return_flag = \
             p_ui_info_cache->menu_load_info.return_flag;
-        if(return_flag && ui_mode != ui_mode_watchface)
+        if(return_flag/* && ui_mode != ui_mode_watchface*/)
             push_menu_return_level(act_id);
     }else
     {
@@ -312,7 +314,7 @@ ui_menu_load_info_t *ui_menu_load_info(ui_act_id_t act_id)
     if(act_id == ui_act_id_watchface)
     {
         ui_watchface_id_t cur_watchface_id = \
-            get_vm_para_cache_with_label(vm_label_watchface_id);
+            GetVmParaCacheByLabel(vm_label_watchface_sel);
 
         ui_watchface_id_t i;
         list_for_ui_watchface_load(i)
@@ -326,7 +328,7 @@ ui_menu_load_info_t *ui_menu_load_info(ui_act_id_t act_id)
     }else if(act_id == ui_act_id_menu)
     {
         ui_menu_view_t menu_style = \
-            get_vm_para_cache_with_label(vm_label_menu_view);
+            GetVmParaCacheByLabel(vm_label_menu_view);
 
         ui_menu_view_t i;
         list_for_ui_menu_style(i)
@@ -339,15 +341,17 @@ ui_menu_load_info_t *ui_menu_load_info(ui_act_id_t act_id)
         }
     }else if(act_id == ui_act_id_al_name_list)
     {
-        al_name_list_mode_t list_mode = \
-            get_vm_para_cache_with_label(vm_label_al_name_list_mode);
+        int al_name_list_mode = \
+            GetVmParaCacheByLabel(\
+                vm_label_al_name_list_mode);
         
         al_name_list_mode_t i;
         list_for_ui_al_name_list(i)
         {
-            if(i == list_mode)
+            if(i == al_name_list_mode)
             {
-                menu_load_info = al_name_load_info[i];
+                menu_load_info = \
+                    al_name_load_info[i];
                 break;
             }
         }

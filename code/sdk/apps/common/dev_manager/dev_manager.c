@@ -60,10 +60,10 @@ int __dev_manager_add(char *logo, u8 need_mount)
 		}
 	}
 
-	if (p) 
+	if(p) 
 	{
 		///挂载文件系统
-		if (dev_manager_list_check_by_logo(logo)) {
+		if(dev_manager_list_check_by_logo(logo)) {
 			printf("dev online aready, err!!!\n");
 			return DEV_MANAGER_ADD_IN_LIST_AREADY;
 		}

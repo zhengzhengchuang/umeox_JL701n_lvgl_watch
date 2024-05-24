@@ -16,15 +16,13 @@ int qmc6309_read_block(unsigned char addr, unsigned char *data, unsigned char le
 
 	u8 slave_addr = p_mag.slave_addr;
 
-    succ_ret = sensor_iic_rx_buf(slave_addr, addr, data, len);
+    succ_ret = sensor_iic_u8addr_rx_buf(slave_addr, addr, data, len);
 
     while(retry && !succ_ret)
     {
-        succ_ret = sensor_iic_rx_buf(slave_addr, addr, data, len);
+        succ_ret = sensor_iic_u8addr_rx_buf(slave_addr, addr, data, len);
 
         retry--;
-
-        printf("%s:retry = %d\n", __func__, retry);
     }
 
     return succ_ret;
@@ -37,15 +35,13 @@ int qmc6309_write_reg(unsigned char addr, unsigned char data)
 
 	u8 slave_addr = p_mag.slave_addr;
 
-    succ_ret = sensor_iic_tx_byte(slave_addr, addr, data);
+    succ_ret = sensor_iic_u8addr_tx_byte(slave_addr, addr, data);
 
     while(retry && !succ_ret)
     {
-        succ_ret = sensor_iic_tx_byte(slave_addr, addr, data);
+        succ_ret = sensor_iic_u8addr_tx_byte(slave_addr, addr, data);
 
         retry--;
-
-        printf("%s:retry = %d\n", __func__, retry);
     }
 
     return succ_ret;
@@ -348,7 +344,7 @@ int qmc6309_read_mag_xyz(float data[3])
 	data[1] = (float)((float)hw_d[1] / ((float)p_mag.ssvt/100.f));		// ut
 	data[2] = (float)((float)hw_d[2] / ((float)p_mag.ssvt/100.f));		// ut
 
-	qmc6309_axis_convert(data, 0);
+	qmc6309_axis_convert(data, 2);
 
 	if(p_mag.ctrl1.bit.mode == QMC6309_MODE_SINGLE)
 	{
@@ -724,5 +720,22 @@ int qmc6309_self_test(void)
 
 	return selftest_result;
 }
+
+static u8 qmc6309_idle_query(void)
+{
+	//1：允许 0：不允许  
+	bool GmEnableFlag = \
+		GetSensorGmEnableFlag();
+
+	if(GmEnableFlag == true)
+		return 0;
+
+	return 1;
+}
+
+REGISTER_LP_TARGET(qmc6309_lp_target) = {
+    .name = "qmc6309",
+    .is_idle = qmc6309_idle_query,
+};
 
 

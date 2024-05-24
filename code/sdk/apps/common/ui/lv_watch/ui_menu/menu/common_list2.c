@@ -1,12 +1,23 @@
 #include "common_list2.h"
 
+/****************菜单id****************/
+static const ui_act_id_t common_list2_act_id[\
+    Common_List2_Elem_Num] = 
+{
+    ui_act_id_call_main, ui_act_id_msg_list, ui_act_id_null, \
+    ui_act_id_null, ui_act_id_prayer_time_main, ui_act_id_azkar_list, \
+    ui_act_id_tasbih_main, ui_act_id_al_name_list, ui_act_id_Gcalendar_main, \
+    ui_act_id_null, ui_act_id_sleep_main, ui_act_id_weather_data, \
+    ui_act_id_hr_sample, ui_act_id_bo_sample, ui_act_id_alarm_main, \
+    ui_act_id_more_menu, ui_act_id_set_main, 
+};
 
 /****************元素容器点击索引****************/
 static const uint16_t common_list2_elem_container_idx[\
     Common_List2_Elem_Num] =
 {
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, \
-    10, 11, 12, 13, 14, 15, 
+    10, 11, 12, 13, 14, 15, 16 
 };
 
 /****************通用列表2滚动参数****************/
@@ -210,7 +221,24 @@ static void common_list2_elem_container_click_cb(lv_event_t *e)
 
     uint16_t idx = *(uint16_t *)lv_event_get_user_data(e);
 
-    printf("******%s:%d\n", __func__, idx);
+    if(idx == 2)
+    {
+        bool cali_succ = \
+            GetSensorGmCaliSucc();
+        if(cali_succ == false)
+            ui_menu_jump(ui_act_id_gm_cali);
+        else
+        {
+            if(!(ll_info.position_valid))
+                ui_menu_jump(ui_act_id_kaaba_position);   
+            else
+                ui_menu_jump(ui_act_id_kaaba_qibla);
+        }
+    }else
+    {
+        ui_menu_jump(\
+            common_list2_act_id[idx]);
+    }
 
     return;
 }

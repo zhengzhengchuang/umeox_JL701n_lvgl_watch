@@ -25,10 +25,20 @@
 #endif
 
 static spinlock_t sensor_iic_lock;
-static const u8 sensor_iic_delay = 1;
+static const u32 sensor_iic_delay = 1;
 static bool sensor_iic_init_flag = false;
 static const soft_iic_dev sensor_iic_hdl = \
     TCFG_SENOR_IIC_INDEX;
+
+u32 Get_sensor_iic_delay(void)
+{
+    return sensor_iic_delay;
+}
+
+soft_iic_dev Get_sensor_iic_hdl(void)
+{
+    return sensor_iic_hdl;
+}
 
 void sensor_iic_init(void)
 {
@@ -46,123 +56,264 @@ void sensor_iic_init(void)
     return;
 }
 
-bool sensor_iic_tx_byte(u8 slave_addr, u8 reg_addr, u8 data)
+bool sensor_iic_u8addr_tx_byte(u8 slave_addr, u8 reg_addr, u8 data)
 {
-    bool error_flag = false;
+    u8 op_ret;
+    bool op_succ = false;
 
     spin_lock(&sensor_iic_lock);
 
     iic_start(sensor_iic_hdl);
 
-    if(!iic_tx_byte(sensor_iic_hdl, slave_addr << 1))
-    {
-        error_flag = true;
-        goto __gcend;
-    }      
+    op_ret = \
+        iic_tx_byte(sensor_iic_hdl, slave_addr << 1);
+    if(op_ret == 0)
+        goto __end;
     delay(sensor_iic_delay);
 
-    if(!iic_tx_byte(sensor_iic_hdl, reg_addr))
-    {
-        error_flag = true;
-        goto __gcend;
-    }
+    op_ret = \
+        iic_tx_byte(sensor_iic_hdl, reg_addr);
+    if(op_ret == 0)
+        goto __end;
     delay(sensor_iic_delay);
 
-    if(!iic_tx_byte(sensor_iic_hdl, data))
-    {
-        error_flag = true;
-        goto __gcend;
-    }
+    op_ret = \
+        iic_tx_byte(sensor_iic_hdl, data);
+    if(op_ret == 0)
+        goto __end;
+    delay(sensor_iic_delay);
 
-__gcend:
+    op_succ = true;
+
+__end:
     iic_stop(sensor_iic_hdl);
     spin_unlock(&sensor_iic_lock);
-    return (!error_flag);
+    return op_succ;
 }
 
-bool sensor_iic_tx_buf(u8 slave_addr, u8 reg_addr, u8 *buf, u8 len)
+bool sensor_iic_u8addr_tx_buf(u8 slave_addr, u8 reg_addr, u8 *buf, u8 len)
 {
-    bool error_flag = false;
+    u8 op_ret;
+    bool op_succ = false;
 
-    if(!buf || len == 0)
-        return error_flag;
+    if(buf == NULL || len == 0)
+        return op_succ;
 
     spin_lock(&sensor_iic_lock);
 
     iic_start(sensor_iic_hdl);
 
-    if(!iic_tx_byte(sensor_iic_hdl, slave_addr << 1))
-    {
-        error_flag = true;
-        goto __gcend;
-    }
+    op_ret = \
+        iic_tx_byte(sensor_iic_hdl, slave_addr << 1);
+    if(op_ret == 0)
+        goto __end;
     delay(sensor_iic_delay);
 
-    if(!iic_tx_byte(sensor_iic_hdl, reg_addr)) 
-    {
-        error_flag = true;
-        goto __gcend;
-    }
+    op_ret = \
+        iic_tx_byte(sensor_iic_hdl, reg_addr);
+    if(op_ret == 0)
+        goto __end;
     delay(sensor_iic_delay);
 
     for(u8 i = 0; i < len; i++)
     {
-        if(!iic_tx_byte(sensor_iic_hdl, buf[i])) 
-        {
-            error_flag = true;
-            goto __gcend;
-        }
+        op_ret = \
+            iic_tx_byte(sensor_iic_hdl, buf[i]);
+        if(op_ret == 0)
+            goto __end;
         delay(sensor_iic_delay);
     }
-    
- __gcend:
+
+    op_succ = true;
+
+__end:
     iic_stop(sensor_iic_hdl);
     spin_unlock(&sensor_iic_lock);
-    return (!error_flag);
+    return op_succ;
 }
 
-bool sensor_iic_rx_buf(u8 slave_addr, u8 reg_addr, u8 *buf, u8 len)
+bool sensor_iic_u8addr_rx_buf(u8 slave_addr, u8 reg_addr, u8 *buf, u8 len)
 {
-    u8 r_len = 0;
-    bool error_flag = false;
+    u8 op_ret;
+    bool op_succ = false;
 
-    if(!buf || len == 0)
-        return error_flag;
+    if(buf == NULL || len == 0)
+        return op_succ;
 
     spin_lock(&sensor_iic_lock);
 
     iic_start(sensor_iic_hdl);
 
-    if(!iic_tx_byte(sensor_iic_hdl, slave_addr << 1)) 
-    {
-        error_flag = true;
-        goto __gcend;
-    }
+    op_ret = \
+        iic_tx_byte(sensor_iic_hdl, slave_addr << 1);
+    if(op_ret == 0)
+        goto __end;
     delay(sensor_iic_delay);
 
-    if(!iic_tx_byte(sensor_iic_hdl, reg_addr))
-    {
-        error_flag = true;
-        goto __gcend;
-    }
+    op_ret = \
+        iic_tx_byte(sensor_iic_hdl, reg_addr);
+    if(op_ret == 0)
+        goto __end;
     delay(sensor_iic_delay);
 
     iic_start(sensor_iic_hdl);
 
-    if(!iic_tx_byte(sensor_iic_hdl, (slave_addr << 1) | 0x01))
-    {
-        error_flag = true;
-        goto __gcend;
-    }
+    op_ret = \
+        iic_tx_byte(sensor_iic_hdl, (slave_addr << 1) | (0x01));
+    if(op_ret == 0)
+        goto __end;
     delay(sensor_iic_delay);
 
+    u8 r_len = 0;
     for(; len > 1; len--)
         buf[r_len++] = iic_rx_byte(sensor_iic_hdl, 1);
 
     buf[r_len++] = iic_rx_byte(sensor_iic_hdl, 0);
 
- __gcend:
+    op_succ = true;
+
+__end:
     iic_stop(sensor_iic_hdl);
     spin_unlock(&sensor_iic_lock);
-    return (!error_flag);
+    return op_succ;
+}
+
+bool sensor_iic_u16addr_tx_byte(u8 slave_addr, u16 reg_addr, u8 data)
+{
+    u8 op_ret;
+    bool op_succ = false;
+
+    spin_lock(&sensor_iic_lock);
+
+    iic_start(sensor_iic_hdl);
+
+    op_ret = \
+        iic_tx_byte(sensor_iic_hdl, slave_addr << 1);
+    if(op_ret == 0)
+        goto __end;
+    delay(sensor_iic_delay);
+
+    //先发高8，再发低8
+    u8 addr_buf[2];
+    addr_buf[0] = \
+        (u8)((reg_addr >> 8)&(0xff));
+    addr_buf[1] = \
+        (u8)((reg_addr)&(0xff));
+    u8 reg_w_len = \
+        iic_write_buf(sensor_iic_hdl, addr_buf, 2);
+    if(reg_w_len != 2)
+        goto __end;
+    delay(sensor_iic_delay);
+
+    op_ret = \
+        iic_tx_byte(sensor_iic_hdl, data);
+    if(op_ret == 0)
+        goto __end;
+    delay(sensor_iic_delay);
+
+    op_succ = true;
+
+__end:
+    iic_stop(sensor_iic_hdl);
+    spin_unlock(&sensor_iic_lock);
+    return op_succ;
+}
+
+bool sensor_iic_u16addr_tx_buf(u8 slave_addr, u16 reg_addr, u8 *buf, u8 len)
+{
+    u8 op_ret;
+    bool op_succ = false;
+
+    if(buf == NULL || len == 0)
+        return op_succ;
+    
+    spin_lock(&sensor_iic_lock);
+
+    iic_start(sensor_iic_hdl);
+
+    op_ret = \
+        iic_tx_byte(sensor_iic_hdl, slave_addr << 1);
+    if(op_ret == 0)
+        goto __end;
+    delay(sensor_iic_delay);
+
+    //先发高8，再发低8
+    u8 addr_buf[2];
+    addr_buf[0] = \
+        (u8)((reg_addr >> 8)&(0xff));
+    addr_buf[1] = \
+        (u8)((reg_addr)&(0xff));
+    u8 reg_w_len = \
+        iic_write_buf(sensor_iic_hdl, addr_buf, 2);
+    if(reg_w_len != 2)
+        goto __end;
+    delay(sensor_iic_delay);
+
+    for(u8 i = 0; i < len; i++)
+    {
+        op_ret = \
+            iic_tx_byte(sensor_iic_hdl, buf[i]);
+        if(op_ret == 0)
+            goto __end;
+        delay(sensor_iic_delay);
+    }
+
+    op_succ = true;
+
+__end:
+    iic_stop(sensor_iic_hdl);
+    spin_unlock(&sensor_iic_lock);
+    return op_succ;
+}
+
+bool sensor_iic_u16addr_rx_buf(u8 slave_addr, u16 reg_addr, u8 *buf, u8 len)
+{
+    u8 op_ret;
+    bool op_succ = false;
+
+    if(buf == NULL || len == 0)
+        return op_succ;
+
+    spin_lock(&sensor_iic_lock);
+
+    iic_start(sensor_iic_hdl);
+
+    op_ret = \
+        iic_tx_byte(sensor_iic_hdl, slave_addr << 1);
+    if(op_ret == 0)
+        goto __end;
+    delay(sensor_iic_delay);
+
+    //先发高8，再发低8
+    u8 addr_buf[2];
+    addr_buf[0] = \
+        (u8)((reg_addr >> 8)&(0xff));
+    addr_buf[1] = \
+        (u8)((reg_addr)&(0xff));
+    u8 reg_w_len = \
+        iic_write_buf(sensor_iic_hdl, addr_buf, 2);
+    if(reg_w_len != 2)
+        goto __end;
+    delay(sensor_iic_delay);
+
+    iic_start(sensor_iic_hdl);
+
+    op_ret = \
+        iic_tx_byte(sensor_iic_hdl, (slave_addr << 1) | (0x01));
+    if(op_ret == 0)
+        goto __end;
+    delay(sensor_iic_delay);
+
+    u8 r_len = 0;
+    for(; len > 1; len--)
+        buf[r_len++] = iic_rx_byte(sensor_iic_hdl, 1);
+
+    buf[r_len++] = iic_rx_byte(sensor_iic_hdl, 0);
+
+    op_succ = true;
+
+__end:
+    iic_stop(sensor_iic_hdl);
+    spin_unlock(&sensor_iic_lock);
+    return op_succ;
 }

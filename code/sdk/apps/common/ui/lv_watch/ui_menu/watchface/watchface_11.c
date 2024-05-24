@@ -79,7 +79,7 @@ static void menu_display_cb(lv_obj_t *obj)
     common_week_widget_create(&comm_week_para);
 
     int step_val = \
-        get_vm_para_cache_with_label(\
+        GetVmParaCacheByLabel(\
             vm_label_daily_step);
     widget_data_para.data_x = 21;
     widget_data_para.data_y = 332;
@@ -92,16 +92,19 @@ static void menu_display_cb(lv_obj_t *obj)
     common_data_widget_create(&widget_data_para, \
         widget_data_type_step, &step_val);
 
+#if 0
     int hr_val = \
-        get_vm_para_cache_with_label(\
+        GetVmParaCacheByLabel(\
             vm_label_hr);
     widget_data_para.data_x = 33;
     widget_data_para.data_y = 185;
     common_data_widget_create(&widget_data_para, \
         widget_data_type_hr, &hr_val);
+#endif 
 
+#if 0
     weather_type_t weather_type = \
-        vm_weather_data_weather_type(0);
+        weather_weather_type(0);
     widget_img_para.img_x = 297;
     widget_img_para.img_y = 264;
     widget_img_para.img_parent = \
@@ -116,7 +119,7 @@ static void menu_display_cb(lv_obj_t *obj)
             &weather_type_dsc_idx);
 
     int16_t real_temper = \
-        vm_weather_data_real_temper();
+        weather_real_temper();
     widget_data_para.data_x = 290;
     widget_data_para.data_y = 332;
     widget_data_para.num_inv = 0;
@@ -127,6 +130,7 @@ static void menu_display_cb(lv_obj_t *obj)
         widget_data_align_center;
     common_data_widget_create(&widget_data_para, \
         widget_data_type_weather, &real_temper);
+#endif
 
     return;
 }

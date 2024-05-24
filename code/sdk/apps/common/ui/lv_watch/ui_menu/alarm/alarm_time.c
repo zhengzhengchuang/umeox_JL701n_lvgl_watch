@@ -3,7 +3,7 @@
 static uint8_t alarm_time_hour_tmp;
 static uint8_t alarm_time_minute_tmp;
 
-void set_alarm_time_tmp(uint8_t hour, \
+void SetAlarmTimeTmp(uint8_t hour, \
     uint8_t minute)
 {
     alarm_time_hour_tmp = \
@@ -14,7 +14,7 @@ void set_alarm_time_tmp(uint8_t hour, \
     return;
 }
 
-void get_alarm_time_tmp(uint8_t *hour, \
+void GetAlarmTimeTmp(uint8_t *hour, \
     uint8_t *minute)
 {
     if(!hour || !minute)
@@ -32,7 +32,8 @@ static void alarm_time_next_step_cb(lv_event_t *e)
 {
     if(!e) return;
 
-    ui_menu_jump(ui_act_id_alarm_repeat);
+    ui_menu_jump(\
+        ui_act_id_alarm_repeat);
 
     return;
 }
@@ -72,11 +73,13 @@ static void menu_create_cb(lv_obj_t *obj)
     if(!obj) return;
 
     ui_act_id_t prev_act_id = \
-        read_menu_return_level_id();
-
-    tileview_register_all_menu(obj, ui_act_id_null, \
-        ui_act_id_null, prev_act_id, ui_act_id_null, \
-            ui_act_id_alarm_time);
+        ui_act_id_null;
+    if(!lang_txt_is_arabic())
+        tileview_register_all_menu(obj, ui_act_id_null, ui_act_id_null, \
+            prev_act_id, ui_act_id_null, ui_act_id_alarm_time);
+    else
+        tileview_register_all_menu(obj, ui_act_id_null, ui_act_id_null, \
+            ui_act_id_null, prev_act_id, ui_act_id_alarm_time);
 
     return;
 }
@@ -108,7 +111,7 @@ static void menu_display_cb(lv_obj_t *obj)
     lv_obj_t *alarm_time_sel = \
         common_widget_img_create(&widget_img_para, NULL);
     lv_obj_align(alarm_time_sel, LV_ALIGN_CENTER, \
-        0, -30);
+        0, -25);
 
     widget_img_para.img_parent = \
        alarm_time_sel;
@@ -131,7 +134,7 @@ static void menu_display_cb(lv_obj_t *obj)
     widget_roller_para.roller_sel = \
         alarm_time_hour_tmp;
     widget_roller_para.roller_line_inv = \
-        30;
+        25;
     widget_roller_para.roller_main_bg_opax = \
         LV_OPA_0;
     widget_roller_para.roller_main_bg_color = \
@@ -146,7 +149,7 @@ static void menu_display_cb(lv_obj_t *obj)
     widget_roller_para.roller_border_color = \
         lv_color_hex(0x000000);
     widget_roller_para.roller_main_text_font = \
-        &font_common_num_52;
+        &font_common_num_64;
     widget_roller_para.roller_main_text_color = \
         lv_color_hex(0x999999);
     widget_roller_para.roller_selected_text_font = \
@@ -160,7 +163,7 @@ static void menu_display_cb(lv_obj_t *obj)
     lv_obj_t *alarm_time_hour_roller = \
         common_widget_roller_create(&widget_roller_para);
     lv_obj_align(alarm_time_hour_roller, LV_ALIGN_LEFT_MID, \
-        90, -30);
+        90, -25);
 
     widget_roller_para.roller_options = \
         time_min_sec_str;
@@ -171,7 +174,7 @@ static void menu_display_cb(lv_obj_t *obj)
     lv_obj_t *alarm_time_minute_roller = \
         common_widget_roller_create(&widget_roller_para);
     lv_obj_align(alarm_time_minute_roller, LV_ALIGN_RIGHT_MID, \
-        -90, -30);
+        -90, -25);
 
     widget_img_para.img_parent = \
         obj;
@@ -187,7 +190,7 @@ static void menu_display_cb(lv_obj_t *obj)
         common_widget_img_create(&widget_img_para, NULL);
     lv_obj_align(next_step_icon, LV_ALIGN_TOP_MID, \
         0, 376);
-    lv_obj_set_ext_click_area(next_step_icon, 15);
+    lv_obj_set_ext_click_area(next_step_icon, 20);
 
     return;
 }
@@ -205,7 +208,7 @@ register_ui_menu_load_info(\
 {
     .menu_arg = NULL,
     .lock_flag = false,
-    .return_flag = false,
+    .return_flag = true,
     .menu_id = \
         ui_act_id_alarm_time,
     .user_offscreen_time = 0,

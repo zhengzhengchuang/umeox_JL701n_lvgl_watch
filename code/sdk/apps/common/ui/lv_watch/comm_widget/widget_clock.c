@@ -78,7 +78,7 @@ void common_clock_pointer_refresh(void)
             clock_hour_angle += 1;
     }
 #elif (Clock_Pointer_Rot == 1)
-    get_utc_time(&clk_p_utc_time);
+    GetUtcTime(&clk_p_utc_time);
 
     uint8_t utc_time_hour = clk_p_utc_time.hour;
     uint8_t utc_time_minute = clk_p_utc_time.min;
@@ -106,7 +106,7 @@ void common_clock_pointer_refresh(void)
 
 void common_clock_pointer_angle_update(void)
 {
-    get_utc_time(&clk_p_utc_time);
+    GetUtcTime(&clk_p_utc_time);
 
     uint8_t utc_time_hour = clk_p_utc_time.hour;
     uint8_t utc_time_minute = clk_p_utc_time.min;
@@ -147,7 +147,7 @@ void common_clock_pointer_create(lv_obj_t *obj, \
     for(uint8_t i = 0; i < 3; i++)
        clk_p_obj[i] = NULL;
 
-    get_utc_time(&clk_p_utc_time);
+    GetUtcTime(&clk_p_utc_time);
 
     uint8_t utc_time_hour = clk_p_utc_time.hour;
     uint8_t utc_time_minute = clk_p_utc_time.min;

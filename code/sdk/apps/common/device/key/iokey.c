@@ -160,6 +160,7 @@ __attribute__((weak)) u8 iokey_filter_hook(u8 io_state)
     return 0;
 }
 
+#include "asm/adc_api.h"
 u8 io_get_key_value(void)
 {
     int i;
@@ -169,8 +170,9 @@ u8 io_get_key_value(void)
     u8 read_io;
     u8 write_io;
     u8 connect_way;
-    u8 ret_value = NO_KEY;
     u8 bit_mark = 0;
+    //static u8 adc_cnt = 0;
+    u8 ret_value = NO_KEY;
 
     if (!__this->enable) {
         return NO_KEY;
@@ -199,6 +201,7 @@ u8 io_get_key_value(void)
 #else
         read_value = get_io_key_value(read_io);
 #endif
+
         if (iokey_filter_hook(read_value)) {
 #ifdef TCFG_IOKEY_TIME_REDEFINE
             extern struct key_driver_para iokey_scan_user_para;
@@ -214,10 +217,14 @@ u8 io_get_key_value(void)
             iokey_scan_para.click_delay_cnt = 0;
             iokey_scan_para.last_key = NO_KEY;
 #endif
+            //printf("*************999999\n");
             return NO_KEY;
         }
-        if (read_value == press_value) {
+
+        if(read_value == press_value) 
+        {
             ret_value = __this->port[i].key_value;
+
 #if MULT_KEY_ENABLE
             MARK_BIT_VALUE(bit_mark, ret_value);  //标记被按下的按键
 #else
@@ -226,6 +233,8 @@ u8 io_get_key_value(void)
         }
     }
 
+//user add
+#if 0
     //再扫描两个IO接按键方式, in_port: 上拉输入, out_port: 输出低
     for (i = 0; i < __this->num; i++) 
     {
@@ -247,6 +256,7 @@ u8 io_get_key_value(void)
             }
         }
     }
+#endif
 
 #if MULT_KEY_ENABLE
     bit_mark = iokey_value_remap(bit_mark);  //组合按键重新映射按键值

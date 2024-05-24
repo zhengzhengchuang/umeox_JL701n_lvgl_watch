@@ -1,7 +1,6 @@
 #include "timestamp.h"
 
 
-
 #define UTC_BASE_YEAR 		1970
 #define MONTH_PER_YEAR 		12
 #define DAY_PER_YEAR 		365

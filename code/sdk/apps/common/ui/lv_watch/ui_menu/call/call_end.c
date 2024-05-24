@@ -1,10 +1,9 @@
 #include "call_end.h"
 
-#define Menu_Jump_Dur (5)
-static lv_timer_t *menu_jump_timer = NULL;
-static uint8_t menu_jump_duration = Menu_Jump_Dur;
+#define Jump_Dur (5*1000)
+static lv_timer_t *jump_timer;
 
-static void call_end_container_event_cb(lv_event_t *e)
+static void container_event_cb(lv_event_t *e)
 {
     if(!e) return;
 
@@ -15,18 +14,37 @@ static void call_end_container_event_cb(lv_event_t *e)
     return;
 }
 
-static void menu_jump_timer_cb(lv_timer_t *timer)
+static void jump_timer_delete(void)
 {
-    if(!menu_jump_timer)
+    if(jump_timer)
+        lv_timer_del(jump_timer);
+    
+    jump_timer = NULL;
+}
+
+static void timer_cb(lv_timer_t *timer)
+{
+    if(!jump_timer)
         return;
+
+    jump_timer_delete();
 
     ui_act_id_t prev_act_id = \
         read_menu_return_level_id();
-
-    lv_timer_del(menu_jump_timer);
-    menu_jump_timer = NULL;
-
     ui_menu_jump(prev_act_id);
+
+    return;
+}
+
+static void jump_timer_create(void)
+{
+    if(jump_timer)
+        lv_timer_del(jump_timer);
+    
+    jump_timer = NULL;
+
+    jump_timer = \
+        lv_timer_create(timer_cb, Jump_Dur, NULL);
 
     return;
 }
@@ -37,28 +55,21 @@ static void menu_create_cb(lv_obj_t *obj)
 
     ui_act_id_t prev_act_id = \
         read_menu_return_level_id();
+    if(!lang_txt_is_arabic())
+        tileview_register_all_menu(obj, ui_act_id_null, ui_act_id_null, \
+            prev_act_id, ui_act_id_null, ui_act_id_call_end);
+    else
+        tileview_register_all_menu(obj, ui_act_id_null, ui_act_id_null, \
+            ui_act_id_null, prev_act_id, ui_act_id_call_end);
 
-    tileview_register_all_menu(obj, ui_act_id_null, \
-        ui_act_id_null, prev_act_id, ui_act_id_null, \
-            ui_act_id_call_end);
-
-    menu_jump_duration = \
-        Menu_Jump_Dur;
-    if(!menu_jump_timer)
-        menu_jump_timer = \
-            lv_timer_create(menu_jump_timer_cb, \
-                menu_jump_duration*1000, NULL);
+    jump_timer_create();
 
     return;
 }
 
 static void menu_destory_cb(lv_obj_t *obj)
 {
-    if(menu_jump_timer)
-    {
-        lv_timer_del(menu_jump_timer);
-        menu_jump_timer = NULL;
-    }
+    jump_timer_delete();
 
     return;
 }
@@ -75,7 +86,7 @@ static void menu_display_cb(lv_obj_t *obj)
     if(!obj) return;
 
     widget_label_para.label_w = \
-        (220);
+        280;
     widget_label_para.label_h = \
         Label_Line_Height*2;
     widget_label_para.long_mode = \
@@ -91,20 +102,16 @@ static void menu_display_cb(lv_obj_t *obj)
     widget_label_para.label_parent = \
         obj;
     widget_label_para.label_text = \
-        bt_get_call_number_name();
-    lv_obj_t *call_number_name_label = \
+        GetCallNumName();
+    lv_obj_t *num_name_label = \
         common_widget_label_create(&widget_label_para);
-    lv_obj_align(call_number_name_label, LV_ALIGN_TOP_MID, \
-        0, 80);
+    lv_obj_align(num_name_label, LV_ALIGN_TOP_MID, 0, 80);
 
-    uint32_t call_online_duration = \
-        get_call_online_duration();
-    char call_online_duration_str[9];
-    memset(call_online_duration_str, 0, \
-        sizeof(call_online_duration_str));
-    sprintf(call_online_duration_str, "%02d:%02d:%02d", \
-        call_online_duration/3600, (call_online_duration%3600)/60, \
-            (call_online_duration%3600)%60);
+    char online_duration_str[9];
+    uint32_t online_duration = GetCallOnlineDuration();
+    memset(online_duration_str, 0, sizeof(online_duration_str));
+    sprintf(online_duration_str, "%02d:%02d:%02d", \
+        online_duration/3600, (online_duration%3600)/60, (online_duration%3600)%60);
  
     int16_t img_x_offset = 0;
     widget_img_para.img_y = 155;
@@ -115,15 +122,15 @@ static void menu_display_cb(lv_obj_t *obj)
     {
         widget_img_para.img_x = \
             135 + img_x_offset;
-        if(call_online_duration_str[i] == ':')
+        if(online_duration_str[i] == ':')
             widget_img_para.file_img_dat = \
                 comm_num_14x22_gr_10_index;
         else
              widget_img_para.file_img_dat = \
                 comm_num_14x22_gr_00_index + \
-                    (call_online_duration_str[i] - '0');
+                    (online_duration_str[i] - '0');
         
-        if(call_online_duration_str[i] == ':')
+        if(online_duration_str[i] == ':')
             img_x_offset += 7;
         else
             img_x_offset += 14;
@@ -135,15 +142,14 @@ static void menu_display_cb(lv_obj_t *obj)
         comm_icon_13_index;
     widget_img_para.img_click_attr = true;
     widget_img_para.event_cb = \
-        call_end_container_event_cb;
+        container_event_cb;
     widget_img_para.user_data = NULL;
     lv_obj_t *call_end_container = \
         common_widget_img_create(&widget_img_para, NULL);
-    lv_obj_align(call_end_container, LV_ALIGN_TOP_MID, \
-        0, 308);
+    lv_obj_align(call_end_container, LV_ALIGN_TOP_MID, 0, 308);
     
     widget_label_para.label_w = \
-        (320);
+        320;
     widget_label_para.label_h = \
         Label_Line_Height;
     widget_label_para.long_mode = \

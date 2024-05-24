@@ -187,8 +187,6 @@ testable void appendBitsToBuffer(unsigned int val, int numBits, uint8_t buffer[]
 		buffer[*bitLen >> 3] |= ((val >> i) & 1) << (7 - (*bitLen & 7));
 }
 
-
-
 /*---- Low-level QR Code encoding functions ----*/
 
 // Public function - see documentation comment in header file.

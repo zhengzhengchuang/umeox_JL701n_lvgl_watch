@@ -1,19 +1,21 @@
 #include "camera.h"
 
-static void camera_photos_cb(lv_event_t *e)
+static void photos_cb(lv_event_t *e)
 {
     if(!e) return;
 
-    ble_dev_ctrl_phone_take_photos();
+    DevReqOpCameraHandle(\
+        DevReqTakePhotos);
 
     return;
 }
 
-static void camera_dly_photos_cb(lv_event_t *e)
+static void dly_photos_cb(lv_event_t *e)
 {
     if(!e) return;
 
-    ble_dev_ctrl_phone_dly_take_photo();
+    DevReqOpCameraHandle(\
+        DevReqDlyTakePhotos);
 
     return;
 }
@@ -24,22 +26,34 @@ static void menu_create_cb(lv_obj_t *obj)
 
     ui_act_id_t prev_act_id = \
         read_menu_return_level_id();
-
-    tileview_register_all_menu(obj, ui_act_id_null, \
-        ui_act_id_null, prev_act_id, ui_act_id_null, \
-            ui_act_id_camera);
+    if(!lang_txt_is_arabic())
+        tileview_register_all_menu(obj, ui_act_id_null, ui_act_id_null, \
+            prev_act_id, ui_act_id_null, ui_act_id_camera);
+    else
+        tileview_register_all_menu(obj, ui_act_id_null, ui_act_id_null, \
+            ui_act_id_null, prev_act_id, ui_act_id_camera);
 
     return;
 }
 
 static void menu_destory_cb(lv_obj_t *obj)
 {
-    bool is_enter_offscr = \
-        get_is_enter_offscreen();
-    if(is_enter_offscr)
-        return;
+    bool OffScreen = \
+        GetIsEnterOffScreen();
+    if(OffScreen == false)
+    {
+        bool RemExit = \
+            GetCameraIsRemoteExit();
+        if(RemExit == false)
+            DevReqOpCameraHandle(\
+                DevReqExitCamera);
 
-    ble_dev_ctrl_phone_exit_camera();
+        SetCameraUnlockExit(false);
+        SetCameraIsRemoteExit(false);
+    }else
+    {
+        SetCameraUnlockExit(true);
+    }
 
     return;
 }
@@ -48,6 +62,16 @@ static void menu_refresh_cb(lv_obj_t *obj)
 {
     if(!obj) return;
 
+    u8 BleBtStatus = \
+        GetDevBleBtConnectStatus();
+    if(BleBtStatus == 0 || \
+        BleBtStatus == 2)
+    {
+        ui_act_id_t prev_act_id = \
+            read_menu_return_level_id();
+        ui_menu_jump(prev_act_id);
+    }
+        
     return;
 }
 
@@ -65,8 +89,7 @@ static void menu_display_cb(lv_obj_t *obj)
         NULL;
     lv_obj_t *camera_icon = \
         common_widget_img_create(&widget_img_para, NULL);
-    lv_obj_align(camera_icon, LV_ALIGN_TOP_MID, \
-        0, 108);
+    lv_obj_align(camera_icon, LV_ALIGN_TOP_MID, 0, 108);
 
     widget_img_para.img_x = 42;
     widget_img_para.img_y = 316;
@@ -75,19 +98,17 @@ static void menu_display_cb(lv_obj_t *obj)
     widget_img_para.img_click_attr = \
         true;
     widget_img_para.event_cb = \
-        camera_dly_photos_cb;
+        dly_photos_cb;
     widget_img_para.user_data = \
         NULL;
-    lv_obj_t *camera_dly_photos_icon = \
-        common_widget_img_create(&widget_img_para, NULL);
+    common_widget_img_create(&widget_img_para, NULL);
     
     widget_img_para.img_x = 226;
     widget_img_para.file_img_dat = \
         camera_02_index;
     widget_img_para.event_cb = \
-        camera_photos_cb;
-    lv_obj_t *camera_photos_icon = \
-        common_widget_img_create(&widget_img_para, NULL);
+        photos_cb;
+    common_widget_img_create(&widget_img_para, NULL);
 
     return;
 }
@@ -105,7 +126,7 @@ register_ui_menu_load_info(\
 {
     .menu_arg = NULL,
     .lock_flag = false,
-    .return_flag = true,
+    .return_flag = false,
     .menu_id = \
         ui_act_id_camera,
     .user_offscreen_time = 0,

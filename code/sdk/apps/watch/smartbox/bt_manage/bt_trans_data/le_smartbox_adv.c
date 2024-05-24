@@ -839,6 +839,7 @@ static void rcsp_adv_fill_mac_addr(u8 *mac_addr_buf)
 
 int smartbox_make_set_adv_data(void)
 {
+#if 0
     u8 offset = 0;
     u8 *buf = adv_data;
     
@@ -924,6 +925,53 @@ int smartbox_make_set_adv_data(void)
     ble_op_set_adv_data(offset, buf);
 
     return 0;
+#else
+    u8 offset = 0;
+    u8 *buf = adv_data;
+
+    buf[offset++] = 0x1E;
+    buf[offset++] = 0xFF;
+
+    buf[offset++] = 0xD6; // JL ID
+    buf[offset++] = 0x05;
+
+#if 1
+    u16 vid = get_vid_pid_ver_from_cfg_file(GET_VID_FROM_EX_CFG);
+    buf[offset++] = vid & 0xFF;
+    buf[offset++] = vid >> 8;
+
+    u16 pid = get_vid_pid_ver_from_cfg_file(GET_PID_FROM_EX_CFG);
+    buf[offset++] = pid & 0xFF;
+    buf[offset++] = pid >> 8;
+#else
+    buf[offset++] = 0x02;	// VID
+    buf[offset++] = 0x00;
+
+    buf[offset++] = 0x0F;	// PID
+    buf[offset++] = 0x00;
+#endif
+
+    buf[offset++] = 0x50 | VER_FLAG_BLE_CTRL_BREDR;	// 手表类型
+
+    rcsp_adv_fill_mac_addr(buf + offset);
+    offset += 6;
+
+    if (RCSP_SPP == get_defalut_bt_channel_sel()) {
+        log_info("sel rcsp_spp\n");
+        buf[offset++] = BIT(7);
+    }
+
+    if (offset > ADV_RSP_PACKET_MAX) {
+        puts("***adv_data overflow!!!!!!\n");
+        return -1;
+    }
+    offset = 31;//fixed
+    log_info("adv_data(%d):", offset);
+    log_info_hexdump(buf, offset);
+    adv_data_len = offset;
+    ble_op_set_adv_data(offset, buf);/*fixed 31bytes*/
+    return 0;
+#endif
 }
 
 int smartbox_make_set_rsp_data(void)

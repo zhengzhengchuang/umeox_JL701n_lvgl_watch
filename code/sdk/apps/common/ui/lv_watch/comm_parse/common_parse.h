@@ -7,8 +7,7 @@ extern "C" {
 
 #include "../include/ui_menu.h"
 
-void umeox_common_le_cmd_parse(uint8_t *rev_buf, \
-    uint16_t rev_len);
+void umeox_common_le_cmd_parse(u8 *buf, u8 len);
 #ifdef __cplusplus
 } /* extern "C" */
 #endif

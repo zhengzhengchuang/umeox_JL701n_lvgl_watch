@@ -15,11 +15,6 @@ extern "C" {
 #define Call_log_Max_Num (10)
 
 /*********************************************************************************
-                                  通话记录时间字符串长度 13:50                                 
-*********************************************************************************/
-//#define Call_log_Time_Str_Len (6) 
-
-/*********************************************************************************
                                   通话记录状态枚举                                 
 *********************************************************************************/
 enum
@@ -48,14 +43,16 @@ typedef struct
     
     struct sys_time call_log_time;
 }vm_call_log_ctx_t;
+extern vm_call_log_ctx_t w_call_log;
+extern vm_call_log_ctx_t r_call_log;
 
 /*********************************************************************************
                                   通话记录接口                                       
 *********************************************************************************/
-void vm_call_log_ctx_clear(void);
-uint8_t vm_call_log_item_num(void);
-void vm_call_log_ctx_falsh_save(vm_call_log_ctx_t *p);
-bool vm_call_log_ctx_by_idx(uint8_t idx, vm_call_log_ctx_t *p);
+void VmCallLogCtxClear(void);
+uint8_t VmCallLogItemNum(void);
+bool VmCallLogCtxByIdx(uint8_t idx);
+void VmCallLogCtxFlashSave(void *p);
 #ifdef __cplusplus
 }
 #endif

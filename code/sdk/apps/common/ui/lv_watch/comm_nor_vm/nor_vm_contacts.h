@@ -25,15 +25,16 @@ typedef struct
     char contacts_number_str[\
         Call_Number_Max_Len];
 }vm_contacts_ctx_t;
+extern vm_contacts_ctx_t w_contacts;
+extern vm_contacts_ctx_t r_contacts;
 
 /*********************************************************************************
                                   联系人接口                                       
 *********************************************************************************/
-void vm_contacts_ctx_clear(void);
-uint8_t vm_contacts_item_num(void);
-char *vm_contacts_name_by_number(char *number);
-bool vm_contacts_ctx_by_idx(uint8_t idx, vm_contacts_ctx_t *p);
-void vm_contacts_ctx_falsh_save(uint8_t idx, vm_contacts_ctx_t *p);
+void VmContactsCtxClear(void);
+uint8_t VmContactsItemNum(void);
+bool VmContactsCtxByIdx(uint8_t idx);
+void VmContactsCtxFlashSave(uint8_t idx, void *p);
 #ifdef __cplusplus
 }
 #endif

@@ -30,6 +30,8 @@ extern widget_num_str_para_t num_str_para;
 
 int16_t common_widget_num_str_create(\
     widget_num_str_para_t *num_str_para);
+void common_widget_num_str_refresh(lv_obj_t **num_obj, uint8_t obj_max, \
+    uint16_t *num_dsc_idx, char *p_num_str, uint8_t str_len, uint32_t index);
 #ifdef __cplusplus
 } /* extern "C" */
 #endif

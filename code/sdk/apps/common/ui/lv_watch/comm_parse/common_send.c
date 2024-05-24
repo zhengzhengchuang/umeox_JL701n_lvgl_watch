@@ -1,79 +1,44 @@
-#include "common_cmd.h"
-#include "common_send.h"
 #include "../lv_watch.h"
 #include "../../../../../include_lib/btstack/le/le_user.h"
 
-void umeox_common_le_resp_fail(uint8_t *notify_buf, \
-    uint16_t notify_len)
+void umeox_common_le_reply_fail(u8 *buf, u8 len)
 {
-    uint32_t verify_crc = 0;
-    uint8_t notify_data[Le_Cmd_Max_Len] = {0};
+    u8 reply_buf[Cmd_Pkt_Len];
+    memset(reply_buf, 0x00, Cmd_Pkt_Len);
 
-    if(notify_buf == NULL || \
-        notify_len == 0)
-        return;
+    u8 cmd_idx = 0;
+    le_cmd_t cmd = buf[0];
+    reply_buf[cmd_idx] = cmd|(0x80);
 
-    if(notify_len > Le_Cmd_Max_Len)
-        notify_len = Le_Cmd_Max_Len;
+    u32 verify_crc = 0;
+    u8 crc_idx = len - 1;
+    for(u8 i = 0; i < crc_idx; i++)
+        verify_crc += reply_buf[i];
 
-    notify_data[0] = notify_buf[0] | 0x80;
-    
-    /*********去掉开头与和校验*********/
-    memcpy(&notify_data[1], &notify_buf[1], notify_len - 2);
+    reply_buf[crc_idx] = \
+        (u8)(verify_crc&(0xff));
 
-    for(uint8_t i = 0; i < notify_len - 1; i++)
-        verify_crc += notify_data[i];
-
-    notify_data[notify_len - 1] = (uint8_t)(verify_crc&(0xff));
-
-    struct ble_server_operation_t *ble_server_operation;
-    ble_get_server_operation_table(&ble_server_operation);
-    ble_server_operation->send_data(NULL, notify_data, notify_len);
-
+    umeox_common_le_notify_data(reply_buf, len);
+ 
     return;
 }
 
-void umeox_common_le_resp_success(uint8_t *notify_buf, \
-    uint16_t notify_len)
-{
-    uint8_t notify_data[Le_Cmd_Max_Len] = {0};
-
-    if(notify_buf == NULL || \
-        notify_len == 0)
-        return;
-
-    if(notify_len > Le_Cmd_Max_Len)
-        notify_len = Le_Cmd_Max_Len;
-
-    memcpy(notify_data, notify_buf, notify_len);
-    struct ble_server_operation_t *ble_server_operation;
-    ble_get_server_operation_table(&ble_server_operation);
-    ble_server_operation->send_data(NULL, notify_data, notify_len);
-
-    return;
-}
-
-bool umeox_common_le_notify_data(uint8_t *notify_buf, \
-    uint16_t notify_len)
+bool umeox_common_le_notify_data(u8 *buf, u8 len)
 {
     int ret;
 
-    if(notify_buf == NULL || \
-        notify_len == 0)
+    if(buf == NULL || len == 0)
         return false;
 
-    if(notify_len > Le_Cmd_Max_Len)
-        notify_len = Le_Cmd_Max_Len;
+    if(len > Cmd_Pkt_Len)
+        len = Cmd_Pkt_Len;
 
     struct ble_server_operation_t *ble_server_operation;
     ble_get_server_operation_table(&ble_server_operation);
-    ret = ble_server_operation->send_data(NULL, notify_buf, notify_len);
-    if(!ret)
-        return true;
+    ret = ble_server_operation->send_data(NULL, buf, len);
+    if(!ret) return true;
 
-    printf("notify_data fail!!!!!!!!!!!!!!!!!!!!!\n");
+    printf("notify fail!!!!!!!!!!!!!!!!!!!!!\n");
 
     return false;
 }
-
-

@@ -84,6 +84,7 @@ void common_pace_widget_refresh(void)
         widget_data_para_t *p_pace_para = \
             &pace_para_cache[i];
 
+#if 0
         uint16_t vm_label_type = \
             vm_label_none;
 
@@ -94,8 +95,10 @@ void common_pace_widget_refresh(void)
             continue;
 
         int __data = \
-            get_vm_para_cache_with_label(\
+            GetVmParaCacheByLabel(\
                 vm_label_type); 
+#endif
+        int __data = 0;
 
         if(__data > Pace_Disp_Max)
             __data = Pace_Disp_Max;

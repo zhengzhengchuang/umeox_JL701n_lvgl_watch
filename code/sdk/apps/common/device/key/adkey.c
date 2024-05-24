@@ -32,12 +32,15 @@ u8 ad_get_key_value(void)
 
     /* ad_data = adc_get_voltage(__this->ad_channel); */
     ad_data = adc_get_value(__this->ad_channel);
-    /* printf("ad_value = %d \n", ad_data); */
+    // printf("ad_value = %d \n", ad_data);
+    // printf("TCFG_ADKEY_VOLTAGE0 = %d\n", TCFG_ADKEY_VOLTAGE0);
+    // printf("TCFG_ADKEY_VOLTAGE1 = %d\n", TCFG_ADKEY_VOLTAGE1);
     for (i = 0; i < ADKEY_MAX_NUM; i++) {
         if ((ad_data <= __this->ad_value[i]) && (__this->ad_value[i] < 0x3ffL)) {
             return __this->key_value[i];
         }
     }
+
     return NO_KEY;
 }
 

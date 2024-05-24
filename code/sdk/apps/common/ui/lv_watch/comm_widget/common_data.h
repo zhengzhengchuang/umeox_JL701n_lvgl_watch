@@ -64,12 +64,8 @@ enum
     widget_data_type___ = 0x00,
 
     widget_data_type_hr,             /*数据类型：心率值*/
-    widget_data_type_min_hr,         /*数据类型：最小心率*/
-    widget_data_type_max_hr,         /*数据类型：最大心率*/
 
-    widget_data_type_bo,             /*数据类型：血氧*/
-    widget_data_type_min_bo,         /*数据类型：最小血氧*/
-    widget_data_type_max_bo,         /*数据类型：最大血氧*/
+    widget_data_type_bo,             /*数据类型：血氧值*/
 
     widget_data_type_step,           /*数据类型：步数*/
     widget_data_type_calorie,        /*数据类型：卡路里(千卡)*/

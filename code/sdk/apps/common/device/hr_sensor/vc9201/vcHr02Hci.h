@@ -296,7 +296,7 @@ vcHr02Ret_t vcHr02TimeReadValues(vcHr02_t *pvcHr02,uint8_t *DataLen);
 void vcHr02DevInit(void);
 void vcHr02ProcessHanlde(void);
 void CtrlvcHr02StopSample(void);
-void CtrlvcHr02StartSample(vcHr02Mode_t vcMode);
+void CtrlvcHr02StartSample(u8 type);
 
 /*
  * @brief

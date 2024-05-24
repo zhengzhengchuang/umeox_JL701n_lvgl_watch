@@ -17,10 +17,12 @@ static void menu_create_cb(lv_obj_t *obj)
 
     ui_act_id_t prev_act_id = \
         read_menu_return_level_id();
-
-    tileview_register_all_menu(obj, ui_act_id_null, \
-        ui_act_id_null, prev_act_id, ui_act_id_null, \
-            ui_act_id_alarm_remind);
+    if(!lang_txt_is_arabic())
+        tileview_register_all_menu(obj, ui_act_id_null, ui_act_id_null, \
+            prev_act_id, ui_act_id_null, ui_act_id_alarm_remind);
+    else
+        tileview_register_all_menu(obj, ui_act_id_null, ui_act_id_null, \
+            ui_act_id_null, prev_act_id, ui_act_id_alarm_remind);
 
     return;
 }
@@ -61,18 +63,16 @@ static void menu_display_cb(lv_obj_t *obj)
         0, 60);
 
     int time_format = \
-        get_vm_para_cache_with_label(\
+        GetVmParaCacheByLabel(\
             vm_label_time_format);
 
     uint8_t am_or_pm;
     uint8_t alarm_id = \
-        get_reminding_alarm_id();
+        GetAlarmIsOnId();
     uint8_t alarm_time_hour = \
-        p_vm_para_cache->alarm_manage_para.alarm_info[\
-            alarm_id].bit_field.alarm_hour;
+        Alarm_Info.alarm_union[alarm_id].bit_field.alarm_hour;
     uint8_t alarm_time_minute = \
-        p_vm_para_cache->alarm_manage_para.alarm_info[\
-            alarm_id].bit_field.alarm_minute;
+        Alarm_Info.alarm_union[alarm_id].bit_field.alarm_minute;
     if(time_format == time_format_12)
     {
         if(alarm_time_hour >= 12)
@@ -110,7 +110,7 @@ static void menu_display_cb(lv_obj_t *obj)
     num_str_para.num_dsc_idx = \
         NULL;
     num_str_para.file_00_index = \
-        comm_num_36x56_wh_00_index;
+        comm_num_34x56_wh_00_index;
     int16_t end_y = \
         common_widget_num_str_create(&num_str_para);
   
@@ -154,6 +154,7 @@ static void menu_display_cb(lv_obj_t *obj)
         common_widget_img_create(&widget_img_para, NULL);
     lv_obj_align(exit_button, LV_ALIGN_TOP_MID, \
         0, 376);
+    lv_obj_set_ext_click_area(exit_button, 20);
 
     return;
 }

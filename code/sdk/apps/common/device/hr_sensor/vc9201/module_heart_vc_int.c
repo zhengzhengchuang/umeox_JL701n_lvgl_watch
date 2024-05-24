@@ -216,7 +216,7 @@ void vcHr02_process(AlgoSportMode sportMode)
 				/* 在下一行添加读取Gsensor数据的代码 */
 				/* ReadGsensorFIFO(+-4G11bit or +-8G12bit 256/g) */
 				GsensorLength = \
-					vcHr02GsensorDatacbufRead(xData, yData, zData, 49);
+					vcHr02GsDataFifoRead(xData, yData, zData, 49);
 
 				// printf("GsensorLength = %d\n", \
 				// 	GsensorLength);
@@ -283,21 +283,37 @@ void vcHr02_process(AlgoSportMode sportMode)
 						if(HeartRateValue == -1)
 						{
 							Algo_Init();
+
+							SetHrRealVal(0);
+							SetHrSensorDataFilterCnt(\
+								Hr_Data_Filter_Cnt);
 						}else
 						{
-							AppSetvcHr02WearStatus(true);
-
-							set_vm_para_cache_with_label(\
-								vm_label_hr, HeartRateValue);
+							SetHrSensorWearStatus(true);
+							
+							if(HeartRateValue > 0)
+							{
+								u8 FilterCnt = \
+									GetHrSensorDataFilterCnt();
+								if(FilterCnt == 0)
+								{
+									SetHrRealVal((u8)HeartRateValue);
+									SetHrVmCtxCache((u8)HeartRateValue);
+								}else
+								{
+									FilterCnt--;
+									SetHrSensorDataFilterCnt(\
+										FilterCnt);
+								}
+							}
 						}
 					}else
 					{
-						//printf("not wear!!!!!!!!!!!\n");
+						SetHrSensorWearStatus(false);
 
-						AppSetvcHr02WearStatus(false);
-
-						set_vm_para_cache_with_label(\
-							vm_label_hr, 0);
+						SetHrRealVal(0);
+						SetHrSensorDataFilterCnt(\
+							Hr_Data_Filter_Cnt);
 					}
 				}
 				else 
@@ -306,6 +322,10 @@ void vcHr02_process(AlgoSportMode sportMode)
 					green_led_off_state_gsensor_abs_sum_diff_func(xData[0],yData[0],zData[0]);
 #endif
 					HeartRateValue = -2;
+
+					SetHrRealVal(0);
+					SetHrSensorDataFilterCnt(\
+						Hr_Data_Filter_Cnt);
 				}
 			}
 		}
@@ -362,16 +382,28 @@ void vcHr02_process(AlgoSportMode sportMode)
 								// printf("real_spo = %d\n", \
 								// 	real_spo);
 
-								set_vm_para_cache_with_label(\
-									vm_label_bo, real_spo);
+								if(real_spo > 0)
+								{
+									u8 FilterCnt = \
+										GetHrSensorDataFilterCnt();
+									if(FilterCnt == 0)
+									{
+										SetBoRealVal((u8)real_spo);
+										SetBoVmCtxCache((u8)real_spo);
+									}else
+									{
+										FilterCnt--;
+										SetHrSensorDataFilterCnt(\
+											FilterCnt);
+									}
+								}
 							}						
 						}					
 					}
 				}
 				else 
 				{
-					set_vm_para_cache_with_label(\
-						vm_label_bo, 0);
+					SetBoRealVal(0);
 #if SportMotionEn
 					green_led_off_state_gsensor_abs_sum_diff_func(xData[0],yData[0],zData[0]);
 #endif
@@ -415,7 +447,7 @@ void vcHr02IRQHandler(void)
 {
 	int SensorHrMsg[1];
 	SensorHrMsg[0] = \
-		SensorHrMsgProcess;
+		SensorHrProcess;
 	PostSensorHrTaskMsg(SensorHrMsg, 1);
 
 	return;
@@ -474,12 +506,12 @@ vcHr02Ret_t vcHr02WriteRegisters(uint8_t startAddress, uint8_t *pRegisters, uint
 
 	u8 slave_addr = VCHR02_ADDR;
 
-    succ_ret = sensor_iic_tx_buf(slave_addr, \
+    succ_ret = sensor_iic_u8addr_tx_buf(slave_addr, \
 		startAddress, pRegisters, len);
 
     while(retry && !succ_ret)
     {
-        succ_ret = sensor_iic_tx_buf(slave_addr, startAddress, \
+        succ_ret = sensor_iic_u8addr_tx_buf(slave_addr, startAddress, \
 			pRegisters, len);
 
         retry--;
@@ -516,12 +548,12 @@ vcHr02Ret_t vcHr02ReadRegisters(uint8_t startAddress, uint8_t *pRegisters, uint8
 
 	u8 slave_addr = VCHR02_ADDR;
 
-    succ_ret = sensor_iic_rx_buf(slave_addr, \
+    succ_ret = sensor_iic_u8addr_rx_buf(slave_addr, \
 		startAddress, pRegisters, len);
 
     while(retry && !succ_ret)
     {
-        succ_ret = sensor_iic_rx_buf(slave_addr, \
+        succ_ret = sensor_iic_u8addr_rx_buf(slave_addr, \
 			startAddress, pRegisters, len);
 
         retry--;
@@ -576,11 +608,20 @@ void CtrlvcHr02StopSample(void)
 	return;
 }
 
-void CtrlvcHr02StartSample(vcHr02Mode_t vcMode)
+void CtrlvcHr02StartSample(u8 type)
 {
+	vcHr02Mode_t vcMode;
+
 	CtrlvcHr02StopSample();
 
-	vcHr02Init(&vcHr02,vcMode);
+	if(type == SensorWorkHr)
+		vcMode = VCWORK_MODE_HRWORK;
+	else if(type == SensorWorkBo)
+		vcMode = VCWORK_MODE_SPO2WORK;
+	else
+		vcMode = VCWORK_MODE_HRWORK;
+
+	vcHr02Init(&vcHr02, vcMode);
 
 	return;
 }

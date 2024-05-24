@@ -12,7 +12,7 @@
 #include "audio_config.h"
 #include "gSensor/gSensor_manage.h"
 #include "imuSensor_manage.h"
-#include "hrSensor_manage.h"
+//#include "hrSensor_manage.h"
 #include "key_event_deal.h"
 #include "user_cfg.h"
 #include "norflash_sfc.h"
@@ -130,8 +130,8 @@ UART0_PLATFORM_DATA_BEGIN(uart0_data)
 UART0_PLATFORM_DATA_END()
 #endif //TCFG_UART0_ENABLE
 
-
-#if (defined TCFG_PSRAM_DEV_ENABLE && TCFG_PSRAM_DEV_ENABLE)
+//user add
+#if 1//(defined TCFG_PSRAM_DEV_ENABLE && TCFG_PSRAM_DEV_ENABLE)
 void sd_power_config(int enable)
 {
 	//Note: 使用psram不能使用sdpga供电:
@@ -139,7 +139,7 @@ void sd_power_config(int enable)
 	if (enable) {
         gpio_set_pull_up(TCFG_SD0_POWER_PORT, 0);
         gpio_set_pull_down(TCFG_SD0_POWER_PORT, 0);
-        gpio_set_output_value(TCFG_SD0_POWER_PORT, 0);
+        gpio_set_output_value(TCFG_SD0_POWER_PORT, 1);
         gpio_set_direction(TCFG_SD0_POWER_PORT, 0);
 	} else {
         gpio_set_pull_up(TCFG_SD0_POWER_PORT, 0);
@@ -297,6 +297,7 @@ const struct iokey_port iokey_list[] = {
         .key_value = 0,                          //按键值
     },
 
+#if 0
     {
         .connect_way = TCFG_IOKEY1_WAY,
         .key_type.one_io.port = TCFG_IOKEY1,
@@ -315,6 +316,7 @@ const struct iokey_port iokey_list[] = {
         .key_type.one_io.port = TCFG_IOKEY3,
         .key_value = 3,
     },
+#endif
 #endif
 };
 
@@ -374,26 +376,26 @@ const struct adkey_platform_data adkey_data = {
     .ad_value = {                                             //根据电阻算出来的电压值
         TCFG_ADKEY_VOLTAGE0,
         TCFG_ADKEY_VOLTAGE1,
-        TCFG_ADKEY_VOLTAGE2,
-        TCFG_ADKEY_VOLTAGE3,
-        TCFG_ADKEY_VOLTAGE4,
-        TCFG_ADKEY_VOLTAGE5,
-        TCFG_ADKEY_VOLTAGE6,
-        TCFG_ADKEY_VOLTAGE7,
-        TCFG_ADKEY_VOLTAGE8,
-        TCFG_ADKEY_VOLTAGE9,
+        // TCFG_ADKEY_VOLTAGE2,
+        // TCFG_ADKEY_VOLTAGE3,
+        // TCFG_ADKEY_VOLTAGE4,
+        // TCFG_ADKEY_VOLTAGE5,
+        // TCFG_ADKEY_VOLTAGE6,
+        // TCFG_ADKEY_VOLTAGE7,
+        // TCFG_ADKEY_VOLTAGE8,
+        // TCFG_ADKEY_VOLTAGE9,
     },
     .key_value = {                                             //AD按键各个按键的键值
         TCFG_ADKEY_VALUE0,
         TCFG_ADKEY_VALUE1,
-        TCFG_ADKEY_VALUE2,
-        TCFG_ADKEY_VALUE3,
-        TCFG_ADKEY_VALUE4,
-        TCFG_ADKEY_VALUE5,
-        TCFG_ADKEY_VALUE6,
-        TCFG_ADKEY_VALUE7,
-        TCFG_ADKEY_VALUE8,
-        TCFG_ADKEY_VALUE9,
+        // TCFG_ADKEY_VALUE2,
+        // TCFG_ADKEY_VALUE3,
+        // TCFG_ADKEY_VALUE4,
+        // TCFG_ADKEY_VALUE5,
+        // TCFG_ADKEY_VALUE6,
+        // TCFG_ADKEY_VALUE7,
+        // TCFG_ADKEY_VALUE8,
+        // TCFG_ADKEY_VALUE9,
     },
 };
 #endif
@@ -795,9 +797,9 @@ IMU_SENSOR_PLATFORM_DATA_END();
 /************************** rtc ****************************/
 #if TCFG_RTC_ENABLE
 const struct sys_time def_sys_time = {  //初始一下当前时间
-    .year = 2020,
-    .month = 1,
-    .day = 1,
+    .year = 2024,
+    .month = 4,
+    .day = 21,
     .hour = 0,
     .min = 0,
     .sec = 0,
@@ -1047,15 +1049,23 @@ const struct wakeup_param wk_param = {
 #endif
 };
 
-void gSensor_wkupup_disable(void)
+void hr_wkupup_disable(void)
 {
-    log_info("gSensor wkup disable\n");
+    power_wakeup_index_enable(6, 0);
+}
+
+void hr_wkupup_enable(void)
+{
+    power_wakeup_index_enable(6, 1);
+}
+
+void Gs_wkupup_disable(void)
+{
     power_wakeup_index_enable(4, 0);
 }
 
-void gSensor_wkupup_enable(void)
+void Gs_wkupup_enable(void)
 {
-    log_info("gSensor wkup enable\n");
     power_wakeup_index_enable(4, 1);
 }
 
@@ -1110,7 +1120,7 @@ u8 get_power_on_status(void)
 
 #if TCFG_ADKEY_ENABLE
     if (adkey_data.enable) {
-        if (adc_get_value(adkey_data.ad_channel) < 10) {
+        if(adc_get_value(adkey_data.ad_channel) < 10) {
             return 1;
         }
     }
@@ -1152,8 +1162,8 @@ static void board_devices_init(void)
     extern int qmc6309_init(void);
     qmc6309_init();
 
-    extern void vcHr02DevInit();
-    vcHr02DevInit();
+    extern int gh30x_module_init(void);
+    gh30x_module_init();
 
 #if TCFG_IMUSENSOR_ENABLE
     imu_sensor_init(imu_sensor_data,sizeof(imu_sensor_data));
@@ -1201,6 +1211,7 @@ void board_init()
     /* devices_init(); */
 
     ldo_power_ctrl(1);
+    //vbat_power_ctrl(1);
 
 #if TCFG_PSRAM_DEV_ENABLE
 	psram_init();
@@ -1232,6 +1243,8 @@ void board_init()
 	sd_power_config(4);
 #endif
 
+    extern void motor_init(void);
+    motor_init();
 
 // 触摸屏 和 屏公用复位，先初始化触摸
 #if TCFG_TOUCH_PANEL_ENABLE
@@ -1332,7 +1345,7 @@ void board_init()
 #endif
     SensorHrTaskCreate();
     SensorGsTaskCreate();
-    SensorMagTaskCreate();
+    SensorGmTaskCreate();
 
 #if TCFG_SENSOR_DEBUG_ENABLE
     data_export_init();
@@ -1381,6 +1394,8 @@ void board_set_soft_poweroff(void)
 #if (TCFG_SD0_ENABLE || TCFG_SD1_ENABLE)
 	sd_power_config(0);
 #endif
+
+    ldo_power_ctrl(0);
 
 	//power按键
 #if TCFG_IOKEY_ENABLE
@@ -1488,11 +1503,11 @@ void sleep_exit_callback(u32 usec)
 #endif /* #if SDX_POWER_ALONE */
 }
 
-void sleep_enter_callback(u8  step)
+void sleep_enter_callback(u8 step)
 {
     /* 此函数禁止添加打印 */
     if (step == 1) {
-        putchar('<');
+        putchar('#');
 #if 0
 		extern u32 check_ram1_size(void);
 		extern int mem_vlt_is_recyclable(void);
@@ -1504,6 +1519,7 @@ void sleep_enter_callback(u8  step)
 		}
 #endif
     } else {
+        putchar('+');
 #if (!TCFG_USB_IO_MODE)
 		sleep_gpio_protect(IO_PORT_DP);
 		sleep_gpio_protect(IO_PORT_DM);
@@ -1512,6 +1528,7 @@ void sleep_enter_callback(u8  step)
 #if TCFG_PSRAM_DEV_ENABLE
 		psram_hw_enter_sleep();
 #endif /* #if TCFG_PSRAM_DEV_ENABLE */
+
 		sleep_enter_callback_common(NULL);
 	}
 }

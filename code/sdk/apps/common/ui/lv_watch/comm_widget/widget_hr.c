@@ -83,33 +83,17 @@ void common_hr_widget_refresh(void)
         widget_data_para_t *p_hr_para = \
             &hr_para_cache[i];
 
-        uint16_t vm_label_type = \
-            vm_label_none;
+        u8 __data = \
+            GetHrRealVal();
 
-        if(hr_data_type[i] == \
-            widget_data_type_hr)
-            vm_label_type = vm_label_hr;
-        else if(hr_data_type[i] == \
-            widget_data_type_min_hr)
-            vm_label_type = vm_label_min_hr;
-        else if(hr_data_type[i] == \
-            widget_data_type_max_hr)
-            vm_label_type = vm_label_max_hr;
-        else
-            continue;
-
-        int __data = \
-            get_vm_para_cache_with_label(\
-                vm_label_type); 
-
-        int hr_warn_val = \
-        get_vm_para_cache_with_label(\
-            vm_label_hr_warn_val);
+        int hr_high_val = \
+            GetVmParaCacheByLabel(\
+                vm_label_hr_high_val);
 
         uint32_t num_addr_index;
         if(p_hr_para->user0_para_valid)
         {
-            if(__data >= hr_warn_val)
+            if(__data >= hr_high_val)
                 num_addr_index = \
                     p_hr_para->user0_num_addr_index;
             else
@@ -219,7 +203,7 @@ int16_t common_hr_widget_create(widget_data_para_t *data_para, \
         Hr_Group_Max)
         return data_end_x;
 
-    int __data = *(int *)data_val;
+    u8 __data = *(u8 *)data_val;
 
     hr_data_type[hr_group_num] = type;
 
@@ -229,14 +213,14 @@ int16_t common_hr_widget_create(widget_data_para_t *data_para, \
     widget_data_para_t *p_hr_para = \
         &hr_para_cache[hr_group_num];
 
-    int hr_warn_val = \
-        get_vm_para_cache_with_label(\
-            vm_label_hr_warn_val);
+    int hr_high_val = \
+        GetVmParaCacheByLabel(\
+            vm_label_hr_high_val);
 
     uint32_t num_addr_index;
     if(p_hr_para->user0_para_valid)
     {
-        if(__data >= hr_warn_val)
+        if(__data >= hr_high_val)
             num_addr_index = \
                 p_hr_para->user0_num_addr_index;
         else

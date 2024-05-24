@@ -17,12 +17,12 @@ static bool is_enter_offscreen = false;
 /**************函数声明**************/
 static void common_menu_lock_timer_cb(void *priv);
 
-bool get_is_enter_offscreen(void)
+bool GetIsEnterOffScreen(void)
 {
     return is_enter_offscreen;
 }
 
-void set_is_enter_offscreen(bool status)
+void SetIsEnterOffScreen(bool status)
 {
     is_enter_offscreen = \
         status;
@@ -47,10 +47,23 @@ void common_menu_lock_timer_add(void)
 {
     set_menu_timer_lock_flag(true);
 
-    /*三分钟解锁*/
     if(!menu_lock_timer_id)
         menu_lock_timer_id = sys_timeout_add(NULL, \
-            common_menu_lock_timer_cb, 3*60*1000);
+            common_menu_lock_timer_cb, 1*60*1000);
+
+    return;
+}
+
+void common_offscreen_handle(void)
+{
+    common_offscreen_timer_destroy();
+    
+    SetIsEnterOffScreen(true);
+
+    int menu_offscreen_msg[1];
+    menu_offscreen_msg[0] = \
+        ui_msg_menu_offscreen;
+    post_ui_msg(menu_offscreen_msg, 1);
 
     return;
 }
@@ -61,12 +74,7 @@ static void common_offscreen_timer_cb(void *priv)
         Always_OnScreen)
         return;
         
-    set_is_enter_offscreen(true);
-
-    // int menu_offscreen_msg[1];
-    // menu_offscreen_msg[0] = \
-    //     ui_msg_menu_offscreen;
-    // post_ui_msg(menu_offscreen_msg, 1);
+    common_offscreen_handle();
 
     return;
 }
@@ -75,13 +83,27 @@ static void common_menu_lock_timer_cb(void *priv)
 {
     common_menu_lock_timer_del();
 
+    //地磁如果开启，关掉
+    bool GmEnableFlag = \
+        GetSensorGmEnableFlag();
+    if(GmEnableFlag == true)
+        DisableSensorGmModule();
+
+    /*相机解锁退出*/
+    bool CameraUnlock = \
+        GetCameraUnlockExit();
+    if(CameraUnlock == true)
+        DevReqOpCameraHandle(\
+            DevReqExitCamera);
+    SetCameraUnlockExit(false);
+
     return;
 }
 
 extern int lcd_sleep_ctrl(u8 enter);
 void common_offscreen_msg_handle(void)
 {
-    ui_ctl_lcd_enter_sleep(true);
+    AppCtrlLcdEnterSleep(true);
 
     /**************清除当前页面**************/
     ui_menu_jump_handle(ui_act_id_null);//传ui_act_id_null即是销毁页面
@@ -101,7 +123,7 @@ void common_offscreen_timer_create(void)
     uint32_t user_offscreen_time = \
         p_ui_info_cache->menu_load_info.user_offscreen_time;
     int sys_offscreen_time = \
-        get_vm_para_cache_with_label(vm_label_offscreen_time);
+        GetVmParaCacheByLabel(vm_label_offscreen_time);
 
     if(user_offscreen_time > 0)
         cur_offscreen_time = user_offscreen_time;
@@ -112,7 +134,7 @@ void common_offscreen_timer_create(void)
         offscreen_timer_id = sys_timeout_add(NULL, \
             common_offscreen_timer_cb, cur_offscreen_time);
 
-    set_is_enter_offscreen(false);
+    SetIsEnterOffScreen(false);
 
     return;
 }

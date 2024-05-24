@@ -3,14 +3,105 @@
 static uint8_t bo_GIF_cnt;
 static lv_obj_t *bo_GIF_icon;
 static uint16_t bo_GIF_dsc_idx;
+
+static int16_t bos_scroll_y;
 static lv_obj_t *bo_sample_container;
+
+static bool bo_sample_user_enable = false;
+
 static lv_obj_t *bo_sample_start_icon;
 
 static lv_timer_t *bo_sample_timer;
 static const uint32_t bo_sample_duration = \
     45*1000;
 
-static bool bo_sample_user_enable = false;
+static void bos_container_scroll_cb(\
+    lv_event_t *e)
+{
+    if(!e) return;
+
+    lv_obj_t *obj = \
+        lv_event_get_target(e);
+    bos_scroll_y = \
+        lv_obj_get_scroll_y(obj);
+
+    return;
+}
+
+static void bo_sample_container_create(\
+    lv_obj_t *obj)
+{
+    widget_obj_para.obj_parent = \
+        obj;
+    widget_obj_para.obj_x = 0;
+    widget_obj_para.obj_y = \
+        0;
+    widget_obj_para.obj_width = \
+        LCD_WIDTH;
+    widget_obj_para.obj_height = \
+        LCD_HEIGHT;
+    widget_obj_para.obj_bg_opax = \
+        LV_OPA_0;
+    widget_obj_para.obj_bg_color = \
+        lv_color_hex(0x000000);
+    widget_obj_para.obj_border_opax = \
+        LV_OPA_0;
+    widget_obj_para.obj_border_width = 0;
+    widget_obj_para.obj_border_color = \
+        lv_color_hex(0x000000);
+    widget_obj_para.obj_radius = 0;
+    widget_obj_para.obj_is_scrollable = \
+        true;
+    bo_sample_container = \
+        common_widget_obj_create(&widget_obj_para);
+    lv_obj_add_event_cb(bo_sample_container, \
+        bos_container_scroll_cb, LV_EVENT_SCROLL, NULL);
+
+    return;
+}
+
+static void bo_sample_timeout_cb(lv_timer_t *timer)
+{
+    if(!timer) return;
+
+    if(bo_sample_timer)
+        lv_timer_del(bo_sample_timer);
+    bo_sample_timer = NULL;
+
+    HrSensorStopSample();
+
+    bo_sample_user_enable = false;
+
+    lv_obj_clear_flag(bo_sample_start_icon, \
+        LV_OBJ_FLAG_HIDDEN);
+
+    return;
+}
+
+static void bo_sample_start_event_cb(lv_event_t *e)
+{
+    if(!e) return;
+
+    common_offscreen_timer_restart();
+
+    lv_obj_t *obj = \
+        lv_event_get_target(e);
+    lv_obj_add_flag(obj, LV_OBJ_FLAG_HIDDEN);
+
+    SetBoRealVal(0);
+
+    HrSensorStartSample(\
+        SensorWorkBo, SensorModeManual);
+
+    bo_sample_user_enable = true;
+
+    if(!bo_sample_timer)
+        bo_sample_timer = \
+            lv_timer_create(bo_sample_timeout_cb, \
+                bo_sample_duration, NULL);
+
+    return;
+}
 
 #define CHART_PRIX_MAJOR_CNT 5
 static const char *chart_prix_label_str[\
@@ -20,10 +111,9 @@ static const char *chart_prix_label_str[\
 
 #define CHART_PRIY_MAJOR_CNT 5
 
-#define CHART_ITEM_CNT 24
 #define CHART_SERIES_NUM 1
 static int16_t bo_sample_chart_points[\
-    CHART_SERIES_NUM][CHART_ITEM_CNT] = {
+    CHART_SERIES_NUM][24] = {
     LV_CHART_POINT_NONE
 };
 
@@ -32,21 +122,8 @@ static lv_color_t bo_sample_chart_color[\
 static lv_chart_series_t *bo_sample_chart_series[\
     CHART_SERIES_NUM];
 
-static uint8_t bo_sample_data[2][CHART_ITEM_CNT] = {
-    [0] = {
-        94, 90, 92, 93, 94, 90, 91, 93, 92, 89, \
-        94, 95, 92, 93, 94, 90, 91, 93, 92, 89, \
-        94, 95, 92, 93,
-    },
-
-    [1] = {
-        99, 100, 98, 99, 99, 99, 99, 99, 99, 99, \
-        99, 100, 98, 99, 99, 99, 99, 99, 99, 99, \
-        99, 100, 98, 99,
-    },
-};
-
-static void bo_sample_minmax_chart_create(void)
+static void bo_sample_range_chart_create(\
+    lv_obj_t *obj)
 {
     const uint8_t bo_chart_min = \
         80;
@@ -55,19 +132,25 @@ static void bo_sample_minmax_chart_create(void)
     const uint8_t bo_pixel_per = \
         14;
 
+    uint16_t chart_h = \
+        (bo_chart_max - bo_chart_min)*bo_pixel_per;
+
+    lv_obj_set_style_pad_bottom(obj, \
+        (LCD_HEIGHT - chart_h)/2, LV_PART_MAIN);
+
     bo_sample_chart_color[0] = \
         lv_color_hex(0x000000);
 
     widget_chart_para.chart_parent = \
-        bo_sample_container;
+        obj;
     widget_chart_para.chart_width = \
         300;
     widget_chart_para.chart_height = \
-        (bo_chart_max - bo_chart_min)*bo_pixel_per;
+        chart_h;
     widget_chart_para.chart_type = \
         LV_CHART_TYPE_NONE;
     widget_chart_para.chart_item_cnt = \
-        CHART_ITEM_CNT;
+        24;
     widget_chart_para.chart_update_mode = \
         LV_CHART_UPDATE_MODE_CIRCULAR;
     widget_chart_para.chart_hor_div = \
@@ -101,7 +184,7 @@ static void bo_sample_minmax_chart_create(void)
     lv_obj_t *bo_sample_chart = \
         common_widget_chart_create(&widget_chart_para);
     lv_obj_align(bo_sample_chart, LV_ALIGN_TOP_MID, \
-        0, LCD_HEIGHT + 84);
+        0, (3*LCD_HEIGHT - chart_h)/2);
     lv_obj_clear_flag(bo_sample_chart, LV_OBJ_FLAG_SCROLLABLE);
 
 
@@ -132,12 +215,16 @@ static void bo_sample_minmax_chart_create(void)
     uint8_t bo_sample_min;
     uint8_t bo_sample_max;
     uint16_t bo_sample_bar_h;
-    for(uint8_t i = 0; i < CHART_ITEM_CNT; i++)
+
+    u8 HIdx = \
+       (w_bo.CurIdx)/(60/Bo_Inv_Dur);
+
+    for(uint8_t i = 0; i < (HIdx + 1); i++)
     {
         bo_sample_min = \
-            bo_sample_data[0][i];
+            w_bo.min_data[i];
         bo_sample_max = \
-            bo_sample_data[1][i];
+            w_bo.max_data[i];
 
         if(bo_sample_max < \
             bo_sample_min)
@@ -169,109 +256,49 @@ static void bo_sample_minmax_chart_create(void)
     return;
 }
 
-static void bo_sample_container_create(\
-    lv_obj_t *obj)
-{
-    widget_obj_para.obj_parent = \
-        obj;
-    widget_obj_para.obj_x = 0;
-    widget_obj_para.obj_y = \
-        LCD_UI_Y_OFFSET;
-    widget_obj_para.obj_width = \
-        LCD_WIDTH;
-    widget_obj_para.obj_height = \
-        LCD_HEIGHT - LCD_UI_Y_OFFSET;
-    widget_obj_para.obj_bg_opax = \
-        LV_OPA_0;
-    widget_obj_para.obj_bg_color = \
-        lv_color_hex(0x000000);
-    widget_obj_para.obj_border_opax = \
-        LV_OPA_0;
-    widget_obj_para.obj_border_width = 0;
-    widget_obj_para.obj_border_color = \
-        lv_color_hex(0x000000);
-    widget_obj_para.obj_radius = 0;
-    widget_obj_para.obj_is_scrollable = \
-        true;
-    bo_sample_container = \
-        common_widget_obj_create(&widget_obj_para);
-    lv_obj_set_style_pad_bottom(bo_sample_container, \
-        84, LV_PART_MAIN);
-
-    return;
-}
-
-static void bo_sample_timer_cb(lv_timer_t *timer)
-{
-    if(!timer) return;
-
-    if(bo_sample_timer)
-        lv_timer_del(bo_sample_timer);
-    bo_sample_timer = NULL;
-
-    AppCtrlvcHr02StopSample();
-
-    bo_sample_user_enable = \
-        false;
-
-    lv_obj_clear_flag(bo_sample_start_icon, \
-        LV_OBJ_FLAG_HIDDEN);
-
-    return;
-}
-
-static void bo_sample_start_cb(lv_event_t *e)
-{
-    if(!e) return;
-
-    common_offscreen_timer_restart();
-
-    lv_obj_t *obj = \
-        lv_event_get_target(e);
-    lv_obj_add_flag(obj, LV_OBJ_FLAG_HIDDEN);
-
-    set_vm_para_cache_with_label(\
-        vm_label_bo, 0);
-
-    AppCtrlvcHr02StartSample(\
-        VCWORK_MODE_SPO2WORK);
-
-    bo_sample_user_enable = true;
-
-    if(!bo_sample_timer)
-        bo_sample_timer = \
-            lv_timer_create(bo_sample_timer_cb, \
-                bo_sample_duration, NULL);
-
-    return;
-}
-
 static void menu_create_cb(lv_obj_t *obj)
 {
     if(!obj) return;
 
-    bo_GIF_cnt = 0;
-    bo_sample_user_enable = \
-        false;
-
-    ui_act_id_t prev_act_id = \
-        read_menu_return_level_id();
-
-    tileview_register_all_menu(obj, ui_act_id_null, \
-        ui_act_id_null, ui_act_id_hr_sample, ui_act_id_null, \
-            ui_act_id_bo_sample);
+    ui_mode_t ui_mode = \
+        p_ui_info_cache->ui_mode;
+    if(ui_mode == ui_mode_watchface)
+    {
+        ui_act_id_t left_act_id = \
+            ui_act_id_sleep_main;
+        ui_act_id_t right_act_id = \
+            ui_act_id_hr_sample;
+        ui_act_id_t down_act_id = \
+            ui_act_id_null;
+        tileview_register_all_menu(obj, ui_act_id_null, down_act_id, \
+            left_act_id, right_act_id, ui_act_id_bo_sample);
+    }else
+    {
+        ui_act_id_t prev_act_id = \
+            ui_act_id_menu;
+        ui_act_id_t down_act_id = \
+            ui_act_id_null;
+        if(!lang_txt_is_arabic())
+            tileview_register_all_menu(obj, ui_act_id_null, down_act_id, \
+                prev_act_id, ui_act_id_null, ui_act_id_bo_sample);
+        else
+            tileview_register_all_menu(obj, ui_act_id_null, down_act_id, \
+                ui_act_id_null, prev_act_id, ui_act_id_bo_sample);
+    }
 
     return;
 }
 
 static void menu_destory_cb(lv_obj_t *obj)
 {
+    if(!bo_sample_user_enable)
+        return;
+
     if(bo_sample_timer)
         lv_timer_del(bo_sample_timer);
     bo_sample_timer = NULL;
 
-    if(bo_sample_user_enable)
-        AppCtrlvcHr02StopSample();
+    HrSensorStopSample();
         
     return;
 }
@@ -280,21 +307,35 @@ static void menu_refresh_cb(lv_obj_t *obj)
 {
     if(!obj) return;
 
+    if(!bo_sample_user_enable)
+        return;
+
+    bool wear_status = \
+        GetHrSensorWearStatus();
+    if(!wear_status)
+    {
+        ui_menu_jump(\
+            ui_act_id_off_wrist);
+        return;
+    }
+        
     bo_GIF_cnt++;
     bo_GIF_cnt %= 1;
-    common_widget_img_replace_src(\
-        bo_GIF_icon, bo_GIF_00_index + bo_GIF_cnt, \
-            bo_GIF_dsc_idx);
+    common_widget_img_replace_src(bo_GIF_icon, \
+        bo_GIF_00_index + bo_GIF_cnt, bo_GIF_dsc_idx);
 
-    if(bo_sample_user_enable)
-        common_offscreen_timer_restart();
-
+    common_offscreen_timer_restart();
+        
     return;
 }
 
 static void menu_display_cb(lv_obj_t *obj)
 {
     if(!obj) return;
+
+    bo_GIF_cnt = 0;
+    bo_sample_user_enable = \
+        false;
 
     bo_sample_container_create(obj);
 
@@ -310,22 +351,21 @@ static void menu_display_cb(lv_obj_t *obj)
         common_widget_img_create(&widget_img_para, NULL);
     lv_obj_align(bo_sample_icon, LV_ALIGN_TOP_LEFT, \
         24, 72);
-    
-    int bo_sample_val = \
-        get_vm_para_cache_with_label(\
-            vm_label_bo);
+
+    u8 bo_sample_val = \
+        GetBoRealVal();
     widget_data_para.data_x = \
         136;
     widget_data_para.data_y = \
         96;
     widget_data_para.num_inv = \
-        0;
+        3;
     widget_data_para.data_parent = \
         bo_sample_container;
     widget_data_para.num_addr_index = \
-        comm_num_30x40_wh_00_index;
+        comm_num_24x40_wh_00_index;
     widget_data_para.data_align = \
-        widget_data_align_left;
+        widget_data_align_center;
     common_data_widget_create(&widget_data_para, \
         widget_data_type_bo, &bo_sample_val);
 
@@ -340,7 +380,7 @@ static void menu_display_cb(lv_obj_t *obj)
     widget_img_para.img_click_attr = \
         true;
     widget_img_para.event_cb = \
-        bo_sample_start_cb;
+        bo_sample_start_event_cb;
     widget_img_para.user_data = \
         NULL;
     bo_sample_start_icon = \
@@ -357,17 +397,18 @@ static void menu_display_cb(lv_obj_t *obj)
         NULL;
     bo_GIF_icon = \
         common_widget_img_create(&widget_img_para, &bo_GIF_dsc_idx);
-    lv_obj_align(bo_GIF_icon, LV_ALIGN_TOP_MID, \
-        0, 224);
+    lv_obj_align(bo_GIF_icon, LV_ALIGN_TOP_MID, 0, 224);
 
     widget_img_para.file_img_dat = \
         bo_01_index;
     lv_obj_t *bo_01_icon = \
         common_widget_img_create(&widget_img_para, NULL);
-    lv_obj_align(bo_01_icon, LV_ALIGN_TOP_MID, \
-        0, 392);
+    lv_obj_align(bo_01_icon, LV_ALIGN_TOP_MID, 0, 392);
 
-    bo_sample_minmax_chart_create();
+    bo_sample_range_chart_create(bo_sample_container);
+
+    lv_obj_scroll_to_y(bo_sample_container, \
+        bos_scroll_y, LV_ANIM_OFF);
 
     return;
 }
@@ -388,10 +429,8 @@ register_ui_menu_load_info(\
     .return_flag = true,
     .menu_id = \
         ui_act_id_bo_sample,
-    .user_offscreen_time = \
-        0,
-    .user_refresh_time_inv = \
-        200,
+    .user_offscreen_time = 0,
+    .user_refresh_time_inv = 0,
     .key_func_cb = menu_key_cb,
     .create_func_cb = menu_create_cb,
     .destory_func_cb = menu_destory_cb,

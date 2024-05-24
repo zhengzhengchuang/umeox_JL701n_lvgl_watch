@@ -1,33 +1,30 @@
 #include "backlight.h"
 
-/*滑块范围增大*/
-#define Slider_Range_Inc (3)
+//滑块增大倍数
+static const uint8_t inc_mul = 3;
 
-static void backlight_slider_event_cb(lv_event_t *e)
+static void slider_cb(lv_event_t *e)
 {
     if(!e) return;
 
     lv_obj_t *obj = \
         lv_event_get_target(e);
-    int32_t backlight_cur_val = \
-        lv_slider_get_value(obj)/ \
-            Slider_Range_Inc;
+    int cur_val = \
+        lv_slider_get_value(obj)/inc_mul;
 
-    int backlight_min_val = \
+    int min_val = \
         TCFG_BACKLIGHT_MIN_VAL;
-    int backlight_max_val = \
+    int max_val = \
         TCFG_BACKLIGHT_MAX_VAL;
-    backlight_cur_val = \
-        backlight_cur_val < backlight_min_val?\
-            backlight_min_val:backlight_cur_val;
-    backlight_cur_val = \
-        backlight_cur_val > backlight_max_val?\
-            backlight_max_val:backlight_cur_val;
+    cur_val = \
+        cur_val < min_val?min_val:cur_val;
+    cur_val = \
+        cur_val > max_val?max_val:cur_val;
 
-    set_vm_para_cache_with_label(\
-        vm_label_backlight, backlight_cur_val);
+    SetVmParaCacheByLabel(\
+        vm_label_backlight, cur_val);
     
-    ui_set_sys_backlight(backlight_cur_val);
+    AppSetSysBacklight(cur_val);
   
     return;
 }
@@ -36,12 +33,21 @@ static void menu_create_cb(lv_obj_t *obj)
 {
     if(!obj) return;
 
+    ui_mode_t ui_mode = \
+        p_ui_info_cache->ui_mode;
     ui_act_id_t prev_act_id = \
-        read_menu_return_level_id();
-
-    tileview_register_all_menu(obj, ui_act_id_null, \
-        ui_act_id_null, prev_act_id, ui_act_id_screen_sleep, \
-            ui_act_id_backlight);
+        ui_act_id_set_main;
+    if(ui_mode == ui_mode_tool_box)
+        prev_act_id = \
+            ui_act_id_tool_box;
+    ui_act_id_t scr_slp_act_id = \
+        ui_act_id_screen_sleep;
+    if(!lang_txt_is_arabic())
+        tileview_register_all_menu(obj, ui_act_id_null, ui_act_id_null, \
+            prev_act_id, scr_slp_act_id, ui_act_id_backlight);
+    else
+        tileview_register_all_menu(obj, ui_act_id_null, ui_act_id_null, \
+            scr_slp_act_id, prev_act_id, ui_act_id_backlight);
 
     return;
 }
@@ -62,16 +68,16 @@ static void menu_display_cb(lv_obj_t *obj)
 {
     if(!obj) return;
 
-    int backlight_cur_val = \
-        get_vm_para_cache_with_label(\
-            vm_label_backlight)*\
-                Slider_Range_Inc;
-    int backlight_min_val = \
-        TCFG_BACKLIGHT_MIN_VAL*\
-            Slider_Range_Inc;
-    int backlight_max_val = \
-        TCFG_BACKLIGHT_MAX_VAL*\
-            Slider_Range_Inc;
+    int cur_val;
+    int min_val; 
+    int max_val;
+
+    cur_val = \
+        GetVmParaCacheByLabel(vm_label_backlight)*inc_mul;
+    min_val = \
+        TCFG_BACKLIGHT_MIN_VAL*inc_mul;
+    max_val = \
+        TCFG_BACKLIGHT_MAX_VAL*inc_mul;
 
     widget_slider_para.slider_parent = obj;
     widget_slider_para.slider_x = 0;
@@ -79,11 +85,11 @@ static void menu_display_cb(lv_obj_t *obj)
     widget_slider_para.slider_width = 82;
     widget_slider_para.slider_height = 284;
     widget_slider_para.slider_min_value = \ 
-        backlight_min_val;
+        min_val;
     widget_slider_para.slider_max_value = \
-        backlight_max_val;
+        max_val;
     widget_slider_para.slider_cur_value = \
-        backlight_cur_val;
+        cur_val;
     widget_slider_para.slider_main_color = \
         lv_color_hex(0xB28146);
     widget_slider_para.slider_indic_color = \
@@ -93,36 +99,30 @@ static void menu_display_cb(lv_obj_t *obj)
     widget_slider_para.slider_knob_color = \
         lv_color_hex(0x000000);
     widget_slider_para.event_cb = \
-        backlight_slider_event_cb;
+        slider_cb;
     widget_slider_para.user_data = NULL;
-    lv_obj_t *backlight_slider = \
+    lv_obj_t *slider = \
         common_widget_slider_create(&widget_slider_para);
-    lv_obj_align(backlight_slider, LV_ALIGN_TOP_MID, 0, \
-        80);
+    lv_obj_align(slider, LV_ALIGN_TOP_MID, 0, 80);
 
     widget_img_para.event_cb = NULL;
     widget_img_para.user_data = NULL;
     widget_img_para.img_parent = \
-        backlight_slider;
+        slider;
     widget_img_para.file_img_dat = \
         disp_ctrl_00_index;
     widget_img_para.img_click_attr = \
         false;
-    lv_obj_t *backlight_down_icon = \
-        common_widget_img_create(&widget_img_para, \
-            NULL);
-    lv_obj_align(backlight_down_icon, LV_ALIGN_BOTTOM_MID, \
-        0, -20);
+    lv_obj_t *down_icon = \
+        common_widget_img_create(&widget_img_para, NULL);
+    lv_obj_align(down_icon, LV_ALIGN_BOTTOM_MID, 0, -20);
 
     widget_img_para.file_img_dat = \
         disp_ctrl_01_index;
-    lv_obj_t *backlight_up_icon = \
-        common_widget_img_create(&widget_img_para, \
-            NULL);
-    lv_obj_align(backlight_up_icon, LV_ALIGN_TOP_MID, \
-        0, 20);
+    lv_obj_t *up_icon = \
+        common_widget_img_create(&widget_img_para, NULL);
+    lv_obj_align(up_icon, LV_ALIGN_TOP_MID, 0, 20);
 
-    /********************圆点********************/
     widget_img_para.img_x = 170;
     widget_img_para.img_y = 408;
     widget_img_para.img_parent = \

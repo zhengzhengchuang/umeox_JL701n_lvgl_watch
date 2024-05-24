@@ -7,7 +7,6 @@ extern "C" {
 
 #include "../include/ui_menu.h"
 #include "../include/ui_act_id.h"
-#include "../comm_remind/alarm_manage.h"
 
 /*********************************************************************************
                                   时间小时制枚举                                      
@@ -27,7 +26,7 @@ enum
     unit_distance_kilometre = 0x00,
     unit_distance_mile,
     
-    unit_distance_max,
+    unit_distance_num,
 };
 
 /*********************************************************************************
@@ -38,7 +37,7 @@ enum
     unit_temperature_C = 0x00,
     unit_temperature_F,
 
-    unit_temperature_max,
+    unit_temperature_num,
 };
 
 /*********************************************************************************
@@ -69,7 +68,7 @@ enum
     /*******背光亮度*******/
     vm_label_backlight,
 
-    /*******系统时区*******/
+    /*******时区*******/
     vm_label_time_zone,
 
     /*******菜单风格*******/
@@ -79,7 +78,7 @@ enum
     vm_label_time_format,
 
     /*******表盘选择*******/
-    vm_label_watchface_id,
+    vm_label_watchface_sel,
 
     /*******熄屏时间*******/
     vm_label_offscreen_time,
@@ -87,11 +86,14 @@ enum
     /*******系统语言*******/
     vm_label_sys_language,
 
-    /*******系统声音开启*******/
-    vm_label_sys_sound_on,
+    /*******系统声音*******/
+    vm_label_sys_sound,
 
     /*******勿扰状态*******/
     vm_label_dnd_state,
+
+    /*******久坐步数*******/
+    vm_label_sedentary_steps,
 
     /*******耳机状态*******/
     vm_label_earphone_state,
@@ -102,55 +104,60 @@ enum
 
     /*******99真主名列表模式*******/
     vm_label_al_name_list_mode,
-  
-    /*******日常心率数据*******/
-    vm_label_hr,
-    vm_label_min_hr,
-    vm_label_max_hr,
 
-    /*******日常心率预警值*******/
-    vm_label_hr_warn_val,
+    /*******设备绑定标志*******/
+    vm_label_dev_bond,
 
-    /*******日常血氧数据*******/
-    vm_label_bo,
-    vm_label_min_bo,
-    vm_label_max_bo,
+    /*******心率值*******/
+    vm_label_hr_real_val,
+    
+    /*******心率异常区间*******/
+    vm_label_hr_low_remind_sw,  //心率过低开关
+    vm_label_hr_high_remind_sw, //心率过高开关
+    vm_label_hr_low_val,        //心率过低参数
+    vm_label_hr_high_val,       //心率过高参数
 
-    /*******日常运动数据*******/
-    vm_label_daily_step,
-    vm_label_daily_pace,
-    vm_label_daily_calorie,
-    vm_label_daily_distance,
+    /*******血氧值*******/
+    vm_label_bo_real_val,
 
-    vm_label_store_max,
+    /*******活动数据*******/
+    vm_label_daily_step,       //步
+    vm_label_daily_calorie,    //千卡
+    vm_label_daily_distance,   //米
+
+    /*******特定开关*******/
+    vm_label_auto_hr_sw,        //自动心率开关
+    vm_label_auto_bo_sw,        //自动血氧开关
+    vm_label_lpw_remind_sw,     //低电提醒开关
+
+    vm_label_num,
 };
 
-#define Vm_Store_Para_Num  (vm_label_store_max)
-#define Vm_Store_Para_Mask (0x55aa)//每次更新vm参数的时候都需要更改
+#define Vm_Num \
+    (vm_label_num)
+#define Vm_Mask (0x55ad)//每次更新vm参数的时候都需要更改
 
 typedef struct
 {
     uint16_t label;
-    int store_para_val;
-}vm_store_para_with_label_t;
+    int val;
+}vm_ctx_t;
 
 typedef struct
 {
-    uint16_t vm_store_para_mask;
+    uint16_t vm_mask;
 
-    alarm_manage_para_t alarm_manage_para;
-    vm_store_para_with_label_t vm_store_para[\
-        Vm_Store_Para_Num];  
-}vm_store_para_cache_t;
-extern vm_store_para_cache_t *p_vm_para_cache;
+    vm_ctx_t vm_para[Vm_Num];  
+}vm_para_info_t;
+extern vm_para_info_t *p_vm_para_cache;
+extern const ui_menu_load_info_t *al_name_load_info[];
 extern const ui_menu_load_info_t *watchface_load_info[];
 extern const ui_menu_load_info_t *menu_style_load_info[];
-extern const ui_menu_load_info_t *al_name_load_info[];
 
 void vm_store_para_init(void);
-int get_vm_para_cache_with_label(uint16_t label);
-bool set_vm_para_cache_with_label(uint16_t label, \
-    int vm_val);
+void vm_para_cache_write(void);
+int GetVmParaCacheByLabel(uint16_t label);
+bool SetVmParaCacheByLabel(uint16_t label, int vm_val);
 #ifdef __cplusplus
 }
 #endif

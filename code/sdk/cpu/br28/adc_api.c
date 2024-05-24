@@ -556,6 +556,10 @@ static void _adc_init(u32 sys_lvd_en)
     adc_add_sample_ch(AD_CH_DTEMP);
     adc_set_sample_freq(AD_CH_DTEMP, PMU_CH_SAMPLE_FREQ);
 
+    //add user
+    // adc_add_sample_ch(AD_CH_PB1);
+    // adc_set_sample_freq(AD_CH_PB1, PMU_CH_SAMPLE_FREQ);
+
     u32 vbg_adc_value = 0;
     u32 vbg_min_value = -1;
     u32 vbg_max_value = 0;

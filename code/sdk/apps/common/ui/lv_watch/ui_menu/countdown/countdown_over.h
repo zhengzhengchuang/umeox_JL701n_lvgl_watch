@@ -1,5 +1,5 @@
-﻿#ifndef __DEMO_H__
-#define __DEMO_H__
+﻿#ifndef __COUNTDOWN_OVER_H__
+#define __COUNTDOWN_OVER_H__
 
 #ifdef __cplusplus
 extern "C" {

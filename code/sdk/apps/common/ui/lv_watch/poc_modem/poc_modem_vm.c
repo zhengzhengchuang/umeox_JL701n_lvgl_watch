@@ -4,11 +4,8 @@
 #include "poc_modem_vm.h"
 #include "../comm_nor_vm/nor_vm_main.h"
 
-
-#define Vm_Debug_En (1)
-
-vm_store_para_cache_t *p_vm_para_cache = NULL;
-static vm_store_para_cache_t vm_para_cache = {0};
+vm_para_info_t *p_vm_para_cache = NULL;
+static vm_para_info_t vm_para_cache = {0};
 const ui_menu_load_info_t *watchface_load_info[] = {
     &menu_load_watchface_00, &menu_load_watchface_01, \
     &menu_load_watchface_02, &menu_load_watchface_03, \
@@ -30,124 +27,94 @@ const ui_menu_load_info_t *al_name_load_info[] = {
 /*********************************************************************************
                              系统带标签参数的缺省值                                  
 *********************************************************************************/
-static const vm_store_para_with_label_t default_label_para[\
-    Vm_Store_Para_Num] = {
-    /*********默认屏幕背光亮度*********/
+static const vm_ctx_t vm_def[Vm_Num] = {
+    /*********屏幕背光亮度*********/
     {.label = vm_label_backlight, \
-        .store_para_val = \
-            TCFG_BACKLIGHT_MIN_VAL + \
-                TCFG_BACKLIGHT_STEPS_VAL*3}, 
+        .val = TCFG_BACKLIGHT_MIN_VAL + TCFG_BACKLIGHT_STEPS_VAL*3}, 
 
-    /*********时区默认 深圳：东八区*********/
-    {.label = vm_label_time_zone, \
-        .store_para_val = 0x08}, 
+    /*********东八区 时区*10*********/
+    {.label = vm_label_time_zone, .val = 80}, 
 
-    /*********默认菜单风格*********/
-    {.label = vm_label_menu_view, \
-        .store_para_val = ui_menu_view_00},
+    /*********菜单风格*********/
+    {.label = vm_label_menu_view, .val = ui_menu_view_00},
 
-    /*********默认时间格式:24小时制*********/
-    {.label = vm_label_time_format, \
-        .store_para_val = time_format_12},
+    /*********时间制:24小时制*********/
+    {.label = vm_label_time_format, .val = time_format_24},
 
-    /*********默认屏幕熄屏时间 30s*********/
-    {.label = vm_label_offscreen_time, \
-        .store_para_val = 30*1000},
+    /*********屏幕熄屏*********/
+    {.label = vm_label_offscreen_time, .val = 30*1000},
 
-    /*********默认表盘*********/
-    {.label = vm_label_watchface_id, \
-        .store_para_val = ui_watchface_id_04},
+    /*********表盘*********/
+    {.label = vm_label_watchface_sel, .val = ui_watchface_id_04},
 
-    /*********默认系统语言*********/
-    {.label = vm_label_sys_language, \
-        .store_para_val = comm_language_id_chinese},
+    /*********系统语言*********/
+    {.label = vm_label_sys_language, .val = comm_language_id_chinese},
 
-    /*********默认系统声音开启、音量*********/
-    {.label = vm_label_sys_sound_on, \
-        .store_para_val = 1},
+    /*********系统声音开启*********/
+    {.label = vm_label_sys_sound, .val = 1},
 
     /*******勿扰状态*******/
-    {.label = vm_label_dnd_state, \
-        .store_para_val = dnd_state_disable},
+    {.label = vm_label_dnd_state, .val = dnd_state_disable},
+
+    /*******久坐步数*******/
+    {.label = vm_label_sedentary_steps, .val = 0},
 
     /*******耳机状态*******/
-    {.label = vm_label_earphone_state, \
-        .store_para_val = earphone_state_disc},
+    {.label = vm_label_earphone_state, .val = earphone_state_disc},
 
     /*******计量单位*******/
-    {.label = vm_label_unit_distance, \
-        .store_para_val = unit_distance_kilometre},
-    {.label = vm_label_unit_temperature, \
-        .store_para_val = unit_temperature_C},
+    {.label = vm_label_unit_distance, .val = unit_distance_kilometre},
+    {.label = vm_label_unit_temperature, .val = unit_temperature_C},
 
     /*******99真主名列表模式*******/
-    {.label = vm_label_al_name_list_mode, \
-        .store_para_val = al_name_list_mode0},
+    {.label = vm_label_al_name_list_mode, .val = al_name_list_mode0},
 
-    /*********默认日常心率*********/
-    {.label = vm_label_hr, \
-        .store_para_val = 0},
-    {.label = vm_label_min_hr, \
-        .store_para_val = 0},
-    {.label = vm_label_max_hr, \
-        .store_para_val = 0},
+    /*******设备绑定*******/
+    {.label = vm_label_dev_bond, .val = 0},
+    
+    /*******心率值*******/
+    {.label = vm_label_hr_real_val, .val = 0},
 
-    /*********默认心率预警值*********/
-    {.label = vm_label_hr_warn_val, \
-        .store_para_val = 150},
+    /*********心率过高值*********/
+    {.label = vm_label_hr_low_remind_sw, .val = 1},
+    {.label = vm_label_hr_high_remind_sw, .val = 1},
+    {.label = vm_label_hr_low_val, .val = 40},
+    {.label = vm_label_hr_high_val, .val = 150},
 
-    /*********默认日常血氧*********/
-    {.label = vm_label_bo, \
-        .store_para_val = 0},
-    {.label = vm_label_min_bo, \
-        .store_para_val = 0},
-    {.label = vm_label_max_bo, \
-        .store_para_val = 0},
+    /*********血氧值*********/
+    {.label = vm_label_bo_real_val, .val = 0},
 
-    /*********默认日常数据*********/
-    {.label = vm_label_daily_step, \
-        .store_para_val = 0},
-    {.label = vm_label_daily_pace, \
-        .store_para_val = 0},
-    {.label = vm_label_daily_calorie, \
-        .store_para_val = 0},
-    {.label = vm_label_daily_distance, \
-        .store_para_val = 0},
+    /*********活动数据*********/
+    {.label = vm_label_daily_step, .val = 0},
+    {.label = vm_label_daily_calorie, .val = 0},
+    {.label = vm_label_daily_distance, .val = 0},
+
+    /*******特定开关*******/
+    {.label = vm_label_auto_hr_sw, .val = 1},
+    {.label = vm_label_auto_bo_sw, .val = 1},
+    {.label = vm_label_lpw_remind_sw, .val = 1},
 };
 
-/*********************************************************************************
-                             闹钟管理的缺省值                                  
-*********************************************************************************/
-static const alarm_manage_para_t default_alarm_para = 
+int GetVmParaCacheByLabel(uint16_t label)
 {
-    .alarm_num = 0,
-    .alarm_info[0] = {.info = No_Alarm_Info},
-    .alarm_info[1] = {.info = No_Alarm_Info},
-    .alarm_info[2] = {.info = No_Alarm_Info},
-    .alarm_info[3] = {.info = No_Alarm_Info},
-    .alarm_info[4] = {.info = No_Alarm_Info},
-};
-
-int get_vm_para_cache_with_label(uint16_t label)
-{
-    for(uint16_t i = 0; i < Vm_Store_Para_Num; i++)
+    for(uint16_t i = 0; i < Vm_Num; i++)
     {
-        if(p_vm_para_cache->vm_store_para[i].label == label)
-            return (p_vm_para_cache->vm_store_para[i].store_para_val);
+        if(p_vm_para_cache->vm_para[i].label == label)
+            return (p_vm_para_cache->vm_para[i].val);
     }
     
-    return default_label_para[label].store_para_val;
+    return vm_def[label].val;
 }
 
-bool set_vm_para_cache_with_label(uint16_t label, \
-    int vm_val)
+bool SetVmParaCacheByLabel(uint16_t label, int vm_val)
 {
-    for(uint16_t i = 0; i < Vm_Store_Para_Num; i++)
+    for(uint16_t i = 0; i < Vm_Num; i++)
     {
-        if(p_vm_para_cache->vm_store_para[i].label == label)
+        if(p_vm_para_cache->vm_para[i].label == label)
         {
-            p_vm_para_cache->vm_store_para[i].store_para_val = \
+            p_vm_para_cache->vm_para[i].val = \
                 vm_val;
+            vm_para_cache_write();
             return true;
         }     
     }
@@ -161,40 +128,56 @@ void vm_store_para_init(void)
 
     if(!p_vm_para_cache) ASSERT(0);
 
-    int ret = 0;
-    uint8_t repeat_cnt = 3;
-    ret = syscfg_read(CFG_USER_PARA_INFO, \
-        (uint8_t *)&vm_para_cache, sizeof(vm_store_para_cache_t));
+    int op_vm_len = \
+        sizeof(vm_para_info_t);
+
+    int ret = syscfg_read(CFG_SYS_PARA_INFO, \
+        (uint8_t *)&vm_para_cache, op_vm_len);
 #if Vm_Debug_En
     if(1)
 #else
-    if(ret != sizeof(vm_store_para_cache_t) || p_vm_para_cache->vm_store_para_mask != Vm_Store_Para_Mask)
+    if(ret != op_vm_len || \
+        p_vm_para_cache->vm_mask != Vm_Mask)
 #endif
     {
-        p_vm_para_cache->vm_store_para_mask = \
-            Vm_Store_Para_Mask;
+        p_vm_para_cache->vm_mask = Vm_Mask;
 
-        memcpy(&p_vm_para_cache->alarm_manage_para, \
-            &default_alarm_para, sizeof(alarm_manage_para_t));
+        memcpy(p_vm_para_cache->vm_para, vm_def, \
+            sizeof(vm_ctx_t)*Vm_Num);
 
-        memcpy(p_vm_para_cache->vm_store_para, default_label_para, \
-            sizeof(vm_store_para_with_label_t)*Vm_Store_Para_Num);
-
-        ret = 0;
-        repeat_cnt = 3;
-        ret = syscfg_write(CFG_USER_PARA_INFO, (uint8_t *)&vm_para_cache, \
-            sizeof(vm_store_para_cache_t));
-        while(repeat_cnt && ret != sizeof(vm_store_para_cache_t))
-        {
-            ret = syscfg_write(CFG_USER_PARA_INFO, (uint8_t *)&vm_para_cache, \
-                sizeof(vm_store_para_cache_t));
-            repeat_cnt--;
-        }
+        vm_para_cache_write();
     }
 
+    KaabaQiblaParaRead();
+    PTimeCfgParaRead();
+    TasbihRInfoParaRead();
+    HcalendarInfoParaRead();
+    AlarmInfoParaRead();
+    DndInfoParaRead();
+    UserInfoParaRead();
+    GalgoInfoParaRead();
+    BondCodeInfoParaRead();
+    MsgNotifyInfoParaRead();
+    SedInfoParaRead();
+    RmusicInfoParaRead();
+    
     nor_flash_vm_init();
 
     return;
 }
 
+void vm_para_cache_write(void)
+{
+    int vm_op_len = \
+        sizeof(vm_para_info_t);
+    
+    for(u8 i = 0; i < 3; i++)
+    {
+        int ret = syscfg_write(CFG_SYS_PARA_INFO, \
+            &vm_para_cache, vm_op_len);
+        if(ret == vm_op_len)
+            break;
+    }
 
+    return;
+}

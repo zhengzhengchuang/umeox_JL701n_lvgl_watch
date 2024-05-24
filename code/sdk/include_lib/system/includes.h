@@ -17,7 +17,6 @@
 #include "bank_switch.h"
 
 
-
 #include "generic/includes.h"
 #include "device/includes.h"
 #include "asm/includes.h"

@@ -7,12 +7,8 @@ extern "C" {
 
 #include "../include/ui_menu.h"
 
-void umeox_common_le_resp_fail(uint8_t *notify_buf, \
-    uint16_t notify_len);
-void umeox_common_le_resp_success(uint8_t *notify_buf, \
-    uint16_t notify_len);
-bool umeox_common_le_notify_data(uint8_t *notify_buf, \
-    uint16_t notify_len);
+void umeox_common_le_reply_fail(u8 *buf, u8 len);
+bool umeox_common_le_notify_data(u8 *buf, u8 len);
 #ifdef __cplusplus
 } /* extern "C" */
 #endif

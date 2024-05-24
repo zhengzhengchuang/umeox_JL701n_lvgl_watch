@@ -11,10 +11,16 @@ extern "C" {
 
 enum
 {
-    comm_msg_minute_handle,
+    comm_msg_utcday_handle,
+    comm_msg_utcmin_handle,
+    comm_msg_utcsec_handle,
 
+    comm_msg_timersec_handle,
+
+    comm_msg_stopwatch_over,
     comm_msg_countdown_timeout,
-    comm_msg_stopwatch_timeout,
+
+    comm_msg_dev_shutdown,
 };
 
 void comm_task_create(void);

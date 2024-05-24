@@ -106,3 +106,65 @@ int16_t common_widget_num_str_create(\
 
     return (num_str_para->num_obj_x + total_width);
 }
+
+
+void common_widget_num_str_refresh(lv_obj_t **num_obj, uint8_t obj_max, \
+    uint16_t *num_dsc_idx, char *p_num_str, uint8_t str_len, uint32_t index)
+{
+    if(!num_obj || obj_max == 0 || !num_dsc_idx ||\
+        !p_num_str || str_len == 0)
+        return;
+
+    if(str_len > obj_max)
+        str_len = obj_max;
+
+    uint32_t file_index;
+    for(uint8_t i = 0; i < str_len; i++)
+    {
+        if(p_num_str[i] == ':')
+            file_index = index + \
+                Comm_Symbol_10;
+        else if(p_num_str[i] == '-')
+            file_index = index + \
+                Comm_Symbol_11;
+        else if(p_num_str[i] == '/')
+            file_index = index + \
+                Comm_Symbol_12;
+        else if(p_num_str[i] == '%')
+            file_index = index + \
+                Comm_Symbol_13;
+        else if(p_num_str[i] == '.')
+            file_index = index + \
+                Comm_Symbol_14;
+        else if(p_num_str[i] == '~')
+            file_index = index + \
+                Comm_Symbol_15;
+        else if(p_num_str[i] == 'C')
+            file_index = index + \
+                Comm_Symbol_16;
+        else if(p_num_str[i] == 'F')
+            file_index = index + \
+                Comm_Symbol_17;
+        else if(p_num_str[i] == '^')
+            file_index = index + \
+                Comm_Symbol_18;
+        else if(p_num_str[i] == '_')
+            file_index = index + \
+                Comm_Symbol_19;
+        else if(p_num_str[i] == '*')
+            file_index = index + \
+                Comm_Symbol_20;
+        else if(p_num_str[i] == '+')
+            file_index = index + \
+                Comm_Symbol_21;
+        else if(p_num_str[i] >= '0' && \
+            p_num_str[i] <= '9')
+            file_index = index + \
+                (p_num_str[i] - '0');
+
+        common_widget_img_replace_src(num_obj[i], \
+            file_index, num_dsc_idx[i]);
+    }
+
+    return;  
+}

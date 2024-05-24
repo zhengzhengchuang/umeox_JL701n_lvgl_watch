@@ -36,7 +36,7 @@ void common_date_widget_refresh(void)
         return;
 
     struct sys_time utc_time;
-    get_utc_time(&utc_time);
+    GetUtcTime(&utc_time);
 
     uint16_t date_year = \
         utc_time.year;
@@ -96,7 +96,7 @@ void common_date_widget_create(widget_date_para_t *date_para, \
         return;
 
     struct sys_time utc_time;
-    get_utc_time(&utc_time);
+    GetUtcTime(&utc_time);
 
     uint16_t date_year = \
         utc_time.year;

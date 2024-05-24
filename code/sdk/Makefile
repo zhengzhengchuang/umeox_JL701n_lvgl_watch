@@ -210,8 +210,6 @@ INCLUDES := \
 	-Iapps/common/cJSON \
 	-Iapps/common/include \
 	-Iapps/common/config/include \
-	-Iapps/common/device/hr_sensor \
-	-Iapps/common/device/hr_sensor/vchr02 \
 	-Iapps/common/device/imu_sensor \
 	-Iapps/common/device/bmp280 \
 	-Iapps/common/device/nfc \
@@ -296,8 +294,29 @@ c_SRC_FILES := \
 	apps/common/device/sensor_iic/sensor_iic.c \
 	apps/common/device/gSensor/qmi8658/qmi8658.c \
 	apps/common/device/m_sensor/qmc6309/qmc6309.c \
-	apps/common/device/hr_sensor/vc9201/module_heart_vc_int.c \
-	apps/common/device/hr_sensor/vc9201/vcHr02Hci.c \
+	apps/common/device/motor/motor.c \
+	apps/common/device/hr_sensor/gh3018/Algo_Code/call/src/gh30x_demo_algo_call_adt.c \
+	apps/common/device/hr_sensor/gh3018/Algo_Code/call/src/gh30x_demo_algo_call_hr.c \
+	apps/common/device/hr_sensor/gh3018/Algo_Code/call/src/gh30x_demo_algo_call_hrv.c \
+	apps/common/device/hr_sensor/gh3018/Algo_Code/call/src/gh30x_demo_algo_call_nadt.c \
+	apps/common/device/hr_sensor/gh3018/Algo_Code/call/src/gh30x_demo_algo_call_spo2.c \
+	apps/common/device/hr_sensor/gh3018/Algo_Code/common/src/gh30x_demo_algo_call.c \
+	apps/common/device/hr_sensor/gh3018/Algo_Code/common/src/gh30x_demo_algo_config.c \
+	apps/common/device/hr_sensor/gh3018/Algo_Code/common/src/gh30x_demo_algo_hook.c \
+	apps/common/device/hr_sensor/gh3018/Algo_Code/common/src/gh30x_demo_algo_memory.c \
+	apps/common/device/hr_sensor/gh3018/Drv_Code/src/gh30x_example_comm_pkg.c \
+	apps/common/device/hr_sensor/gh3018/Drv_Code/src/gh30x_example_ctrl.c \
+	apps/common/device/hr_sensor/gh3018/Drv_Code/src/gh30x_example_hook.c \
+	apps/common/device/hr_sensor/gh3018/Drv_Code/src/gh30x_example_port.c \
+	apps/common/device/hr_sensor/gh3018/Drv_Code/src/gh30x_example_process.c \
+	apps/common/device/hr_sensor/gh3018/Drv_Code/src/gh30x_example_reg_array.c \
+	apps/common/device/hr_sensor/gh3018/Lib_Code/src/heart_net_org_dll.c \
+	apps/common/device/hr_sensor/gh3018/Lib_Code/src/HRNet_knConfNetWeights.c \
+	apps/common/device/hr_sensor/gh3018/Lib_Code/src/HRNet_knSceneNetWeights.c \
+	apps/common/device/hr_sensor/gh3018/Lib_Code/src/HRNet_knSceneSwitchWeights.c \
+	apps/common/device/hr_sensor/gh3018/Lib_Code/src/HRNet_knWeights.c \
+	apps/common/device/hr_sensor/gh3018/Lib_Code/src/HRNet_knWeightsSmall.c \
+	apps/common/device/hr_sensor/gh3018/Lib_Code/src/pv_v2.0.1_spo2wrnet_for_GH3011_masimo_2155fb.c \
 	apps/common/device/key/adkey.c \
 	apps/common/device/key/iokey.c \
 	apps/common/device/key/irkey.c \
@@ -524,6 +543,8 @@ c_SRC_FILES := \
 	apps/common/ui/lvgl/src/font/font_common_num_42.c  \
 	apps/common/ui/lvgl/src/font/font_common_num_52.c  \
 	apps/common/ui/lvgl/src/font/font_common_num_64.c  \
+	apps/common/ui/lvgl/src/font/font_common_num_78.c  \
+	apps/common/ui/lvgl/src/font/font_common_26_no_ch.c  \
     apps/common/ui/lvgl/src/font/lv_font_montserrat_12.c  \
     apps/common/ui/lvgl/src/hal/lv_hal_disp.c  \
     apps/common/ui/lvgl/src/hal/lv_hal_indev.c  \
@@ -917,7 +938,8 @@ c_SRC_FILES := \
 	apps/common/ui/lv_watch/comm_key/common_key.c \
 	apps/common/ui/lv_watch/comm_lang/lang_conf.c \
 	apps/common/ui/lv_watch/comm_lang/lang_table.c \
-	apps/common/ui/lv_watch/comm_lang/name_99_table.c \
+	apps/common/ui/lv_watch/comm_lang/azkar_table.c \
+	apps/common/ui/lv_watch/comm_lang/al_name_table.c \
 	apps/common/ui/lv_watch/comm_parse/common_rev.c \
 	apps/common/ui/lv_watch/comm_parse/common_send.c \
 	apps/common/ui/lv_watch/comm_parse/common_parse.c \
@@ -940,14 +962,36 @@ c_SRC_FILES := \
 	apps/common/ui/lv_watch/comm_widget/widget_clock.c \
 	apps/common/ui/lv_watch/comm_widget/common_widget.c \
 	apps/common/ui/lv_watch/comm_widget/widget_refresh.c \
-	apps/common/ui/lv_watch/comm_func/common_stopwatch.c \
-	apps/common/ui/lv_watch/comm_func/common_countdown.c \
+	apps/common/ui/lv_watch/comm_func/call_func.c \
+	apps/common/ui/lv_watch/comm_func/message_func.c \
+	apps/common/ui/lv_watch/comm_func/quran_player_func.c \
+	apps/common/ui/lv_watch/comm_func/prayer_time_func.c \
+	apps/common/ui/lv_watch/comm_func/azkar_prayer_func.c \
+	apps/common/ui/lv_watch/comm_func/countdown_func.c \
+	apps/common/ui/lv_watch/comm_func/stopwatch_func.c \
+	apps/common/ui/lv_watch/comm_func/kaaba_qibla_func.c \
+	apps/common/ui/lv_watch/comm_func/tasbih_reminder_func.c \
+	apps/common/ui/lv_watch/comm_func/allah_name_func.c \
+	apps/common/ui/lv_watch/comm_func/hijri_calendar_func.c \
+	apps/common/ui/lv_watch/comm_func/sleep_func.c \
+	apps/common/ui/lv_watch/comm_func/weather_func.c \
+	apps/common/ui/lv_watch/comm_func/hr_func.c \
+	apps/common/ui/lv_watch/comm_func/bo_func.c \
+	apps/common/ui/lv_watch/comm_func/alarm_func.c \
+	apps/common/ui/lv_watch/comm_func/dnd_func.c \
+	apps/common/ui/lv_watch/comm_func/find_func.c \
+	apps/common/ui/lv_watch/comm_func/user_info_func.c \
+	apps/common/ui/lv_watch/comm_func/gomore_func.c \
+	apps/common/ui/lv_watch/comm_func/dev_bond_func.c \
+	apps/common/ui/lv_watch/comm_func/sedentary_func.c \
+	apps/common/ui/lv_watch/comm_func/camera_func.c \
+	apps/common/ui/lv_watch/comm_func/remote_music_func.c \
+	apps/common/ui/lv_watch/comm_func/dev_op_func.c \
 	apps/common/ui/lv_watch/comm_task/comm_task.c \
-	apps/common/ui/lv_watch/comm_task/minute_task.c \
+	apps/common/ui/lv_watch/comm_task/utc_time_task.c \
 	apps/common/ui/lv_watch/comm_sensor/sensor_hr_task.c \
 	apps/common/ui/lv_watch/comm_sensor/sensor_gs_task.c \
-	apps/common/ui/lv_watch/comm_sensor/sensor_mag_task.c \
-	apps/common/ui/lv_watch/comm_remind/alarm_manage.c \
+	apps/common/ui/lv_watch/comm_sensor/sensor_gm_task.c \
 	apps/common/ui/lv_watch/ui_translate/ui_translate.c \
 	apps/common/ui/lv_watch/ui_cover/ui_cover.c \
 	apps/common/ui/lv_watch/ui_tileview/ui_tileview.c \
@@ -955,7 +999,6 @@ c_SRC_FILES := \
 	apps/common/ui/lv_watch/ui_menu/weather/weather_report.c \
 	apps/common/ui/lv_watch/ui_menu/device_op/device_op.c \
 	apps/common/ui/lv_watch/ui_menu/sedentary/sedentary.c \
-	apps/common/ui/lv_watch/ui_menu/hr_warn/hr_warn.c \
 	apps/common/ui/lv_watch/ui_menu/off_wrist/off_wrist.c \
 	apps/common/ui/lv_watch/ui_menu/low_battery/low_battery.c \
 	apps/common/ui/lv_watch/ui_menu/ota_update/ota_update.c \
@@ -964,7 +1007,10 @@ c_SRC_FILES := \
 	apps/common/ui/lv_watch/ui_menu/menu/common_list.c \
 	apps/common/ui/lv_watch/ui_menu/menu/common_list1.c \
 	apps/common/ui/lv_watch/ui_menu/menu/common_list2.c \
-	apps/common/ui/lv_watch/ui_menu/settings/settings_list.c \
+	apps/common/ui/lv_watch/ui_menu/kaaba/gm_cali.c \
+	apps/common/ui/lv_watch/ui_menu/kaaba/kaaba_position.c \
+	apps/common/ui/lv_watch/ui_menu/kaaba/kaaba_qibla.c \
+	apps/common/ui/lv_watch/ui_menu/set/set_main.c \
 	apps/common/ui/lv_watch/ui_menu/sound_ctrl/sound_ctrl.c \
 	apps/common/ui/lv_watch/ui_menu/menu_view/menu_view.c \
 	apps/common/ui/lv_watch/ui_menu/watchface/watchface_00.c \
@@ -987,8 +1033,8 @@ c_SRC_FILES := \
 	apps/common/ui/lv_watch/ui_menu/unit_switch/unit_switch.c \
 	apps/common/ui/lv_watch/ui_menu/about/about.c \
 	apps/common/ui/lv_watch/ui_menu/reset/reset.c \
+	apps/common/ui/lv_watch/ui_menu/find_dev/find_dev.c \
 	apps/common/ui/lv_watch/ui_menu/split_screen/split_screen.c \
-	apps/common/ui/lv_watch/ui_menu/worship_time/worship_time.c \
 	apps/common/ui/lv_watch/ui_menu/call/call_main.c \
 	apps/common/ui/lv_watch/ui_menu/call/call_disc.c \
 	apps/common/ui/lv_watch/ui_menu/call/contacts.c \
@@ -999,31 +1045,56 @@ c_SRC_FILES := \
 	apps/common/ui/lv_watch/ui_menu/call/call_online.c \
 	apps/common/ui/lv_watch/ui_menu/call/call_volume.c \
 	apps/common/ui/lv_watch/ui_menu/call/call_end.c \
-	apps/common/ui/lv_watch/ui_menu/remote_music/remote_music.c \
 	apps/common/ui/lv_watch/ui_menu/message/msg_list.c \
 	apps/common/ui/lv_watch/ui_menu/message/msg_detail.c \
 	apps/common/ui/lv_watch/ui_menu/camera/camera.c \
-	apps/common/ui/lv_watch/ui_menu/alarm/alarm_main.c \
-	apps/common/ui/lv_watch/ui_menu/alarm/alarm_time.c \
-	apps/common/ui/lv_watch/ui_menu/alarm/alarm_repeat.c \
-	apps/common/ui/lv_watch/ui_menu/alarm/alarm_modify.c \
-	apps/common/ui/lv_watch/ui_menu/alarm/alarm_remind.c \
 	apps/common/ui/lv_watch/ui_menu/countdown/countdown_time.c \
 	apps/common/ui/lv_watch/ui_menu/countdown/countdown_state.c \
 	apps/common/ui/lv_watch/ui_menu/countdown/countdown_over.c \
 	apps/common/ui/lv_watch/ui_menu/stopwatch/stopwatch_main.c \
 	apps/common/ui/lv_watch/ui_menu/stopwatch/stopwatch_state.c \
 	apps/common/ui/lv_watch/ui_menu/stopwatch/stopwatch_over.c \
-	apps/common/ui/lv_watch/ui_menu/al_name_99/al_name_list0.c \
-	apps/common/ui/lv_watch/ui_menu/al_name_99/al_name_list1.c \
-	apps/common/ui/lv_watch/ui_menu/al_name_99/al_name_ex.c \
 	apps/common/ui/lv_watch/ui_menu/hr/hr_sample.c \
 	apps/common/ui/lv_watch/ui_menu/bo/bo_sample.c \
+	apps/common/ui/lv_watch/ui_menu/allah_name/al_name_list_0.c \
+	apps/common/ui/lv_watch/ui_menu/allah_name/al_name_list_1.c \
+	apps/common/ui/lv_watch/ui_menu/allah_name/al_name_ex.c \
+	apps/common/ui/lv_watch/ui_menu/azkar/azkar_list.c \
+	apps/common/ui/lv_watch/ui_menu/azkar/azkar_section.c \
+	apps/common/ui/lv_watch/ui_menu/tasbih/tasbih_main.c \
+	apps/common/ui/lv_watch/ui_menu/tasbih/tasbih_start_time.c \
+	apps/common/ui/lv_watch/ui_menu/tasbih/tasbih_end_time.c \
+	apps/common/ui/lv_watch/ui_menu/tasbih/tasbih_inv_time.c \
+	apps/common/ui/lv_watch/ui_menu/tasbih/tasbih_days.c \
+	apps/common/ui/lv_watch/ui_menu/tasbih/tasbih_remind.c \
+	apps/common/ui/lv_watch/ui_menu/hijri_calendar/Gcalendar_main.c \
+	apps/common/ui/lv_watch/ui_menu/hijri_calendar/Hcalendar_main.c \
+	apps/common/ui/lv_watch/ui_menu/hijri_calendar/Hcalendar_modify.c \
+	apps/common/ui/lv_watch/ui_menu/hijri_calendar/Hcalendar_remind.c \
+	apps/common/ui/lv_watch/ui_menu/hijri_calendar/Hcalendar_festivals.c \
+	apps/common/ui/lv_watch/ui_menu/sleep/sleep_main.c \
+	apps/common/ui/lv_watch/ui_menu/sleep/sleep_detail.c \
+	apps/common/ui/lv_watch/ui_menu/alarm/alarm_main.c \
+	apps/common/ui/lv_watch/ui_menu/alarm/alarm_time.c \
+	apps/common/ui/lv_watch/ui_menu/alarm/alarm_repeat.c \
+	apps/common/ui/lv_watch/ui_menu/alarm/alarm_modify.c \
+	apps/common/ui/lv_watch/ui_menu/alarm/alarm_remind.c \
+	apps/common/ui/lv_watch/ui_menu/more/more_menu.c \
+	apps/common/ui/lv_watch/ui_menu/remote_music/remote_music.c \
+	apps/common/ui/lv_watch/ui_menu/prayer_time/prayer_time_main.c \
+	apps/common/ui/lv_watch/ui_menu/prayer_time/prayer_time_popup.c \
+	apps/common/ui/lv_watch/ui_menu/prayer_time/prayer_time_preview.c \
+	apps/common/ui/lv_watch/ui_menu/prayer_time/prayer_time_remind.c \
+	apps/common/ui/lv_watch/ui_menu/prayer_time/prayer_time_advance.c \
 	apps/common/ui/lv_watch/comm_nor_vm/nor_vm_main.c \
 	apps/common/ui/lv_watch/comm_nor_vm/nor_vm_contacts.c \
 	apps/common/ui/lv_watch/comm_nor_vm/nor_vm_weather.c \
 	apps/common/ui/lv_watch/comm_nor_vm/nor_vm_call_log.c \
 	apps/common/ui/lv_watch/comm_nor_vm/nor_vm_message.c \
+	apps/common/ui/lv_watch/comm_nor_vm/nor_vm_sleep.c \
+	apps/common/ui/lv_watch/comm_nor_vm/nor_vm_hr.c \
+	apps/common/ui/lv_watch/comm_nor_vm/nor_vm_bo.c \
+	apps/common/ui/lv_watch/comm_nor_vm/nor_vm_activity.c \
 
 # 需要编译的 .S 文件
 S_SRC_FILES := \
@@ -1118,8 +1189,12 @@ LFLAGS := \
 	cpu/br28/liba/wrist_bright.a \
 	cpu/br28/liba/Preprocess.a \
 	cpu/br28/liba/qmc6309/fangkuang.a \
-	cpu/br28/liba/vc9201/lib_hr_v637_jieli_NA_01.a \
-	cpu/br28/liba/vc9201/lib_spo2_vp60a2_int_JieLi_NA_01.a \
+	cpu/br28/liba/gh3018/Algo_Lib/common_pi32v2_clang-4.0.1.a \
+	cpu/br28/liba/gh3018/Algo_Lib/hba_pi32v2_clang-4.0.1.a \
+	cpu/br28/liba/gh3018/Algo_Lib/hrv_pi32v2_clang-4.0.1.a \
+	cpu/br28/liba/gh3018/Algo_Lib/nadt_pi32v2_clang-4.0.1.a \
+	cpu/br28/liba/gh3018/Algo_Lib/spo2_pi32v2_clang-4.0.1.a \
+	cpu/br28/liba/gh3018/Drv_Lib/Default_CLANG_PI32.a \
 	cpu/br28/liba/fall_detection.a \
 	cpu/br28/liba/motion_detection.a \
 	cpu/br28/liba/sedentary.a \

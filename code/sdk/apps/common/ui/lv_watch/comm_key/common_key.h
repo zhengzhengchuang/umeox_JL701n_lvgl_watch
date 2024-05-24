@@ -9,7 +9,9 @@ extern "C" {
 
 enum
 {
-    Common_Key_Val_0 = 0,
+    Common_Key_Val_0,
+    Common_Key_Val_1,
+    
     Common_Key_Val_Max,
 };
 

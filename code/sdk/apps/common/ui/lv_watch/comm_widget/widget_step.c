@@ -94,7 +94,7 @@ void common_step_widget_refresh(void)
             continue;
 
         int __data = \
-            get_vm_para_cache_with_label(\
+            GetVmParaCacheByLabel(\
                 vm_label_type); 
 
         if(__data > Step_Disp_Max)

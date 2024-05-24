@@ -45,7 +45,7 @@ bool vbat_is_low_power(void);
 void check_power_on_voltage(void);
 void vbat_timer_update(u32 msec);
 
-
+int vbat_power_ctrl(uint8_t on);
 
 #endif
 

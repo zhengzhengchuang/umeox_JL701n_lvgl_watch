@@ -2,11 +2,6 @@
 #define SYS_INIT_H
 
 
-
-
-
-
-
 typedef int (*initcall_t)(void);
 
 #define __initcall(fn)  \

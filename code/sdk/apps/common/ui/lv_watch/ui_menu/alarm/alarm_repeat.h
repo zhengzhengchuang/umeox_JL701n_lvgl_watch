@@ -7,8 +7,9 @@ extern "C" {
 
 #include "../../lv_watch.h"
 
-uint8_t get_alarm_repeat_tmp(void);
-void set_alarm_repeat_tmp(uint8_t repeat);
+uint8_t GetAlarmRepeatTmp(void);
+void SetAlarmRepeatTmp(uint8_t repeat);
+
 #ifdef __cplusplus
 } /* extern "C" */
 #endif

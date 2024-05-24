@@ -79,13 +79,14 @@ enum
     /*****设置相关页面*****/
     ui_act_id_about,
     ui_act_id_reset, 
+    ui_act_id_set_main,
     ui_act_id_lang_sel,
     ui_act_id_backlight,
     ui_act_id_menu_view,
     ui_act_id_sound_ctrl,
     ui_act_id_unit_switch,
     ui_act_id_screen_sleep,
-    ui_act_id_settings_list,
+    
 
     /*****通话相关页面*****/
     ui_act_id_call_main,
@@ -100,9 +101,9 @@ enum
     ui_act_id_call_end,
 
     /*****提醒相关页面*****/
-    ui_act_id_hr_warn,
-    ui_act_id_sedentary,
+    ui_act_id_find_dev,
     ui_act_id_off_wrist,
+    ui_act_id_sedentary,
     ui_act_id_device_op,
     ui_act_id_ota_update,
     ui_act_id_low_battery,
@@ -154,6 +155,44 @@ enum
     
     /*****血氧相关页面*****/
     ui_act_id_bo_sample,
+
+    /*****克尔白朝向相关页面*****/
+    ui_act_id_gm_cali,
+    ui_act_id_kaaba_position,
+    ui_act_id_kaaba_qibla,
+
+    /*****祈祷时间相关页面*****/
+    ui_act_id_prayer_time_main,
+    ui_act_id_prayer_time_popup,
+    ui_act_id_prayer_time_remind,
+    ui_act_id_prayer_time_advance,
+    ui_act_id_prayer_time_preview,
+
+    /*****祈祷祠相关页面*****/
+    ui_act_id_azkar_list,
+    ui_act_id_azkar_section,
+
+    /*****赞念提醒相关页面*****/
+    ui_act_id_tasbih_main,
+    ui_act_id_tasbih_start_time,
+    ui_act_id_tasbih_end_time,
+    ui_act_id_tasbih_inv_time,
+    ui_act_id_tasbih_days,
+    ui_act_id_tasbih_remind,
+
+    /*****回历相关页面*****/
+    ui_act_id_Gcalendar_main,
+    ui_act_id_Hcalendar_main,
+    ui_act_id_Hcalendar_modify,
+    ui_act_id_Hcalendar_remind,
+    ui_act_id_Hcalendar_festivals,
+
+    /*****睡眠相关页面*****/
+    ui_act_id_sleep_main,
+    ui_act_id_sleep_detail,
+
+    /*****更多菜单相关页面*****/
+    ui_act_id_more_menu,
 
     ui_act_id_max,
 };

@@ -1,46 +1,28 @@
 #include "unit_switch.h"
 
-/*********************************************************************************
-                                  距离单位事件下标                                 
-*********************************************************************************/
+#if 0
 static const uint8_t unit_distance_idx[\
     Unit_Distance_Sel_Num] = {
     unit_distance_kilometre, unit_distance_mile,
 };
 
-/*********************************************************************************
-                                  距离单位文本id                                 
-*********************************************************************************/
 static const uint16_t unit_distance_txtid[\
     Unit_Distance_Sel_Num] = {
     lang_txtid_kilometer, lang_txtid_mile,
 };
 
-/*********************************************************************************
-                                  温度单位事件下标                                 
-*********************************************************************************/
 static const uint8_t unit_temperature_idx[\
     Unit_Temperature_Sel_Num] = {
     unit_temperature_C, unit_temperature_F,
 };
 
-/*********************************************************************************
-                                  温度单位文本id                                 
-*********************************************************************************/
 static const uint16_t unit_temperature_txtid[\
     Unit_Temperature_Sel_Num] = {
     lang_txtid_unit_C, lang_txtid_unit_F,
 };
 
-/*********************************************************************************
-                                  单位切换内容参数                                 
-*********************************************************************************/
 static unit_switch_ctx_t unit_switch_ctx = {0};
 
-
-/*********************************************************************************
-                                  创建单位切换容器                                 
-*********************************************************************************/
 static void unit_switch_container_create(lv_obj_t *obj)
 {
     lv_obj_t **unit_switch_container = \
@@ -73,9 +55,6 @@ static void unit_switch_container_create(lv_obj_t *obj)
     return;
 }
 
-/*********************************************************************************
-                                  创建距离标签                                 
-*********************************************************************************/
 static void unit_switch_distance_label_create(void)
 {
     lv_obj_t *unit_switch_container = \
@@ -123,7 +102,7 @@ static void unit_switch_distance_sel_cb(lv_event_t *e)
         unit_switch_ctx.unit_distance_img_dsc;
 
     int cur_unit_distance = \
-        get_vm_para_cache_with_label(\
+        GetVmParaCacheByLabel(\
             vm_label_unit_distance);
 
     if(idx == cur_unit_distance)
@@ -131,7 +110,7 @@ static void unit_switch_distance_sel_cb(lv_event_t *e)
 
     cur_unit_distance = (int)idx;
 
-    set_vm_para_cache_with_label(\
+    SetVmParaCacheByLabel(\
         vm_label_unit_distance, cur_unit_distance);
 
     uint32_t file_img_dat;
@@ -167,7 +146,7 @@ static void unit_switch_distance_sel_create(void)
         unit_switch_ctx.unit_distance_img_dsc;
 
     int cur_unit_distance = \
-        get_vm_para_cache_with_label(\
+        GetVmParaCacheByLabel(\
             vm_label_unit_distance);
 
     widget_img_para.img_x = 24;
@@ -276,7 +255,7 @@ static void unit_switch_temperature_sel_cb(lv_event_t *e)
         unit_switch_ctx.unit_temperature_img_dsc;
 
     int cur_unit_temperature = \
-        get_vm_para_cache_with_label(\
+        GetVmParaCacheByLabel(\
             vm_label_unit_temperature);
 
     if(idx == cur_unit_temperature)
@@ -284,7 +263,7 @@ static void unit_switch_temperature_sel_cb(lv_event_t *e)
 
     cur_unit_temperature = (int)idx;
 
-    set_vm_para_cache_with_label(\
+    SetVmParaCacheByLabel(\
         vm_label_unit_temperature, cur_unit_temperature);
 
     uint32_t file_img_dat;
@@ -320,7 +299,7 @@ static void unit_switch_temperature_sel_create(void)
         unit_switch_ctx.unit_temperature_img_dsc;
 
     int cur_unit_temperature = \
-        get_vm_para_cache_with_label(\
+        GetVmParaCacheByLabel(\
             vm_label_unit_temperature);
 
     widget_img_para.img_x = 24;
@@ -378,17 +357,269 @@ static void unit_switch_temperature_sel_create(void)
 
     return;
 }
+#endif
+
+static int16_t scroll_y;
+static lv_obj_t *list_ctx_container;
+
+static const uint8_t unit_0_idx[\
+    unit_distance_num] = {
+    unit_distance_kilometre, unit_distance_mile,
+};
+static const uint8_t unit_1_idx[\
+    unit_temperature_num] = {
+    unit_temperature_C, unit_temperature_F,
+};
+
+static void scroll_cb(lv_event_t *e)
+{
+    if(!e) return;
+
+    lv_obj_t *obj = \
+        lv_event_get_target(e);
+    scroll_y = \
+        lv_obj_get_scroll_y(obj);
+
+    return;
+}
+
+static void list_ctx_container_create(lv_obj_t *obj)
+{
+    widget_obj_para.obj_parent = \
+        obj;
+    widget_obj_para.obj_x = 0;
+    widget_obj_para.obj_y = \
+        LCD_UI_Y_OFFSET;
+    widget_obj_para.obj_width = \
+        LCD_WIDTH;
+    widget_obj_para.obj_height = \
+        LCD_HEIGHT - LCD_UI_Y_OFFSET;
+    widget_obj_para.obj_bg_opax = \
+        LV_OPA_0;
+    widget_obj_para.obj_bg_color = \
+        lv_color_hex(0x000000);
+    widget_obj_para.obj_border_opax = \
+        LV_OPA_0;
+    widget_obj_para.obj_border_width = 0;
+    widget_obj_para.obj_border_color = \
+        lv_color_hex(0x000000);
+    widget_obj_para.obj_radius = 0;
+    widget_obj_para.obj_is_scrollable = \
+        true;
+    list_ctx_container = \
+        common_widget_obj_create(&widget_obj_para);
+    lv_obj_set_style_pad_bottom(list_ctx_container, 25, \
+        LV_PART_MAIN);
+    lv_obj_add_event_cb(list_ctx_container, scroll_cb, \
+        LV_EVENT_SCROLL, NULL);
+
+    return;
+}
+
+static void unit_0_cb(lv_event_t *e)
+{
+    if(!e) return;
+
+    uint8_t idx = \
+        *(uint8_t *)lv_event_get_user_data(e);
+    int unit_dis = \
+        GetVmParaCacheByLabel(vm_label_unit_distance);
+    if(unit_dis == idx)
+        return;
+
+    unit_dis = idx;
+    SetVmParaCacheByLabel(vm_label_unit_distance, unit_dis);
+
+    ui_act_id_t act_id = \
+        p_ui_info_cache->cur_act_id;
+    ui_menu_jump(act_id);
+
+    return;
+}
+
+static void elem_ctx_unit_0_create(menu_align_t menu_align)
+{
+    int unit_dis = \
+        GetVmParaCacheByLabel(vm_label_unit_distance);
+
+    widget_label_para.label_w = \
+        300;
+    widget_label_para.label_h = \
+        Label_Line_Height;
+    widget_label_para.long_mode = \
+        LV_LABEL_LONG_SCROLL;
+    widget_label_para.text_align = \
+        LV_TEXT_ALIGN_CENTER;
+    widget_label_para.label_text_color = \
+        lv_color_hex(0xffffff);
+    widget_label_para.label_ver_center = \
+        false;
+    widget_label_para.user_text_font = \
+        NULL;
+    widget_label_para.label_parent = \
+        list_ctx_container;
+    widget_label_para.label_text = \
+        get_lang_txt_with_id(lang_txtid_distance);
+    lv_obj_t *title_label = \
+        common_widget_label_create(&widget_label_para);
+    lv_obj_align(title_label, LV_ALIGN_TOP_MID, 0, 20);
+
+    widget_img_para.img_parent = \
+        list_ctx_container;
+    widget_img_para.img_click_attr = \
+        true;
+    widget_img_para.event_cb = \
+        unit_0_cb;
+
+    widget_label_para.label_w = \
+        300;
+    widget_label_para.label_h = \
+        Label_Line_Height;
+    widget_label_para.long_mode = \
+        LV_LABEL_LONG_SCROLL;
+    widget_label_para.text_align = \
+        LV_TEXT_ALIGN_CENTER;
+    widget_label_para.label_text_color = \
+        lv_color_hex(0xffffff);
+    widget_label_para.label_ver_center = \
+        false;
+    widget_label_para.user_text_font = NULL;
+
+    for(uint8_t idx = unit_distance_kilometre; idx < \
+        unit_distance_num; idx++)
+    {
+        if(idx == unit_dis)
+            widget_img_para.file_img_dat = \
+                comm_icon_06_index;
+        else
+            widget_img_para.file_img_dat = \
+                comm_icon_05_index;
+        widget_img_para.user_data = \
+            (void *)&unit_0_idx[idx];
+        lv_obj_t *sel_container = \
+            common_widget_img_create(&widget_img_para, NULL);
+        lv_obj_align(sel_container, LV_ALIGN_TOP_MID, 0, 84 + 95*idx);
+
+        widget_label_para.label_parent = \
+            sel_container;
+        widget_label_para.label_text = \
+            get_lang_txt_with_id(lang_txtid_kilometer + idx);
+        lv_obj_t *elem_ctx_label = \
+            common_widget_label_create(&widget_label_para);
+        lv_obj_center(elem_ctx_label);
+    }
+
+    return;
+}
+
+static void unit_1_cb(lv_event_t *e)
+{
+    if(!e) return;
+
+    uint8_t idx = \
+        *(uint8_t *)lv_event_get_user_data(e);
+    int unit_temper = \
+        GetVmParaCacheByLabel(vm_label_unit_temperature);
+    if(unit_temper == idx)
+        return;
+
+    unit_temper = idx;
+    SetVmParaCacheByLabel(vm_label_unit_temperature, unit_temper);
+
+    ui_act_id_t act_id = \
+        p_ui_info_cache->cur_act_id;
+    ui_menu_jump(act_id);
+
+    return;
+}
+
+static void elem_ctx_unit_1_create(menu_align_t menu_align)
+{
+    int unit_temper = \
+        GetVmParaCacheByLabel(vm_label_unit_temperature);
+
+    widget_label_para.label_w = \
+        300;
+    widget_label_para.label_h = \
+        Label_Line_Height;
+    widget_label_para.long_mode = \
+        LV_LABEL_LONG_SCROLL;
+    widget_label_para.text_align = \
+        LV_TEXT_ALIGN_CENTER;
+    widget_label_para.label_text_color = \
+        lv_color_hex(0xffffff);
+    widget_label_para.label_ver_center = \
+        false;
+    widget_label_para.user_text_font = \
+        NULL;
+    widget_label_para.label_parent = \
+        list_ctx_container;
+    widget_label_para.label_text = \
+        get_lang_txt_with_id(lang_txtid_temperature);
+    lv_obj_t *title_label = \
+        common_widget_label_create(&widget_label_para);
+    lv_obj_align(title_label, LV_ALIGN_TOP_MID, 0, 304);
+
+    widget_img_para.img_parent = \
+        list_ctx_container;
+    widget_img_para.img_click_attr = \
+        true;
+    widget_img_para.event_cb = \
+        unit_1_cb;
+
+    widget_label_para.label_w = \
+        300;
+    widget_label_para.label_h = \
+        Label_Line_Height;
+    widget_label_para.long_mode = \
+        LV_LABEL_LONG_SCROLL;
+    widget_label_para.text_align = \
+        LV_TEXT_ALIGN_CENTER;
+    widget_label_para.label_text_color = \
+        lv_color_hex(0xffffff);
+    widget_label_para.label_ver_center = \
+        false;
+    widget_label_para.user_text_font = NULL;
+
+    for(uint8_t idx = unit_temperature_C; idx < \
+        unit_temperature_num; idx++)
+    {
+        if(idx == unit_temper)
+            widget_img_para.file_img_dat = \
+                comm_icon_06_index;
+        else
+            widget_img_para.file_img_dat = \
+                comm_icon_05_index;
+        widget_img_para.user_data = \
+            (void *)&unit_1_idx[idx];
+        lv_obj_t *sel_container = \
+            common_widget_img_create(&widget_img_para, NULL);
+        lv_obj_align(sel_container, LV_ALIGN_TOP_MID, 0, 368 + 95*idx);
+
+        widget_label_para.label_parent = \
+            sel_container;
+        widget_label_para.label_text = \
+            get_lang_txt_with_id(lang_txtid_unit_C + idx);
+        lv_obj_t *elem_ctx_label = \
+            common_widget_label_create(&widget_label_para);
+        lv_obj_center(elem_ctx_label);
+    }
+
+    return;
+}
 
 static void menu_create_cb(lv_obj_t *obj)
 {
     if(!obj) return;
 
     ui_act_id_t prev_act_id = \
-        read_menu_return_level_id();
-
-    tileview_register_all_menu(obj, ui_act_id_null, \
-        ui_act_id_null, prev_act_id, ui_act_id_null, \
-            ui_act_id_unit_switch);
+        ui_act_id_set_main;
+    if(!lang_txt_is_arabic())
+        tileview_register_all_menu(obj, ui_act_id_null, ui_act_id_null, \
+            prev_act_id, ui_act_id_null, ui_act_id_unit_switch);
+    else
+        tileview_register_all_menu(obj, ui_act_id_null, ui_act_id_null, \
+            ui_act_id_null, prev_act_id, ui_act_id_unit_switch);
 
     return;
 }
@@ -409,18 +640,20 @@ static void menu_display_cb(lv_obj_t *obj)
 {
     if(!obj) return;
 
-    memset(&unit_switch_ctx, 0, \
-        sizeof(unit_switch_ctx_t));
+    menu_align_t menu_align = \
+        menu_align_left;
+    if(lang_txt_is_arabic())
+        menu_align = \
+            menu_align_right;
 
-    unit_switch_container_create(obj);
+    list_ctx_container_create(obj);
 
-    unit_switch_distance_label_create();
+    elem_ctx_unit_0_create(menu_align);
 
-    unit_switch_distance_sel_create();
+    elem_ctx_unit_1_create(menu_align);
 
-    unit_switch_temperature_label_create();
-
-    unit_switch_temperature_sel_create();
+    lv_obj_scroll_to_y(list_ctx_container, \
+        scroll_y, LV_ANIM_OFF);
 
     return;
 }

@@ -5,6 +5,8 @@
 extern "C" {
 #endif
 
+#define Vm_Debug_En (0)
+
 #define UI_USE_COVER            0
 #define UI_USE_TILEVIEW         1
 #define UI_USE_TRANSLATE        0

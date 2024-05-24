@@ -53,7 +53,7 @@
 #define qmi8658_log(...)
 #endif
 
-#define Qmi8658_Fifo_WM (20)
+#define Qmi8658_Fifo_WM (30)
 
 enum Qmi8658Register
 {
@@ -358,6 +358,8 @@ typedef struct
 	unsigned char	cod_data[6];
 	float			st_out[6];
 } qmi8658_state;
+
+u16 GetGsACCSsvt(void);
 
 extern int qmi8658_write_reg(unsigned char reg, unsigned char value);
 extern int qmi8658_read_reg(unsigned char reg, unsigned char* buf, unsigned short len);

@@ -74,7 +74,8 @@ lv_obj_t *common_widget_img_create(common_widget_img_para_t *img_para, \
         return NULL;
     }
 
-    if(!(img_dst_gather[img_dst_cnt].data))
+    if(!(img_dst_gather[img_dst_cnt].data) && \
+        img_para->file_img_dat != File_Img_Dat_None)
     {
         open_fd("usr_nor");
         lv_open_res(get_res_fd(), RES_BASE_ADDR, 0, file_index[img_para->file_img_dat], \
@@ -100,8 +101,7 @@ lv_obj_t *common_widget_img_create(common_widget_img_para_t *img_para, \
 
     user_img_dsc.img_dst_cnt++;
 
-    // printf("img_dst_cnt = %d\n", \
-    //     user_img_dsc.img_dst_cnt);
+    //printf("%d\n", user_img_dsc.img_dst_cnt);
 
     return common_widget_img;
 }
@@ -629,6 +629,8 @@ lv_obj_t *common_widget_textarea_create(common_widget_textarea_para_t *textarea_
         lv_obj_set_style_border_color(common_widget_textarea, \
             textarea_para->border_color, LV_PART_MAIN);
     }
+    // lv_obj_set_style_pad_ver(common_widget_textarea, 5, \
+    //     LV_PART_MAIN);
 
     return common_widget_textarea;
 }

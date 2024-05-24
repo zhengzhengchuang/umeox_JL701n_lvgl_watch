@@ -1,10 +1,10 @@
 #include "stopwatch_main.h"
 
-static void stopwatch_start_cb(lv_event_t *e)
+static void start_cb(lv_event_t *e)
 {
     if(!e) return;
 
-    common_user_stopwatch_create();
+    UserStopwatchCreate();
 
     ui_menu_jump_handle(\
         ui_act_id_stopwatch_state);
@@ -16,14 +16,14 @@ static void menu_create_cb(lv_obj_t *obj)
 {
     if(!obj) return;
 
-    common_user_stopwatch_reset();
-
     ui_act_id_t prev_act_id = \
-        read_menu_return_level_id();
-
-    tileview_register_all_menu(obj, ui_act_id_null, \
-        ui_act_id_null, prev_act_id, ui_act_id_null, \
-            ui_act_id_stopwatch_main);
+        ui_act_id_more_menu;
+    if(!lang_txt_is_arabic())
+        tileview_register_all_menu(obj, ui_act_id_null, ui_act_id_null, \
+            prev_act_id, ui_act_id_null, ui_act_id_stopwatch_main);
+    else
+        tileview_register_all_menu(obj, ui_act_id_null, ui_act_id_null, \
+            ui_act_id_null, prev_act_id, ui_act_id_stopwatch_main);
 
     return;
 }
@@ -44,15 +44,9 @@ static void menu_display_cb(lv_obj_t *obj)
 {
     if(!obj) return;
 
-    stopwatch_attribute_data_t *stopwatch_data = \
-        &p_ui_info_cache->common_stopwatch_para.stopwatch_data;
-    char stopwatch_data_str[10];
-    memset(stopwatch_data_str, 0, \
-        sizeof(stopwatch_data_str));
-    sprintf(stopwatch_data_str, "%02d:%02d.%02d", \
-        stopwatch_data->stopwatch_minute, \
-            stopwatch_data->stopwatch_second, \
-                stopwatch_data->stopwatch_m_second);
+    char time_str[10];
+    memset(time_str, 0, sizeof(time_str));
+    sprintf(time_str, "%02d:%02d.%02d", 0, 0, 0);
     num_str_para.parent = \ 
         obj;
     num_str_para.num_obj_x = \
@@ -60,7 +54,7 @@ static void menu_display_cb(lv_obj_t *obj)
     num_str_para.num_obj_y = \
         184;
     num_str_para.p_num_str = \
-        stopwatch_data_str;
+        time_str;
     num_str_para.num_str_len = \
         8;
     num_str_para.num_obj = \
@@ -70,7 +64,7 @@ static void menu_display_cb(lv_obj_t *obj)
     num_str_para.num_dsc_idx = \
         NULL;
     num_str_para.file_00_index = \
-        comm_num_36x56_wh_00_index;
+        comm_num_34x56_wh_00_index;
     common_widget_num_str_create(&num_str_para);
 
     widget_img_para.img_parent = \
@@ -83,22 +77,20 @@ static void menu_display_cb(lv_obj_t *obj)
         NULL;
     lv_obj_t *comm_11_icon = \
         common_widget_img_create(&widget_img_para, NULL);
-    lv_obj_align(comm_11_icon, LV_ALIGN_TOP_MID, \
-        0, 266);
+    lv_obj_align(comm_11_icon, LV_ALIGN_TOP_MID, 0, 266);
 
     widget_img_para.file_img_dat = \
         comm_icon_28_index;
     widget_img_para.img_click_attr = \
         true;
     widget_img_para.event_cb = \
-        stopwatch_start_cb;
+        start_cb;
     widget_img_para.user_data = \
         NULL;
-    lv_obj_t *stopwatch_start_icon = \
+    lv_obj_t *start_button = \
         common_widget_img_create(&widget_img_para, NULL);
-    lv_obj_align(stopwatch_start_icon, LV_ALIGN_TOP_MID, \
-        0, 376);
-    lv_obj_set_ext_click_area(stopwatch_start_icon, 20);
+    lv_obj_align(start_button, LV_ALIGN_TOP_MID, 0, 376);
+    lv_obj_set_ext_click_area(start_button, 20);
 
     return;
 }
@@ -116,7 +108,7 @@ register_ui_menu_load_info(\
 {
     .menu_arg = NULL,
     .lock_flag = false,
-    .return_flag = true,
+    .return_flag = false,
     .menu_id = \
         ui_act_id_stopwatch_main,
     .user_offscreen_time = 0,

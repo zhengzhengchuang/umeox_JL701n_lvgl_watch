@@ -522,6 +522,8 @@ int lcd_drv_power_ctrl(u8 on)
     return 0;
 }
 
+
+//user 控制屏幕使能管教
 int ldo_power_ctrl(uint8_t on)
 {
     on = !!on;
@@ -531,7 +533,6 @@ int ldo_power_ctrl(uint8_t on)
 
     return 0;
 }
-
 
 struct lcd_platform_data *lcd_get_platform_data()
 {
@@ -1723,12 +1724,8 @@ int lcd_sleep_ctrl(u8 enter)
         lcd_sleep_in = true;
 #endif
         clock_remove_set(DEC_UI_CLK);
-
-        ldo_power_ctrl(0);
     } else 
     {
-        ldo_power_ctrl(1);
-
         clock_add_set(DEC_UI_CLK);
 
         norflash_flash_power_check();

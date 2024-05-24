@@ -93,7 +93,7 @@ void common_calorie_widget_refresh(void)
             continue;
 
         int __data = \
-            get_vm_para_cache_with_label(\
+            GetVmParaCacheByLabel(\
                 vm_label_type); 
 
         if(__data > Calorie_Disp_Max)

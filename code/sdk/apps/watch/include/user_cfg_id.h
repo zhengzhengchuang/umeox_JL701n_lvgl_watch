@@ -139,8 +139,20 @@
 #define 	CFG_BT_PAGE_LIST		    189
 #define		CFG_MUSIC_MODE				190
 
-#define     CFG_USER_PARA_INFO			191
-#define     CFG_MAG_CALIPARA_INFO	    192//存储地磁校准信息
+#define     CFG_SYS_PARA_INFO			191
+#define     CFG_GM_CALIPARA_INFO	    192//存储地磁校准信息
+#define     CFG_LATITUDE_LONGITUDE_INFO	193//存储当前位置的经纬度
+#define     CFG_PT_CFG_PARA_INFO	    194//存储祈祷时间配置参数信息
+#define     CFG_TASBIH_R_PARA_INFO	    195//存储赞念提醒参数信息
+#define     CFG_HCALENDAR_PARA_INFO	    196//存储回历参数信息
+#define     CFG_ALARM_PARA_INFO	        197//存储闹钟参数信息
+#define     CFG_DND_PARA_INFO	        198//存储勿扰参数信息
+#define     CFG_USER_PERSONAL_INFO	    199//存储用户个人信息
+#define     CFG_GM_ALGO_KEY_INFO	    200//存储GoMore算法密钥
+#define     CFG_DEV_BOND_CODE_INFO	    201//存储设备绑定码
+#define     CFG_MSG_NOTIFY_PARA_INFO	202//存储消息通知参数信息
+#define     CFG_SEDENTARY_PARA_INFO	    203//存储久坐提醒参数
+//#define     CFG_RMUSIC_PARA_INFO	    204//存储远程音乐参数
 #if 0
 #define     VM_WATCH_EX_BEGIN            191//拓展表盘信息
 #define     VM_WATCH_EX0                      VM_WATCH_EX_BEGIN//拓展表盘信息

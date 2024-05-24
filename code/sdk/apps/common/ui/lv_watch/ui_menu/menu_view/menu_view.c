@@ -1,35 +1,16 @@
 #include "menu_view.h"
 
-static const uint32_t menu_view_icon_src[\
-    ui_menu_view_max] = 
-{
-    menu_view_00_index, menu_view_01_index, \
-    menu_view_02_index,
-};
-
-static const uint16_t menu_view_text_id[\
-    ui_menu_view_max] = 
-{
-    lang_txtid_view_list, lang_txtid_view_grid_1, \
-    lang_txtid_view_grid_2,
-};
-
-static const uint8_t menu_view_elem_container_idx[\
-    ui_menu_view_max] = 
-{
+static lv_obj_t *elem_container[\
+    ui_menu_view_max];
+static ui_menu_view_t menu_view_cache = \
+    ui_menu_view_max;
+    
+static const uint8_t ex_idx[ui_menu_view_max] = {
     ui_menu_view_00, ui_menu_view_01, \
     ui_menu_view_02,
 };
 
-static ui_menu_view_t menu_view_cache = \
-    ui_menu_view_max;
-static uint16_t elem_container_dsc_idx[\
-    ui_menu_view_max] = {0xffff};
-static lv_obj_t *menu_view_elem_container[\
-    ui_menu_view_max] = {NULL};
-
-
-static void menu_view_elem_container_cb(lv_event_t *e)
+static void elem_container_cb(lv_event_t *e)
 {
     if(!e) return;
 
@@ -41,37 +22,27 @@ static void menu_view_elem_container_cb(lv_event_t *e)
 
     menu_view_cache = menu_view_sel;
 
-    uint32_t file_img_dat;
-    for(uint8_t i = ui_menu_view_00; i < ui_menu_view_max; i++)
-    {
-        if(menu_view_cache == i)
-            file_img_dat = \
-                comm_icon_06_index;
-        else
-           file_img_dat = \
-                comm_icon_05_index;
+    SetVmParaCacheByLabel(vm_label_menu_view, \
+        menu_view_cache);
 
-        common_widget_img_replace_src(\
-            menu_view_elem_container[i], file_img_dat, \
-                elem_container_dsc_idx[i]);
-    }
+    ui_act_id_t act_id = \
+        p_ui_info_cache->cur_act_id;
+    ui_menu_jump(act_id);
 
     return;
 }
 
-static void menu_view_confirm_button_cb(lv_event_t *e)
+static void confirm_button_cb(lv_event_t *e)
 {
     if(!e) return;
 
     int menu_view_vm_cache = \
         (int)menu_view_cache;
     
-    set_vm_para_cache_with_label(\
+    SetVmParaCacheByLabel(\
         vm_label_menu_view, menu_view_vm_cache);
 
-    ui_act_id_t prev_act_id = \
-        read_menu_return_level_id();
-    ui_menu_jump(prev_act_id);
+    ui_menu_jump(ui_act_id_set_main);
 
     return;
 }
@@ -81,11 +52,13 @@ static void menu_create_cb(lv_obj_t *obj)
     if(!obj) return;
 
     ui_act_id_t prev_act_id = \
-        read_menu_return_level_id();
-
-    tileview_register_all_menu(obj, ui_act_id_null, \
-        ui_act_id_null, prev_act_id, ui_act_id_null, \
-            ui_act_id_menu_view);
+        ui_act_id_set_main;
+    if(!lang_txt_is_arabic())
+        tileview_register_all_menu(obj, ui_act_id_null, ui_act_id_null, \
+            prev_act_id, ui_act_id_null, ui_act_id_menu_view);
+    else
+        tileview_register_all_menu(obj, ui_act_id_null, ui_act_id_null, \
+            ui_act_id_null, prev_act_id, ui_act_id_menu_view);
 
     return;
 }
@@ -113,13 +86,14 @@ static void menu_display_cb(lv_obj_t *obj)
             menu_align_right;
 
     int cur_menu_view = \
-        get_vm_para_cache_with_label(\
+        GetVmParaCacheByLabel(\
             vm_label_menu_view);
 
     menu_view_cache = \
         (ui_menu_view_t)cur_menu_view;
     
-    widget_img_para.img_parent = obj;
+    widget_img_para.img_parent = \
+        obj;
     widget_img_para.img_x = 24;
 
     for(uint8_t i = ui_menu_view_00; i < \
@@ -133,29 +107,27 @@ static void menu_display_cb(lv_obj_t *obj)
         else
             widget_img_para.file_img_dat = \
                 comm_icon_05_index;
-        widget_img_para.img_click_attr = true;
+        widget_img_para.img_click_attr = \
+            true;
         widget_img_para.event_cb = \
-            menu_view_elem_container_cb;
+            elem_container_cb;
         widget_img_para.user_data = \
-            (void *)&menu_view_elem_container_idx[i];
-        menu_view_elem_container[i] = \
-            common_widget_img_create(&widget_img_para, \
-                &elem_container_dsc_idx[i]);
+            (void *)&ex_idx[i];
+        elem_container[i] = \
+            common_widget_img_create(&widget_img_para, NULL);
     }
 
     for(uint8_t i = ui_menu_view_00; i < \
         ui_menu_view_max; i++)
     {
         widget_img_para.img_parent = \
-            menu_view_elem_container[i];
+            elem_container[i];
         widget_img_para.file_img_dat = \
-            menu_view_icon_src[i];
+            menu_view_00_index + i;
         widget_img_para.img_click_attr = false;
         widget_img_para.event_cb = NULL;
         lv_obj_t *menu_view_icon = \
-            common_widget_img_create(&widget_img_para, \
-                NULL);
-
+            common_widget_img_create(&widget_img_para, NULL);
         if(menu_align == menu_align_right)
             lv_obj_align(menu_view_icon, LV_ALIGN_RIGHT_MID, \
                 -44, 0);
@@ -186,9 +158,9 @@ static void menu_display_cb(lv_obj_t *obj)
         ui_menu_view_max; i++)
     {
         widget_label_para.label_parent = \
-            menu_view_elem_container[i];
+            elem_container[i];
         widget_label_para.label_text = \
-            get_lang_txt_with_id(menu_view_text_id[i]);
+            get_lang_txt_with_id(lang_txtid_view_list + i);
         lv_obj_t *menu_view_label = \
             common_widget_label_create(&widget_label_para);
         if(menu_align == menu_align_right)
@@ -207,11 +179,11 @@ static void menu_display_cb(lv_obj_t *obj)
     widget_img_para.file_img_dat = \
         comm_icon_02_index;
     widget_img_para.event_cb = \
-        menu_view_confirm_button_cb;
+        confirm_button_cb;
     widget_img_para.user_data = NULL;
     lv_obj_t *confirm_button = \
         common_widget_img_create(&widget_img_para,  NULL);
-    lv_obj_set_ext_click_area(confirm_button, 15);
+    lv_obj_set_ext_click_area(confirm_button, 20);
     
     return;
 }

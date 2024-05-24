@@ -3,23 +3,18 @@
 #include "alarm_repeat.h"
 
 static uint8_t alarm_repeat_tmp;
-static int16_t alarm_repeat_scroll_y = 0;
+static int16_t alarm_repeat_scroll_y;
 static lv_obj_t *alarm_repeat_scroll_container;
-static const uint8_t alarm_repeat_elem_container_idx[7] = {
+static const uint8_t alarm_repeat_idx[7] = {
     0, 1, 2, 3, 4, 5, 6,
 };
-static const comm_lang_txtid_t alarm_repeat_week_txt[7] = {
-    lang_txtid_sunday, lang_txtid_monday, lang_txtid_tuesday, \
-    lang_txtid_wednesday, lang_txtid_thursday, lang_txtid_friday, \
-    lang_txtid_saturday,
-};
 
-uint8_t get_alarm_repeat_tmp(void)
+uint8_t GetAlarmRepeatTmp(void)
 {
     return alarm_repeat_tmp;
 }
 
-void set_alarm_repeat_tmp(uint8_t repeat)
+void SetAlarmRepeatTmp(uint8_t repeat)
 {
     alarm_repeat_tmp = \
         repeat;
@@ -34,40 +29,44 @@ static void alarm_set_confirm_cb(lv_event_t *e)
     if(!e) return;
 
     uint8_t id = \
-        get_alarm_edit_id();
+        GetAlarmEditId();
     uint8_t alarm_num = \
-        p_vm_para_cache->alarm_manage_para.alarm_num;
+        Alarm_Info.alarm_num;
 
     uint8_t alarm_hour;
     uint8_t alarm_minute;
-    get_alarm_time_tmp(&alarm_hour, \
+    GetAlarmTimeTmp(&alarm_hour, \
         &alarm_minute);
+
+    alarm_union_t alarm_union_tmp;
+    alarm_union_tmp.bit_field.alarm_id = id;
+    alarm_union_tmp.bit_field.alarm_hour = \
+        alarm_hour;
+    alarm_union_tmp.bit_field.alarm_minute = \
+        alarm_minute;
+    alarm_union_tmp.bit_field.alarm_repeat = \
+        alarm_repeat_tmp;
+
+    if(id < alarm_num)
+    {
+        //编辑
+        UserAlarmTimeModify(alarm_union_tmp.info);
+        UserAlarmRepeatModify(alarm_union_tmp.info);
+    }else
+    {
+        //添加
+        alarm_union_tmp.bit_field.alarm_enable = \
+            true;
+        UserAlarmAdd(alarm_union_tmp.info);
+    }
     
-    alarm_manage_para_t *alarm_manage_para = \
-        &(p_vm_para_cache->alarm_manage_para);
-
-    alarm_manage_para->alarm_info[\
-        id].bit_field.alarm_id = id;
-    alarm_manage_para->alarm_info[\
-        id].bit_field.alarm_enable = 1;
-    alarm_manage_para->alarm_info[\
-        id].bit_field.alarm_hour = alarm_hour;
-    alarm_manage_para->alarm_info[\
-        id].bit_field.alarm_minute = alarm_minute;
-    alarm_manage_para->alarm_info[\
-        id].bit_field.alarm_repeat = alarm_repeat_tmp;
-
-    if(id >= alarm_num)
-        alarm_manage_para->alarm_num += 1;
-
-    ui_act_id_t prev_act_id = \ 
-        read_menu_return_level_id();
-    ui_menu_jump(prev_act_id);
+    ui_menu_jump(ui_act_id_alarm_main);
 
     return;
 }
 
-static void alarm_repeat_elem_container_cb(lv_event_t *e)
+static void alarm_repeat_elem_container_cb(\
+    lv_event_t *e)
 {
     if(!e) return;
 
@@ -86,7 +85,8 @@ static void alarm_repeat_elem_container_cb(lv_event_t *e)
     return;
 }
 
-static void alarm_repeat_scroll_container_cb(lv_event_t *e)
+static void alarm_repeat_scroll_cb(\
+    lv_event_t *e)
 {
     if(!e) return;
 
@@ -98,7 +98,8 @@ static void alarm_repeat_scroll_container_cb(lv_event_t *e)
     return;
 }
 
-static void alarm_repeat_scroll_container_create(lv_obj_t *obj)
+static void alarm_repeat_container_create(\
+    lv_obj_t *obj)
 {
     widget_obj_para.obj_parent = \
         obj;
@@ -123,10 +124,8 @@ static void alarm_repeat_scroll_container_create(lv_obj_t *obj)
         true;
     alarm_repeat_scroll_container = \
         common_widget_obj_create(&widget_obj_para);
-    lv_obj_set_style_pad_bottom(alarm_repeat_scroll_container, \
-        25, LV_PART_MAIN);
     lv_obj_add_event_cb(alarm_repeat_scroll_container, \
-        alarm_repeat_scroll_container_cb, LV_EVENT_SCROLL, NULL);
+        alarm_repeat_scroll_cb, LV_EVENT_SCROLL, NULL);
 
     return;
 }
@@ -136,11 +135,13 @@ static void menu_create_cb(lv_obj_t *obj)
     if(!obj) return;
 
     ui_act_id_t prev_act_id = \
-        ui_act_id_alarm_time;
-
-    tileview_register_all_menu(obj, ui_act_id_null, \
-        ui_act_id_null, prev_act_id, ui_act_id_null, \
-            ui_act_id_alarm_repeat);
+        ui_act_id_null;
+    if(!lang_txt_is_arabic())
+        tileview_register_all_menu(obj, ui_act_id_null, ui_act_id_null, \
+            prev_act_id, ui_act_id_null, ui_act_id_alarm_repeat);
+    else
+        tileview_register_all_menu(obj, ui_act_id_null, ui_act_id_null, \
+            ui_act_id_null, prev_act_id, ui_act_id_alarm_repeat);
 
     return;
 }
@@ -167,7 +168,8 @@ static void menu_display_cb(lv_obj_t *obj)
         menu_align = \
             menu_align_right;
 
-    alarm_repeat_scroll_container_create(obj);
+    alarm_repeat_container_create(\
+        obj);
 
     uint8_t i;
     for(i = 0; i < 7; i++)
@@ -185,7 +187,7 @@ static void menu_display_cb(lv_obj_t *obj)
         widget_img_para.event_cb = \
             alarm_repeat_elem_container_cb;
         widget_img_para.user_data = \
-            (void *)&alarm_repeat_elem_container_idx[i];
+            (void *)&alarm_repeat_idx[i];
         lv_obj_t *alarm_repeat_elem_container = \
             common_widget_img_create(&widget_img_para, NULL);
         lv_obj_align(alarm_repeat_elem_container, LV_ALIGN_TOP_MID, \
@@ -213,7 +215,7 @@ static void menu_display_cb(lv_obj_t *obj)
             NULL;
         widget_label_para.label_text = \
             get_lang_txt_with_id(\
-                alarm_repeat_week_txt[i]);
+                lang_txtid_sunday + i);
         lv_obj_t *alarm_repeat_week_label = \
             common_widget_label_create(&widget_label_para);
         if(menu_align == menu_align_right)
@@ -280,7 +282,7 @@ register_ui_menu_load_info(\
 {
     .menu_arg = NULL,
     .lock_flag = false,
-    .return_flag = false,
+    .return_flag = true,
     .menu_id = \
         ui_act_id_alarm_repeat,
     .user_offscreen_time = 0,

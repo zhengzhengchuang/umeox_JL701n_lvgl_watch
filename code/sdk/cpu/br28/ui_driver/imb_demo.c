@@ -4980,7 +4980,7 @@ void lcd_disp_init(void *arg, void **buf1, void **buf2, int *lenp)
         __this->lcd->clear_screen(0x000000);
 
     u8 lcd_backlight = \
-        get_vm_para_cache_with_label(vm_label_backlight);
+        GetVmParaCacheByLabel(vm_label_backlight);
 
     if(__this->lcd->backlight_ctrl)
         __this->lcd->backlight_ctrl(lcd_backlight);
@@ -5005,6 +5005,7 @@ void lcd_disp_init(void *arg, void **buf1, void **buf2, int *lenp)
     *buf2 = lcd_buffer_init(0, buf, len / info.buf_num, info.buf_num);
     *buf1 = buf;
     *lenp = len;    
+
 #else   //PSRAM整帧
     len = info.height*info.width*2;
     *lenp = len*2;

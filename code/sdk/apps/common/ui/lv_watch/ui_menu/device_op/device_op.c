@@ -4,6 +4,8 @@ static void shutdown_event_cb(lv_event_t *e)
 {
     if(!e) return;
 
+    DevOpShutdownHandle();
+
     return;
 }
 
@@ -18,9 +20,14 @@ static void menu_create_cb(lv_obj_t *obj)
 {
     if(!obj) return;
 
-    tileview_register_all_menu(obj, ui_act_id_null, \
-        ui_act_id_null, ui_act_id_null, ui_act_id_null, \
-            ui_act_id_device_op);
+    ui_act_id_t prev_act_id = \
+        read_menu_return_level_id();
+    if(!lang_txt_is_arabic())
+        tileview_register_all_menu(obj, ui_act_id_null, ui_act_id_null, \
+            prev_act_id, ui_act_id_null, ui_act_id_device_op);
+    else
+        tileview_register_all_menu(obj, ui_act_id_null, ui_act_id_null, \
+            ui_act_id_null, prev_act_id, ui_act_id_device_op);
 
     return;
 }
@@ -76,7 +83,7 @@ register_ui_menu_load_info(\
 {
     .menu_arg = NULL,
     .lock_flag = false,
-    .return_flag = true,
+    .return_flag = false,
     .menu_id = \
         ui_act_id_device_op,
     .user_offscreen_time = 0,

@@ -1588,7 +1588,7 @@ void bt_status_phone_income(struct bt_event *bt)
 {
     printf("*********%s\n", __func__);
 
-    record_call_out_or_in(2);
+    SetCallOutOrIn(2);
   
     __this->esco_dump_packet = ESCO_DUMP_PACKET_CALL;
     ui_update_status(STATUS_PHONE_INCOME);
@@ -1649,7 +1649,7 @@ void bt_status_phone_out(struct bt_event *bt)
 {
     printf("*********%s\n", __func__);
 
-    record_call_out_or_in(1);
+    SetCallOutOrIn(1);
    
     if (bt_switch_back_timer) 
     {
@@ -1675,7 +1675,7 @@ void bt_status_phone_active(struct bt_event *bt)
 {
     printf("*********%s\n", __func__);
 
-    record_call_is_answer(true);
+    SetCallAnswerState(true);
   
     bt_phone_active_start_time = timer_get_ms();
     ui_update_status(STATUS_PHONE_ACTIV);
@@ -1713,7 +1713,7 @@ void bt_status_phone_active(struct bt_event *bt)
     app_audio_set_volume(APP_AUDIO_STATE_CALL, app_var.call_volume, 1);
 #endif
 
-    bt_call_answer_menu_jump();
+    CallAnswerAfterHandle();
 }
 
 u32 bt_get_phone_active_start_time_ms(void)
@@ -1763,10 +1763,6 @@ void bt_status_phone_hangup(struct bt_event *bt)
         //call handup
         bt_user_priv_var.set_call_vol_flag  = 0;
     }
-
-    update_call_log_message_flash();
-    bt_call_hang_up_menu_jump(); 
-    record_call_status_clear(); 
 }
 
 /*----------------------------------------------------------------------------*/
@@ -1807,7 +1803,7 @@ void bt_status_phone_number(struct bt_event *bt)
     {
         bt_user_priv_var.phone_num_flag = 1;
 
-        bt_call_out_or_in_menu_jump();
+        CallOutOrInProcess();
     }else 
     {
         log_debug("PHONE_NUMBER len err\n");

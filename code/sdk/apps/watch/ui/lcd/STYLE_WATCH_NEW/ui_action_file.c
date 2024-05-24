@@ -455,12 +455,6 @@ REGISTER_UI_EVENT_HANDLER(VERTLIST_3)
   .ontouch = file_switch_ontouch,
 };
 
-
-
-
-
-
-
 #endif
 #endif /* #if TCFG_APP_MUSIC_EN */
 #endif /* #if (!TCFG_LUA_ENABLE) */

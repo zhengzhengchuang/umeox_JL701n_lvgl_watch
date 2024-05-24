@@ -133,9 +133,9 @@
 //*********************************************************************************//
 //                                  SD 配置                                        //
 //*********************************************************************************//
-#define TCFG_SD0_ENABLE						DISABLE//ENABLE_THIS_MOUDLE	//SD0模块使能
+#define TCFG_SD0_ENABLE						ENABLE_THIS_MOUDLE	//SD0模块使能
 #define TCFG_SD0_DAT_MODE					1               //线数设置，1：一线模式  4：四线模式
-#define TCFG_SD0_DET_MODE					SD_IO_DECT//SD_CLK_DECT		//SD卡检测方式
+#define TCFG_SD0_DET_MODE					SD_CLK_DECT//SD_IO_DECT//SD_CLK_DECT		//SD卡检测方式
 #define TCFG_SD0_DET_IO                     IO_PORTB_03      //当检测方式为IO检测可用
 #define TCFG_SD0_DET_IO_LEVEL               0               //当检测方式为IO检测可用,0：低电平检测到卡。 1：高电平(外部电源)检测到卡。 2：高电平(SD卡电源)检测到卡。
 #define TCFG_SD0_CLK						(3000000 * 4L)  //SD卡时钟频率设置
@@ -146,7 +146,7 @@
 #define TCFG_SD0_PORT_DA2					NO_CONFIG_PORT
 #define TCFG_SD0_PORT_DA3					NO_CONFIG_PORT
 
-#define TCFG_SD_ALWAY_ONLINE_ENABLE         DISABLE//ENABLE
+#define TCFG_SD_ALWAY_ONLINE_ENABLE         ENABLE
 #define TCFG_KEEP_CARD_AT_ACTIVE_STATUS	    DISABLE	// 保持卡活跃状态。会增加功耗
 
 #define TCFG_SD0_POWER_PORT					IO_PORTG_08 // 没有psram时使用SDPG（PE6），该宏定义无效。psram占用SDPG时，使用mos管控制SDPG
@@ -189,7 +189,7 @@
 //*********************************************************************************//
 //                                 iokey 配置                                      //
 //*********************************************************************************//
-#define TCFG_IOKEY_ENABLE					ENABLE_THIS_MOUDLE //是否使能IO按键
+#define TCFG_IOKEY_ENABLE					DISABLE_THIS_MOUDLE//ENABLE_THIS_MOUDLE //是否使能IO按键
 
 #define TCFG_IOKEY0_WAY             		ONE_PORT_TO_LOW    //按键一端接低电平一端接IO
 #define TCFG_IOKEY0             			IO_PORTB_01        //IO按键端口
@@ -206,16 +206,16 @@
 //*********************************************************************************//
 //                                 adkey 配置                                      //
 //*********************************************************************************//
-#define TCFG_ADKEY_ENABLE                   DISABLE_THIS_MOUDLE//是否使能AD按键
-#define TCFG_ADKEY_PORT                     IO_PORT_DM         //AD按键端口(需要注意选择的IO口是否支持AD功能)
+#define TCFG_ADKEY_ENABLE                   ENABLE_THIS_MOUDLE//DISABLE_THIS_MOUDLE//是否使能AD按键
+#define TCFG_ADKEY_PORT                     IO_PORTB_01         //AD按键端口(需要注意选择的IO口是否支持AD功能)
 /*AD通道选择，需要和AD按键的端口相对应:
     AD_CH_PA1    AD_CH_PA3    AD_CH_PA4    AD_CH_PA5
     AD_CH_PA9    AD_CH_PA1    AD_CH_PB1    AD_CH_PB4
     AD_CH_PB6    AD_CH_PB7    AD_CH_DP     AD_CH_DM
     AD_CH_PB2
 */
-#define TCFG_ADKEY_AD_CHANNEL               AD_CH_DM
-#define TCFG_ADKEY_EXTERN_UP_ENABLE         ENABLE_THIS_MOUDLE //是否使用外部上拉
+#define TCFG_ADKEY_AD_CHANNEL               AD_CH_PB1
+#define TCFG_ADKEY_EXTERN_UP_ENABLE         DISABLE_THIS_MOUDLE//ENABLE_THIS_MOUDLE //是否使用外部上拉
 
 #if TCFG_ADKEY_EXTERN_UP_ENABLE
 #define R_UP    220                 //22K，外部上拉阻值在此自行设置
@@ -896,7 +896,7 @@ DAC硬件上的连接方式,可选的配置：
 #define TCFG_CHIP_RESET_PIN						IO_PORTB_01 // 长按复位
 #endif
 #define TCFG_CHIP_RESET_LEVEL					0 // 0-低电平复位；1-高电平复位
-#define TCFG_CHIP_RESET_TIME					8 // 复位时间1 2 4 8 16 单位为秒
+#define TCFG_CHIP_RESET_TIME					16 // 复位时间1 2 4 8 16 单位为秒
 
 //*********************************************************************************//
 //                                  蓝牙配置                                       //
@@ -907,7 +907,7 @@ DAC硬件上的连接方式,可选的配置：
 #define TCFG_BT_SUPPORT_AAC                 0   //AAC格式支持
 #define TCFG_USER_EMITTER_ENABLE            1   //emitter功能使能
 #define TCFG_BT_SNIFF_ENABLE                0   //bt sniff 功能使能
-#define TCFG_USER_BLE_CTRL_BREDR_EN			0	//BLE控制经典蓝牙开关使能
+#define TCFG_USER_BLE_CTRL_BREDR_EN			1	//BLE控制经典蓝牙开关使能
 
 #define TCFG_BLE_ADV_DYNAMIC_SWITCH			1	//BLE广播动态调整。超时后降低广播频率
 

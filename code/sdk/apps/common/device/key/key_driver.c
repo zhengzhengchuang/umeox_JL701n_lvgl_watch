@@ -41,6 +41,7 @@
 #endif
 #endif
 
+static const u32 long_3s_cnt = 300;
 static volatile u8 is_key_active = 0;
 //static volatile u8 key_poweron_flag = 1;
 
@@ -113,6 +114,7 @@ static void key_driver_scan(void *_scan_para)
     /* } */
 
     cur_key_value = scan_para->get_value();
+    //printf("cur_key_value = %d\n", cur_key_value);
 
     /* if (cur_key_value != NO_KEY) { */
     /*     printf(">>>cur_key_value: %d\n", cur_key_value); */
@@ -137,7 +139,7 @@ static void key_driver_scan(void *_scan_para)
         scan_para->filter_cnt++;
         return;
     }
-
+ 
     //为了滤掉adkey与mic连在一起时电容充放电导致的按键误判,一般用于type-c耳机
     /* if ((cur_key_value != scan_para->last_key) && (scan_para->last_key != NO_KEY) && (cur_key_value != NO_KEY)) { */
     /*     return; */
@@ -242,11 +244,16 @@ static void key_driver_scan(void *_scan_para)
             }
         }else 
         {  //last_key = valid_key; cur_key = valid_key, press_cnt累加用于判断long和hold
-            if(scan_para->press_cnt < 0xff)
+            if(scan_para->press_cnt < 0xffff)
                 scan_para->press_cnt++;
 
-            if (scan_para->press_cnt == scan_para->long_time) {
+            //printf("press_cnt = %d\n", scan_para->press_cnt);
+
+            if(scan_para->press_cnt == scan_para->long_time) {
                 key_event = KEY_EVENT_LONG;
+            }else if(scan_para->press_cnt == long_3s_cnt)
+            {
+                key_event = KEY_EVENT_LONG_3S;
             }
             // else if (scan_para->press_cnt == scan_para->hold_time) {
             //     key_event = KEY_EVENT_HOLD;

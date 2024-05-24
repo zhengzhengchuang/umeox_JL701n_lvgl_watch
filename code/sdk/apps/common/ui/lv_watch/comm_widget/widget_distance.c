@@ -93,7 +93,7 @@ void common_distance_widget_refresh(void)
             continue;
 
         int __data = \
-            get_vm_para_cache_with_label(\
+            GetVmParaCacheByLabel(\
                 vm_label_type); 
 
         if(__data > Distance_Disp_Max)

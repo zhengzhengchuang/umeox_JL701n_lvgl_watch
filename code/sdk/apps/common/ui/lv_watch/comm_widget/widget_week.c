@@ -37,9 +37,9 @@ void common_week_widget_refresh(void)
         return;
 
     struct sys_time utc_time;
-    get_utc_time(&utc_time);
+    GetUtcTime(&utc_time);
     comm_enum_week_t enum_week = \
-        get_utc_week(&utc_time);
+        GetUtcWeek(&utc_time);
 
     uint32_t week_addr_index[Week_Obj_Max];
     for(uint8_t i = 0; i < week_group_num; i++)
@@ -76,9 +76,9 @@ void common_week_widget_create(comm_week_para_t \
         return;
 
     struct sys_time utc_time;
-    get_utc_time(&utc_time);
+    GetUtcTime(&utc_time);
     comm_enum_week_t enum_week = \
-        get_utc_week(&utc_time);
+        GetUtcWeek(&utc_time);
 
     memcpy(&week_para_cache[week_group_num], \
         week_para, sizeof(comm_week_para_t));

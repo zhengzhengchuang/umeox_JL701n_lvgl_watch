@@ -41,14 +41,12 @@ int16_t common_data_widget_create(widget_data_para_t *data_para, \
     if(!data_para || !data_val)
         return data_end_x;
 
-    if(type >= widget_data_type_hr && \ 
-        type <= widget_data_type_max_hr)
+    if(type == widget_data_type_hr)
     {
         data_end_x = \
             common_hr_widget_create(data_para, \
                 type, data_val);
-    }else if(type >= widget_data_type_bo && \ 
-        type <= widget_data_type_max_bo)
+    }else if(type == widget_data_type_bo)
     {
         data_end_x = \
             common_bo_widget_create(data_para, \

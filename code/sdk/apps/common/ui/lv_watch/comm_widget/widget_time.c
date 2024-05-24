@@ -36,7 +36,7 @@ void common_time_widget_refresh(void)
         return;
 
     struct sys_time utc_time;
-    get_utc_time(&utc_time);
+    GetUtcTime(&utc_time);
 
     uint8_t time_hour = \
         utc_time.hour;
@@ -46,7 +46,7 @@ void common_time_widget_refresh(void)
         utc_time.sec;
 
     int time_format = \
-        get_vm_para_cache_with_label(\
+        GetVmParaCacheByLabel(\
             vm_label_time_format);
     if(time_format == time_format_12)
     {
@@ -108,7 +108,7 @@ void common_time_widget_create(widget_time_para_t *time_para, \
         return;
 
     struct sys_time utc_time;
-    get_utc_time(&utc_time);
+    GetUtcTime(&utc_time);
 
     uint8_t time_hour = \
         utc_time.hour;
@@ -118,7 +118,7 @@ void common_time_widget_create(widget_time_para_t *time_para, \
         utc_time.sec;
 
     int time_format = \
-        get_vm_para_cache_with_label(\
+        GetVmParaCacheByLabel(\
             vm_label_time_format);
     if(time_format == time_format_12)
     {

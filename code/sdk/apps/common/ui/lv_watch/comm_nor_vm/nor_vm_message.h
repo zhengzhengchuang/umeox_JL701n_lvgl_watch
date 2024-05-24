@@ -15,7 +15,7 @@ extern "C" {
 /*********************************************************************************
                                   信息内容长度                                  
 *********************************************************************************/
-#define Message_Content_Len (240)
+#define Message_Content_Len (120)
 
 
 /*********************************************************************************
@@ -23,7 +23,8 @@ extern "C" {
 *********************************************************************************/
 enum
 {
-    message_type_facebook = 0x00,
+    message_type_other,
+    message_type_facebook,
     message_type_vkontakte,
     message_type_instagram,
     message_type_linkedin,
@@ -37,8 +38,6 @@ enum
     message_type_line,
     message_type_gmail,
     message_type_sms,
-
-    /******区别于消息通知*******/
     message_type_phone,
 
     message_type_unknown,
@@ -55,19 +54,21 @@ typedef struct
 	message_type_t \
         message_type;
     char message_content_str[\
-        Message_Content_Len];
+        Message_Content_Len + 1];
     
     struct sys_time message_time;
 }vm_message_ctx_t;
+extern vm_message_ctx_t w_message;
+extern vm_message_ctx_t r_message;
 
 /*********************************************************************************
                                   信息接口                                       
 *********************************************************************************/
-void vm_message_ctx_clear(void);
-uint8_t vm_message_item_num(void);
-void vm_message_delete_by_index(uint8_t index);
-void vm_message_ctx_falsh_save(vm_message_ctx_t *p);
-bool vm_message_ctx_by_idx(uint8_t idx, vm_message_ctx_t *p);
+void VmMessageCtxClear(void);
+uint8_t VmMessageItemNum(void);
+bool VmMessageCtxByIdx(uint8_t idx);
+void VmMessageCtxFlashSave(void *p);
+void VmMessageDelByIdx(uint8_t index);
 #ifdef __cplusplus
 }
 #endif

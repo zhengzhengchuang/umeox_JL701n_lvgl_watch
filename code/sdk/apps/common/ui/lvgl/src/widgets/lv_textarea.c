@@ -203,7 +203,7 @@ void lv_textarea_add_text(lv_obj_t * obj, const char * txt)
     }
 
     /*Move the cursor after the new text*/
-    lv_textarea_set_cursor_pos(obj, lv_textarea_get_cursor_pos(obj) + _lv_txt_get_encoded_length(txt));
+    //lv_textarea_set_cursor_pos(obj, lv_textarea_get_cursor_pos(obj) + _lv_txt_get_encoded_length(txt));
 
     lv_event_send(obj, LV_EVENT_VALUE_CHANGED, NULL);
 }

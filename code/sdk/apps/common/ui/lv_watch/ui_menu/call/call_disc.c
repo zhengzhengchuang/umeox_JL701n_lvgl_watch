@@ -1,12 +1,12 @@
 #include "call_disc.h"
 
-static void call_disc_confirm_button_cb(lv_event_t *e)
+static void confirm_cb(lv_event_t *e)
 {
     if(!e) return;
 
-    ui_act_id_t prev_act_id = \
+    ui_act_id_t act_id = \
         read_menu_return_level_id();
-    ui_menu_jump(prev_act_id);
+    ui_menu_jump(act_id);
 
     return;
 }
@@ -17,11 +17,12 @@ static void menu_create_cb(lv_obj_t *obj)
 
     ui_act_id_t prev_act_id = \
         read_menu_return_level_id();
-
-    tileview_register_all_menu(obj, ui_act_id_null, \
-        ui_act_id_null, prev_act_id, ui_act_id_null, \
-            ui_act_id_call_disc);
-
+    if(!lang_txt_is_arabic())
+        tileview_register_all_menu(obj, ui_act_id_null, ui_act_id_null, \
+            prev_act_id, ui_act_id_null, ui_act_id_call_disc);
+    else
+        tileview_register_all_menu(obj, ui_act_id_null, ui_act_id_null, \
+            ui_act_id_null, prev_act_id, ui_act_id_call_disc);
     return;
 }
 
@@ -42,9 +43,9 @@ static void menu_display_cb(lv_obj_t *obj)
     if(!obj) return;
 
     widget_label_para.label_w = \
-        (300);
+        300;
     widget_label_para.label_h = \
-        Label_Line_Height*4;
+        Label_Line_Height*3;
     widget_label_para.long_mode = \
         LV_LABEL_LONG_WRAP;
     widget_label_para.text_align = \
@@ -58,10 +59,9 @@ static void menu_display_cb(lv_obj_t *obj)
         obj;
     widget_label_para.label_text = \
         get_lang_txt_with_id(lang_txtid_call_disc_tips);
-    lv_obj_t *call_disc_tips_label = \
+    lv_obj_t *tips_label = \
         common_widget_label_create(&widget_label_para);
-    lv_obj_align(call_disc_tips_label, LV_ALIGN_TOP_MID, \
-        0, 88);
+    lv_obj_align(tips_label, LV_ALIGN_TOP_MID, 0, 112);
 
     widget_img_para.img_parent = obj;
     widget_img_para.img_x = 32;
@@ -81,11 +81,11 @@ static void menu_display_cb(lv_obj_t *obj)
     widget_img_para.file_img_dat = \
         comm_icon_02_index;
     widget_img_para.event_cb = \
-        call_disc_confirm_button_cb;
+        confirm_cb;
     widget_img_para.user_data = NULL;
     lv_obj_t *confirm_button = \
         common_widget_img_create(&widget_img_para,  NULL);
-    lv_obj_set_ext_click_area(confirm_button, 15);
+    lv_obj_set_ext_click_area(confirm_button, 20);
 
     return;
 }

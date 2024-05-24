@@ -103,9 +103,9 @@ void set_comm_sys_language(comm_language_id_t lang_id);
 const void *get_lang_txt_with_id(comm_lang_txtid_t txtid);
 bool utf8_str_is_arabic(const char *utf8_str, uint32_t str_len);
 
-const void *al_name_lang_txt_with_id(uint8_t id);
-const void *al_name_ar_lang_txt_with_id(uint8_t id);
-const void *al_name_ex_lang_txt_with_id(uint8_t id);
+// const void *al_name_lang_txt_with_id(uint8_t id);
+// const void *al_name_ar_lang_txt_with_id(uint8_t id);
+// const void *al_name_ex_lang_txt_with_id(uint8_t id);
 #ifdef __cplusplus
 } /* extern "C" */
 #endif

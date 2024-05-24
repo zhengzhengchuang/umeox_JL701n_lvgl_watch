@@ -7,9 +7,9 @@ extern "C" {
 
 #include "../../lv_watch.h"
 
-void set_alarm_time_tmp(uint8_t hour, \
+void SetAlarmTimeTmp(uint8_t hour, \
     uint8_t minute);
-void get_alarm_time_tmp(uint8_t *hour, \
+void GetAlarmTimeTmp(uint8_t *hour, \
     uint8_t *minute);
 #ifdef __cplusplus
 } /* extern "C" */
